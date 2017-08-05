@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/// <summary>
+/// 所有GUI显示层的基类
+/// </summary>
+public class GuiFrameWrapper : MonoBehaviour
+{
 
-public class GuiFrameWrapper : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		
 	}
 }
