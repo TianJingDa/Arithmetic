@@ -7,7 +7,12 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
 
-	void Start ()
+    void Awake()
+    {
+        MutiLanguage.InitDict();
+    }
+
+    void Start ()
     {
 		
 	}
