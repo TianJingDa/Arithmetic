@@ -6,10 +6,25 @@ using UnityEngine;
 /// </summary>
 public class GameController : MonoBehaviour
 {
+    public Language language = Language.Chinese;//默认语言：中文
 
+
+    public static GameController Instance//单例
+    {
+        get;
+        private set;
+    } 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         MutiLanguage.InitDict();
+        foreach(int key in MutiLanguage.mutiLanguageDict.Keys)
+        {
+            Debug.Log("KEY:" + key.ToString() + ",CONTENT:" + MutiLanguage.mutiLanguageDict[key][(int)Instance.language]);
+        }
     }
 
     void Start ()
