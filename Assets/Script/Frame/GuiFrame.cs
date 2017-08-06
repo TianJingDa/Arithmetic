@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 所有GUI数据层的基类
 /// </summary>
-public abstract class GuiFrame
+public class GuiFrame
 {
     protected GuiFrameID id;
 
