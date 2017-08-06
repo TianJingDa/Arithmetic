@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -7,7 +8,8 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public Language language = Language.Chinese;//默认语言：中文
-
+    public Dictionary<GuiFrameID, GuiFrame> guiFrameDict = new Dictionary<GuiFrameID, GuiFrame>();//key：GuiFrameID，value：Frame
+    public Dictionary<GuiFrameID, GuiFrameWrapper> guiFrameWrapperDict = new Dictionary<GuiFrameID, GuiFrameWrapper>();//key：GuiFrameID，value：FrameWrapper
 
     public static GameController Instance//单例
     {
@@ -21,7 +23,7 @@ public class GameController : MonoBehaviour
             Instance = this;
         }
         MutiLanguage.InitDict();
-        foreach(int key in MutiLanguage.mutiLanguageDict.Keys)
+        foreach (int key in MutiLanguage.mutiLanguageDict.Keys)
         {
             Debug.Log("KEY:" + key.ToString() + ",CONTENT:" + MutiLanguage.mutiLanguageDict[key][(int)Instance.language]);
         }
