@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuiMsgController
+public class AnswerFrameWrapper : GuiFrameWrapper
 {
 
 	void Start () 

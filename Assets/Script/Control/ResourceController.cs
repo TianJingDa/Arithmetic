@@ -2,8 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceController 
+public sealed class ResourceController
 {
+    #region C#单例
+    private static ResourceController instance = null;
+    private ResourceController() { }
+    public static ResourceController Instance
+    {
+        get { return instance ?? (instance = new ResourceController()); }
+    }
+    #endregion
+
     private Dictionary<GuiFrameID, string> guiAssetDict = new Dictionary<GuiFrameID, string>();//key：GuiFrameID，value：资源路径
     private Dictionary<GuiFrameID, Object> resourceDict = new Dictionary<GuiFrameID, Object>();//key：GuiFrameID，value：资源
     /// <summary>

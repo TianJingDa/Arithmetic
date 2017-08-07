@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatisticsFrame : GuiFrame
+public class SetUpFrameWrapper : GuiFrameWrapper
 {
-    public StatisticsFrame(GuiFrameID id) : base(id)
-    {
-
-    }
 
     void Start () 
 	{
@@ -18,4 +14,10 @@ public class StatisticsFrame : GuiFrame
 	{
 		
 	}
+
+    public override void InitUI()
+    {
+
+    }
+
 }

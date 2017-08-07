@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CategoryFrame : GuiFrame
+public class SettlementFrameWrapper : GuiFrameWrapper
 {
-    public CategoryFrame(GuiFrameID id) : base(id)
-    {
-
-    }
 
     void Start () 
 	{
@@ -18,4 +14,10 @@ public class CategoryFrame : GuiFrame
 	{
 		
 	}
+
+    public override void InitUI()
+    {
+
+    }
+
 }
