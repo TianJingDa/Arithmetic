@@ -6,14 +6,17 @@ public sealed class GuiObjectController
 {
     #region C#单例
     private static GuiObjectController instance = null;
-    private GuiObjectController() { }
+    private GuiObjectController()
+    {
+        guiFrameWrapperDict = new Dictionary<GuiFrameID, GameObject>();
+    }
     public static GuiObjectController Instance
     {
         get { return instance ?? (instance = new GuiObjectController()); }
     }
     #endregion
 
-    private Dictionary<GuiFrameID, GameObject> guiFrameWrapperDict = new Dictionary<GuiFrameID, GameObject>();//key：GuiFrameID，value：FrameWrapper
+    private Dictionary<GuiFrameID, GameObject> guiFrameWrapperDict;//key：GuiFrameID，value：FrameWrapper
     public void RegisterGuiObject(GuiFrameID id, GameObject wrapper)
     {
         if (!guiFrameWrapperDict.ContainsKey(id))

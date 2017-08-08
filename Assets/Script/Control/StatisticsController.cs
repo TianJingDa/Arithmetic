@@ -6,7 +6,10 @@ public sealed class StatisticsController
 {
     #region C#单例
     private static StatisticsController instance = null;
-    private StatisticsController() { }
+    private StatisticsController()
+    {
+
+    }
     public static StatisticsController Instance
     {
         get { return instance ?? (instance = new StatisticsController()); }

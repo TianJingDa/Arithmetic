@@ -6,7 +6,10 @@ public sealed class ExamController
 {
     #region C#单例
     private static ExamController instance = null;
-    private ExamController() { }
+    private ExamController()
+    {
+
+    }
     public static ExamController Instance
     {
         get { return instance ?? (instance = new ExamController()); }

@@ -6,15 +6,19 @@ public sealed class ResourceController
 {
     #region C#单例
     private static ResourceController instance = null;
-    private ResourceController() { }
+    private ResourceController()
+    {
+        guiAssetDict = new Dictionary<GuiFrameID, string>();
+        resourceDict = new Dictionary<GuiFrameID, Object>();
+    }
     public static ResourceController Instance
     {
         get { return instance ?? (instance = new ResourceController()); }
     }
     #endregion
 
-    private Dictionary<GuiFrameID, string> guiAssetDict = new Dictionary<GuiFrameID, string>();//key：GuiFrameID，value：资源路径
-    private Dictionary<GuiFrameID, Object> resourceDict = new Dictionary<GuiFrameID, Object>();//key：GuiFrameID，value：资源
+    private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
+    private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
     /// <summary>
     /// 注册所有资源地址
     /// </summary>

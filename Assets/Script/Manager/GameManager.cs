@@ -41,10 +41,10 @@ public class GameManager : MonoBehaviour
         resourceCtrl.RegisterAsset();
         statisticsCtrl.InitStatisticsData();
         timeMgr.InitTimeMgr();
-        ActiveGui(GuiFrameID.StartFrame);
+        //ActiveGui(GuiFrameID.StartFrame);
     }
-	
-	void Update ()
+
+    void Update ()
     {
         timeMgr.Update();
 
