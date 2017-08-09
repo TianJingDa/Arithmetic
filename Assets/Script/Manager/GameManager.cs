@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public UIRoot root;
+    public GameObject root;
 
     private MutiLanguageController mutiLanguageCtrl;//多语言控制器
     private ResourceController resourceCtrl;//资源控制器
