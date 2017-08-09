@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -41,7 +40,16 @@ public class GameManager : MonoBehaviour
         resourceCtrl.RegisterAsset();
         statisticsCtrl.InitStatisticsData();
         timeMgr.InitTimeMgr();
-        //ActiveGui(GuiFrameID.StartFrame);
+        ActiveGui(GuiFrameID.StartFrame);
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00002"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00003"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00004"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00005"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00006"));
+        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00007"));
+
     }
 
     void Update ()
@@ -60,7 +68,13 @@ public class GameManager : MonoBehaviour
     }
     public void ActiveGui(GuiFrameID id)
     {
-        GameObject wrapper = Instantiate(resourceCtrl.GetResource(id), root.transform) as GameObject;
+        Object reource = resourceCtrl.GetResource(id);
+        if (reource == null)
+        {
+            Debug.Log("Can not load reousce:"+id.ToString());
+            return;
+        }
+        GameObject wrapper = Instantiate(reource, root.transform) as GameObject;
         guiObjectCtrl.RegisterGuiObject(id, wrapper);
     }
     public void DeActiveGui(GuiFrameID id)

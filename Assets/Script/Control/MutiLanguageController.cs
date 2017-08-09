@@ -31,15 +31,19 @@ public sealed class MutiLanguageController
     /// </summary>
     public void InitLanguageDict()
     {
-        List<List<string>> dataList = LoadFile(Application.dataPath + "/Document", "MutiLanguage.csv");
-        if(dataList.Count==0|| dataList == null)
+        TextAsset mutiLanguageAsset = Resources.Load("MutiLanguage", typeof(TextAsset)) as TextAsset;
+        if (mutiLanguageAsset == null)
         {
             Debug.Log("Load File Error!");
             return;
         }
-        foreach (List<string> strArray in dataList)
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        List<string> lineList;
+        for(int i = 0; i < lineArray.Length; i++)
         {
-            mutiLanguageDict.Add(strArray[0], strArray.GetRange(1, strArray.Count - 1).ToArray());
+            lineList = new List<string>(lineArray[i].Split(','));
+            mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
         }
     }
     /// <summary>
@@ -51,33 +55,10 @@ public sealed class MutiLanguageController
     {
         string[] languageArray = null;
         mutiLanguageDict.TryGetValue(index, out languageArray);
+        if (languageArray == null)
+        {
+            return index;
+        }
         return languageArray[(int)language];
-    }
-    /// <summary>
-    /// 加载多语言文件
-    /// </summary>
-    /// <param name="path">路径</param>
-    /// <param name="fileName">文件名</param>
-    private List<List<string>> LoadFile(string path,string fileName)
-    {
-        List<List<string>> dataList = new List<List<string>>();
-        StreamReader sr = null;
-        try
-        {
-            sr = File.OpenText(path + "//" + fileName);
-        }
-        catch
-        {
-            Debug.Log("File can not be found:" + fileName);
-            return null;
-        }
-        string line;
-        while ((line = sr.ReadLine()) != null)
-        {
-            dataList.Add(new List<string>(line.Split(',')));
-        }
-        sr.Close();
-        sr.Dispose();
-        return dataList;
     }
 }

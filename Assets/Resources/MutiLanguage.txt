@@ -2,3 +2,5 @@ Index,Chinese,English
 TJD_00000,感谢开发人员,TJD
 TJD_00001,感谢,TJD
 TJD_00002,非常感谢,TJD
+TJD_00003,设置,TJD
+TJD_00004,版本,TJD
