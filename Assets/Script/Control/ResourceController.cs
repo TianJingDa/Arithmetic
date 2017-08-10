@@ -2,32 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ResourceController
+public sealed class ResourceCtrl : Controller
 {
-    #region C#单例
-    private static ResourceController instance = null;
-    private ResourceController()
+    #region 单例
+    private static ResourceCtrl Instance
     {
-        guiAssetDict = new Dictionary<GuiFrameID, string>();
-        resourceDict = new Dictionary<GuiFrameID, Object>();
+        get;
+        set;
     }
-    public static ResourceController Instance
+    void OnEnable()
     {
-        get { return instance ?? (instance = new ResourceController()); }
+        if (Instance == null)
+        {
+            Instance = this;
+            InitController();
+            GameManager.Instance.RegisterController(base.id, Instance);
+        }
     }
     #endregion
 
     private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
     private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
+    protected override void InitController()
+    {
+        base.id = ControllerID.ResourceCtrl;
+        guiAssetDict = new Dictionary<GuiFrameID, string>();
+        resourceDict = new Dictionary<GuiFrameID, Object>();
+        RegisterAsset();
+    }
     /// <summary>
     /// 注册所有资源地址
     /// </summary>
-    public void RegisterAsset()
+    private void RegisterAsset()
     {
         guiAssetDict.Add(GuiFrameID.StartFrame, "StartFrame");
         guiAssetDict.Add(GuiFrameID.StatisticsFrame, "StatisticsFrame");
         guiAssetDict.Add(GuiFrameID.CategoryFrame, "CategoryFrame");
         guiAssetDict.Add(GuiFrameID.SetUpFrame, "SetUpFrame");
+        guiAssetDict.Add(GuiFrameID.AnswerFrame, "AnswerFrame");
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "SettlementFrame");
     }
 

@@ -6,41 +6,28 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public GameObject root;
-
-    private MutiLanguageController mutiLanguageCtrl;//多语言控制器
-    private ResourceController resourceCtrl;//资源控制器
-    private GuiObjectController guiObjectCtrl;//GUI实例控制器
-    private ExamController examCtrl;//考试控制器
-    private StatisticsController statisticsCtrl;//统计数据控制器
-    private TimeManager timeMgr;//时间控制器
+    private GameObject root;
+    private Clock clock = null;
+    private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
     public static GameManager Instance//单例
     {
         get;
         private set;
-    } 
+    }
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            controllerDict = new Dictionary<ControllerID, Controller>();
         }
-        mutiLanguageCtrl = MutiLanguageController.Instance;
-        resourceCtrl = ResourceController.Instance;
-        guiObjectCtrl = GuiObjectController.Instance;
-        examCtrl = ExamController.Instance;
-        statisticsCtrl = StatisticsController.Instance;
-        timeMgr = TimeManager.Instance;
     }
 
-    void Start ()
+    void Start()
     {
-        mutiLanguageCtrl.InitLanguageDict();
-        resourceCtrl.RegisterAsset();
-        statisticsCtrl.InitStatisticsData();
-        timeMgr.InitTimeMgr();
-        ActiveGui(GuiFrameID.StartFrame);
+        root = GameObject.Find("Canvas");
+        //ActiveGui(GuiFrameID.StartFrame);
         //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
         //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
         //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00002"));
@@ -52,40 +39,96 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void Update ()
+    void Update()
     {
-        timeMgr.Update();
-
+        if (clock != null)
+        {
+            clock.Update();
+        }
     }
 
     #region 公共方法
+    /// <summary>
+    /// 修改语言
+    /// </summary>
+    /// <param name="language"></param>
     public void SetLanguage(Language language)
     {
-        if (guiObjectCtrl.IsRegister(GuiFrameID.SetUpFrame))
+        if ((controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).IsRegister(GuiFrameID.SetUpFrame))
         {
-            mutiLanguageCtrl.Language = language;
+            (controllerDict[ControllerID.MutiLanguageCtrl] as MutiLanguageCtrl).Language = language;
         }
     }
+    public void RegisterController(ControllerID id, Controller ctrl)
+    {
+        if (!controllerDict.ContainsKey(id))
+        {
+            controllerDict.Add(id, ctrl);
+        }
+        else
+        {
+            Debug.Log("重复注册！");
+        }
+    }
+    /// <summary>
+    /// 注册时钟
+    /// </summary>
+    /// <param name="clock"></param>
+    public void RegisterClock(Clock clock)
+    {
+        this.clock = null;
+        System.GC.Collect();
+        this.clock = clock;
+    }
+    /// <summary>
+    /// 注销时钟
+    /// </summary>
+    public void UnRegisterClock()
+    {
+        this.clock = null;
+        System.GC.Collect();
+    }
+    /// <summary>
+    /// 激活GUI
+    /// </summary>
+    /// <param name="id"></param>
     public void ActiveGui(GuiFrameID id)
     {
-        Object reource = resourceCtrl.GetResource(id);
+        Object reource = (controllerDict[ControllerID.ResourceCtrl] as ResourceCtrl).GetResource(id);
         if (reource == null)
         {
-            Debug.Log("Can not load reousce:"+id.ToString());
+            Debug.Log("Can not load reousce:" + id.ToString());
             return;
         }
         GameObject wrapper = Instantiate(reource, root.transform) as GameObject;
-        guiObjectCtrl.RegisterGuiObject(id, wrapper);
+        (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).RegisterGuiObject(id, wrapper);
     }
+    /// <summary>
+    /// 销毁GUI
+    /// </summary>
+    /// <param name="id"></param>
     public void DeActiveGui(GuiFrameID id)
     {
-        Destroy(guiObjectCtrl.GetGuiObject(id));
-        guiObjectCtrl.UnRegisterGuiObject(id);
+        GameObject guiObject = (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).GetGuiObject(id);
+        (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).UnRegisterGuiObject(id);
+        Destroy(guiObject);
+        System.GC.Collect();
     }
     #endregion
 
     #region 私有方法
-
+    //private  Controller ControllerInstance(ControllerID id)
+    //{
+    //    Controller ctrl = controllerDict[id];
+    //    if(ctrl is MutiLanguageCtrl)
+    //    {
+    //        return (MutiLanguageCtrl)ctrl;
+    //    }
+    //    else if(ctrl is ResourceCtrl)
+    //    {
+    //        return (ResourceCtrl)ctrl;
+    //    }
+    //}
 
     #endregion
 

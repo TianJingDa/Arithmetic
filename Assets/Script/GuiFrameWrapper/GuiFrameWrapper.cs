@@ -4,10 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 所有GUI显示层的基类
 /// </summary>
-public class GuiFrameWrapper : MonoBehaviour
+public abstract class GuiFrameWrapper : MonoBehaviour
 {
-    public virtual void InitUI()
-    {
-
-    }
+    public abstract void InitUI();
 }

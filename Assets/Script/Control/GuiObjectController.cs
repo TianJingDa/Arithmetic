@@ -2,21 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class GuiObjectController  
+public sealed class GuiObjectCtrl : Controller  
 {
-    #region C#单例
-    private static GuiObjectController instance = null;
-    private GuiObjectController()
+    #region 单例
+    private static GuiObjectCtrl Instance
     {
-        guiFrameWrapperDict = new Dictionary<GuiFrameID, GameObject>();
+        get;
+        set;
     }
-    public static GuiObjectController Instance
+    void OnEnable()
     {
-        get { return instance ?? (instance = new GuiObjectController()); }
+        if (Instance == null)
+        {
+            Instance = this;
+            InitController();
+            GameManager.Instance.RegisterController(base.id, Instance);
+        }
     }
     #endregion
 
     private Dictionary<GuiFrameID, GameObject> guiFrameWrapperDict;//key：GuiFrameID，value：FrameWrapper
+    protected override void InitController()
+    {
+        base.id = ControllerID.GuiObjectCtrl;
+        guiFrameWrapperDict = new Dictionary<GuiFrameID, GameObject>();
+    }
     public void RegisterGuiObject(GuiFrameID id, GameObject wrapper)
     {
         if (!guiFrameWrapperDict.ContainsKey(id))

@@ -2,26 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class StatisticsController  
+public sealed class StatisticsCtrl : Controller
 {
-    #region C#单例
-    private static StatisticsController instance = null;
-    private StatisticsController()
+    #region 单例
+    private static StatisticsCtrl Instance
     {
-
+        get;
+        set;
     }
-    public static StatisticsController Instance
+    void OnEnable()
     {
-        get { return instance ?? (instance = new StatisticsController()); }
+        if (Instance == null)
+        {
+            Instance = this;
+            InitController();
+            GameManager.Instance.RegisterController(base.id, Instance);
+        }
     }
     #endregion
+    protected override void InitController()
+    {
+        base.id = ControllerID.StatisticsCtrl;
+        InitStatisticsData();
+    }
 
-    public void InitStatisticsData()
+
+    private void InitStatisticsData()
     {
 
     }
 }
-public class StatisticsInstance
+public struct StatisticsInstance
 {
 
 }

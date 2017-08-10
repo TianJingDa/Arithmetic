@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public sealed class MutiLanguageController
+public sealed class MutiLanguageCtrl: Controller
 {
-    #region C#单例
-    private static MutiLanguageController instance = null;
-    private MutiLanguageController()
+    #region 单例
+    private static MutiLanguageCtrl Instance
     {
-        mutiLanguageDict = new Dictionary<string, string[]>();
+        get;
+        set;
     }
-    public static MutiLanguageController Instance
+    void OnEnable()
     {
-        get { return instance ?? (instance = new MutiLanguageController()); }
+        if (Instance == null)
+        {
+            Instance = this;
+            InitController();
+            GameManager.Instance.RegisterController(base.id, Instance);
+        }
     }
     #endregion
     private Language language = Language.Chinese;//默认语言：中文
@@ -26,10 +31,16 @@ public sealed class MutiLanguageController
             language = value;
         }
     }
+    protected override void InitController()
+    {
+        base.id = ControllerID.MutiLanguageCtrl;
+        mutiLanguageDict = new Dictionary<string, string[]>();
+        InitLanguageDict();
+    }
     /// <summary>
     /// 初始化多语言字典
     /// </summary>
-    public void InitLanguageDict()
+    private void InitLanguageDict()
     {
         TextAsset mutiLanguageAsset = Resources.Load("MutiLanguage", typeof(TextAsset)) as TextAsset;
         if (mutiLanguageAsset == null)
@@ -40,7 +51,7 @@ public sealed class MutiLanguageController
         char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
         string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
         List<string> lineList;
-        for(int i = 0; i < lineArray.Length; i++)
+        for (int i = 0; i < lineArray.Length; i++)
         {
             lineList = new List<string>(lineArray[i].Split(','));
             mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ExamCtrl : Controller
+public class AchievementCtrl : Controller 
 {
     #region 单例
-    private static ExamCtrl Instance
+    private static AchievementCtrl Instance
     {
         get;
         set;
@@ -22,21 +22,11 @@ public sealed class ExamCtrl : Controller
     #endregion
     protected override void InitController()
     {
-        base.id = ControllerID.ExamCtrl;
-        InitExamData();
+        base.id = ControllerID.AchievementCtrl;
+        InitAchievementData();
     }
-    private void InitExamData()
+    private void InitAchievementData()
     {
 
     }
-    public ExamQuestionInstance GetQuestionInstance()
-    {
-        return new ExamQuestionInstance();
-    }
-
 }
-public struct ExamQuestionInstance
-{
-
-}
-
