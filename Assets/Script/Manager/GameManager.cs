@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     private StatisticsController                                c_StatisticsCtrl;
     private ExamController                                      c_ExamCtrl;
     private AchievementController                               c_AchievementCtrl;
+    private SkinController                                      c_SkinCtrl;
+    private LayoutController                                    c_LayoutCtrl;
 
 
     //private Dictionary<ControllerID, Controller> controllerDict;
@@ -134,10 +136,17 @@ public class GameManager : MonoBehaviour
             case ControllerID.StatisticsController:
                 c_StatisticsCtrl = (StatisticsController)ctrl;
                 break;
+            case ControllerID.SkinController:
+                c_SkinCtrl = (SkinController)ctrl;
+                break;
+            case ControllerID.LayoutController:
+                c_LayoutCtrl = (LayoutController)ctrl;
+                break;
             default:
-                Debug.Log("Unknow Controller!!");
+                Debug.Log("Unknow Controller:"+ctrl.id.ToString());
                 break;
         }
+        Debug.Log("Ctrl.id:" + ctrl.id.ToString());
     }
     private void RegisterGuiObject(GuiFrameID id, GameObject wrapper)
     {

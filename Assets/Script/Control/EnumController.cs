@@ -23,5 +23,17 @@ public enum ControllerID
     GuiObjectController,       //GuiObject控制器
     StatisticsController,      //统计数据控制器
     ExamController,            //考试控制器
-    AchievementController      //成就控制器
+    AchievementController,     //成就控制器
+    SkinController,            //皮肤控制器
+    LayoutController           //布局控制器
+}
+public enum SkinID
+{
+    First,
+    Second
+}
+public enum LayoutID
+{
+    Horizontal,
+    Vertical
 }
