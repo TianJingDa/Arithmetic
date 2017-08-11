@@ -18,10 +18,10 @@ public enum GuiFrameID
 }
 public enum ControllerID
 {
-    MutiLanguageCtrl,    //多语言控制器
-    ResourceCtrl,        //资源控制器
-    GuiObjectCtrl,       //GuiObject控制器
-    StatisticsCtrl,      //统计数据控制器
-    ExamCtrl,            //考试控制器
-    AchievementCtrl      //成就控制器
+    MutiLanguageController,    //多语言控制器
+    ResourceController,        //资源控制器
+    GuiObjectController,       //GuiObject控制器
+    StatisticsController,      //统计数据控制器
+    ExamController,            //考试控制器
+    AchievementController      //成就控制器
 }

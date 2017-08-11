@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ExamCtrl : Controller
+public sealed class ExamController : Controller
 {
     #region 单例
-    private static ExamCtrl Instance
+    private static ExamController Instance
     {
         get;
         set;
@@ -16,13 +16,13 @@ public sealed class ExamCtrl : Controller
         {
             Instance = this;
             InitController();
-            GameManager.Instance.RegisterController(base.id, Instance);
+            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
         }
     }
     #endregion
     protected override void InitController()
     {
-        base.id = ControllerID.ExamCtrl;
+        base.id = ControllerID.ExamController;
         InitExamData();
     }
     private void InitExamData()

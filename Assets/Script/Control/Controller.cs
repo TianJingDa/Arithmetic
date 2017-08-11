@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public abstract class Controller : MonoBehaviour
 {
-    protected ControllerID id;
+    [HideInInspector]
+    public ControllerID id;
+    public static int index = 0;
     protected abstract void InitController();//初始化控制器
 }

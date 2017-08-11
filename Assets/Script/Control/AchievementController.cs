@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AchievementCtrl : Controller 
+public class AchievementController : Controller 
 {
     #region 单例
-    private static AchievementCtrl Instance
+    private static AchievementController Instance
     {
         get;
         set;
@@ -16,13 +16,13 @@ public class AchievementCtrl : Controller
         {
             Instance = this;
             InitController();
-            GameManager.Instance.RegisterController(base.id, Instance);
+            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
         }
     }
     #endregion
     protected override void InitController()
     {
-        base.id = ControllerID.AchievementCtrl;
+        base.id = ControllerID.AchievementController;
         InitAchievementData();
     }
     private void InitAchievementData()

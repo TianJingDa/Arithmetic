@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ResourceCtrl : Controller
+public sealed class ResourceController : Controller
 {
     #region 单例
-    private static ResourceCtrl Instance
+    private static ResourceController Instance
     {
         get;
         set;
@@ -16,7 +16,7 @@ public sealed class ResourceCtrl : Controller
         {
             Instance = this;
             InitController();
-            GameManager.Instance.RegisterController(base.id, Instance);
+            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
         }
     }
     #endregion
@@ -25,7 +25,7 @@ public sealed class ResourceCtrl : Controller
     private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
     protected override void InitController()
     {
-        base.id = ControllerID.ResourceCtrl;
+        base.id = ControllerID.ResourceController;
         guiAssetDict = new Dictionary<GuiFrameID, string>();
         resourceDict = new Dictionary<GuiFrameID, Object>();
         RegisterAsset();

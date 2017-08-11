@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public sealed class MutiLanguageCtrl: Controller
+public sealed class MutiLanguageController: Controller
 {
     #region 单例
-    private static MutiLanguageCtrl Instance
+    private static MutiLanguageController Instance
     {
         get;
         set;
@@ -17,7 +17,7 @@ public sealed class MutiLanguageCtrl: Controller
         {
             Instance = this;
             InitController();
-            GameManager.Instance.RegisterController(base.id, Instance);
+            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
         }
     }
     #endregion
@@ -33,7 +33,7 @@ public sealed class MutiLanguageCtrl: Controller
     }
     protected override void InitController()
     {
-        base.id = ControllerID.MutiLanguageCtrl;
+        base.id = ControllerID.MutiLanguageController;
         mutiLanguageDict = new Dictionary<string, string[]>();
         InitLanguageDict();
     }

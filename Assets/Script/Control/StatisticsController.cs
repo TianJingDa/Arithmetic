@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class StatisticsCtrl : Controller
+public sealed class StatisticsController : Controller
 {
     #region 单例
-    private static StatisticsCtrl Instance
+    private static StatisticsController Instance
     {
         get;
         set;
@@ -16,13 +16,13 @@ public sealed class StatisticsCtrl : Controller
         {
             Instance = this;
             InitController();
-            GameManager.Instance.RegisterController(base.id, Instance);
+            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
         }
     }
     #endregion
     protected override void InitController()
     {
-        base.id = ControllerID.StatisticsCtrl;
+        base.id = ControllerID.StatisticsController;
         InitStatisticsData();
     }
 

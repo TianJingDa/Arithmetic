@@ -6,9 +6,18 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    private GameObject root;
-    private Clock clock = null;
-    private Dictionary<ControllerID, Controller> controllerDict;
+    private GameObject                                          m_Root;                             //UI对象的根对象
+    private Clock                                               m_Clock = null;                     //时钟工具
+    private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
+
+    private MutiLanguageController                              c_MutiLanguageCtrl;
+    private ResourceController                                  c_ResourceCtrl;
+    private StatisticsController                                c_StatisticsCtrl;
+    private ExamController                                      c_ExamCtrl;
+    private AchievementController                               c_AchievementCtrl;
+
+
+    //private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
     public static GameManager Instance//单例
     {
@@ -20,13 +29,12 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            controllerDict = new Dictionary<ControllerID, Controller>();
         }
     }
 
     void Start()
     {
-        root = GameObject.Find("Canvas");
+        m_Root = GameObject.Find("Canvas");
         //ActiveGui(GuiFrameID.StartFrame);
         //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
         //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
@@ -41,9 +49,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (clock != null)
+        if (m_Clock != null)
         {
-            clock.Update();
+            m_Clock.Update();
         }
     }
 
@@ -54,20 +62,9 @@ public class GameManager : MonoBehaviour
     /// <param name="language"></param>
     public void SetLanguage(Language language)
     {
-        if ((controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).IsRegister(GuiFrameID.SetUpFrame))
+        if (IsRegister(GuiFrameID.SetUpFrame))
         {
-            (controllerDict[ControllerID.MutiLanguageCtrl] as MutiLanguageCtrl).Language = language;
-        }
-    }
-    public void RegisterController(ControllerID id, Controller ctrl)
-    {
-        if (!controllerDict.ContainsKey(id))
-        {
-            controllerDict.Add(id, ctrl);
-        }
-        else
-        {
-            Debug.Log("重复注册！");
+            c_MutiLanguageCtrl.Language = language;
         }
     }
     /// <summary>
@@ -76,16 +73,16 @@ public class GameManager : MonoBehaviour
     /// <param name="clock"></param>
     public void RegisterClock(Clock clock)
     {
-        this.clock = null;
+        this.m_Clock = null;
         System.GC.Collect();
-        this.clock = clock;
+        this.m_Clock = clock;
     }
     /// <summary>
     /// 注销时钟
     /// </summary>
     public void UnRegisterClock()
     {
-        this.clock = null;
+        this.m_Clock = null;
         System.GC.Collect();
     }
     /// <summary>
@@ -94,14 +91,14 @@ public class GameManager : MonoBehaviour
     /// <param name="id"></param>
     public void ActiveGui(GuiFrameID id)
     {
-        Object reource = (controllerDict[ControllerID.ResourceCtrl] as ResourceCtrl).GetResource(id);
+        Object reource = c_ResourceCtrl.GetResource(id);
         if (reource == null)
         {
             Debug.Log("Can not load reousce:" + id.ToString());
             return;
         }
-        GameObject wrapper = Instantiate(reource, root.transform) as GameObject;
-        (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).RegisterGuiObject(id, wrapper);
+        GameObject wrapper = Instantiate(reource, m_Root.transform) as GameObject;
+        RegisterGuiObject(id, wrapper);
     }
     /// <summary>
     /// 销毁GUI
@@ -109,26 +106,72 @@ public class GameManager : MonoBehaviour
     /// <param name="id"></param>
     public void DeActiveGui(GuiFrameID id)
     {
-        GameObject guiObject = (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).GetGuiObject(id);
-        (controllerDict[ControllerID.GuiObjectCtrl] as GuiObjectCtrl).UnRegisterGuiObject(id);
+        GameObject guiObject = GetGuiObject(id);
+        UnRegisterGuiObject(id);
         Destroy(guiObject);
         System.GC.Collect();
     }
     #endregion
 
     #region 私有方法
-    //private  Controller ControllerInstance(ControllerID id)
-    //{
-    //    Controller ctrl = controllerDict[id];
-    //    if(ctrl is MutiLanguageCtrl)
-    //    {
-    //        return (MutiLanguageCtrl)ctrl;
-    //    }
-    //    else if(ctrl is ResourceCtrl)
-    //    {
-    //        return (ResourceCtrl)ctrl;
-    //    }
-    //}
+    private void RegisterController(Controller ctrl)
+    {
+        switch (ctrl.id)
+        {
+            case ControllerID.AchievementController:
+                c_AchievementCtrl = (AchievementController)ctrl;
+                break;
+            case ControllerID.ExamController:
+                c_ExamCtrl = (ExamController)ctrl;
+                break;
+            case ControllerID.MutiLanguageController:
+                c_MutiLanguageCtrl = (MutiLanguageController)ctrl;
+                break;
+            case ControllerID.ResourceController:
+                c_ResourceCtrl = (ResourceController)ctrl;
+                break;
+            case ControllerID.StatisticsController:
+                c_StatisticsCtrl = (StatisticsController)ctrl;
+                break;
+            default:
+                Debug.Log("Unknow Controller!!");
+                break;
+        }
+    }
+    private void RegisterGuiObject(GuiFrameID id, GameObject wrapper)
+    {
+        if (!m_GuiObjectDict.ContainsKey(id))
+        {
+            m_GuiObjectDict.Add(id, wrapper);
+        }
+        else
+        {
+            Debug.Log("重复注册：" + id.ToString());
+        }
+    }
+    private void UnRegisterGuiObject(GuiFrameID id)
+    {
+        if (m_GuiObjectDict.ContainsKey(id))
+        {
+            m_GuiObjectDict.Remove(id);
+        }
+        else
+        {
+            Debug.Log("重复注销：" + id.ToString());
+        }
+    }
+
+    private GameObject GetGuiObject(GuiFrameID id)
+    {
+        GameObject wrapper = null;
+        m_GuiObjectDict.TryGetValue(id, out wrapper);
+        return wrapper;
+    }
+    private bool IsRegister(GuiFrameID id)
+    {
+        return m_GuiObjectDict.ContainsKey(id);
+    }
+
 
     #endregion
 
