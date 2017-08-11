@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            m_GuiObjectDict = new Dictionary<GuiFrameID, GameObject>();
         }
     }
 
