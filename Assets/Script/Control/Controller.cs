@@ -8,6 +8,5 @@ public abstract class Controller : MonoBehaviour
 {
     [HideInInspector]
     public ControllerID id;
-    public static int index = 0;
     protected abstract void InitController();//初始化控制器
 }

@@ -3,36 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// 速算类别选择界面
+/// 答题界面
 /// </summary>
-public class CategoryFrameWrapper : GuiFrameWrapper
+public class ExamFrameWrapper : GuiFrameWrapper
 {
+    public Text timeLabel;
+    public GameObject confirmPage;
 
-    void Start () 
+	void Start () 
 	{
-        base.id = GuiFrameID.CategoryFrame;
+        base.id = GuiFrameID.ExamFrame;
     }
 
     void Update () 
 	{
 		
 	}
+    void OnDestroy()
+    {
+        GameManager.Instance.UnRegisterClock();
+    }
 
     public override void InitUI()
     {
-
+        GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
     public void OnClick(Button btn)
     {
         switch (btn.name)
         {
-            case "CloseBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.StartFrame);
+            case "FinishBtn":
+                confirmPage.SetActive(true);
                 break;
-            case "StartBtn":                
+            case "StartBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.ExamFrame);
                 break;
         }
     }
+
 
 }

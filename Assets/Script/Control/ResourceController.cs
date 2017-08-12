@@ -28,19 +28,19 @@ public sealed class ResourceController : Controller
         base.id = ControllerID.ResourceController;
         guiAssetDict = new Dictionary<GuiFrameID, string>();
         resourceDict = new Dictionary<GuiFrameID, Object>();
-        RegisterAsset();
+        InitReourceData();
     }
     /// <summary>
     /// 注册所有资源地址
     /// </summary>
-    private void RegisterAsset()
+    private void InitReourceData()
     {
-        guiAssetDict.Add(GuiFrameID.StartFrame, "StartFrame");
-        guiAssetDict.Add(GuiFrameID.StatisticsFrame, "StatisticsFrame");
-        guiAssetDict.Add(GuiFrameID.CategoryFrame, "CategoryFrame");
-        guiAssetDict.Add(GuiFrameID.SetUpFrame, "SetUpFrame");
-        guiAssetDict.Add(GuiFrameID.AnswerFrame, "AnswerFrame");
-        guiAssetDict.Add(GuiFrameID.SettlementFrame, "SettlementFrame");
+        guiAssetDict.Add(GuiFrameID.StartFrame, "UI/StartFrame");
+        guiAssetDict.Add(GuiFrameID.StatisticsFrame, "UI/StatisticsFrame");
+        guiAssetDict.Add(GuiFrameID.CategoryFrame, "UI/CategoryFrame");
+        guiAssetDict.Add(GuiFrameID.SetUpFrame, "UI/SetUpFrame");
+        guiAssetDict.Add(GuiFrameID.ExamFrame, "UI/AnswerFrame");
+        guiAssetDict.Add(GuiFrameID.SettlementFrame, "UI/SettlementFrame");
     }
 
     /// <summary>

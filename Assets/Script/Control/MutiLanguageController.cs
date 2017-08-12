@@ -35,14 +35,14 @@ public sealed class MutiLanguageController: Controller
     {
         base.id = ControllerID.MutiLanguageController;
         mutiLanguageDict = new Dictionary<string, string[]>();
-        InitLanguageDict();
+        InitLanguageData();
     }
     /// <summary>
     /// 初始化多语言字典
     /// </summary>
-    private void InitLanguageDict()
+    private void InitLanguageData()
     {
-        TextAsset mutiLanguageAsset = Resources.Load("MutiLanguage", typeof(TextAsset)) as TextAsset;
+        TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
         if (mutiLanguageAsset == null)
         {
             Debug.Log("Load File Error!");

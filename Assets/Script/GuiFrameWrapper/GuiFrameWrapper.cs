@@ -6,5 +6,8 @@ using UnityEngine;
 /// </summary>
 public abstract class GuiFrameWrapper : MonoBehaviour
 {
-    public abstract void InitUI();
+    [HideInInspector]
+    public GuiFrameID id;
+    public virtual void InitUI() { }
+    public virtual void UpdateWrapper() { }
 }

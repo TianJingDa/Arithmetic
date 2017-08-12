@@ -9,10 +9,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
-		
-	}
-	
-	void Update () 
+        base.id = GuiFrameID.SettlementFrame;
+    }
+
+    void Update () 
 	{
 		
 	}

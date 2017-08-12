@@ -7,8 +7,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private GameObject                                          m_Root;                             //UI对象的根对象
+    private GameObject                                          m_CurrentWrapper;                   //当前激活的GuiWrapper
     private Clock                                               m_Clock = null;                     //时钟工具
-    private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
+    //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
 
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
@@ -17,10 +18,18 @@ public class GameManager : MonoBehaviour
     private AchievementController                               c_AchievementCtrl;
     private SkinController                                      c_SkinCtrl;
     private LayoutController                                    c_LayoutCtrl;
+    private FontController                                      c_FontCtrl;
 
 
     //private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+    private GuiFrameWrapper M_CurrentWrapper
+    {
+        get
+        {
+            return m_CurrentWrapper.GetComponent<GuiFrameWrapper>();
+        }
+    }
     public static GameManager Instance//单例
     {
         get;
@@ -31,22 +40,22 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            m_GuiObjectDict = new Dictionary<GuiFrameID, GameObject>();
         }
     }
 
     void Start()
     {
         m_Root = GameObject.Find("Canvas");
+        m_CurrentWrapper = GameObject.Find("StartFrame");
         //ActiveGui(GuiFrameID.StartFrame);
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00002"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00003"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00004"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00005"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00006"));
-        //Debug.Log(mutiLanguageCtrl.GetMutiLanguage("TJD_00007"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00002"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00003"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00004"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00005"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00006"));
+        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00007"));
 
     }
 
@@ -56,6 +65,10 @@ public class GameManager : MonoBehaviour
         {
             m_Clock.Update();
         }
+        //if (M_CurrentWrapper.id == GuiFrameID.ExamFrame)
+        //{
+        //    ((ExamFrameWrapper)M_CurrentWrapper).UpdateWrapper();
+        //}
     }
 
     #region 公共方法
@@ -65,7 +78,7 @@ public class GameManager : MonoBehaviour
     /// <param name="language"></param>
     public void SetLanguage(Language language)
     {
-        if (IsRegister(GuiFrameID.SetUpFrame))
+        if (IsActive(GuiFrameID.SetUpFrame))
         {
             c_MutiLanguageCtrl.Language = language;
         }
@@ -76,8 +89,6 @@ public class GameManager : MonoBehaviour
     /// <param name="clock"></param>
     public void RegisterClock(Clock clock)
     {
-        this.m_Clock = null;
-        System.GC.Collect();
         this.m_Clock = clock;
     }
     /// <summary>
@@ -86,33 +97,65 @@ public class GameManager : MonoBehaviour
     public void UnRegisterClock()
     {
         this.m_Clock = null;
-        System.GC.Collect();
     }
+    ///// <summary>
+    ///// 激活GUI
+    ///// </summary>
+    ///// <param name="id"></param>
+    //public void ActiveGui(GuiFrameID id)
+    //{
+    //    if (M_CurrentWrapper.id != id)
+    //    {
+    //        Object reource = c_ResourceCtrl.GetResource(id);
+    //        if (reource == null)
+    //        {
+    //            Debug.Log("Can not load reousce:" + id.ToString());
+    //            return;
+    //        }
+    //        m_CurrentWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Active Again!!");
+    //    }
+    //}
+    ///// <summary>
+    ///// 销毁GUI
+    ///// </summary>
+    ///// <param name="id"></param>
+    //public void DeActiveGui(GuiFrameID id)
+    //{
+    //    if (M_CurrentWrapper.id == id)
+    //    {
+    //        GameObject tempWrapper = m_CurrentWrapper;
+    //        m_CurrentWrapper = null;
+    //        Destroy(tempWrapper);
+    //    }
+    //}
     /// <summary>
-    /// 激活GUI
+    /// GuiWrapper切换
     /// </summary>
-    /// <param name="id"></param>
-    public void ActiveGui(GuiFrameID id)
+    /// <param name="from_ID"></param>
+    /// <param name="to_ID"></param>
+    public void SwitchWrapper(GuiFrameID from_ID,GuiFrameID to_ID)
     {
-        Object reource = c_ResourceCtrl.GetResource(id);
-        if (reource == null)
+        if (from_ID != to_ID && M_CurrentWrapper.id == from_ID)
         {
-            Debug.Log("Can not load reousce:" + id.ToString());
-            return;
+            GameObject tempWrapper = m_CurrentWrapper;
+            m_CurrentWrapper = null;
+            Destroy(tempWrapper);
+            Object reource = c_ResourceCtrl.GetResource(to_ID);
+            if (reource == null)
+            {
+                Debug.Log("Can not load reousce:" + to_ID.ToString());
+                return;
+            }
+            m_CurrentWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         }
-        GameObject wrapper = Instantiate(reource, m_Root.transform) as GameObject;
-        RegisterGuiObject(id, wrapper);
-    }
-    /// <summary>
-    /// 销毁GUI
-    /// </summary>
-    /// <param name="id"></param>
-    public void DeActiveGui(GuiFrameID id)
-    {
-        GameObject guiObject = GetGuiObject(id);
-        UnRegisterGuiObject(id);
-        Destroy(guiObject);
-        System.GC.Collect();
+        else
+        {
+            Debug.Log("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
+        }
     }
     #endregion
 
@@ -142,44 +185,18 @@ public class GameManager : MonoBehaviour
             case ControllerID.LayoutController:
                 c_LayoutCtrl = (LayoutController)ctrl;
                 break;
+            case ControllerID.FontController:
+                c_FontCtrl = (FontController)ctrl;
+                break;
             default:
                 Debug.Log("Unknow Controller:"+ctrl.id.ToString());
                 break;
         }
         Debug.Log("Ctrl.id:" + ctrl.id.ToString());
     }
-    private void RegisterGuiObject(GuiFrameID id, GameObject wrapper)
+    private bool IsActive(GuiFrameID id)
     {
-        if (!m_GuiObjectDict.ContainsKey(id))
-        {
-            m_GuiObjectDict.Add(id, wrapper);
-        }
-        else
-        {
-            Debug.Log("重复注册：" + id.ToString());
-        }
-    }
-    private void UnRegisterGuiObject(GuiFrameID id)
-    {
-        if (m_GuiObjectDict.ContainsKey(id))
-        {
-            m_GuiObjectDict.Remove(id);
-        }
-        else
-        {
-            Debug.Log("重复注销：" + id.ToString());
-        }
-    }
-
-    private GameObject GetGuiObject(GuiFrameID id)
-    {
-        GameObject wrapper = null;
-        m_GuiObjectDict.TryGetValue(id, out wrapper);
-        return wrapper;
-    }
-    private bool IsRegister(GuiFrameID id)
-    {
-        return m_GuiObjectDict.ContainsKey(id);
+        return M_CurrentWrapper.id == id;
     }
 
 
