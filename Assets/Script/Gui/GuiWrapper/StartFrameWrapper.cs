@@ -10,9 +10,11 @@ public class StartFrameWrapper : GuiFrameWrapper
     void Start()
     {
         base.id = GuiFrameID.StartFrame;
+        InitGui();
     }
-    public void OnClick(Button btn)
+    public override void OnClick(Button btn)
     {
+        base.OnClick(btn);
         switch (btn.name)
         {
             case "StatisticsBtn":
@@ -23,6 +25,9 @@ public class StartFrameWrapper : GuiFrameWrapper
                 break;
             case "SetUpBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.SetUpFrame);
+                break;
+            default:
+                Debug.Log("Can not find Button:" + btn.name);
                 break;
         }
     }

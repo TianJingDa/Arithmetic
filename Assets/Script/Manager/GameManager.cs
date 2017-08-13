@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
             return m_CurrentWrapper.GetComponent<GuiFrameWrapper>();
         }
     }
+    public GuiFrameID M_CurExamID { get; set; }                                                     //当前答题界面（横竖）
     public static GameManager Instance//单例
     {
         get;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
     {
         m_Root = GameObject.Find("Canvas");
         m_CurrentWrapper = GameObject.Find("StartFrame");
+        M_CurExamID = GuiFrameID.ExamFrame_V;
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
         Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
@@ -65,7 +67,7 @@ public class GameManager : MonoBehaviour
         {
             m_Clock.Update();
         }
-        //if (M_CurrentWrapper.id == GuiFrameID.ExamFrame)
+        //if (M_CurrentWrapper.id == GuiFrameID.ExamFrame_V)
         //{
         //    ((ExamFrameWrapper)M_CurrentWrapper).UpdateWrapper();
         //}
@@ -82,6 +84,10 @@ public class GameManager : MonoBehaviour
         {
             c_MutiLanguageCtrl.Language = language;
         }
+    }
+    public string GetMutiLanguage(string index)
+    {
+        return c_MutiLanguageCtrl.GetMutiLanguage(index);
     }
     /// <summary>
     /// 注册时钟

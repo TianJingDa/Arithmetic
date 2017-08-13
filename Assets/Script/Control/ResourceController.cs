@@ -39,7 +39,8 @@ public sealed class ResourceController : Controller
         guiAssetDict.Add(GuiFrameID.StatisticsFrame, "UI/StatisticsFrame");
         guiAssetDict.Add(GuiFrameID.CategoryFrame, "UI/CategoryFrame");
         guiAssetDict.Add(GuiFrameID.SetUpFrame, "UI/SetUpFrame");
-        guiAssetDict.Add(GuiFrameID.ExamFrame, "UI/AnswerFrame");
+        guiAssetDict.Add(GuiFrameID.ExamFrame_V, "UI/ExamFrame_V");
+        guiAssetDict.Add(GuiFrameID.ExamFrame_H, "UI/ExamFrame_H");
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "UI/SettlementFrame");
     }
 

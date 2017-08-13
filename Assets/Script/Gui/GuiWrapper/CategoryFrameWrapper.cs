@@ -11,6 +11,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         base.id = GuiFrameID.CategoryFrame;
+        InitGui();
     }
 
     void Update () 
@@ -18,19 +19,19 @@ public class CategoryFrameWrapper : GuiFrameWrapper
 		
 	}
 
-    public override void InitUI()
+    public override void OnClick(Button btn)
     {
-
-    }
-    public void OnClick(Button btn)
-    {
+        base.OnClick(btn);
         switch (btn.name)
         {
             case "CloseBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.StartFrame);
                 break;
             case "StartBtn":                
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.ExamFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, CurExamID);
+                break;
+            default:
+                Debug.Log("Can not find Button:" + btn.name);
                 break;
         }
     }
