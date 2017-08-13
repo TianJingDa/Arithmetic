@@ -4,29 +4,21 @@ using UnityEngine;
 
 public class LayoutController : Controller 
 {
-    #region 单例
-    private static LayoutController Instance
-    {
-        get;
-        set;
-    }
-    void OnEnable()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
-    }
-    #endregion
-    private Dictionary<GuiFrameID, LayoutID> layoutDict;
-    protected override void InitController()
+    #region C#单例
+    private static LayoutController instance = null;
+    private LayoutController()
     {
         base.id = ControllerID.LayoutController;
         layoutDict = new Dictionary<GuiFrameID, LayoutID>();
         InitLayoutData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
+    public static LayoutController Instance
+    {
+        get { return instance ?? (instance = new LayoutController()); }
+    }
+    #endregion
+    private Dictionary<GuiFrameID, LayoutID> layoutDict;
     private void InitLayoutData()
     {
         layoutDict.Add(GuiFrameID.ExamFrame_H, LayoutID.Horizontal);

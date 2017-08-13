@@ -9,12 +9,12 @@ public enum Language
 }
 public enum GuiFrameID
 {
+    ExamFrame_V,               //答题界面（竖版）
+    ExamFrame_H,               //答题界面（横版）
     StartFrame,                //开始界面
     StatisticsFrame,           //统计数据界面
     CategoryFrame,             //速算类别选择界面
     SetUpFrame,                //设置界面
-    ExamFrame_V,               //答题界面（竖版）
-    ExamFrame_H,               //答题界面（横版）
     SettlementFrame,           //结算界面
     PayFrame                   //支付界面
 }

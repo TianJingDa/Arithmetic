@@ -4,27 +4,20 @@ using UnityEngine;
 
 public sealed class ExamController : Controller
 {
-    #region 单例
-    private static ExamController Instance
-    {
-        get;
-        set;
-    }
-    void OnEnable()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
-    }
-    #endregion
-    protected override void InitController()
+    #region C#单例
+    private static ExamController instance = null;
+    private ExamController()
     {
         base.id = ControllerID.ExamController;
         InitExamData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
+    public static ExamController Instance
+    {
+        get { return instance ?? (instance = new ExamController()); }
+    }
+    #endregion
+
     private void InitExamData()
     {
 

@@ -4,27 +4,20 @@ using UnityEngine;
 
 public class FontController : Controller 
 {
-    #region 单例
-    private static FontController Instance
-    {
-        get;
-        set;
-    }
-    void OnEnable()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
-    }
-    #endregion
-    protected override void InitController()
+    #region C#单例
+    private static FontController instance = null;
+    private FontController()
     {
         base.id = ControllerID.FontController;
         InitFontData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
+    public static FontController Instance
+    {
+        get { return instance ?? (instance = new FontController()); }
+    }
+    #endregion
+
     private void InitFontData()
     {
 

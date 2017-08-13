@@ -36,6 +36,11 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     public void InitGui()
     {
         InitGuiText();
+        InitGuiImage();
+    }
+    private void InitGuiImage()
+    {
+
     }
     private void InitGuiText()
     {
@@ -55,6 +60,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].text);
         }
     }
+
     private string GetTextPath(GameObject obj)
     {
         StringBuilder path = new StringBuilder(obj.name);

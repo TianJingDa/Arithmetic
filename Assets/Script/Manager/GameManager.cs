@@ -42,6 +42,14 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+        c_AchievementCtrl = AchievementController.Instance;
+        c_ExamCtrl = ExamController.Instance;
+        c_FontCtrl = FontController.Instance;
+        c_LayoutCtrl = LayoutController.Instance;
+        c_MutiLanguageCtrl = MutiLanguageController.Instance;
+        c_ResourceCtrl = ResourceController.Instance;
+        c_SkinCtrl = SkinController.Instance;
+        c_StatisticsCtrl = StatisticsController.Instance;
     }
 
     void Start()
@@ -71,6 +79,7 @@ public class GameManager : MonoBehaviour
         //{
         //    ((ExamFrameWrapper)M_CurrentWrapper).UpdateWrapper();
         //}
+
     }
 
     #region 公共方法
@@ -166,40 +175,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region 私有方法
-    private void RegisterController(Controller ctrl)
-    {
-        switch (ctrl.id)
-        {
-            case ControllerID.AchievementController:
-                c_AchievementCtrl = (AchievementController)ctrl;
-                break;
-            case ControllerID.ExamController:
-                c_ExamCtrl = (ExamController)ctrl;
-                break;
-            case ControllerID.MutiLanguageController:
-                c_MutiLanguageCtrl = (MutiLanguageController)ctrl;
-                break;
-            case ControllerID.ResourceController:
-                c_ResourceCtrl = (ResourceController)ctrl;
-                break;
-            case ControllerID.StatisticsController:
-                c_StatisticsCtrl = (StatisticsController)ctrl;
-                break;
-            case ControllerID.SkinController:
-                c_SkinCtrl = (SkinController)ctrl;
-                break;
-            case ControllerID.LayoutController:
-                c_LayoutCtrl = (LayoutController)ctrl;
-                break;
-            case ControllerID.FontController:
-                c_FontCtrl = (FontController)ctrl;
-                break;
-            default:
-                Debug.Log("Unknow Controller:"+ctrl.id.ToString());
-                break;
-        }
-        Debug.Log("Ctrl.id:" + ctrl.id.ToString());
-    }
     private bool IsActive(GuiFrameID id)
     {
         return M_CurrentWrapper.id == id;

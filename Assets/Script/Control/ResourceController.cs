@@ -4,32 +4,23 @@ using UnityEngine;
 
 public sealed class ResourceController : Controller
 {
-    #region 单例
-    private static ResourceController Instance
-    {
-        get;
-        set;
-    }
-    void OnEnable()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
-    }
-    #endregion
-
-    private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
-    private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
-    protected override void InitController()
+    #region C#单例
+    private static ResourceController instance = null;
+    private ResourceController()
     {
         base.id = ControllerID.ResourceController;
         guiAssetDict = new Dictionary<GuiFrameID, string>();
         resourceDict = new Dictionary<GuiFrameID, Object>();
         InitReourceData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
+    public static ResourceController Instance
+    {
+        get { return instance ?? (instance = new ResourceController()); }
+    }
+    #endregion
+    private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
+    private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
     /// <summary>
     /// 注册所有资源地址
     /// </summary>

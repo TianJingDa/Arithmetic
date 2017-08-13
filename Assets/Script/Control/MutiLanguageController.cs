@@ -5,24 +5,22 @@ using System.IO;
 
 public sealed class MutiLanguageController: Controller
 {
-    #region 单例
-    private static MutiLanguageController Instance
+    #region C#单例
+    private static MutiLanguageController instance = null;
+    private MutiLanguageController()
     {
-        get;
-        set;
+        base.id = ControllerID.MutiLanguageController;
+        mutiLanguageDict = new Dictionary<string, string[]>();
+        InitLanguageData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
-    void OnEnable()
+    public static MutiLanguageController Instance
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
+        get{ return instance ?? (instance = new MutiLanguageController()); }
     }
     #endregion
-    private Language language = Language.Chinese;//默认语言：中文
-    private Dictionary<string, string[]> mutiLanguageDict;//存储多语言的字典，key：序号，value：文字
+    private Language language = Language.Chinese;           //默认语言：中文
+    private Dictionary<string, string[]> mutiLanguageDict;  //存储多语言的字典，key：序号，value：文字
 
     public Language Language
     {
@@ -30,12 +28,6 @@ public sealed class MutiLanguageController: Controller
         {
             language = value;
         }
-    }
-    protected override void InitController()
-    {
-        base.id = ControllerID.MutiLanguageController;
-        mutiLanguageDict = new Dictionary<string, string[]>();
-        InitLanguageData();
     }
     /// <summary>
     /// 初始化多语言字典

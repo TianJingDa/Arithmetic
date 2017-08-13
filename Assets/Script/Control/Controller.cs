@@ -4,9 +4,8 @@ using UnityEngine;
 /// <summary>
 /// 所有控制器的基类
 /// </summary>
-public abstract class Controller : MonoBehaviour
+public abstract class Controller
 {
-    [HideInInspector]
-    public ControllerID id;
-    protected abstract void InitController();//初始化控制器
+    protected ControllerID id;
+    protected virtual void InitController() { }//初始化控制器
 }

@@ -4,27 +4,20 @@ using UnityEngine;
 
 public class AchievementController : Controller 
 {
-    #region 单例
-    private static AchievementController Instance
-    {
-        get;
-        set;
-    }
-    void OnEnable()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitController();
-            SendMessage("RegisterController", Instance, SendMessageOptions.RequireReceiver);
-        }
-    }
-    #endregion
-    protected override void InitController()
+    #region C#单例
+    private static AchievementController instance = null;
+    private AchievementController()
     {
         base.id = ControllerID.AchievementController;
         InitAchievementData();
+        Debug.Log("Loading Controller:" + id.ToString());
     }
+    public static AchievementController Instance
+    {
+        get { return instance ?? (instance = new AchievementController()); }
+    }
+    #endregion
+
     private void InitAchievementData()
     {
 
