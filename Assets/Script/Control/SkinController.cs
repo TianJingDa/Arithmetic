@@ -9,8 +9,7 @@ public class SkinController : Controller
     private SkinController()
     {
         base.id = ControllerID.SkinController;
-        skinDict = new Dictionary<string, string[]>();
-        InitSkinData();
+        spriteDict = new Dictionary<string, Object>();
         Debug.Log("Loading Controller:" + id.ToString());
     }
     public static SkinController Instance
@@ -18,22 +17,46 @@ public class SkinController : Controller
         get { return instance ?? (instance = new SkinController()); }
     }
     #endregion
-    private Dictionary<string, string[]> skinDict;  //存储多语言的字典，key：序号，value：文字
-    private void InitSkinData()
+    private Dictionary<string, Object> spriteDict;//key：string，value：sprite预设体
+
+    public Object GetSpriteResource(SkinID id,string index)
     {
-        TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
-        if (mutiLanguageAsset == null)
+        string path = "";
+        switch (id)
         {
-            Debug.Log("Load File Error!");
-            return;
+            case SkinID.Default:
+                path = "Skin/Default/";
+                break;
+            case SkinID.FreshGreen:
+                path = "Skin/FreshGreen/";
+                break;
+            case SkinID.RosePink:
+                path = "Skin/RosePink/";
+                break;
+            case SkinID.SkyBlue:
+                path = "Skin/SkyBlue/";
+                break;
+            default:
+                Debug.Log("Unknow id:" + id.ToString());
+                break;
         }
-        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
-        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
-        List<string> lineList;
-        for (int i = 0; i < lineArray.Length; i++)
+        if (path == "") return null;
+        Object resouce = null;
+        if (spriteDict.ContainsKey(index))
         {
-            lineList = new List<string>(lineArray[i].Split(','));
-            skinDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
+            resouce = spriteDict[index];
         }
+        else
+        {
+            resouce = Resources.Load(path + index);
+            spriteDict.Add(index, resouce);
+        }
+        return resouce;
     }
+    //切换SkinID的时候需要清空spriteDict！！！
+    public void ClearSpriteDict()
+    {
+        spriteDict.Clear();
+    }
+
 }

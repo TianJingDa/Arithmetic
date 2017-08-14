@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class ImageExtension : Image 
+[RequireComponent(typeof(Image))]
+public class ImageExtension : MonoBehaviour 
 {    
     public string index;//颜色编号
 }

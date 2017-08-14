@@ -1,9 +1,9 @@
 Index,Chinese,English
-TJD_00000,感谢开发人员,TJD
-TJD_00001,感谢,TJD
-TJD_00002,非常感谢,TJD
-TJD_00003,设置,TJD
-TJD_00004,版本,TJD
-TJD_00005,是否结束,TJD
-TJD_00006,否，继续,TJD
-TJD_00007,是，结束,TJD
+Text_00000,感谢开发人员,TJD
+Text_00001,感谢,TJD
+Text_00002,非常感谢,TJD
+Text_00003,设置,TJD
+Text_00004,版本,TJD
+Text_00005,是否结束,TJD
+Text_00006,否，继续,TJD
+Text_00007,是，结束,TJD

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Language
+public enum LanguageID
 {
     Chinese,
     English
@@ -31,11 +31,19 @@ public enum ControllerID
 }
 public enum SkinID
 {
-    First,
-    Second
+    Default,                   //默认皮肤
+    FreshGreen,                //清新绿
+    RosePink,                  //玫瑰粉
+    SkyBlue                    //天空蓝
 }
 public enum LayoutID
 {
     Horizontal,                //水平布局
     Vertical                   //垂直布局
+}
+public enum FontID
+{
+    FZSTK,                     //方正舒体
+    STKAITI,                   //华文楷体
+    STXINGKA,                  //华文行楷
 }

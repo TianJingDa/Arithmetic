@@ -19,16 +19,8 @@ public sealed class MutiLanguageController: Controller
         get{ return instance ?? (instance = new MutiLanguageController()); }
     }
     #endregion
-    private Language language = Language.Chinese;           //默认语言：中文
     private Dictionary<string, string[]> mutiLanguageDict;  //存储多语言的字典，key：序号，value：文字
 
-    public Language Language
-    {
-        set
-        {
-            language = value;
-        }
-    }
     /// <summary>
     /// 初始化多语言字典
     /// </summary>
@@ -54,7 +46,7 @@ public sealed class MutiLanguageController: Controller
     /// </summary>
     /// <param name="index">序号</param>
     /// <returns>内容</returns>
-    public string GetMutiLanguage(string index)
+    public string GetMutiLanguage(string index,LanguageID language)
     {
         string[] languageArray = null;
         mutiLanguageDict.TryGetValue(index, out languageArray);

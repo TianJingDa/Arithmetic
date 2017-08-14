@@ -23,13 +23,13 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     {
         get
         {
-            return GameManager.Instance.M_CurExamID;
+            return GameManager.Instance.m_CurExamID;
         }
         set
         {
             if (id == GuiFrameID.SetUpFrame)
             {
-                GameManager.Instance.M_CurExamID = value;
+                GameManager.Instance.m_CurExamID = value;
             }
         }
     }
@@ -40,7 +40,29 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     }
     private void InitGuiImage()
     {
-
+        ImageExtension[] imageArray = gameObject.GetComponentsInChildren<ImageExtension>(true);
+        if (imageArray.Length == 0)
+        {
+            Debug.Log("No child has Image component which need modify!");
+            return;
+        }
+        for (int i = 0; i < imageArray.Length; i++)
+        {
+            if (imageArray[i].index == "")
+            {
+                Debug.Log("This image's index is NULL:" + GetObjectPath(imageArray[i].gameObject));
+                continue;
+            }
+            Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
+            if (sprite != null)
+            {
+                imageArray[i].gameObject.GetComponent<Image>().sprite = sprite;
+            }
+            else
+            {
+                Debug.Log("Can not load Sprite:" + imageArray[i].index);
+            }
+        }
     }
     private void InitGuiText()
     {
@@ -50,18 +72,20 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             Debug.Log("No child has Text component!");
             return;
         }
+        Font curFont = GameManager.Instance.GetFont();
         for (int i = 0; i < textArray.Length; i++)
         {
             if (textArray[i].text == "")
             {
-                Debug.Log("This text's content is NULL:" + GetTextPath(textArray[i].gameObject));
+                Debug.Log("This text's content is NULL:" + GetObjectPath(textArray[i].gameObject));
                 continue;
             }
+            textArray[i].font = curFont;
+            textArray[i].color = GameManager.Instance.GetColor(textArray[i].text);
             textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].text);
         }
     }
-
-    private string GetTextPath(GameObject obj)
+    private string GetObjectPath(GameObject obj)
     {
         StringBuilder path = new StringBuilder(obj.name);
         Transform Parent = obj.transform.parent;

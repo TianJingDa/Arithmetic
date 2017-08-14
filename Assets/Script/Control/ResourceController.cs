@@ -40,7 +40,7 @@ public sealed class ResourceController : Controller
     /// </summary>
     /// <param name="id">GuiFrameID</param>
     /// <returns>资源实例</returns>
-    public Object GetResource(GuiFrameID id)
+    public Object GetGuiResource(GuiFrameID id)
     {
         Object resouce = null;
         if (resourceDict.ContainsKey(id))

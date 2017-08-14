@@ -6,11 +6,18 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    private GameObject                                          m_Root;                             //UI对象的根对象
-    private GameObject                                          m_CurrentWrapper;                   //当前激活的GuiWrapper
-    private Clock                                               m_Clock = null;                     //时钟工具
-    //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
+    [HideInInspector]
+    public  LanguageID                                          m_CurLanguageID ;                   //当前语言
+    [HideInInspector]
+    public GuiFrameID                                           m_CurExamID;                        //当前答题界面
+    [HideInInspector]
+    public FontID                                               m_CurFontID;                        //当前字体
+    [HideInInspector]
+    public SkinID                                               m_CurSkinID;                        //当前皮肤
 
+    private GameObject                                          m_Root;                             //UI对象的根对象
+    private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
+    private Clock                                               m_Clock;                            //时钟工具
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
     private StatisticsController                                c_StatisticsCtrl;
@@ -19,18 +26,18 @@ public class GameManager : MonoBehaviour
     private SkinController                                      c_SkinCtrl;
     private LayoutController                                    c_LayoutCtrl;
     private FontController                                      c_FontCtrl;
+    private TextColorController                                 c_TextColorCtrl;
 
-
+    //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
     private GuiFrameWrapper M_CurrentWrapper
     {
         get
         {
-            return m_CurrentWrapper.GetComponent<GuiFrameWrapper>();
+            return m_CurWrapper.GetComponent<GuiFrameWrapper>();
         }
     }
-    public GuiFrameID M_CurExamID { get; set; }                                                     //当前答题界面（横竖）
     public static GameManager Instance//单例
     {
         get;
@@ -38,10 +45,7 @@ public class GameManager : MonoBehaviour
     }
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        if (Instance == null){ Instance = this; }
         c_AchievementCtrl = AchievementController.Instance;
         c_ExamCtrl = ExamController.Instance;
         c_FontCtrl = FontController.Instance;
@@ -50,22 +54,26 @@ public class GameManager : MonoBehaviour
         c_ResourceCtrl = ResourceController.Instance;
         c_SkinCtrl = SkinController.Instance;
         c_StatisticsCtrl = StatisticsController.Instance;
+        c_TextColorCtrl = TextColorController.Instance;
+        m_CurLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
+        m_CurFontID = FontID.FZSTK;//后期需要进行判断PlayerPrefs，不然每次进来都是同一字体
+        m_CurSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
     }
 
     void Start()
     {
         m_Root = GameObject.Find("Canvas");
-        m_CurrentWrapper = GameObject.Find("StartFrame");
-        M_CurExamID = GuiFrameID.ExamFrame_V;
+        m_CurWrapper = GameObject.Find("StartFrame");
+        m_CurExamID = GuiFrameID.ExamFrame_V;
         //ActiveGui(GuiFrameID.StartFrame);
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00000"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00001"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00002"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00003"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00004"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00005"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00006"));
-        Debug.Log(c_MutiLanguageCtrl.GetMutiLanguage("TJD_00007"));
+        Debug.Log(GetMutiLanguage("Text_00000"));
+        Debug.Log(GetMutiLanguage("Text_00001"));
+        Debug.Log(GetMutiLanguage("Text_00002"));
+        Debug.Log(GetMutiLanguage("Text_00003"));
+        Debug.Log(GetMutiLanguage("Text_00004"));
+        Debug.Log(GetMutiLanguage("Text_00005"));
+        Debug.Log(GetMutiLanguage("Text_00006"));
+        Debug.Log(GetMutiLanguage("Text_00007"));
 
     }
 
@@ -87,16 +95,28 @@ public class GameManager : MonoBehaviour
     /// 修改语言
     /// </summary>
     /// <param name="language"></param>
-    public void SetLanguage(Language language)
+    public void SetLanguage(LanguageID language)
     {
         if (IsActive(GuiFrameID.SetUpFrame))
         {
-            c_MutiLanguageCtrl.Language = language;
+            m_CurLanguageID = language;
         }
     }
     public string GetMutiLanguage(string index)
     {
-        return c_MutiLanguageCtrl.GetMutiLanguage(index);
+        return c_MutiLanguageCtrl.GetMutiLanguage(index, m_CurLanguageID);
+    }
+    public Font GetFont()
+    {
+        return (Font)c_FontCtrl.GetFontResource(m_CurFontID);
+    }
+    public Sprite GetSprite(string index)
+    {
+        return (Sprite)c_SkinCtrl.GetSpriteResource(m_CurSkinID, index);
+    }
+    public Color GetColor(string index)
+    {
+        return c_TextColorCtrl.GetColorData(m_CurSkinID, index);
     }
     /// <summary>
     /// 注册时钟
@@ -121,13 +141,13 @@ public class GameManager : MonoBehaviour
     //{
     //    if (M_CurrentWrapper.id != id)
     //    {
-    //        Object reource = c_ResourceCtrl.GetResource(id);
+    //        Object reource = c_ResourceCtrl.GetGuiResource(id);
     //        if (reource == null)
     //        {
     //            Debug.Log("Can not load reousce:" + id.ToString());
     //            return;
     //        }
-    //        m_CurrentWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+    //        m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
     //    }
     //    else
     //    {
@@ -142,8 +162,8 @@ public class GameManager : MonoBehaviour
     //{
     //    if (M_CurrentWrapper.id == id)
     //    {
-    //        GameObject tempWrapper = m_CurrentWrapper;
-    //        m_CurrentWrapper = null;
+    //        GameObject tempWrapper = m_CurWrapper;
+    //        m_CurWrapper = null;
     //        Destroy(tempWrapper);
     //    }
     //}
@@ -156,16 +176,16 @@ public class GameManager : MonoBehaviour
     {
         if (from_ID != to_ID && M_CurrentWrapper.id == from_ID)
         {
-            GameObject tempWrapper = m_CurrentWrapper;
-            m_CurrentWrapper = null;
+            GameObject tempWrapper = m_CurWrapper;
+            m_CurWrapper = null;
             Destroy(tempWrapper);
-            Object reource = c_ResourceCtrl.GetResource(to_ID);
+            Object reource = c_ResourceCtrl.GetGuiResource(to_ID);
             if (reource == null)
             {
                 Debug.Log("Can not load reousce:" + to_ID.ToString());
                 return;
             }
-            m_CurrentWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+            m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         }
         else
         {
