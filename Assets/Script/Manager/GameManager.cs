@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public GuiFrameID                                           m_CurExamID;                        //当前答题界面
     [HideInInspector]
-    public FontID                                               m_CurFontID;                        //当前字体
-    [HideInInspector]
     public SkinID                                               m_CurSkinID;                        //当前皮肤
 
     private GameObject                                          m_Root;                             //UI对象的根对象
@@ -56,15 +54,14 @@ public class GameManager : MonoBehaviour
         c_StatisticsCtrl = StatisticsController.Instance;
         c_TextColorCtrl = TextColorController.Instance;
         m_CurLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
-        m_CurFontID = FontID.FZSTK;//后期需要进行判断PlayerPrefs，不然每次进来都是同一字体
         m_CurSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
+        m_CurExamID = GuiFrameID.ExamFrame_V;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
     }
 
     void Start()
     {
         m_Root = GameObject.Find("Canvas");
         m_CurWrapper = GameObject.Find("StartFrame");
-        m_CurExamID = GuiFrameID.ExamFrame_V;
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
         Debug.Log(GetMutiLanguage("Text_00001"));
@@ -108,11 +105,13 @@ public class GameManager : MonoBehaviour
     }
     public Font GetFont()
     {
-        return (Font)c_FontCtrl.GetFontResource(m_CurFontID);
+        Object font = c_FontCtrl.GetFontResource(m_CurSkinID,m_CurLanguageID);
+        return Instantiate(font) as Font;
     }
     public Sprite GetSprite(string index)
     {
-        return (Sprite)c_SkinCtrl.GetSpriteResource(m_CurSkinID, index);
+        Object sprite = c_SkinCtrl.GetSpriteResource(m_CurSkinID, index);
+        return Instantiate(sprite) as Sprite;
     }
     public Color GetColor(string index)
     {

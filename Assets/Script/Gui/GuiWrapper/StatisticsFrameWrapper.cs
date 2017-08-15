@@ -25,7 +25,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         
     }
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)

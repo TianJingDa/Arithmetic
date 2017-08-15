@@ -18,7 +18,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 		
 	}
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)

@@ -11,7 +11,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
     public virtual void UpdateWrapper() { }
-    public virtual void OnClick(Button btn)
+    protected virtual void OnClick(Button btn)
     {
         if (btn == null)
         {
@@ -19,7 +19,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             return;
         }
     }
-    public GuiFrameID CurExamID
+    protected GuiFrameID CurExamID
     {
         get
         {
@@ -33,17 +33,17 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             }
         }
     }
-    public void InitGui()
+    protected void InitGui()
     {
         InitGuiText();
         InitGuiImage();
     }
     private void InitGuiImage()
     {
-        ImageExtension[] imageArray = gameObject.GetComponentsInChildren<ImageExtension>(true);
+        return;
+        Image[] imageArray = gameObject.GetComponentsInChildren<Image>(true);
         if (imageArray.Length == 0)
         {
-            Debug.Log("No child has Image component which need modify!");
             return;
         }
         for (int i = 0; i < imageArray.Length; i++)
@@ -56,7 +56,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
             if (sprite != null)
             {
-                imageArray[i].gameObject.GetComponent<Image>().sprite = sprite;
+                imageArray[i].sprite = sprite;
             }
             else
             {
@@ -66,23 +66,23 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     }
     private void InitGuiText()
     {
+        return;
         Text[] textArray = gameObject.GetComponentsInChildren<Text>(true);
         if (textArray.Length == 0)
         {
-            Debug.Log("No child has Text component!");
             return;
         }
         Font curFont = GameManager.Instance.GetFont();
         for (int i = 0; i < textArray.Length; i++)
         {
-            if (textArray[i].text == "")
+            if (textArray[i].index == "")
             {
-                Debug.Log("This text's content is NULL:" + GetObjectPath(textArray[i].gameObject));
+                Debug.Log("This text's index is NULL:" + GetObjectPath(textArray[i].gameObject));
                 continue;
             }
             textArray[i].font = curFont;
-            textArray[i].color = GameManager.Instance.GetColor(textArray[i].text);
-            textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].text);
+            textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
+            textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
         }
     }
     private string GetObjectPath(GameObject obj)
@@ -95,5 +95,23 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             Parent = Parent.parent;
         }
         return path.ToString();
+    }
+    private T GetComponentByName<T>(string name)where T : Object
+    {
+        T[] array = GetComponentsInChildren<T>(true);
+        T result = null;
+        for(int i = 0; i < array.Length; i++)
+        {
+            if (array[i].name == name)
+            {
+                result = array[i];
+                break;
+            }
+        }
+        if (result == null)
+        {
+            Debug.Log("Can not find :" + name);
+        }
+        return result;
     }
 }

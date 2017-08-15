@@ -52,7 +52,7 @@ public class TextColorController : Controller
     }
     public Color GetColorData(SkinID id, string index)
     {
-        Dictionary<string, string[]> colorDict = new Dictionary<string, string[]>();
+        Dictionary<string, string[]> colorDict = null;
         switch (id)
         {
             case SkinID.Default:

@@ -9,7 +9,7 @@ public class FontController : Controller
     private FontController()
     {
         base.id = ControllerID.FontController;
-        fontAssetDict = new Dictionary<FontID, string>();
+        fontAssetDict = new Dictionary<SkinID, string[]>();
         InitFontData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -18,17 +18,18 @@ public class FontController : Controller
         get { return instance ?? (instance = new FontController()); }
     }
     #endregion
-    private Dictionary<FontID, string> fontAssetDict;//key：FontID，value：资源路径
+    private Dictionary<SkinID, string[]> fontAssetDict;//key：SkinID，value：资源路径
 
     private void InitFontData()
     {
-        fontAssetDict.Add(FontID.FZSTK, "Font/FZSTK");
-        fontAssetDict.Add(FontID.STKAITI, "Font/STKAITI");
-        fontAssetDict.Add(FontID.STXINGKA, "Font/STXINGKA");
+        fontAssetDict.Add(SkinID.Default, new string[] { "Default/Chinese", "Default/English" });
+        fontAssetDict.Add(SkinID.FreshGreen, new string[] { "FreshGreen/Chinese", "FreshGreen/English" });
+        fontAssetDict.Add(SkinID.RosePink, new string[] { "RosePink/Chinese", "RosePink/English" });
+        fontAssetDict.Add(SkinID.SkyBlue, new string[] { "SkyBlue/Chinese", "SkyBlue/English" });
     }
-    public Object GetFontResource(FontID id)
+    public Object GetFontResource(SkinID sID,LanguageID lID)
     {
-        Object resouce = Resources.Load(fontAssetDict[id]);
+        Object resouce = Resources.Load(fontAssetDict[sID][(int)lID]);
         return resouce;
     }
 

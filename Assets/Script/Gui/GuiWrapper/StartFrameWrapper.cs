@@ -12,7 +12,7 @@ public class StartFrameWrapper : GuiFrameWrapper
         base.id = GuiFrameID.StartFrame;
         InitGui();
     }
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)

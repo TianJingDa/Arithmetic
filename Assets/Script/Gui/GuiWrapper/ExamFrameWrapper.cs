@@ -26,7 +26,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
         GameManager.Instance.UnRegisterClock();
     }
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
