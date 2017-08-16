@@ -25,7 +25,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         
     }
 
-    protected override void OnClick(Button btn)
+    public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
@@ -34,7 +34,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, GuiFrameID.StartFrame);
                 break;
             default:
-                Debug.Log("Can not find Button:" + btn.name);
+                Debug.LogError("Can not find Button:" + btn.name);
                 break;
         }
     }

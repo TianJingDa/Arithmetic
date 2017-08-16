@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public  LanguageID                                          m_CurLanguageID ;                   //当前语言
     [HideInInspector]
-    public GuiFrameID                                           m_CurExamID;                        //当前答题界面
-    [HideInInspector]
     public SkinID                                               m_CurSkinID;                        //当前皮肤
+    [HideInInspector]
+    public LayoutID                                             m_CurLayoutID;                      //当前布局
 
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         c_TextColorCtrl = TextColorController.Instance;
         m_CurLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
         m_CurSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
-        m_CurExamID = GuiFrameID.ExamFrame_V;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
+        m_CurLayoutID = LayoutID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
     }
 
     void Start()
@@ -116,6 +116,10 @@ public class GameManager : MonoBehaviour
     public Color GetColor(string index)
     {
         return c_TextColorCtrl.GetColorData(m_CurSkinID, index);
+    }
+    public RectTransform[] GetLayoutData()
+    {
+        return c_LayoutCtrl.GetLayoutData(m_CurLayoutID);
     }
     /// <summary>
     /// 注册时钟
@@ -181,14 +185,14 @@ public class GameManager : MonoBehaviour
             Object reource = c_ResourceCtrl.GetGuiResource(to_ID);
             if (reource == null)
             {
-                Debug.Log("Can not load reousce:" + to_ID.ToString());
+                Debug.LogError("Can not load reousce:" + to_ID.ToString());
                 return;
             }
             m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         }
         else
         {
-            Debug.Log("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
+            Debug.LogError("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
         }
     }
     #endregion

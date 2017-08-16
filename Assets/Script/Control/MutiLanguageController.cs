@@ -29,7 +29,7 @@ public sealed class MutiLanguageController: Controller
         TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
         if (mutiLanguageAsset == null)
         {
-            Debug.Log("Load File Error!");
+            Debug.LogError("Load File Error!");
             return;
         }
         char[] charSeparators = new char[] { "\r"[0], "\n"[0] };

@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 /// <summary>
 /// 答题界面
 /// </summary>
 public class ExamFrameWrapper : GuiFrameWrapper
 {
-    public Text timeLabel;
-    public GameObject confirmWin;
+    private Text timeLabel;
+    private GameObject confirmWin;
+    private GameObject confirmBtn;
 
-	void Start () 
+
+    void Start () 
 	{
-        base.id = CurExamID;
+        base.id = GuiFrameID.ExamFrame;
+        RectTransform[] transforms = GameManager.Instance.GetLayoutData();
+        InitLayout(transforms);
         InitGui();
+        //timeLabel = GetComponentByName<Text>("TimeLabel");
+        confirmWin = GetGameObjectByName(gameObject, "ConfirmWin");
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
+
 
     void Update () 
 	{
@@ -26,7 +34,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
         GameManager.Instance.UnRegisterClock();
     }
 
-    protected override void OnClick(Button btn)
+    public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
@@ -40,12 +48,17 @@ public class ExamFrameWrapper : GuiFrameWrapper
                 confirmWin.SetActive(false);
                 break;
             case "ConfirmBtn":
-                GameManager.Instance.SwitchWrapper(CurExamID, GuiFrameID.SettlementFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ExamFrame, GuiFrameID.SettlementFrame);
                 break;
             default:
-                Debug.Log("Can not find Button:" + btn.name);
+                Debug.LogError("Can not find Button:" + btn.name);
                 break;
         }
+    }
+
+    private void InitLayout(RectTransform[] transforms)
+    {
+
     }
 
 

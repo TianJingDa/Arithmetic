@@ -12,7 +12,7 @@ public class StartFrameWrapper : GuiFrameWrapper
         base.id = GuiFrameID.StartFrame;
         InitGui();
     }
-    protected override void OnClick(Button btn)
+    public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
@@ -27,7 +27,7 @@ public class StartFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.SetUpFrame);
                 break;
             default:
-                Debug.Log("Can not find Button:" + btn.name);
+                Debug.LogError("Can not find Button:" + btn.name);
                 break;
         }
     }

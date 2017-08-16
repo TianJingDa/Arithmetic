@@ -11,26 +11,12 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
     public virtual void UpdateWrapper() { }
-    protected virtual void OnClick(Button btn)
+    public virtual void OnClick(Button btn)
     {
         if (btn == null)
         {
-            Debug.Log("Button is NULL!");
+            Debug.LogError("Button is NULL!");
             return;
-        }
-    }
-    protected GuiFrameID CurExamID
-    {
-        get
-        {
-            return GameManager.Instance.m_CurExamID;
-        }
-        set
-        {
-            if (id == GuiFrameID.SetUpFrame)
-            {
-                GameManager.Instance.m_CurExamID = value;
-            }
         }
     }
     protected void InitGui()
@@ -50,7 +36,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         {
             if (imageArray[i].index == "")
             {
-                Debug.Log("This image's index is NULL:" + GetObjectPath(imageArray[i].gameObject));
+                Debug.LogError("This image's index is NULL:" + GetObjectPath(imageArray[i].gameObject));
                 continue;
             }
             Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
@@ -60,28 +46,27 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             }
             else
             {
-                Debug.Log("Can not load Sprite:" + imageArray[i].index);
+                Debug.LogError("Can not load Sprite:" + imageArray[i].index);
             }
         }
     }
     private void InitGuiText()
     {
-        return;
         Text[] textArray = gameObject.GetComponentsInChildren<Text>(true);
         if (textArray.Length == 0)
         {
             return;
         }
-        Font curFont = GameManager.Instance.GetFont();
+        //Font curFont = GameManager.Instance.GetFont();
         for (int i = 0; i < textArray.Length; i++)
         {
             if (textArray[i].index == "")
             {
-                Debug.Log("This text's index is NULL:" + GetObjectPath(textArray[i].gameObject));
+                Debug.LogError("This text's index is NULL:" + GetObjectPath(textArray[i].gameObject));
                 continue;
             }
-            textArray[i].font = curFont;
-            textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
+            //textArray[i].font = curFont;
+            //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
             textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
         }
     }
@@ -96,22 +81,43 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
         return path.ToString();
     }
-    private T GetComponentByName<T>(string name)where T : Object
+    protected T GetComponentByName<T>(GameObject root, string name)where T : Component
     {
-        T[] array = GetComponentsInChildren<T>(true);
+        T[] array = root.GetComponentsInChildren<T>(true);
         T result = null;
-        for(int i = 0; i < array.Length; i++)
+        if (array != null)
         {
-            if (array[i].name == name)
+            for (int i = 0; i < array.Length; i++)
             {
-                result = array[i];
-                break;
+                if (array[i].name == name)
+                {
+                    result = array[i];
+                    break;
+                }
             }
         }
         if (result == null)
         {
-            Debug.Log("Can not find :" + name);
+            Debug.LogError("Can not find :" + name);
         }
         return result;
     }
+    protected T[] GetComponentsByName<T>(string name) where T : Component
+    {
+        T[] result = null;
+        return result;
+    }
+    protected GameObject GetGameObjectByName(GameObject root, string name)
+    {
+        if (root.name == name)
+            return root;
+        for (int i = root.transform.childCount - 1; i >= 0; i--)
+        {
+            GameObject go = GetGameObjectByName(root.transform.GetChild(i).gameObject, name);
+            if (go != null)
+                return go;
+        }
+        return null;
+    }
+
 }

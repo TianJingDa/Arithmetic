@@ -37,7 +37,7 @@ public class SkinController : Controller
                 path = "Skin/SkyBlue/";
                 break;
             default:
-                Debug.Log("Unknow id:" + id.ToString());
+                Debug.LogError("Unknow id:" + id.ToString());
                 break;
         }
         if (path == "") return null;

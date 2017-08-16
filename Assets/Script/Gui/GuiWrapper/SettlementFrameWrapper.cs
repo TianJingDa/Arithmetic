@@ -19,7 +19,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 		
 	}
 
-    protected override void OnClick(Button btn)
+    public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
@@ -31,7 +31,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.CategoryFrame);
                 break;
             default:
-                Debug.Log("Can not find Button:" + btn.name);
+                Debug.LogError("Can not find Button:" + btn.name);
                 break;
         }
     }
