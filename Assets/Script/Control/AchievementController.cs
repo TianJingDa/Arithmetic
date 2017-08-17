@@ -22,4 +22,9 @@ public class AchievementController : Controller
     {
 
     }
+    public AchievementInstance GetAchievementInstance()
+    {
+        return new AchievementInstance();
+    }
+
 }

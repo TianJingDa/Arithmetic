@@ -28,8 +28,4 @@ public sealed class ExamController : Controller
     }
 
 }
-public struct ExamQuestionInstance
-{
-
-}
 

@@ -16,3 +16,13 @@ public class Clock
 		
 	}
 }
+public class ExamQuestionInstance
+{
+
+}
+public class AchievementInstance
+{
+
+}
+
+

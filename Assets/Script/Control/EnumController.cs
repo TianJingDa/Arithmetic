@@ -21,7 +21,6 @@ public enum ControllerID
 {
     MutiLanguageController,    //多语言控制器
     ResourceController,        //资源控制器
-    StatisticsController,      //统计数据控制器
     ExamController,            //考试控制器
     AchievementController,     //成就控制器
     SkinController,            //皮肤控制器

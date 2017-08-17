@@ -109,15 +109,40 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     }
     protected GameObject GetGameObjectByName(GameObject root, string name)
     {
-        if (root.name == name)
-            return root;
-        for (int i = root.transform.childCount - 1; i >= 0; i--)
+        GameObject result = null;
+        if (root != null)
         {
-            GameObject go = GetGameObjectByName(root.transform.GetChild(i).gameObject, name);
-            if (go != null)
-                return go;
+            Transform[] objArray = root.GetComponentsInChildren<Transform>(true);
+            if (objArray != null)
+            {
+                for(int i = 0; i < objArray.Length; i++)
+                {
+                    if (objArray[i].name == name)
+                    {
+                        result = objArray[i].gameObject;
+                        break;
+                    }
+                }
+            }
         }
-        return null;
+        return result;
     }
+    protected List<GameObject> GetGameObjectsByName(GameObject root, string name)
+    {
+        List<GameObject> result = new List<GameObject>();
+        Transform[] objArray = root.GetComponentsInChildren<Transform>(true);
+        if (objArray != null)
+        {
+            for (int i = 0; i < objArray.Length; i++)
+            {
+                if (objArray[i].name == name)//objArray[i].name.Contains(name)  
+                {
+                    result.Add(objArray[i].gameObject);
+                }
+            }
+        }
+        return result;
 
+    }
 }
+

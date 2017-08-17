@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     private Clock                                               m_Clock;                            //时钟工具
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
-    private StatisticsController                                c_StatisticsCtrl;
     private ExamController                                      c_ExamCtrl;
     private AchievementController                               c_AchievementCtrl;
     private SkinController                                      c_SkinCtrl;
@@ -51,7 +50,6 @@ public class GameManager : MonoBehaviour
         c_MutiLanguageCtrl = MutiLanguageController.Instance;
         c_ResourceCtrl = ResourceController.Instance;
         c_SkinCtrl = SkinController.Instance;
-        c_StatisticsCtrl = StatisticsController.Instance;
         c_TextColorCtrl = TextColorController.Instance;
         m_CurLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
         m_CurSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
