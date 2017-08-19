@@ -1,4 +1,13 @@
 Index,Chinese,English
+Text_20000,统计数据,TJD
+Text_20001,游戏时间,TJD
+Text_20002,{0}小时{1}分钟,TJD
+Text_20003,游戏次数,TJD
+Text_20004,{0}次,TJD
+Text_20005,成就,TJD
+Text_20006,存档,TJD
+Text_20007,成就,TJD
+Text_20008,存档,TJD
 Text_40000,感谢开发人员,TJD
 Text_40001,感谢,TJD
 Text_40002,非常感谢,TJD

@@ -39,4 +39,43 @@ public class UITool : Editor
             target.offsetMax = Vector2.zero;
         }
     }
+    [MenuItem("Custom Editor/将锚点设为本身大小（水平）")]
+    public static void AnchorFitter_H()
+    {
+        RectTransform target = Selection.gameObjects[0].transform as RectTransform;
+        RectTransform targetParent = Selection.gameObjects[0].transform.parent as RectTransform;
+        if (target != null && targetParent != null)
+        {
+            float deltaX = target.localPosition.x;
+            float deltaY = target.localPosition.y;
+            float minX = 0.5f * (1 - target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
+            float minY = 0.5f * (1 - target.rect.height / targetParent.rect.height) + deltaY / targetParent.rect.height;
+            float maxX = 0.5f * (1 + target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
+            float maxY = 0.5f * (1 + target.rect.height / targetParent.rect.height) + deltaY / targetParent.rect.height;
+            target.anchorMin = new Vector2(minX, (maxY + minY) / 2);
+            target.anchorMax = new Vector2(maxX, (maxY + minY) / 2);
+            target.offsetMin = new Vector2(0, -50);
+            target.offsetMax = new Vector2(0, 50);
+        }
+    }
+    [MenuItem("Custom Editor/将锚点设为本身大小（垂直）")]
+    public static void AnchorFitter_V()
+    {
+        RectTransform target = Selection.gameObjects[0].transform as RectTransform;
+        RectTransform targetParent = Selection.gameObjects[0].transform.parent as RectTransform;
+        if (target != null && targetParent != null)
+        {
+            float deltaX = target.localPosition.x;
+            float deltaY = target.localPosition.y;
+            float minX = 0.5f * (1 - target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
+            float minY = 0.5f * (1 - target.rect.height / targetParent.rect.height) + deltaY / targetParent.rect.height;
+            float maxX = 0.5f * (1 + target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
+            float maxY = 0.5f * (1 + target.rect.height / targetParent.rect.height) + deltaY / targetParent.rect.height;
+            target.anchorMin = new Vector2((minX + maxX) / 2, minY);
+            target.anchorMax = new Vector2((minX + maxX) / 2, maxY);
+            target.offsetMin = new Vector2(-50, 0);
+            target.offsetMax = new Vector2(50, 0);
+        }
+    }
+
 }

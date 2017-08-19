@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
 /// <summary>
-/// 所有GUI显示层的基类
+/// 所有GUI显示层的基类，先用数据初始化再找物体
 /// </summary>
 public abstract class GuiFrameWrapper : MonoBehaviour
 {
