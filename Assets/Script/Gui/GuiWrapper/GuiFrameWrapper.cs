@@ -62,7 +62,6 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         {
             if (textArray[i].index == "")
             {
-                Debug.LogError("This text's index is NULL:" + GetObjectPath(textArray[i].gameObject));
                 continue;
             }
             //textArray[i].font = curFont;

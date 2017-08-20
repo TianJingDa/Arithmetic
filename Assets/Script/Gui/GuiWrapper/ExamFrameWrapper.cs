@@ -9,7 +9,7 @@ using System.Text;
 public class ExamFrameWrapper : GuiFrameWrapper
 {
     private Text timeLabel;
-    private GameObject confirmWin;
+    private GameObject confirmBg;
     private GameObject confirmBtn;
 
 
@@ -20,7 +20,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
         InitLayout(transforms);
         InitGui();
         //timeLabel = GetComponentByName<Text>("TimeLabel");
-        confirmWin = GetGameObjectByName(gameObject, "ConfirmWin");
+        confirmBg = GetGameObjectByName(gameObject, "ConfirmBg");
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
 
@@ -40,12 +40,12 @@ public class ExamFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "FinishBtn":
-                confirmWin.SetActive(true);
+                confirmBg.SetActive(true);
                 //不可暂停答题！
                 break;
-            case "ConfirmWin":
+            case "ConfirmBg":
             case "CancelBtn":
-                confirmWin.SetActive(false);
+                confirmBg.SetActive(false);
                 break;
             case "ConfirmBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ExamFrame, GuiFrameID.SettlementFrame);
