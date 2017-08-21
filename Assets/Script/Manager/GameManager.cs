@@ -193,6 +193,16 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
         }
     }
+    /// <summary>
+    /// 获取PrefabItem
+    /// </summary>
+    /// <param name="name">Item名字</param>
+    /// <returns></returns>
+    public GameObject GetPrefabItem(string name)
+    {
+        Object resource = c_ResourceCtrl.GetItemResource(name);
+        return Instantiate(resource) as GameObject;
+    }
     #endregion
 
     #region 私有方法

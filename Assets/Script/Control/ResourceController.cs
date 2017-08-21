@@ -11,6 +11,7 @@ public sealed class ResourceController : Controller
         base.id = ControllerID.ResourceController;
         guiAssetDict = new Dictionary<GuiFrameID, string>();
         resourceDict = new Dictionary<GuiFrameID, Object>();
+        prefabItemDict = new Dictionary<string, string>();
         InitReourceData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -21,6 +22,7 @@ public sealed class ResourceController : Controller
     #endregion
     private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
     private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
+    private Dictionary<string, string> prefabItemDict;//key：Item名称，value：资源路径
     /// <summary>
     /// 注册所有资源地址
     /// </summary>
@@ -32,6 +34,9 @@ public sealed class ResourceController : Controller
         guiAssetDict.Add(GuiFrameID.SetUpFrame, "UI/SetUpFrame");
         guiAssetDict.Add(GuiFrameID.ExamFrame, "UI/ExamFrame");
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "UI/SettlementFrame");
+
+        prefabItemDict.Add("AchievementItem", "PrefabItem/AchievementItem");
+        prefabItemDict.Add("QuestionItem", "PrefabItem/QuestionItem");
     }
 
     /// <summary>
@@ -50,6 +55,17 @@ public sealed class ResourceController : Controller
         {
             resouce = Resources.Load(guiAssetDict[id]);
             resourceDict.Add(id, resouce);
+        }
+        return resouce;
+    }
+    public Object GetItemResource(string name)
+    {
+        Object resouce = null;
+        string address;
+        prefabItemDict.TryGetValue(name, out address);
+        if (address != null)
+        {
+            resouce = Resources.Load(address);
         }
         return resouce;
     }

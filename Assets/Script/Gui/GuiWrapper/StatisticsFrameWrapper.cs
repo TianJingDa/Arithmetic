@@ -16,7 +16,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         InitGui();
         achievementWin = GetGameObjectByName(gameObject, "AchievementWin");
         saveFileWin = GetGameObjectByName(gameObject, "SaveFileWin");
-
     }
 
     void Update () 
