@@ -20,7 +20,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
         InitLayout(transforms);
         InitGui();
         //timeLabel = GetComponentByName<Text>("TimeLabel");
-        confirmBg = GetGameObjectByName(gameObject, "ConfirmBg");
+        confirmBg = CommonTool.GetGameObjectByName(gameObject, "ConfirmBg");
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
 

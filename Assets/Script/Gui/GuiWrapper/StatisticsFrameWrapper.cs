@@ -10,12 +10,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 {
     private GameObject achievementWin;
     private GameObject saveFileWin;
+    private InfiniteList achievementGrid;
     void Start () 
 	{
         base.id = GuiFrameID.StatisticsFrame;
         InitGui();
-        achievementWin = GetGameObjectByName(gameObject, "AchievementWin");
-        saveFileWin = GetGameObjectByName(gameObject, "SaveFileWin");
+        achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
+        saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
+        achievementGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
     }
 
     void Update () 
@@ -39,7 +41,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, GuiFrameID.StartFrame);
                 break;
             case "AchievementBtn":
-                achievementWin.SetActive(true);
+                InitInfiniteList();
+                //achievementGrid.InitList()
+                //achievementWin.SetActive(true);
                 break;
             case "SaveFileBtn":
                 saveFileWin.SetActive(true);
@@ -54,5 +58,18 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 Debug.LogError("Can not find Button:" + btn.name);
                 break;
         }
+    }
+
+    private void InitInfiniteList()
+    {
+        ArrayList dataList = new ArrayList();
+        for(int i = 0; i < 20; i++)
+        {
+            AchievementInstance instance = new AchievementInstance();
+            instance.title = i.ToString();
+            dataList.Add(instance);
+        }
+        achievementGrid.InitList(dataList, "AchievementItem");
+        achievementWin.SetActive(true);
     }
 }

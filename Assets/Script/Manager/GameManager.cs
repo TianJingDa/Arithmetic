@@ -202,6 +202,7 @@ public class GameManager : MonoBehaviour
     {
         Object resource = c_ResourceCtrl.GetItemResource(name);
         return Instantiate(resource) as GameObject;
+        //return c_ResourceCtrl.GetItemResource(name); ;
     }
     #endregion
 

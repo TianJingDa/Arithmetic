@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Clock 
 {
@@ -16,13 +17,15 @@ public class Clock
 		
 	}
 }
+[Serializable]
 public class ExamQuestionInstance
 {
 
 }
+[Serializable]
 public class AchievementInstance
 {
-
+    public string title;
 }
 
 
