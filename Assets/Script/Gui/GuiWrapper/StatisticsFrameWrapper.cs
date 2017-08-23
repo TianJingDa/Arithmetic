@@ -63,7 +63,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void InitInfiniteList()
     {
         ArrayList dataList = new ArrayList();
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i < 30; i++)
         {
             AchievementInstance instance = new AchievementInstance();
             instance.title = i.ToString();
