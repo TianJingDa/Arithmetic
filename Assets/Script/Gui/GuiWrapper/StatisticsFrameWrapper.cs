@@ -62,6 +62,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 
     private void InitInfiniteList()
     {
+        achievementWin.SetActive(true);
         ArrayList dataList = new ArrayList();
         for(int i = 0; i < 30; i++)
         {
@@ -70,6 +71,5 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             dataList.Add(instance);
         }
         achievementGrid.InitList(dataList, "AchievementItem");
-        achievementWin.SetActive(true);
     }
 }

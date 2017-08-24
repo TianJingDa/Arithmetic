@@ -27,6 +27,8 @@ public class UITool : Editor
             Debug.Log("target.rect.position:" + target.rect.position.ToString());
             Debug.Log("target.position:" + target.position.ToString());
             Debug.Log("target.localPosition:" + target.localPosition.ToString());
+            Debug.Log("target.anchoredPosition:" + target.anchoredPosition.ToString());
+            return;
             float deltaX = target.localPosition.x;
             float deltaY = target.localPosition.y;
             float minX = 0.5f * (1 - target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
@@ -46,6 +48,9 @@ public class UITool : Editor
         RectTransform targetParent = Selection.gameObjects[0].transform.parent as RectTransform;
         if (target != null && targetParent != null)
         {
+            target.offsetMin -= new Vector2(0, 200);
+            return;
+
             float width = target.rect.width;
             float height = target.rect.height;
             float deltaX = target.localPosition.x;
