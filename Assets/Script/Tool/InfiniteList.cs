@@ -39,6 +39,9 @@ public class InfiniteList : MonoBehaviour
     public void InitList(ArrayList dataList, string name)
     {
         Init();
+        gridLayoutGroup.enabled = true;
+        gridRectTransform.offsetMin = Vector2.zero;
+        gridRectTransform.offsetMax = Vector2.zero;
         dataAmount = dataList.Count;
         realIndex = -1;
         itemName = name;
