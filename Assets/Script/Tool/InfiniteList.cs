@@ -10,6 +10,7 @@ public class InfiniteList : MonoBehaviour
 {
     private int itemAmount;                          //子物体的数量
     private int dataAmount;                          //信息的数量
+    private int minAmount;                           //Mathf.Min(itemAmount, dataAmount)
     private int realIndex;                           //信息的序号
     private int extra = 2;                           //额外行数
     private bool init = false;                       //初始化
@@ -21,79 +22,74 @@ public class InfiniteList : MonoBehaviour
     private GridLayoutGroup gridLayoutGroup;
     private ScrollRect scrollRect;
     private List<RectTransform> children;
+    private List<Vector2> childrenAnchoredPostion;
 
 
-
-    private void Init()
+    private void Init(string name)
     {
         if (init) return;
+        itemName = name;
         gridRectTransform = GetComponent<RectTransform>();
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
         scrollRect = transform.parent.GetComponent<ScrollRect>();
         scrollRect.onValueChanged.AddListener((data) => { ScrollCallback(data); });
         parentRectTransform = scrollRect.transform as RectTransform;
         children = new List<RectTransform>();
+        childrenAnchoredPostion = new List<Vector2>();
+        if (gridLayoutGroup.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
+        {
+            int row = (int)(parentRectTransform.rect.height / (gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y));
+            itemAmount = (row + extra) * gridLayoutGroup.constraintCount;
+        }
+        else
+        {
+            int column = (int)(parentRectTransform.rect.width / (gridLayoutGroup.cellSize.x + gridLayoutGroup.spacing.x));
+            itemAmount = (column + extra) * gridLayoutGroup.constraintCount;
+        }
+        for (int i = 0; i < itemAmount; i++)
+        {
+            GameObject item = GameManager.Instance.GetPrefabItem(itemName);
+            item.transform.SetParent(transform);
+            item.transform.localScale = Vector3.one;
+            childrenAnchoredPostion.Add(item.GetComponent<RectTransform>().anchoredPosition);
+        }
         init = true;
     }
 
     public void InitList(ArrayList dataList, string name)
     {
-        Init();
+        Init(name);
         gridLayoutGroup.enabled = true;
         gridRectTransform.offsetMin = Vector2.zero;
         gridRectTransform.offsetMax = Vector2.zero;
+        this.dataList = dataList;
         dataAmount = dataList.Count;
         realIndex = -1;
-        itemName = name;
-        this.dataList = dataList;
         children.Clear();
-        int minAmount;
+        minAmount = Mathf.Min(itemAmount, dataAmount);
         if (gridLayoutGroup.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
         {
-            int row = (int)(parentRectTransform.rect.height / (gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y));
-            itemAmount = (row + extra) * gridLayoutGroup.constraintCount;
-            minAmount = Mathf.Min(itemAmount, dataAmount);
             float height = Mathf.CeilToInt(minAmount / gridLayoutGroup.constraintCount) * (gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y);
             gridRectTransform.offsetMin -= new Vector2(0f, (height - gridRectTransform.rect.height));
             startPosition = GetMaxToWorldPos();
         }
         else
         {
-            int column = (int)(parentRectTransform.rect.width / (gridLayoutGroup.cellSize.x + gridLayoutGroup.spacing.x));
-            itemAmount = (column + extra) * gridLayoutGroup.constraintCount;
-            minAmount = Mathf.Min(itemAmount, dataAmount);
             float width = Mathf.CeilToInt(minAmount / gridLayoutGroup.constraintCount) * (gridLayoutGroup.cellSize.x + gridLayoutGroup.spacing.x);
-            gridRectTransform.offsetMax += new Vector2(0f, (width - gridRectTransform.rect.width));
+            gridRectTransform.offsetMax += new Vector2((width - gridRectTransform.rect.width), 0f);
             startPosition = GetMinToWorldPos();
         }
-        if (transform.childCount < minAmount)
-        {
-            for (int i = transform.childCount; i < minAmount; i++)
-            {
-                GameObject item = GameManager.Instance.GetPrefabItem(itemName);
-                item.transform.SetParent(transform);
-                item.transform.localScale = Vector3.one;
-            }
-        }
-        else
-        {
-            for (int i = minAmount; i < transform.childCount; i++)
-            {
-                GameObject go = transform.GetChild(i).gameObject;
-                Destroy(go);
-            }
-        }
-        for (int index = 0; index < transform.childCount; index++)
+
+        for (int index = 0; index < itemAmount; index++)
         {
             realIndex++;
             children.Add(transform.GetChild(index).GetComponent<RectTransform>());
+            children[index].anchoredPosition = childrenAnchoredPostion[index];
             children[index].gameObject.name = itemName + realIndex.ToString();
-            children[index].gameObject.SetActive(true);
+            children[index].gameObject.SetActive(index < dataAmount);
             children[index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex]);
         }
     }
-
-
 
     void ScrollCallback(Vector2 data)
     {
@@ -102,11 +98,6 @@ public class InfiniteList : MonoBehaviour
 
     void UpdateChildren()
     {
-        if (transform.childCount < itemAmount)
-        {
-            return;
-        }
-
         gridLayoutGroup.enabled = false;
 
         if (gridLayoutGroup.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
@@ -115,7 +106,7 @@ public class InfiniteList : MonoBehaviour
 
             float offsetY = currentPos.y - startPosition.y;
 
-            if (offsetY > 0.001)
+            if (offsetY > 0.001 && gridRectTransform.offsetMax.y > 0)
             {
                 //向上拉，向下扩展;
                 {
@@ -158,7 +149,7 @@ public class InfiniteList : MonoBehaviour
                     }
                 }
             }
-            else if(offsetY < -0.001)
+            else //if (offsetY <= 0 )//|| gridRectTransform.offsetMax.y <= 0)
             {
                 //向下拉，下面收缩;
                 if (realIndex  <= children.Count - 1)
@@ -180,8 +171,8 @@ public class InfiniteList : MonoBehaviour
                         children[children.Count - 1 - index].SetAsFirstSibling();
                         children[children.Count - 1 - index].anchoredPosition = new Vector2(children[children.Count - 1 - index].anchoredPosition.x, children[0].anchoredPosition.y + gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y);
                         children[children.Count - 1 - index].gameObject.SetActive(true);
-                        children[children.Count - 1 - index].gameObject.name = itemName + (realIndex - transform.childCount).ToString();
-                        children[children.Count - 1 - index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex - transform.childCount]);
+                        children[children.Count - 1 - index].gameObject.name = itemName + (realIndex - minAmount).ToString();
+                        children[children.Count - 1 - index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex - minAmount]);
                         realIndex--;
                     }
 
@@ -201,7 +192,7 @@ public class InfiniteList : MonoBehaviour
 
             float offsetX = currentPos.x - startPosition.x;
 
-            if (offsetX < -0.01)
+            if (offsetX < -0.001 && gridRectTransform.offsetMin.x < 0)
             {
                 //向左拉，向右扩展;
                 {
@@ -246,7 +237,7 @@ public class InfiniteList : MonoBehaviour
                     }
                 }
             }
-            else if (offsetX > 0.01)
+            else //if (offsetX > 0.01)
             {
                 //向右拉，右边收缩;
                 if (realIndex  <= children.Count - 1)
@@ -268,8 +259,8 @@ public class InfiniteList : MonoBehaviour
                         children[children.Count - 1 - index].SetAsFirstSibling();
                         children[children.Count - 1 - index].anchoredPosition = new Vector2(children[0].anchoredPosition.x - gridLayoutGroup.cellSize.x - gridLayoutGroup.spacing.x, children[children.Count - 1 - index].anchoredPosition.y);
                         children[children.Count - 1 - index].gameObject.SetActive(true);
-                        children[children.Count - 1 - index].gameObject.name = itemName + (realIndex - transform.childCount).ToString();
-                        children[children.Count - 1 - index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex - transform.childCount]);
+                        children[children.Count - 1 - index].gameObject.name = itemName + (realIndex - minAmount).ToString();
+                        children[children.Count - 1 - index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex - minAmount]);
                         realIndex--;
                     }
 
