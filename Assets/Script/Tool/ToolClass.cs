@@ -26,6 +26,13 @@ public class SaveFileInstance
 public class AchievementInstance
 {
     public string title;
+    public string detail;
 }
+[Serializable]
+public class QuentionInstance
+{
+    public string title;
+}
+
 
 

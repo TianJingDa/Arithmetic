@@ -10,6 +10,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 {
     private GameObject achievementWin;
     private GameObject saveFileWin;
+    private GameObject achievementDetailBg;
+    private GameObject saveFileDetailScrollRect;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     void Start () 
@@ -18,9 +20,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         InitGui();
         achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
         saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
+        achievementDetailBg = CommonTool.GetGameObjectByName(gameObject, "AchievementDetailBg");
+        saveFileDetailScrollRect = CommonTool.GetGameObjectByName(gameObject, "SaveFileDetailScrollRect");
         achievementGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
         saveFileGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
-
     }
 
     void Update () 
@@ -38,25 +41,25 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         base.OnClick(btn);
         switch (btn.name)
         {
-            case "Statistics2StartFrameBtn":
             case "Achievement2StartFrameBtn":
             case "Save2StartFrameBtn":
+            case "Statistics2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, GuiFrameID.StartFrame);
-                break;
-            case "AchievementBtn":
-                InitAchievementList();
-                //achievementGrid.InitList()
-                //achievementWin.SetActive(true);
-                break;
-            case "SaveFileBtn":
-                InitSaveFileList();
-                //saveFileWin.SetActive(true);
                 break;
             case "Achievement2StatisticsFrameBtn":
                 achievementWin.SetActive(false);
                 break;
+            case "AchievementBtn":
+                InitAchievementList();
+                break;
+            case "AchievementDetailBg":
+                achievementDetailBg.SetActive(false);
+                break;
             case "Save2StatisticsFrameBtn":
                 saveFileWin.SetActive(false);
+                break;
+            case "SaveFileBtn":
+                InitSaveFileList();
                 break;
             default:
                 Debug.LogError("Can not find Button:" + btn.name);
@@ -72,9 +75,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         {
             AchievementInstance instance = new AchievementInstance();
             instance.title = i.ToString();
+            instance.detail = i.ToString();
             dataList.Add(instance);
         }
-        achievementGrid.InitList(dataList);
+        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBg);
     }
 
     private void InitSaveFileList()
@@ -87,7 +91,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             instance.title = i.ToString();
             dataList.Add(instance);
         }
-        saveFileGrid.InitList(dataList);
+        saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailScrollRect);
     }
 
 }

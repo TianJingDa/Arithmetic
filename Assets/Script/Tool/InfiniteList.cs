@@ -8,14 +8,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class InfiniteList : MonoBehaviour 
 {
-    public string itemName;                         //prefabItem名字
-
     private int itemAmount;                          //子物体的数量
     private int dataAmount;                          //信息的数量
     private int minAmount;                           //Mathf.Min(itemAmount, dataAmount)
     private int realIndex;                           //信息的序号
     private int extra = 2;                           //额外行数
     private bool init = false;                       //初始化
+    private string itemName;                         //prefabItem名字
     private ArrayList dataList;                      //实际信息
     private Vector3 startPosition;
     private RectTransform gridRectTransform;
@@ -26,9 +25,10 @@ public class InfiniteList : MonoBehaviour
     private List<Vector2> childrenAnchoredPostion;
 
 
-    private void Init()
+    private void Init(string itemName,GameObject detailWin = null)
     {
         if (init) return;
+        this.itemName = itemName;
         gridRectTransform = GetComponent<RectTransform>();
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
         scrollRect = transform.parent.GetComponent<ScrollRect>();
@@ -53,12 +53,19 @@ public class InfiniteList : MonoBehaviour
             item.transform.localScale = Vector3.one;
             childrenAnchoredPostion.Add(item.GetComponent<RectTransform>().anchoredPosition);
         }
+        if (detailWin != null)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).SendMessage("InitDetailWin", detailWin);
+            }
+        }
         init = true;
     }
 
-    public void InitList(ArrayList dataList)
+    public void InitList(ArrayList dataList ,string itemName ,GameObject detailWin = null)
     {
-        Init();
+        Init(itemName,detailWin);
         gridLayoutGroup.enabled = true;
         gridRectTransform.offsetMin = Vector2.zero;
         gridRectTransform.offsetMax = Vector2.zero;

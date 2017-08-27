@@ -48,6 +48,10 @@ public class CommonTool
                 }
             }
         }
+        if (result == null)
+        {
+            Debug.LogError("Can not find :" + name);
+        }
         return result;
     }
     public static List<GameObject> GetGameObjectsByName(GameObject root, string name)
@@ -64,7 +68,33 @@ public class CommonTool
                 }
             }
         }
+        if (result.Count == 0)
+        {
+            Debug.LogError("Can not find :" + name);
+        }
         return result;
+
+    }
+    public static GameObject GetParentByName(GameObject child,string name)
+    {
+        GameObject result = null;
+
+        if(child.transform.parent.gameObject.name == name)
+        {
+            result = child.transform.parent.gameObject;
+        }
+        else if(child.transform.parent != null)
+        {
+            result = GetParentByName(child.transform.parent.gameObject, name);
+        }
+
+        if (result == null)
+        {
+            Debug.LogError("Can not find :" + name);
+        }
+
+        return result;
+
 
     }
 }
