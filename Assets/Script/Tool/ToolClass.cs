@@ -18,9 +18,9 @@ public class Clock
 	}
 }
 [Serializable]
-public class ExamQuestionInstance
+public class SaveFileInstance
 {
-
+    public string title;
 }
 [Serializable]
 public class AchievementInstance

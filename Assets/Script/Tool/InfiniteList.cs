@@ -8,13 +8,14 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class InfiniteList : MonoBehaviour 
 {
+    public string itemName;                         //prefabItem名字
+
     private int itemAmount;                          //子物体的数量
     private int dataAmount;                          //信息的数量
     private int minAmount;                           //Mathf.Min(itemAmount, dataAmount)
     private int realIndex;                           //信息的序号
     private int extra = 2;                           //额外行数
     private bool init = false;                       //初始化
-    private string itemName;                         //prefabItem名字
     private ArrayList dataList;                      //实际信息
     private Vector3 startPosition;
     private RectTransform gridRectTransform;
@@ -25,10 +26,9 @@ public class InfiniteList : MonoBehaviour
     private List<Vector2> childrenAnchoredPostion;
 
 
-    private void Init(string name)
+    private void Init()
     {
         if (init) return;
-        itemName = name;
         gridRectTransform = GetComponent<RectTransform>();
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
         scrollRect = transform.parent.GetComponent<ScrollRect>();
@@ -56,9 +56,9 @@ public class InfiniteList : MonoBehaviour
         init = true;
     }
 
-    public void InitList(ArrayList dataList, string name)
+    public void InitList(ArrayList dataList)
     {
-        Init(name);
+        Init();
         gridLayoutGroup.enabled = true;
         gridRectTransform.offsetMin = Vector2.zero;
         gridRectTransform.offsetMax = Vector2.zero;

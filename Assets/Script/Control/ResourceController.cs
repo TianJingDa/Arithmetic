@@ -36,7 +36,7 @@ public sealed class ResourceController : Controller
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "UI/SettlementFrame");
 
         prefabItemDict.Add("AchievementItem", "PrefabItem/AchievementItem");
-        prefabItemDict.Add("QuestionItem", "PrefabItem/QuestionItem");
+        prefabItemDict.Add("SaveFileItem", "PrefabItem/SaveFileItem");
     }
 
     /// <summary>

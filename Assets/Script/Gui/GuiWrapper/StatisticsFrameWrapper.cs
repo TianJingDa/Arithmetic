@@ -11,6 +11,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject achievementWin;
     private GameObject saveFileWin;
     private InfiniteList achievementGrid;
+    private InfiniteList saveFileGrid;
     void Start () 
 	{
         base.id = GuiFrameID.StatisticsFrame;
@@ -18,6 +19,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
         saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
         achievementGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
+        saveFileGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
+
     }
 
     void Update () 
@@ -41,12 +44,13 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, GuiFrameID.StartFrame);
                 break;
             case "AchievementBtn":
-                InitInfiniteList();
+                InitAchievementList();
                 //achievementGrid.InitList()
                 //achievementWin.SetActive(true);
                 break;
             case "SaveFileBtn":
-                saveFileWin.SetActive(true);
+                InitSaveFileList();
+                //saveFileWin.SetActive(true);
                 break;
             case "Achievement2StatisticsFrameBtn":
                 achievementWin.SetActive(false);
@@ -60,7 +64,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private void InitInfiniteList()
+    private void InitAchievementList()
     {
         achievementWin.SetActive(true);
         ArrayList dataList = new ArrayList();
@@ -70,6 +74,20 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             instance.title = i.ToString();
             dataList.Add(instance);
         }
-        achievementGrid.InitList(dataList, "AchievementItem");
+        achievementGrid.InitList(dataList);
     }
+
+    private void InitSaveFileList()
+    {
+        saveFileWin.SetActive(true);
+        ArrayList dataList = new ArrayList();
+        for (int i = 0; i < 30; i++)
+        {
+            SaveFileInstance instance = new SaveFileInstance();
+            instance.title = i.ToString();
+            dataList.Add(instance);
+        }
+        saveFileGrid.InitList(dataList);
+    }
+
 }

@@ -22,9 +22,9 @@ public sealed class ExamController : Controller
     {
 
     }
-    public ExamQuestionInstance GetQuestionInstance()
+    public SaveFileInstance GetQuestionInstance()
     {
-        return new ExamQuestionInstance();
+        return new SaveFileInstance();
     }
 
 }
