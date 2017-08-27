@@ -7,6 +7,8 @@ public class SaveFileItem : MonoBehaviour
 {
     private SaveFileInstance content;//详情
     private GameObject detailWin;
+    private Image image;//Item的Image！！
+
 
     private void InitDetailWin(GameObject detailWin)
     {

@@ -11,7 +11,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject achievementWin;
     private GameObject saveFileWin;
     private GameObject achievementDetailBg;
-    private GameObject saveFileDetailScrollRect;
+    private GameObject saveFileDetailBg;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     void Start () 
@@ -21,7 +21,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
         saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
         achievementDetailBg = CommonTool.GetGameObjectByName(gameObject, "AchievementDetailBg");
-        saveFileDetailScrollRect = CommonTool.GetGameObjectByName(gameObject, "SaveFileDetailScrollRect");
+        saveFileDetailBg = CommonTool.GetGameObjectByName(gameObject, "SaveFileDetailBg");
         achievementGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
         saveFileGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
     }
@@ -61,6 +61,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "SaveFileBtn":
                 InitSaveFileList();
                 break;
+            case "SaveFileDetailBg":
+                saveFileDetailBg.SetActive(false);
+                break;
             default:
                 Debug.LogError("Can not find Button:" + btn.name);
                 break;
@@ -91,7 +94,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             instance.title = i.ToString();
             dataList.Add(instance);
         }
-        saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailScrollRect);
+        saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailBg);
     }
 
 }
