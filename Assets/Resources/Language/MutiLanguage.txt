@@ -8,6 +8,17 @@ Text_20005,成就,TJD
 Text_20006,存档,TJD
 Text_20007,成就,TJD
 Text_20008,存档,TJD
+Text_30000,选项,TJD
+Text_30001,限时,TJD
+Text_30002,限时,TJD
+Text_30003,3分钟,TJD
+Text_30004,3分钟,TJD
+Text_30005,+,TJD
+Text_30006,+,TJD
+Text_30007,两位数,TJD
+Text_30008,两位数,TJD
+Text_30009,两个数,TJD
+Text_30010,两个数,TJD
 Text_40000,设置,TJD
 Text_40001,攻略,TJD
 Text_40002,语言,TJD

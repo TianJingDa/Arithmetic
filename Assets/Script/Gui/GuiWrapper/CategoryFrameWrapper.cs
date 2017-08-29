@@ -7,28 +7,30 @@ using UnityEngine.UI;
 /// </summary>
 public class CategoryFrameWrapper : GuiFrameWrapper
 {
+    private GameObject categoryTipBg;
 
     void Start () 
 	{
         base.id = GuiFrameID.CategoryFrame;
         InitGui();
+        categoryTipBg = CommonTool.GetGameObjectByName(gameObject, "CategoryTipBg");
     }
 
-    void Update () 
-	{
-		
-	}
 
     public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
         {
-            case "CloseBtn":
+            case "Category2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.StartFrame);
                 break;
-            case "StartBtn":                
+            case "Category2ExamFrameBtn":                
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.ExamFrame);
+                break;
+            case "CategoryTipBtn":
+            case "CategoryTipBg":
+                categoryTipBg.SetActive(!categoryTipBg.activeSelf);
                 break;
             default:
                 Debug.LogError("Can not find Button:" + btn.name);
