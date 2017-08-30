@@ -14,21 +14,20 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         InitGui();
     }
 
-    void Update () 
-	{
-		
-	}
 
     public override void OnClick(Button btn)
     {
         base.OnClick(btn);
         switch (btn.name)
         {
-            case "BackBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.StartFrame);
+            case "OnlyWrongBtn":
+                Debug.Log("OnlyWrong!!!");
                 break;
-            case "ContinueBtn":
+            case "Settlement2CategoryFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.CategoryFrame);
+                break;
+            case "Settlement2StartFrameBtn":
+                GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.StartFrame);
                 break;
             default:
                 Debug.LogError("Can not find Button:" + btn.name);

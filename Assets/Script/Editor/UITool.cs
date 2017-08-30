@@ -48,8 +48,6 @@ public class UITool : Editor
         RectTransform targetParent = Selection.gameObjects[0].transform.parent as RectTransform;
         if (target != null && targetParent != null)
         {
-            //target.offsetMin -= new Vector2(0, 200);
-            //return;
             float width = target.rect.width;
             float height = target.rect.height;
             float deltaX = target.localPosition.x;

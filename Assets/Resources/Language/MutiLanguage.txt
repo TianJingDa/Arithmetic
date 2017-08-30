@@ -44,3 +44,10 @@ Text_40021,非常感谢(10?),TJD
 Text_50000,是否结束,TJD
 Text_50001,否，继续,TJD
 Text_50002,是，结束,TJD
+Text_60000,成绩,TJD
+Text_60001,时    间：,TJD
+Text_60002,{0}秒,TJD
+Text_60003,总    数：,TJD
+Text_60004,{0}道,TJD
+Text_60005,正确率：,TJD
+Text_60006,{0}%,TJD
