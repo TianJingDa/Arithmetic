@@ -6,7 +6,7 @@ using System.Text;
 /// <summary>
 /// 答题界面
 /// </summary>
-public class ExamFrameWrapper : GuiFrameWrapper
+public class FightFrameWrapper : GuiFrameWrapper
 {
     private Text timeLabel;
     private GameObject confirmBg;
@@ -15,7 +15,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
-        base.id = GuiFrameID.ExamFrame;
+        base.id = GuiFrameID.FightFrame;
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
         InitGui();
@@ -48,7 +48,7 @@ public class ExamFrameWrapper : GuiFrameWrapper
                 confirmBg.SetActive(false);
                 break;
             case "ConfirmBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ExamFrame, GuiFrameID.SettlementFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
                 break;
             default:
                 Debug.LogError("Can not find Button:" + btn.name);

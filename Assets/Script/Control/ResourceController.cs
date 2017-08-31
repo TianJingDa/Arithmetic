@@ -28,16 +28,16 @@ public sealed class ResourceController : Controller
     /// </summary>
     private void InitReourceData()
     {
-        guiAssetDict.Add(GuiFrameID.StartFrame, "UI/StartFrame");
-        guiAssetDict.Add(GuiFrameID.StatisticsFrame, "UI/StatisticsFrame");
-        guiAssetDict.Add(GuiFrameID.CategoryFrame, "UI/CategoryFrame");
-        guiAssetDict.Add(GuiFrameID.SetUpFrame, "UI/SetUpFrame");
-        guiAssetDict.Add(GuiFrameID.ExamFrame, "UI/ExamFrame");
-        guiAssetDict.Add(GuiFrameID.SettlementFrame, "UI/SettlementFrame");
+        guiAssetDict.Add(GuiFrameID.StartFrame, "GuiWrapper/StartFrame");
+        guiAssetDict.Add(GuiFrameID.StatisticsFrame, "GuiWrapper/StatisticsFrame");
+        guiAssetDict.Add(GuiFrameID.CategoryFrame, "GuiWrapper/CategoryFrame");
+        guiAssetDict.Add(GuiFrameID.SetUpFrame, "GuiWrapper/SetUpFrame");
+        guiAssetDict.Add(GuiFrameID.FightFrame, "GuiWrapper/ExamFrame");
+        guiAssetDict.Add(GuiFrameID.SettlementFrame, "GuiWrapper/SettlementFrame");
 
-        prefabItemDict.Add("AchievementItem", "PrefabItem/AchievementItem");
-        prefabItemDict.Add("SaveFileItem", "PrefabItem/SaveFileItem");
-        prefabItemDict.Add("QuestionItem", "PrefabItem/QuestionItem");
+        prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");
+        prefabItemDict.Add("SaveFileItem", "GuiItem/SaveFileItem");
+        prefabItemDict.Add("QuestionItem", "GuiItem/QuestionItem");
     }
 
     /// <summary>

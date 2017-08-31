@@ -83,5 +83,22 @@ public class UITool : Editor
             target.offsetMax = new Vector2(0, (width / 2));
         }
     }
+    [MenuItem("Custom Editor/将锚点设为本身中心")]
+    public static void AnchorCenter()
+    {
+        RectTransform target = Selection.gameObjects[0].transform as RectTransform;
+        RectTransform targetParent = Selection.gameObjects[0].transform.parent as RectTransform;
+        if (target != null && targetParent != null)
+        {
+            float width = target.rect.width;
+            float height = target.rect.height;
+            float X = 0.5f + target.localPosition.x / targetParent.rect.width;
+            float Y = 0.5f + target.localPosition.y / targetParent.rect.height;
+            target.anchorMin = new Vector2(X, Y);
+            target.anchorMax = new Vector2(X, Y);
+            target.anchoredPosition = Vector2.zero;
+        }
+    }
+
 
 }

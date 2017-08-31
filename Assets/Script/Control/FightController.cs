@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ExamController : Controller
+public sealed class FightController : Controller
 {
     #region C#单例
-    private static ExamController instance = null;
-    private ExamController()
+    private static FightController instance = null;
+    private FightController()
     {
         base.id = ControllerID.ExamController;
         InitExamData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
-    public static ExamController Instance
+    public static FightController Instance
     {
-        get { return instance ?? (instance = new ExamController()); }
+        get { return instance ?? (instance = new FightController()); }
     }
     #endregion
 

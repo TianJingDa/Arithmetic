@@ -10,7 +10,7 @@ public enum LanguageID
 public enum GuiFrameID
 {
     CategoryFrame,             //速算类别选择界面
-    ExamFrame,                 //答题界面
+    FightFrame,                //答题界面
     PayFrame,                  //支付界面
     StartFrame,                //开始界面
     StatisticsFrame,           //统计数据界面

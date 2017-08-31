@@ -26,7 +26,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.StartFrame);
                 break;
             case "Category2ExamFrameBtn":                
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.ExamFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.FightFrame);
                 break;
             case "CategoryTipBtn":
             case "CategoryTipBg":

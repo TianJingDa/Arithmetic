@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private Clock                                               m_Clock;                            //时钟工具
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
-    private ExamController                                      c_ExamCtrl;
+    private FightController                                      c_ExamCtrl;
     private AchievementController                               c_AchievementCtrl;
     private SkinController                                      c_SkinCtrl;
     private LayoutController                                    c_LayoutCtrl;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null){ Instance = this; }
         c_AchievementCtrl = AchievementController.Instance;
-        c_ExamCtrl = ExamController.Instance;
+        c_ExamCtrl = FightController.Instance;
         c_FontCtrl = FontController.Instance;
         c_LayoutCtrl = LayoutController.Instance;
         c_MutiLanguageCtrl = MutiLanguageController.Instance;
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         }
         //if (M_CurrentWrapper.id == GuiFrameID.ExamFrame_V)
         //{
-        //    ((ExamFrameWrapper)M_CurrentWrapper).UpdateWrapper();
+        //    ((FightFrameWrapper)M_CurrentWrapper).UpdateWrapper();
         //}
 
     }
