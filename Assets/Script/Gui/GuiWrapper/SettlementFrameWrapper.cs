@@ -15,9 +15,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
 
 
-    public override void OnClick(Button btn)
+    public override void OnButtonClick(Button btn)
     {
-        base.OnClick(btn);
+        base.OnButtonClick(btn);
         switch (btn.name)
         {
             case "OnlyWrongBtn":

@@ -11,11 +11,19 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
     public virtual void UpdateWrapper() { }
-    public virtual void OnClick(Button btn)
+    public virtual void OnButtonClick(Button btn)
     {
         if (btn == null)
         {
             Debug.LogError("Button is NULL!");
+            return;
+        }
+    }
+    public virtual void OnToggleClick(Toggle tgl)
+    {
+        if (tgl == null)
+        {
+            Debug.LogError("Toggle is NULL!");
             return;
         }
     }

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public class SetUpFrameWrapper : GuiFrameWrapper
 {
+    private int tempLanguageID;
+
     private GameObject strategyWin;
     private GameObject languageWin;
     private GameObject skinWin;
@@ -14,6 +16,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject feedbackWin;
     private GameObject aboutUsWin;
     private GameObject thankDevelopersWin;
+    private ToggleGroup languageToggleGroup;
     void Start () 
 	{
         base.id = GuiFrameID.SetUpFrame;
@@ -25,12 +28,13 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         feedbackWin = CommonTool.GetGameObjectByName(gameObject, "FeedbackWin");
         aboutUsWin = CommonTool.GetGameObjectByName(gameObject, "AboutUsWin");
         thankDevelopersWin = CommonTool.GetGameObjectByName(gameObject, "ThankDevelopersWin");
+        languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "languageToggleGroup");
     }
 
 
-    public override void OnClick(Button btn)
+    public override void OnButtonClick(Button btn)
     {
-        base.OnClick(btn);
+        base.OnButtonClick(btn);
         switch (btn.name)
         {
             case "AboutUsBtn":
@@ -74,5 +78,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
         }
     }
-
+    public override void OnToggleClick(Toggle tgl)
+    {
+        base.OnToggleClick(tgl);
+        //tempLanguageID=tgl    
+    }
 }

@@ -12,9 +12,9 @@ public class StartFrameWrapper : GuiFrameWrapper
         base.id = GuiFrameID.StartFrame;
         InitGui();
     }
-    public override void OnClick(Button btn)
+    public override void OnButtonClick(Button btn)
     {
-        base.OnClick(btn);
+        base.OnButtonClick(btn);
         switch (btn.name)
         {
             case "StatisticsBtn":
