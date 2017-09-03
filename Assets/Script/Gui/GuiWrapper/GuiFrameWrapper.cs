@@ -44,7 +44,6 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         {
             if (imageArray[i].index == "")
             {
-                Debug.LogError("This image's index is NULL:" + GetObjectPath(imageArray[i].gameObject));
                 continue;
             }
             Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
@@ -76,17 +75,6 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
             textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
         }
-    }
-    private string GetObjectPath(GameObject obj)
-    {
-        StringBuilder path = new StringBuilder(obj.name);
-        Transform Parent = obj.transform.parent;
-        while (Parent != null)
-        {
-            path.Insert(0, Parent.name + "/");
-            Parent = Parent.parent;
-        }
-        return path.ToString();
     }
 }
 

@@ -42,6 +42,8 @@ Text_40019,邮箱,TJD
 Text_40020,感谢(5?),TJD
 Text_40021,非常感谢(10?),TJD
 Text_40022,应用,TJD
+Text_40023,应用,TJD
+Text_40024,应用,TJD
 Text_50000,是否结束,TJD
 Text_50001,否，继续,TJD
 Text_50002,是，结束,TJD
