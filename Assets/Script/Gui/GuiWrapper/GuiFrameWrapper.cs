@@ -13,14 +13,19 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     public virtual void UpdateWrapper() { }
     public virtual void OnButtonClick(Button btn)
     {
-        if (btn == null)
+        if (!btn)
         {
             Debug.LogError("Button is NULL!");
             return;
         }
     }
-    public virtual void OnToggleClick(bool check)
+    public virtual void OnToggleClick(Toggle tgl)
     {
+        if (!tgl)
+        {
+            Debug.LogError("Toggle is NULL!");
+            return;
+        }
     }
     protected void InitGui()
     {

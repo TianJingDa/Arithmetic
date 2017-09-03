@@ -18,6 +18,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject feedbackWin;
     private GameObject aboutUsWin;
     private GameObject thankDevelopersWin;
+    private Button languageConfirmBtn;
     private ToggleGroup languageToggleGroup;
     void Start () 
 	{
@@ -32,6 +33,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         aboutUsWin = CommonTool.GetGameObjectByName(gameObject, "AboutUsWin");
         thankDevelopersWin = CommonTool.GetGameObjectByName(gameObject, "ThankDevelopersWin");
         languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
+        languageConfirmBtn = CommonTool.GetComponentByName<Button>(gameObject, "LanguageConfirmBtn");
+
         languageTogglesAnchoredPositon = InitToggleAnchoredPositon(languageToggleGroup);
 
     }
@@ -51,15 +54,16 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
         toggleGroup.SetAllTogglesOff();
         int curLanguageID = (int)GameManager.Instance.curLanguageID;
-        Vector2 curToggleAnchoredPositon = togglesAnchoredPositon[curLanguageID];
-        togglesAnchoredPositon.RemoveAt(curLanguageID);
-        togglesAnchoredPositon.Insert(0, curToggleAnchoredPositon);
+        List<Vector2> tempTogglesAnchoredPositon = new List<Vector2>(togglesAnchoredPositon);
+        Vector2 curToggleAnchoredPositon = tempTogglesAnchoredPositon[curLanguageID];
+        tempTogglesAnchoredPositon.RemoveAt(curLanguageID);
+        tempTogglesAnchoredPositon.Insert(0, curToggleAnchoredPositon);
         for(int i=0;i< toggleGroup.toggles.Count; i++)
         {
             RectTransform toggleRectTransform = toggleGroup.toggles[i].transform as RectTransform;
-            toggleRectTransform.anchoredPosition = togglesAnchoredPositon[i];
+            toggleRectTransform.anchoredPosition = tempTogglesAnchoredPositon[i];
         }
-        toggleGroup.NotifyToggleOn(0);
+        toggleGroup.toggles[curLanguageID].isOn = true;
     }
 
     private List<Vector2> InitToggleAnchoredPositon(ToggleGroup toggleGroup)
@@ -92,15 +96,18 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 feedbackWin.SetActive(!feedbackWin.activeSelf);
                 break;
             case "LanguageBtn":
-                languageWin.SetActive(!languageWin.activeSelf);
+                tempLanguageID = -1;
+                languageWin.SetActive(true);
+                languageConfirmBtn.interactable = false;
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon);
                 break;
             case "Language2SetUpFrameBtn":
-                languageWin.SetActive(!languageWin.activeSelf);
+                languageWin.SetActive(false);
                 break;
             case "LanguageConfirmBtn":
                 GameManager.Instance.curLanguageID = (LanguageID)tempLanguageID;
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon);
+                languageConfirmBtn.interactable = false;
                 break;
             case "LayoutBtn":
             case "Layout2SetUpFrameBtn":
@@ -131,14 +138,30 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
         }
     }
-    public override void OnToggleClick(bool check)
+
+    public override void OnToggleClick(Toggle tgl)
     {
-        if (check)
+        base.OnToggleClick(tgl);
+
+        if (!languageConfirmBtn.interactable && tempLanguageID != -1)
         {
-            tempLanguageID = languageToggleGroup.ActiveToggles().FirstOrDefault().index;
+            languageConfirmBtn.interactable = true;
+        }
+
+        if (tgl.isOn)
+        {
+            tempLanguageID = tgl.index;
             Debug.Log("tempLanguageID:" + tempLanguageID);
         }
     }
+    //public override void OnToggleClick(bool check)
+    //{
+    //    if (check)
+    //    {
+    //        tempLanguageID = languageToggleGroup.ActiveToggles().FirstOrDefault().index;
+    //        Debug.Log("tempLanguageID:" + tempLanguageID);
+    //    }
+    //}
 
 
 }
