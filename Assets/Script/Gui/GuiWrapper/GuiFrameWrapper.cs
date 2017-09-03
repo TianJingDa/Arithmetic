@@ -19,13 +19,8 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             return;
         }
     }
-    public virtual void OnToggleClick(Toggle tgl)
+    public virtual void OnToggleClick(bool check)
     {
-        if (tgl == null)
-        {
-            Debug.LogError("Toggle is NULL!");
-            return;
-        }
     }
     protected void InitGui()
     {

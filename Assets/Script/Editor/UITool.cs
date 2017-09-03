@@ -99,6 +99,60 @@ public class UITool : Editor
             target.anchoredPosition = Vector2.zero;
         }
     }
+    [MenuItem("Custom Editor/恢复TextIndex")]
+    public static void RecoverTextIndex()
+    {
+        for(int i = 0; i < Selection.gameObjects.Length; i++)
+        {
+            Text[] textArray = Selection.gameObjects[i].GetComponentsInChildren<Text>(true);
+            for(int j = 0; j < textArray.Length; j++)
+            {
+                if(!string.IsNullOrEmpty(textArray[j].text) && textArray[j].text.Contains("Text_"))
+                {
+                    textArray[j].index = textArray[j].text;
+                }
+            }
+        }
+    }
+    [MenuItem("Custom Editor/恢复ImageIndex")]
+    public static void RecoverImageIndex()
+    {
+        int num = 0;
+        Dictionary<string, string> imageDict = InitImageData();
+        for (int i = 0; i < Selection.gameObjects.Length; i++)
+        {
+            Image[] imageArray = Selection.gameObjects[i].GetComponentsInChildren<Image>(true);
+            for (int j = 0; j < imageArray.Length; j++)
+            {
+                if (imageDict.ContainsKey(imageArray[j].name))
+                {
+                    imageArray[j].index = imageDict[imageArray[j].name];
+                    num++;
+                }
+            }
+        }
+        Debug.Log("num:" + num);
+    }
+    private static Dictionary<string,string> InitImageData()
+    {
+        TextAsset imageAsset = Resources.Load("Language/Image", typeof(TextAsset)) as TextAsset;
+        if (imageAsset == null)
+        {
+            Debug.LogError("Load File Error!");
+            return null;
+        }
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string[] lineArray = imageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        List<string> lineList;
+        Dictionary<string, string> imageDict = new Dictionary<string, string>();
+        for (int i = 0; i < lineArray.Length; i++)
+        {
+            lineList = new List<string>(lineArray[i].Split(','));
+            imageDict.Add(lineList[1], lineList[0]);
+        }
+
+        return imageDict;
+    }
 
 
 }

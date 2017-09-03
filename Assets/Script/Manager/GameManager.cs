@@ -7,18 +7,18 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [HideInInspector]
-    public  LanguageID                                          m_CurLanguageID ;                   //当前语言
+    public  LanguageID                                          curLanguageID ;                   //当前语言
     [HideInInspector]
-    public SkinID                                               m_CurSkinID;                        //当前皮肤
+    public SkinID                                               curSkinID;                        //当前皮肤
     [HideInInspector]
-    public LayoutID                                             m_CurLayoutID;                      //当前布局
+    public LayoutID                                             curLayoutID;                      //当前布局
 
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private Clock                                               m_Clock;                            //时钟工具
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
-    private FightController                                      c_ExamCtrl;
+    private FightController                                     c_ExamCtrl;
     private AchievementController                               c_AchievementCtrl;
     private SkinController                                      c_SkinCtrl;
     private LayoutController                                    c_LayoutCtrl;
@@ -51,9 +51,9 @@ public class GameManager : MonoBehaviour
         c_ResourceCtrl = ResourceController.Instance;
         c_SkinCtrl = SkinController.Instance;
         c_TextColorCtrl = TextColorController.Instance;
-        m_CurLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
-        m_CurSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
-        m_CurLayoutID = LayoutID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
+        curLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
+        curSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
+        curLayoutID = LayoutID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
     }
 
     void Start()
@@ -94,30 +94,30 @@ public class GameManager : MonoBehaviour
     {
         if (IsActive(GuiFrameID.SetUpFrame))
         {
-            m_CurLanguageID = language;
+            curLanguageID = language;
         }
     }
     public string GetMutiLanguage(string index)
     {
-        return c_MutiLanguageCtrl.GetMutiLanguage(index, m_CurLanguageID);
+        return c_MutiLanguageCtrl.GetMutiLanguage(index, curLanguageID);
     }
     public Font GetFont()
     {
-        Object font = c_FontCtrl.GetFontResource(m_CurSkinID,m_CurLanguageID);
+        Object font = c_FontCtrl.GetFontResource(curSkinID,curLanguageID);
         return Instantiate(font) as Font;
     }
     public Sprite GetSprite(string index)
     {
-        Object sprite = c_SkinCtrl.GetSpriteResource(m_CurSkinID, index);
+        Object sprite = c_SkinCtrl.GetSpriteResource(curSkinID, index);
         return Instantiate(sprite) as Sprite;
     }
     public Color GetColor(string index)
     {
-        return c_TextColorCtrl.GetColorData(m_CurSkinID, index);
+        return c_TextColorCtrl.GetColorData(curSkinID, index);
     }
     public RectTransform[] GetLayoutData()
     {
-        return c_LayoutCtrl.GetLayoutData(m_CurLayoutID);
+        return c_LayoutCtrl.GetLayoutData(curLayoutID);
     }
     /// <summary>
     /// 注册时钟

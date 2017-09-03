@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 /// <summary>
 /// 设置界面
 /// </summary>
 public class SetUpFrameWrapper : GuiFrameWrapper
 {
     private int tempLanguageID;
+    private List<Vector2> languageTogglesAnchoredPositon;
 
     private GameObject strategyWin;
     private GameObject languageWin;
@@ -21,6 +23,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 	{
         base.id = GuiFrameID.SetUpFrame;
         InitGui();
+
         strategyWin = CommonTool.GetGameObjectByName(gameObject, "StrategyWin");
         languageWin = CommonTool.GetGameObjectByName(gameObject, "LanguageWin");
         skinWin = CommonTool.GetGameObjectByName(gameObject, "SkinWin");
@@ -28,9 +31,52 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         feedbackWin = CommonTool.GetGameObjectByName(gameObject, "FeedbackWin");
         aboutUsWin = CommonTool.GetGameObjectByName(gameObject, "AboutUsWin");
         thankDevelopersWin = CommonTool.GetGameObjectByName(gameObject, "ThankDevelopersWin");
-        languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "languageToggleGroup");
+        languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
+        languageTogglesAnchoredPositon = InitToggleAnchoredPositon(languageToggleGroup);
+
     }
 
+    private void RefreshToggleGroup(ToggleGroup toggleGroup, List<Vector2> togglesAnchoredPositon)
+    {
+        if (!toggleGroup)
+        {
+            Debug.Log("toggleGroup is null");
+            return;
+        }
+        if (togglesAnchoredPositon == null || togglesAnchoredPositon.Count == 0)
+        {
+            Debug.Log("togglesAnchoredPositon NO data!");
+            return;
+        }
+
+        toggleGroup.SetAllTogglesOff();
+        int curLanguageID = (int)GameManager.Instance.curLanguageID;
+        Vector2 curToggleAnchoredPositon = togglesAnchoredPositon[curLanguageID];
+        togglesAnchoredPositon.RemoveAt(curLanguageID);
+        togglesAnchoredPositon.Insert(0, curToggleAnchoredPositon);
+        for(int i=0;i< toggleGroup.toggles.Count; i++)
+        {
+            RectTransform toggleRectTransform = toggleGroup.toggles[i].transform as RectTransform;
+            toggleRectTransform.anchoredPosition = togglesAnchoredPositon[i];
+        }
+        toggleGroup.NotifyToggleOn(0);
+    }
+
+    private List<Vector2> InitToggleAnchoredPositon(ToggleGroup toggleGroup)
+    {
+        if (!toggleGroup)
+        {
+            Debug.Log("toggleGroup is null");
+            return null;
+        }
+        List<Vector2> toggleAnchoredPositon = new List<Vector2>();
+        for(int i=0;i< toggleGroup.transform.childCount; i++)
+        {
+            RectTransform toggleRectTransform = toggleGroup.transform.GetChild(i) as RectTransform;
+            toggleAnchoredPositon.Add(toggleRectTransform.anchoredPosition);
+        }
+        return toggleAnchoredPositon;
+    }
 
     public override void OnButtonClick(Button btn)
     {
@@ -46,8 +92,15 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 feedbackWin.SetActive(!feedbackWin.activeSelf);
                 break;
             case "LanguageBtn":
+                languageWin.SetActive(!languageWin.activeSelf);
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon);
+                break;
             case "Language2SetUpFrameBtn":
                 languageWin.SetActive(!languageWin.activeSelf);
+                break;
+            case "LanguageConfirmBtn":
+                GameManager.Instance.curLanguageID = (LanguageID)tempLanguageID;
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon);
                 break;
             case "LayoutBtn":
             case "Layout2SetUpFrameBtn":
@@ -78,9 +131,14 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
         }
     }
-    public override void OnToggleClick(Toggle tgl)
+    public override void OnToggleClick(bool check)
     {
-        base.OnToggleClick(tgl);
-        //tempLanguageID=tgl    
+        if (check)
+        {
+            tempLanguageID = languageToggleGroup.ActiveToggles().FirstOrDefault().index;
+            Debug.Log("tempLanguageID:" + tempLanguageID);
+        }
     }
+
+
 }
