@@ -126,7 +126,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 languageWin.SetActive(false);
                 break;
             case "LanguageConfirmBtn":
-                GameManager.Instance.curLanguageID = (LanguageID)tempLanguageID;
+                GameManager.Instance.SetLanguageID(tempLanguageID);
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon, (int)GameManager.Instance.curLanguageID);
                 languageConfirmBtn.interactable = false;
                 InitGui();
@@ -141,7 +141,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 layoutWin.SetActive(false);
                 break;
             case "LayoutConfirmBtn":
-                GameManager.Instance.curLayoutID = (LayoutID)tempLayoutID;
+                GameManager.Instance.SetLayoutID(tempLayoutID);
                 RefreshToggleGroup(layoutToggleGroup, layoutTogglesAnchoredPositon, (int)GameManager.Instance.curLayoutID);
                 layoutConfirmBtn.interactable = false;
                 break;
@@ -163,7 +163,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 skinWin.SetActive(false);
                 break;
             case "SkinConfirmBtn":
-                GameManager.Instance.curSkinID = (SkinID)tempSkinID;
+                GameManager.Instance.SetSkinID(tempSkinID);
                 RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositon, (int)GameManager.Instance.curSkinID);
                 skinConfirmBtn.interactable = false;
                 InitGui();

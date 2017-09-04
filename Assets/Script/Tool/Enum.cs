@@ -34,8 +34,13 @@ public enum SkinID
     RosePink,                  //玫瑰粉
     SkyBlue                    //天空蓝
 }
-public enum LayoutID
+public enum OrientationID
 {
     Horizontal,                //水平布局
     Vertical                   //垂直布局
+}
+public enum HandednessID
+{
+    Right,                     //右撇子
+    Left                       //左撇子
 }

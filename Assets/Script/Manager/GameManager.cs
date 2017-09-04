@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public SkinID                                               curSkinID;                        //当前皮肤
     [HideInInspector]
-    public LayoutID                                             curLayoutID;                      //当前布局
+    public OrientationID                                             curLayoutID;                      //当前布局
 
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         c_TextColorCtrl = TextColorController.Instance;
         curLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
         curSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
-        curLayoutID = LayoutID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
+        curLayoutID = OrientationID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
     }
 
     void Start()
@@ -90,13 +90,13 @@ public class GameManager : MonoBehaviour
     /// 修改语言
     /// </summary>
     /// <param name="language"></param>
-    public void SetLanguage(LanguageID language)
-    {
-        if (IsActive(GuiFrameID.SetUpFrame))
-        {
-            curLanguageID = language;
-        }
-    }
+    //public void SetLanguage(LanguageID language)
+    //{
+    //    if (IsActive(GuiFrameID.SetUpFrame))
+    //    {
+    //        curLanguageID = language;
+    //    }
+    //}
     public string GetMutiLanguage(string index)
     {
         return c_MutiLanguageCtrl.GetMutiLanguage(index, curLanguageID);
@@ -133,6 +133,19 @@ public class GameManager : MonoBehaviour
     public void UnRegisterClock()
     {
         this.m_Clock = null;
+    }
+
+    public void SetLanguageID(int id)
+    {
+        curLanguageID = (LanguageID)id;
+    }
+    public void SetSkinID(int id)
+    {
+        curSkinID = (SkinID)id;
+    }
+    public void SetLayoutID(int id)
+    {
+        curLayoutID = (OrientationID)id;
     }
     ///// <summary>
     ///// 激活GUI

@@ -9,7 +9,7 @@ public class LayoutController : Controller
     private LayoutController()
     {
         base.id = ControllerID.LayoutController;
-        layoutAssetDict = new Dictionary<LayoutID, string[]>();
+        layoutAssetDict = new Dictionary<OrientationID, string[]>();
         InitLayoutData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -18,13 +18,13 @@ public class LayoutController : Controller
         get { return instance ?? (instance = new LayoutController()); }
     }
     #endregion
-    private Dictionary<LayoutID, string[]> layoutAssetDict;
+    private Dictionary<OrientationID, string[]> layoutAssetDict;
     private void InitLayoutData()
     {
-        layoutAssetDict.Add(LayoutID.Vertical, new string[] { "Layout/Vertical/Default", "Layout/Vertical/Custom " });
-        layoutAssetDict.Add(LayoutID.Horizontal, new string[] { "Layout/Horizontal/Default", "Layout/Horizontal/Custom " });
+        layoutAssetDict.Add(OrientationID.Vertical, new string[] { "Layout/Vertical/Default", "Layout/Vertical/Custom " });
+        layoutAssetDict.Add(OrientationID.Horizontal, new string[] { "Layout/Horizontal/Default", "Layout/Horizontal/Custom " });
     }
-    public RectTransform[] GetLayoutData(LayoutID curLayout)
+    public RectTransform[] GetLayoutData(OrientationID curLayout)
     {
         RectTransform[] transforms = null;
         return transforms;
