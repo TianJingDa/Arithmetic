@@ -76,21 +76,5 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
         }
     }
-    protected void InitSelectableGui()
-    {
-
-    }
-    private void InitButton()
-    {
-
-    }
-    private void InitToggle()
-    {
-
-    }
-    private void InitDropdown()
-    {
-
-    }
 }
 

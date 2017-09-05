@@ -41,6 +41,7 @@ public enum OrientationID
 }
 public enum HandednessID
 {
-    Right,                     //右撇子
-    Left                       //左撇子
+    Left = -1,                 //左撇子
+    Right = 1,                 //右撇子
+
 }

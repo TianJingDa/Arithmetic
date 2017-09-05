@@ -21,8 +21,8 @@ public class LayoutController : Controller
     private Dictionary<OrientationID, string[]> layoutAssetDict;
     private void InitLayoutData()
     {
-        layoutAssetDict.Add(OrientationID.Vertical, new string[] { "Layout/Vertical/Default", "Layout/Vertical/Custom " });
         layoutAssetDict.Add(OrientationID.Horizontal, new string[] { "Layout/Horizontal/Default", "Layout/Horizontal/Custom " });
+        layoutAssetDict.Add(OrientationID.Vertical, new string[] { "Layout/Vertical/Default", "Layout/Vertical/Custom " });
     }
     public RectTransform[] GetLayoutData(OrientationID curLayout)
     {
