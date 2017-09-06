@@ -21,7 +21,7 @@ public class CommonTool
         }
         if (result == null)
         {
-            Debug.LogError("Can not find :" + name);
+            MyDebug.LogYellow("Can not find :" + name);
         }
         return result;
     }
@@ -50,7 +50,7 @@ public class CommonTool
         }
         if (result == null)
         {
-            Debug.LogError("Can not find :" + name);
+            MyDebug.LogYellow("Can not find :" + name);
         }
         return result;
     }
@@ -70,7 +70,7 @@ public class CommonTool
         }
         if (result.Count == 0)
         {
-            Debug.LogError("Can not find :" + name);
+            MyDebug.LogYellow("Can not find :" + name);
         }
         return result;
 
@@ -90,7 +90,7 @@ public class CommonTool
 
         if (result == null)
         {
-            Debug.LogError("Can not find :" + name);
+            MyDebug.LogYellow("Can not find :" + name);
         }
 
         return result;

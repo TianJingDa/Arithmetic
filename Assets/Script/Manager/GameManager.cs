@@ -6,13 +6,6 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector]
-    public  LanguageID                                          curLanguageID ;                   //当前语言
-    [HideInInspector]
-    public SkinID                                               curSkinID;                        //当前皮肤
-    [HideInInspector]
-    public OrientationID                                             curLayoutID;                      //当前布局
-
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private Clock                                               m_Clock;                            //时钟工具
@@ -35,6 +28,73 @@ public class GameManager : MonoBehaviour
             return m_CurWrapper.GetComponent<GuiFrameWrapper>();
         }
     }
+
+    public LanguageID CurLanguageID
+    {
+        get
+        {
+            int languageID = PlayerPrefs.GetInt("LanguageID", -1);
+            if (languageID == -1)
+            {
+                switch (Application.systemLanguage)
+                {
+                    case SystemLanguage.ChineseSimplified:
+                        languageID = 0;
+                        break;
+                    case SystemLanguage.English:
+                    default:
+                        languageID = 1;
+                        break;
+                }
+            }
+            return (LanguageID)languageID;
+        }
+        set
+        {
+            int languageID = (int)value;
+            PlayerPrefs.SetInt("LanguageID", languageID);
+        }
+    }
+    public SkinID CurSkinID
+    {
+        get
+        {
+            int skinID = PlayerPrefs.GetInt("SkinID", 0);
+            return (SkinID)skinID;
+        }
+        set
+        {
+            int skinID = (int)value;
+            PlayerPrefs.SetInt("SkinID", skinID);
+        }
+    }
+    public LayoutID CurLayoutID
+    {
+        get
+        {
+            int layoutID = PlayerPrefs.GetInt("LayoutID", 0);
+            return (LayoutID)layoutID;
+        }
+        set
+        {
+            int layout = (int)value;
+            PlayerPrefs.SetInt("LayoutID", layout);
+        }
+    }
+    public HandednessID CurHandednessID
+    {
+        get
+        {
+            int handednessID = PlayerPrefs.GetInt("HandednessID", -1);
+            return (HandednessID)handednessID;
+        }
+        set
+        {
+            int handednessID = (int)value;
+            PlayerPrefs.SetInt("HandednessID", handednessID);
+        }
+    }
+
     public static GameManager Instance//单例
     {
         get;
@@ -43,6 +103,9 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         if (Instance == null){ Instance = this; }
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Application.targetFrameRate = 30;
+
         c_AchievementCtrl = AchievementController.Instance;
         c_ExamCtrl = FightController.Instance;
         c_FontCtrl = FontController.Instance;
@@ -51,14 +114,11 @@ public class GameManager : MonoBehaviour
         c_ResourceCtrl = ResourceController.Instance;
         c_SkinCtrl = SkinController.Instance;
         c_TextColorCtrl = TextColorController.Instance;
-        curLanguageID = LanguageID.Chinese;//后期需要进行判断PlayerPrefs，不然每次进来都是同一语言
-        curSkinID = SkinID.Default;//后期需要进行判断PlayerPrefs，不然每次进来都是同一皮肤
-        curLayoutID = OrientationID.Vertical;//后期需要进行判断PlayerPrefs，不然每次进来都是同一布局
     }
 
     void Start()
     {
-        m_Root = GameObject.Find("Canvas");
+        m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = GameObject.Find("StartFrame");
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
@@ -86,38 +146,27 @@ public class GameManager : MonoBehaviour
     }
 
     #region 公共方法
-    /// <summary>
-    /// 修改语言
-    /// </summary>
-    /// <param name="language"></param>
-    //public void SetLanguage(LanguageID language)
-    //{
-    //    if (IsActive(GuiFrameID.SetUpFrame))
-    //    {
-    //        curLanguageID = language;
-    //    }
-    //}
     public string GetMutiLanguage(string index)
     {
-        return c_MutiLanguageCtrl.GetMutiLanguage(index, curLanguageID);
+        return c_MutiLanguageCtrl.GetMutiLanguage(index, CurLanguageID);
     }
     public Font GetFont()
     {
-        Object font = c_FontCtrl.GetFontResource(curSkinID,curLanguageID);
+        Object font = c_FontCtrl.GetFontResource(CurSkinID,CurLanguageID);
         return Instantiate(font) as Font;
     }
     public Sprite GetSprite(string index)
     {
-        Object sprite = c_SkinCtrl.GetSpriteResource(curSkinID, index);
+        Object sprite = c_SkinCtrl.GetSpriteResource(CurSkinID, index);
         return Instantiate(sprite) as Sprite;
     }
     public Color GetColor(string index)
     {
-        return c_TextColorCtrl.GetColorData(curSkinID, index);
+        return c_TextColorCtrl.GetColorData(CurSkinID, index);
     }
     public RectTransform[] GetLayoutData()
     {
-        return c_LayoutCtrl.GetLayoutData(curLayoutID);
+        return c_LayoutCtrl.GetLayoutData(CurLayoutID, CurHandednessID);
     }
     /// <summary>
     /// 注册时钟
@@ -135,18 +184,6 @@ public class GameManager : MonoBehaviour
         this.m_Clock = null;
     }
 
-    public void SetLanguageID(int id)
-    {
-        curLanguageID = (LanguageID)id;
-    }
-    public void SetSkinID(int id)
-    {
-        curSkinID = (SkinID)id;
-    }
-    public void SetLayoutID(int id)
-    {
-        curLayoutID = (OrientationID)id;
-    }
     ///// <summary>
     ///// 激活GUI
     ///// </summary>
@@ -196,14 +233,14 @@ public class GameManager : MonoBehaviour
             Object reource = c_ResourceCtrl.GetGuiResource(to_ID);
             if (reource == null)
             {
-                Debug.LogError("Can not load reousce:" + to_ID.ToString());
+                MyDebug.LogYellow("Can not load reousce:" + to_ID.ToString());
                 return;
             }
             m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         }
         else
         {
-            Debug.LogError("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
+            MyDebug.LogYellow("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
         }
     }
     /// <summary>

@@ -65,7 +65,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 saveFileDetailBg.SetActive(false);
                 break;
             default:
-                Debug.LogError("Can not find Button:" + btn.name);
+                MyDebug.LogYellow("Can not find Button:" + btn.name);
                 break;
         }
     }

@@ -38,7 +38,7 @@ public class TextColorController : Controller
         TextAsset colorAsset = Resources.Load(path, typeof(TextAsset)) as TextAsset;
         if (colorAsset == null)
         {
-            Debug.LogError("Load File Error!");
+            MyDebug.LogYellow("Load File Error!");
             return;
         }
         char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
@@ -72,7 +72,7 @@ public class TextColorController : Controller
         colorDict.TryGetValue(index, out colorArray);
         if (colorArray == null)
         {
-            Debug.LogError("Get Color Error! SkinID: " + id.ToString()+ ",index:"+index);
+            MyDebug.LogYellow("Get Color Error! SkinID: " + id.ToString()+ ",index:"+index);
             return Color.white;
         }
         Color color = new Color();

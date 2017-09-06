@@ -15,7 +15,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     {
         if (!btn)
         {
-            Debug.LogError("Button is NULL!");
+            MyDebug.LogYellow("Button is NULL!");
             return;
         }
     }
@@ -23,7 +23,15 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     {
         if (!tgl)
         {
-            Debug.LogError("Toggle is NULL!");
+            MyDebug.LogYellow("Toggle is NULL!");
+            return;
+        }
+    }
+    public virtual void OnDropdownClick(Dropdown dpd)
+    {
+        if (!dpd)
+        {
+            MyDebug.LogYellow("Dropdown is NULL!");
             return;
         }
     }
@@ -53,7 +61,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Can not load Sprite:" + imageArray[i].index);
+                MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
             }
         }
     }
