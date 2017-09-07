@@ -10,9 +10,11 @@ public class StartFrameWrapper : GuiFrameWrapper
     void Start()
     {
         base.id = GuiFrameID.StartFrame;
-        InitGui();
+        InitUnSelectableGui();
+        InitSelectableGui(OnButtonClick, null, null);
     }
-    public override void OnButtonClick(Button btn)
+
+    protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
         switch (btn.name)

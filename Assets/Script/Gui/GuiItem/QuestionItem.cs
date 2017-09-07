@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 
 public class QuestionItem : MonoBehaviour 
 {
@@ -16,4 +18,9 @@ public class QuestionItem : MonoBehaviour
         questionIndex.text = content.title;
     }
 
+}
+[Serializable]
+public class QuentionInstance
+{
+    public string title;
 }

@@ -18,28 +18,26 @@ public class FightFrameWrapper : GuiFrameWrapper
         base.id = GuiFrameID.FightFrame;
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
-        InitGui();
+        InitUnSelectableGui();
+        InitSelectableGui(OnButtonClick, null, null);
+
         //timeLabel = GetComponentByName<Text>("TimeLabel");
         confirmBg = CommonTool.GetGameObjectByName(gameObject, "ConfirmBg");
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
 
 
-    void Update () 
-	{
-		
-	}
     void OnDestroy()
     {
         GameManager.Instance.UnRegisterClock();
     }
 
-    public override void OnButtonClick(Button btn)
+    protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
         switch (btn.name)
         {
-            case "FinishBtn":
+            case "Fight2SettlementFrameBtn":
                 confirmBg.SetActive(true);
                 //不可暂停答题！
                 break;

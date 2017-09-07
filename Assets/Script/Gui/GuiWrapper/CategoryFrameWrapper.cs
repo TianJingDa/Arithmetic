@@ -12,12 +12,15 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         base.id = GuiFrameID.CategoryFrame;
-        InitGui();
+        InitUnSelectableGui();
+        InitSelectableGui(OnButtonClick, null, OnDropdownClick);
+
+
         categoryTipBg = CommonTool.GetGameObjectByName(gameObject, "CategoryTipBg");
     }
 
 
-    public override void OnButtonClick(Button btn)
+    protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
         switch (btn.name)

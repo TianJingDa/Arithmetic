@@ -49,6 +49,15 @@ Text_40028,垂直布局,TJD
 Text_40029,水平布局,TJD
 Text_40030,右手,TJD
 Text_40031,左手,TJD
+Text_40032,重置游戏时间,TJD
+Text_40033,重置游戏次数,TJD
+Text_40034,重置成就,TJD
+Text_40035,重置存档,TJD
+Text_40036,重置设置,TJD
+Text_40037,重置,TJD
+Text_40038,是否重置,TJD
+Text_40039,否,TJD
+Text_40040,是，重置,TJD
 Text_50000,是否结束,TJD
 Text_50001,否，继续,TJD
 Text_50002,是，结束,TJD

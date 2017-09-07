@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 
 public class AchievementItem : MonoBehaviour 
 {
@@ -31,3 +33,10 @@ public class AchievementItem : MonoBehaviour
         achievementDetaiPage_Text.text = content.detail;
     }
 }
+[Serializable]
+public class AchievementInstance
+{
+    public string title;
+    public string detail;
+}
+

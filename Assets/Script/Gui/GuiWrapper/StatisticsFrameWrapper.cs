@@ -17,7 +17,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         base.id = GuiFrameID.StatisticsFrame;
-        InitGui();
+        InitUnSelectableGui();
+        InitSelectableGui(OnButtonClick, null, null);
+
         achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
         saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
         achievementDetailBg = CommonTool.GetGameObjectByName(gameObject, "AchievementDetailBg");
@@ -26,17 +28,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
     }
 
-    void Update () 
-	{
-		
-	}
-
-    void OnDestroy()
-    {
-        
-    }
-
-    public override void OnButtonClick(Button btn)
+    protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
         switch (btn.name)

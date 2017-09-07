@@ -32,7 +32,7 @@ public sealed class ResourceController : Controller
         guiAssetDict.Add(GuiFrameID.StatisticsFrame, "GuiWrapper/StatisticsFrame");
         guiAssetDict.Add(GuiFrameID.CategoryFrame, "GuiWrapper/CategoryFrame");
         guiAssetDict.Add(GuiFrameID.SetUpFrame, "GuiWrapper/SetUpFrame");
-        guiAssetDict.Add(GuiFrameID.FightFrame, "GuiWrapper/ExamFrame");
+        guiAssetDict.Add(GuiFrameID.FightFrame, "GuiWrapper/FightFrame");
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "GuiWrapper/SettlementFrame");
 
         prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");

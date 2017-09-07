@@ -12,6 +12,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private int tempSkinID;
     private int tempLayoutID;
     private int tempHandednessID;
+
     private List<Vector2> languageTogglesAnchoredPositon;
     private List<Vector2> skinTogglesAnchoredPositon;
 
@@ -23,17 +24,20 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject feedbackWin;
     private GameObject aboutUsWin;
     private GameObject thankDevelopersWin;
-    private Button languageConfirmBtn;
-    private Button skinConfirmBtn;
-    private Button layoutConfirmBtn;
+    private GameObject resetConfirmBg;
+    private Button languageApplyBtn;
+    private Button skinApplyBtn;
+    private Button layoutApplyBtn;
     private ToggleGroup languageToggleGroup;
     private ToggleGroup skinToggleGroup;
+
     private Dropdown layoutDropdown;
     private Dropdown handednessDropdown;
     void Start () 
 	{
         base.id = GuiFrameID.SetUpFrame;
-        InitGui();
+        InitUnSelectableGui();
+        InitSelectableGui(OnButtonClick, OnToggleClick, OnDropdownClick);
 
         strategyWin = CommonTool.GetGameObjectByName(gameObject, "StrategyWin");
         languageWin = CommonTool.GetGameObjectByName(gameObject, "LanguageWin");
@@ -43,13 +47,15 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         feedbackWin = CommonTool.GetGameObjectByName(gameObject, "FeedbackWin");
         aboutUsWin = CommonTool.GetGameObjectByName(gameObject, "AboutUsWin");
         thankDevelopersWin = CommonTool.GetGameObjectByName(gameObject, "ThankDevelopersWin");
-        languageConfirmBtn = CommonTool.GetComponentByName<Button>(gameObject, "LanguageConfirmBtn");
+        resetConfirmBg = CommonTool.GetGameObjectByName(gameObject, "ResetConfirmBg");
+        languageApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "LanguageApplyBtn");
         languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
-        skinConfirmBtn = CommonTool.GetComponentByName<Button>(gameObject, "SkinConfirmBtn");
+        skinApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "SkinApplyBtn");
         skinToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "SkinToggleGroup");
+
         layoutDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "LayoutDropdown");
         handednessDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "HandednessDropdown");
-        layoutConfirmBtn = CommonTool.GetComponentByName<Button>(gameObject, "LayoutConfirmBtn");
+        layoutApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "LayoutApplyBtn");
 
 
         languageTogglesAnchoredPositon = InitToggleAnchoredPositon(languageToggleGroup);
@@ -66,7 +72,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     {
         if (!toggleGroup)
         {
-            MyDebug.LogYellow("toggleGroup is null");
+            MyDebug.LogYellow("toggleGroup is null!");
             return;
         }
         if (togglesAnchoredPositon == null || togglesAnchoredPositon.Count == 0)
@@ -107,8 +113,26 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         }
         return toggleAnchoredPositon;
     }
-
-    public override void OnButtonClick(Button btn)
+    /// <summary>
+    /// 刷新Dropdown的状态
+    /// </summary>
+    /// <param name="dpd"></param>
+    /// <param name="index"></param>
+    private void RefreshDropdown(Dropdown dpd, int index)
+    {
+        if (!dpd)
+        {
+            MyDebug.LogYellow("Dropdown is null!");
+            return;
+        }
+        for(int i = 0; i < dpd.options.Count; i++)
+        {
+            dpd.options[i].text = GameManager.Instance.GetMutiLanguage(dpd.options[i].text);
+        }
+        dpd.value = index;
+        dpd.RefreshShownValue();
+    }
+    protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
         switch (btn.name)
@@ -124,29 +148,33 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "LanguageBtn":
                 tempLanguageID = -1;
                 languageWin.SetActive(true);
-                languageConfirmBtn.interactable = false;
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon, (int)GameManager.Instance.CurLanguageID);
+                languageApplyBtn.interactable = false;
                 break;
             case "Language2SetUpFrameBtn":
                 languageWin.SetActive(false);
                 break;
-            case "LanguageConfirmBtn":
+            case "LanguageApplyBtn":
                 GameManager.Instance.CurLanguageID = (LanguageID)tempLanguageID;
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon, (int)GameManager.Instance.CurLanguageID);
-                languageConfirmBtn.interactable = false;
-                InitGui();
+                languageApplyBtn.interactable = false;
+                InitUnSelectableGui();
                 break;
             case "LayoutBtn":
-                tempLayoutID = -1;
+                tempLayoutID = (int)GameManager.Instance.CurLayoutID;
+                tempHandednessID = (int)GameManager.Instance.CurHandednessID;
                 layoutWin.SetActive(true);
-                layoutConfirmBtn.interactable = false;
+                RefreshDropdown(layoutDropdown, tempLayoutID);
+                RefreshDropdown(handednessDropdown, tempHandednessID);
+                layoutApplyBtn.interactable = false;
                 break;
             case "Layout2SetUpFrameBtn":
                 layoutWin.SetActive(false);
                 break;
-            case "LayoutConfirmBtn":
+            case "LayoutpplyBtn":
                 GameManager.Instance.CurLayoutID = (LayoutID)tempLayoutID;
-                layoutConfirmBtn.interactable = false;
+                GameManager.Instance.CurHandednessID = (HandednessID)tempHandednessID;
+                layoutApplyBtn.interactable = false;
                 break;
             case "AboutUs2StartFrameBtn":
             case "Language2StartFrameBtn":
@@ -157,24 +185,36 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "Strategy2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, GuiFrameID.StartFrame);
                 break;
-            case "ResetBtn":
             case "Reset2SetUpFrameBtn":
-                resetWin.SetActive(!resetWin.activeSelf);
+                resetWin.SetActive(false);
+                break;
+            case "ResetApplyBtn":
+                resetConfirmBg.SetActive(true);
+                break;
+            case "ResetBtn":
+                resetWin.SetActive(true);
+                break;
+            case "ResetCancelBtn":
+            case "ResetConfirmBg":
+                resetConfirmBg.SetActive(false);
+                break;
+            case "ResetConfirmBtn":
+                resetConfirmBg.SetActive(false);
                 break;
             case "SkinBtn":
                 tempSkinID = -1;
                 skinWin.SetActive(true);
-                skinConfirmBtn.interactable = false;
                 RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositon, (int)GameManager.Instance.CurSkinID);
+                skinApplyBtn.interactable = false;
                 break;
             case "Skin2SetUpFrameBtn":
                 skinWin.SetActive(false);
                 break;
-            case "SkinConfirmBtn":
+            case "SkinCpplyBtn":
                 GameManager.Instance.CurSkinID = (SkinID)tempSkinID;
                 RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositon, (int)GameManager.Instance.CurSkinID);
-                skinConfirmBtn.interactable = false;
-                InitGui();
+                skinApplyBtn.interactable = false;
+                InitUnSelectableGui();
                 break;
             case "StrategyBtn":
             case "Strategy2SetUpFrameBtn":
@@ -190,31 +230,29 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         }
     }
 
-    public override void OnToggleClick(Toggle tgl)
+    protected override void OnToggleClick(Toggle tgl)
     {
         base.OnToggleClick(tgl);
         if (tgl.name.Contains("LanguageToggle"))
         {
-            OnToggleClick(languageConfirmBtn, ref tempLanguageID, tgl);
+            OnToggleClick(languageApplyBtn, ref tempLanguageID, tgl);
         }
         else if (tgl.name.Contains("SkinToggle"))
         {
-            OnToggleClick(skinConfirmBtn, ref tempSkinID, tgl);
+            OnToggleClick(skinApplyBtn, ref tempSkinID, tgl);
         }
     }
     private void OnToggleClick(Button confirmBtn, ref int tempID, Toggle tgl)
     {
-        if (!confirmBtn.interactable && tempID != -1)
-        {
-            confirmBtn.interactable = true;
-        }
+        confirmBtn.interactable = true;
+
         if (tgl.isOn)
         {
             tempID = tgl.index;
         }
     }
 
-    public override void OnDropdownClick(Dropdown dpd)
+    protected override void OnDropdownClick(Dropdown dpd)
     {
         base.OnDropdownClick(dpd);
         switch (dpd.name)
@@ -229,6 +267,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 MyDebug.LogYellow("Can not find Dropdown:" + dpd.name);
                 break;
         }
+        layoutApplyBtn.interactable = true;
     }
     //public override void OnToggleClick(bool check)
     //{

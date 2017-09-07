@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         m_Root = GameObject.Find("UIRoot");
-        m_CurWrapper = GameObject.Find("StartFrame");
+        m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
         Debug.Log(GetMutiLanguage("Text_00001"));

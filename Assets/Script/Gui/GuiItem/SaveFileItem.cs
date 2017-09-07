@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 
 public class SaveFileItem : MonoBehaviour 
 {
@@ -42,4 +44,9 @@ public class SaveFileItem : MonoBehaviour
         detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
     }
 
+}
+[Serializable]
+public class SaveFileInstance
+{
+    public string title;
 }

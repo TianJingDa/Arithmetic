@@ -15,11 +15,11 @@ public static class MyDebug
     }
     public static void LogGreen(object message)
     {
-        Log("<color = green>" + message + "</color>");
+        Log("<color=green>" + message + "</color>");
     }
     public static void LogYellow(object message)
     {
-        Log("<color = yellow>" + message + "</color>");
+        Log("<color=yellow>" + message + "</color>");
     }
 
 
