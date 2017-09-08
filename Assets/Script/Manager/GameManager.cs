@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            int handednessID = PlayerPrefs.GetInt("HandednessID", -1);
+            int handednessID = PlayerPrefs.GetInt("HandednessID", 0);
             return (HandednessID)handednessID;
         }
         set
@@ -94,6 +94,33 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HandednessID", handednessID);
         }
     }
+    private int TotalTime
+    {
+        get
+        {
+            int totalTime = PlayerPrefs.GetInt("TotalTime", 0);
+            return totalTime;
+        }
+        set
+        {
+            int totalTime = value;
+            PlayerPrefs.SetInt("TotalTime", totalTime);
+        }
+    }
+    private int TotalGame
+    {
+        get
+        {
+            int totalGame = PlayerPrefs.GetInt("TotalGame", 0);
+            return totalGame;
+        }
+        set
+        {
+            int totalGame = value;
+            PlayerPrefs.SetInt("TotalGame", totalGame);
+        }
+    }
+
 
     public static GameManager Instance//单例
     {

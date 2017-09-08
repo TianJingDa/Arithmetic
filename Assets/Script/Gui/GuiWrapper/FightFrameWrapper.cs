@@ -49,7 +49,7 @@ public class FightFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
                 break;
             default:
-                MyDebug.LogYellow("Can not find Button:" + btn.name);
+                MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
         }
     }

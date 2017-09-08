@@ -36,7 +36,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 categoryTipBg.SetActive(!categoryTipBg.activeSelf);
                 break;
             default:
-                MyDebug.LogYellow("Can not find Button:" + btn.name);
+                MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
         }
     }

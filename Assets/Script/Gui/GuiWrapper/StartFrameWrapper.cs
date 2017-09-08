@@ -29,7 +29,7 @@ public class StartFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.SetUpFrame);
                 break;
             default:
-                MyDebug.LogYellow("Can not find Button:" + btn.name);
+                MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
         }
     }

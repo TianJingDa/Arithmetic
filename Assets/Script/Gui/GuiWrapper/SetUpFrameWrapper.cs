@@ -8,13 +8,17 @@ using System.Linq;
 /// </summary>
 public class SetUpFrameWrapper : GuiFrameWrapper
 {
+    private delegate void resetDelegate();
+
     private int tempLanguageID;
     private int tempSkinID;
     private int tempLayoutID;
     private int tempHandednessID;
 
-    private List<Vector2> languageTogglesAnchoredPositon;
-    private List<Vector2> skinTogglesAnchoredPositon;
+    private List<int> resetTogglesIndexList;
+    private List<Vector2> languageTogglesAnchoredPositonList;
+    private List<Vector2> skinTogglesAnchoredPositonList;
+    private Dictionary<int, resetDelegate> resetDelegateDict;
 
     private GameObject strategyWin;
     private GameObject languageWin;
@@ -25,9 +29,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject aboutUsWin;
     private GameObject thankDevelopersWin;
     private GameObject resetConfirmBg;
+    private GameObject resetToggleGroup;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
+    private Button resetApplyBtn;
     private ToggleGroup languageToggleGroup;
     private ToggleGroup skinToggleGroup;
 
@@ -52,14 +58,17 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
         skinApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "SkinApplyBtn");
         skinToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "SkinToggleGroup");
+        resetToggleGroup = CommonTool.GetGameObjectByName(gameObject, "ResetToggleGroup");
+        resetApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "ResetApplyBtn");
+
 
         layoutDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "LayoutDropdown");
         handednessDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "HandednessDropdown");
         layoutApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "LayoutApplyBtn");
 
 
-        languageTogglesAnchoredPositon = InitToggleAnchoredPositon(languageToggleGroup);
-        skinTogglesAnchoredPositon = InitToggleAnchoredPositon(skinToggleGroup);
+        languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
+        skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
 
     }
     /// <summary>
@@ -132,6 +141,66 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         dpd.value = index;
         dpd.RefreshShownValue();
     }
+    /// <summary>
+    /// 刷新重置界面
+    /// </summary>
+    private void RefreshResetWin()
+    {
+        for(int i = 0; i < resetToggleGroup.transform.childCount; i++)
+        {
+            resetToggleGroup.transform.GetChild(i).GetComponent<Toggle>().isOn = false;
+        }
+        resetTogglesIndexList = new List<int>();
+        if (resetDelegateDict == null)
+        {
+            resetDelegateDict = new Dictionary<int, resetDelegate>();
+            resetDelegateDict.Add(0, ResetTotalTime);
+            resetDelegateDict.Add(1, ResetTotalGame);
+            resetDelegateDict.Add(2, ResetAchievement);
+            resetDelegateDict.Add(3, ResetSaveFile);
+            resetDelegateDict.Add(4, ResetSetUp);
+        }
+    }
+    /// <summary>
+    /// 重置游戏时间
+    /// </summary>
+    private void ResetTotalTime()
+    {
+        PlayerPrefs.DeleteKey("TotalTime");
+    }
+    /// <summary>
+    /// 重置游戏次数
+    /// </summary>
+    private void ResetTotalGame()
+    {
+        PlayerPrefs.DeleteKey("TotalGame");
+    }
+    /// <summary>
+    /// 重置游戏成就
+    /// </summary>
+    private void ResetAchievement()
+    {
+        MyDebug.LogGreen("ResetAchievement Success!!!");
+    }
+    /// <summary>
+    /// 重置游戏存档
+    /// </summary>
+    private void ResetSaveFile()
+    {
+        MyDebug.LogGreen("ResetSaveFile Success!!!");
+    }
+    /// <summary>
+    /// 重置游戏设置
+    /// </summary>
+    private void ResetSetUp()
+    {
+        PlayerPrefs.DeleteKey("LanguageID");
+        PlayerPrefs.DeleteKey("SkinID");
+        PlayerPrefs.DeleteKey("LayoutID");
+        PlayerPrefs.DeleteKey("HandednessID");
+        InitUnSelectableGui();
+    }
+
     protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
@@ -148,7 +217,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "LanguageBtn":
                 tempLanguageID = -1;
                 languageWin.SetActive(true);
-                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon, (int)GameManager.Instance.CurLanguageID);
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
                 break;
             case "Language2SetUpFrameBtn":
@@ -156,7 +225,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
             case "LanguageApplyBtn":
                 GameManager.Instance.CurLanguageID = (LanguageID)tempLanguageID;
-                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositon, (int)GameManager.Instance.CurLanguageID);
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
                 InitUnSelectableGui();
                 break;
@@ -171,7 +240,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "Layout2SetUpFrameBtn":
                 layoutWin.SetActive(false);
                 break;
-            case "LayoutpplyBtn":
+            case "LayoutApplyBtn":
                 GameManager.Instance.CurLayoutID = (LayoutID)tempLayoutID;
                 GameManager.Instance.CurHandednessID = (HandednessID)tempHandednessID;
                 layoutApplyBtn.interactable = false;
@@ -185,34 +254,42 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "Strategy2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, GuiFrameID.StartFrame);
                 break;
+            case "ResetBtn":
+                resetWin.SetActive(true);
+                RefreshResetWin();
+                break;
             case "Reset2SetUpFrameBtn":
                 resetWin.SetActive(false);
                 break;
             case "ResetApplyBtn":
                 resetConfirmBg.SetActive(true);
                 break;
-            case "ResetBtn":
-                resetWin.SetActive(true);
-                break;
             case "ResetCancelBtn":
+                resetConfirmBg.SetActive(false);
+                break;
             case "ResetConfirmBg":
                 resetConfirmBg.SetActive(false);
                 break;
             case "ResetConfirmBtn":
                 resetConfirmBg.SetActive(false);
+                for (int i = 0; i < resetTogglesIndexList.Count; i++)
+                {
+                    resetDelegateDict[resetTogglesIndexList[i]]();
+                }
+                RefreshResetWin();
                 break;
             case "SkinBtn":
                 tempSkinID = -1;
                 skinWin.SetActive(true);
-                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositon, (int)GameManager.Instance.CurSkinID);
+                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
                 break;
             case "Skin2SetUpFrameBtn":
                 skinWin.SetActive(false);
                 break;
-            case "SkinCpplyBtn":
+            case "SkinApplyBtn":
                 GameManager.Instance.CurSkinID = (SkinID)tempSkinID;
-                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositon, (int)GameManager.Instance.CurSkinID);
+                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
                 InitUnSelectableGui();
                 break;
@@ -225,7 +302,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 thankDevelopersWin.SetActive(!thankDevelopersWin.activeSelf);
                 break;
             default:
-                MyDebug.LogYellow("Can not find Button:" + btn.name);
+                MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
         }
     }
@@ -240,6 +317,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         else if (tgl.name.Contains("SkinToggle"))
         {
             OnToggleClick(skinApplyBtn, ref tempSkinID, tgl);
+        }
+        else if (tgl.name.Contains("ResetToggle"))
+        {
+            if (tgl.isOn) resetTogglesIndexList.Add(tgl.index);
+            else resetTogglesIndexList.Remove(tgl.index);
+            resetApplyBtn.interactable = resetTogglesIndexList.Count != 0;
         }
     }
     private void OnToggleClick(Button confirmBtn, ref int tempID, Toggle tgl)

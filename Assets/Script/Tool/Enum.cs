@@ -41,8 +41,8 @@ public enum LayoutID
 }
 public enum HandednessID
 {
-    Left,                      //左撇子
     Right,                     //右撇子
+    Left,                      //左撇子
     Custom                     //自定义
 
 }
