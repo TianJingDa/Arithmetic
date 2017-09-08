@@ -16,17 +16,24 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private InfiniteList saveFileGrid;
     void Start () 
 	{
-        base.id = GuiFrameID.StatisticsFrame;
-        InitUnSelectableGui();
-        InitSelectableGui(OnButtonClick, null, null);
-
-        achievementWin = CommonTool.GetGameObjectByName(gameObject, "AchievementWin");
-        saveFileWin = CommonTool.GetGameObjectByName(gameObject, "SaveFileWin");
-        achievementDetailBg = CommonTool.GetGameObjectByName(gameObject, "AchievementDetailBg");
-        saveFileDetailBg = CommonTool.GetGameObjectByName(gameObject, "SaveFileDetailBg");
+        Init();
         achievementGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
         saveFileGrid = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
     }
+
+    protected override void Init()
+    {
+        id = GuiFrameID.StatisticsFrame;
+        base.Init();
+
+        achievementWin          = GameObjectDict["AchievementWin"];
+        saveFileWin             = GameObjectDict["SaveFileWin"];
+        saveFileDetailBg        = ButtonDict["SaveFileDetailBg"].gameObject;
+        achievementDetailBg     = ButtonDict["AchievementDetailBg"].gameObject;
+
+
+    }
+
 
     protected override void OnButtonClick(Button btn)
     {

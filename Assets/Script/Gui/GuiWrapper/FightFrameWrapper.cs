@@ -15,16 +15,21 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
-        base.id = GuiFrameID.FightFrame;
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
-        InitUnSelectableGui();
-        InitSelectableGui(OnButtonClick, null, null);
+        Init();
 
         //timeLabel = GetComponentByName<Text>("TimeLabel");
-        confirmBg = CommonTool.GetGameObjectByName(gameObject, "ConfirmBg");
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
+
+    protected override void Init()
+    {
+        id = GuiFrameID.FightFrame;
+        base.Init();
+        confirmBg = ButtonDict["ConfirmBg"].gameObject;
+    }
+
 
 
     void OnDestroy()

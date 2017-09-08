@@ -11,32 +11,53 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
 
-    protected delegate void ButtonDelegate(Button btn);
-    protected delegate void ToggleDelegate(Toggle tgl);
-    protected delegate void DropdownDelegate(Dropdown dpd);
+    protected Dictionary<string, GameObject> GameObjectDict
+    {
+        get;
+        private set;
+    }
+    protected Dictionary<string, Button> ButtonDict
+    {
+        get;
+        private set;
+    }
+    protected Dictionary<string, Toggle> ToggleDict
+    {
+        get;
+        private set;
+    }
+    protected Dictionary<string, Dropdown> DropdownDict
+    {
+        get;
+        private set;
+    }
 
-    protected virtual void OnButtonClick(Button btn)
+    private delegate void ButtonDelegate(Button btn);
+    private delegate void ToggleDelegate(Toggle tgl);
+    private delegate void DropdownDelegate(Dropdown dpd);
+
+    private ButtonDelegate btnDelegate;
+    private ToggleDelegate tglDelegate;
+    private DropdownDelegate dpdDelegate;
+
+    protected virtual void Init()
     {
-        if (!btn)
-        {
-            MyDebug.LogYellow("Button is NULL!");
-            return;
-        }
+        btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
+        tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
+        dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
+        InitGameObjectDict();
+        InitUnSelectableGui();
+        InitSelectableGui();
     }
-    protected virtual void OnToggleClick(Toggle tgl)
+
+    private void InitGameObjectDict()
     {
-        if (!tgl)
+        GameObjectDict = new Dictionary<string, GameObject>();
+        Transform[] gameObjectArray = GetComponentsInChildren<Transform>(true);
+        for(int i = 0; i < gameObjectArray.Length; i++)
         {
-            MyDebug.LogYellow("Toggle is NULL!");
-            return;
-        }
-    }
-    protected virtual void OnDropdownClick(Dropdown dpd)
-    {
-        if (!dpd)
-        {
-            MyDebug.LogYellow("Dropdown is NULL!");
-            return;
+            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+            //MyDebug.LogYellow(gameObjectArray[i].name);
         }
     }
 
@@ -90,37 +111,80 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
     }
 
-    protected void InitSelectableGui(ButtonDelegate btnDelegate, ToggleDelegate tglDelegate, DropdownDelegate dpdDelegate)
+    protected void InitSelectableGui()
     {
-        if (btnDelegate != null) InitButton(btnDelegate);
-        if (tglDelegate != null) InitToggle(tglDelegate);
-        if (dpdDelegate != null) InitDropdown(dpdDelegate);
+        if (btnDelegate != null) InitButton();
+        if (tglDelegate != null) InitToggle();
+        if (dpdDelegate != null) InitDropdown();
     }
-    private void InitButton(ButtonDelegate btnDelegate)
+    private void InitButton()
     {
         Button[] buttonArray = GetComponentsInChildren<Button>(true);
+        ButtonDict = new Dictionary<string, Button>();
         for(int i = 0; i < buttonArray.Length; i++)
         {
             Button curButton = buttonArray[i];
             curButton.onClick.AddListener(() => btnDelegate(curButton));
+            ButtonDict.Add(curButton.name, curButton);
+            if (!GameObjectDict.Remove(curButton.name))
+            {
+                MyDebug.LogYellow(curButton.name + " can NOT be removed from GameObjectDict!!!");
+            }
         }
     }
-    private void InitToggle(ToggleDelegate tglDelegate)
+    private void InitToggle()
     {
         Toggle[] toggleArray = GetComponentsInChildren<Toggle>(true);
+        ToggleDict = new Dictionary<string, Toggle>();
         for(int i = 0; i < toggleArray.Length; i++)
         {
             Toggle curToggle = toggleArray[i];
             curToggle.onValueChanged.AddListener(value => tglDelegate(curToggle));
+            ToggleDict.Add(curToggle.name, curToggle);
+            if (!GameObjectDict.Remove(curToggle.name))
+            {
+                MyDebug.LogYellow(curToggle.name + " can NOT be removed from GameObjectDict!!!");
+            }
         }
     }
-    private void InitDropdown(DropdownDelegate dpdDelegate)
+    private void InitDropdown()
     {
         Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
+        DropdownDict = new Dictionary<string, Dropdown>();
         for(int i = 0; i < dropdownArray.Length; i++)
         {
             Dropdown curDropdown = dropdownArray[i];
             curDropdown.onValueChanged.AddListener(index => dpdDelegate(curDropdown));
+            DropdownDict.Add(curDropdown.name, curDropdown);
+            if (!GameObjectDict.Remove(curDropdown.name))
+            {
+                MyDebug.LogYellow(curDropdown.name + " can NOT be removed from GameObjectDict!!!");
+            }
+        }
+    }
+
+    protected virtual void OnButtonClick(Button btn)
+    {
+        if (!btn)
+        {
+            MyDebug.LogYellow("Button is NULL!");
+            return;
+        }
+    }
+    protected virtual void OnToggleClick(Toggle tgl)
+    {
+        if (!tgl)
+        {
+            MyDebug.LogYellow("Toggle is NULL!");
+            return;
+        }
+    }
+    protected virtual void OnDropdownClick(Dropdown dpd)
+    {
+        if (!dpd)
+        {
+            MyDebug.LogYellow("Dropdown is NULL!");
+            return;
         }
     }
 

@@ -10,10 +10,12 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
-        base.id = GuiFrameID.SettlementFrame;
-        InitUnSelectableGui();
-        InitSelectableGui(OnButtonClick, null, null);
-
+        Init();
+    }
+    protected override void Init()
+    {
+        id = GuiFrameID.SettlementFrame;
+        base.Init();
     }
 
 

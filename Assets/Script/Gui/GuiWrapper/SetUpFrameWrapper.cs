@@ -41,36 +41,41 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private Dropdown handednessDropdown;
     void Start () 
 	{
-        base.id = GuiFrameID.SetUpFrame;
-        InitUnSelectableGui();
-        InitSelectableGui(OnButtonClick, OnToggleClick, OnDropdownClick);
+        Init();
 
-        strategyWin = CommonTool.GetGameObjectByName(gameObject, "StrategyWin");
-        languageWin = CommonTool.GetGameObjectByName(gameObject, "LanguageWin");
-        skinWin = CommonTool.GetGameObjectByName(gameObject, "SkinWin");
-        layoutWin = CommonTool.GetGameObjectByName(gameObject, "LayoutWin");
-        resetWin = CommonTool.GetGameObjectByName(gameObject, "ResetWin");
-        feedbackWin = CommonTool.GetGameObjectByName(gameObject, "FeedbackWin");
-        aboutUsWin = CommonTool.GetGameObjectByName(gameObject, "AboutUsWin");
-        thankDevelopersWin = CommonTool.GetGameObjectByName(gameObject, "ThankDevelopersWin");
-        resetConfirmBg = CommonTool.GetGameObjectByName(gameObject, "ResetConfirmBg");
-        languageApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "LanguageApplyBtn");
-        languageToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
-        skinApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "SkinApplyBtn");
-        skinToggleGroup = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "SkinToggleGroup");
-        resetToggleGroup = CommonTool.GetGameObjectByName(gameObject, "ResetToggleGroup");
-        resetApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "ResetApplyBtn");
-
-
-        layoutDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "LayoutDropdown");
-        handednessDropdown = CommonTool.GetComponentByName<Dropdown>(gameObject, "HandednessDropdown");
-        layoutApplyBtn = CommonTool.GetComponentByName<Button>(gameObject, "LayoutApplyBtn");
-
+        languageToggleGroup     = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
+        skinToggleGroup         = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "SkinToggleGroup");
 
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
 
     }
+
+    protected override void Init()
+    {
+        id = GuiFrameID.SetUpFrame;
+        base.Init();
+
+        strategyWin         = GameObjectDict["StrategyWin"];
+        languageWin         = GameObjectDict["LanguageWin"];
+        skinWin             = GameObjectDict["SkinWin"];
+        layoutWin           = GameObjectDict["LayoutWin"];
+        resetWin            = GameObjectDict["ResetWin"];
+        aboutUsWin          = GameObjectDict["AboutUsWin"];
+        resetToggleGroup    = GameObjectDict["ResetToggleGroup"];
+        feedbackWin         = ButtonDict["FeedbackWin"].gameObject;
+        thankDevelopersWin  = ButtonDict["ThankDevelopersWin"].gameObject;
+        resetConfirmBg      = ButtonDict["ResetConfirmBg"].gameObject;
+        languageApplyBtn    = ButtonDict["LanguageApplyBtn"];
+        skinApplyBtn        = ButtonDict["SkinApplyBtn"];
+        resetApplyBtn       = ButtonDict["ResetApplyBtn"];
+        layoutApplyBtn      = ButtonDict["LayoutApplyBtn"];
+        layoutDropdown      = DropdownDict["LayoutDropdown"];
+        handednessDropdown  = DropdownDict["HandednessDropdown"];
+
+    }
+
+
     /// <summary>
     /// 刷新toggles的排列位置
     /// </summary>
