@@ -9,13 +9,8 @@ public class StartFrameWrapper : GuiFrameWrapper
 {
     void Start()
     {
-        Init();
-    }
-
-    protected override void Init()
-    {
         id = GuiFrameID.StartFrame;
-        base.Init();
+        Init();
     }
 
     protected override void OnButtonClick(Button btn)

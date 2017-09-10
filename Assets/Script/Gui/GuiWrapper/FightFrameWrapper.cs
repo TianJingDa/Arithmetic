@@ -15,6 +15,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
+        id = GuiFrameID.FightFrame;
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
         Init();
@@ -23,14 +24,13 @@ public class FightFrameWrapper : GuiFrameWrapper
         GameManager.Instance.RegisterClock(new Clock(timeLabel));
     }
 
-    protected override void Init()
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
+                                    Dictionary<string, Button>     ButtonDict, 
+                                    Dictionary<string, Toggle>     ToggleDict, 
+                                    Dictionary<string, Dropdown>   DropdownDict)
     {
-        id = GuiFrameID.FightFrame;
-        base.Init();
         confirmBg = ButtonDict["ConfirmBg"].gameObject;
     }
-
-
 
     void OnDestroy()
     {

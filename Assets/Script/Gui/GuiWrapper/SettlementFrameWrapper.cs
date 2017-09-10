@@ -10,12 +10,16 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
+        id = GuiFrameID.SettlementFrame;
         Init();
     }
-    protected override void Init()
+
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
+                                    Dictionary<string, Button>     ButtonDict, 
+                                    Dictionary<string, Toggle>     ToggleDict, 
+                                    Dictionary<string, Dropdown>   DropdownDict)
     {
-        id = GuiFrameID.SettlementFrame;
-        base.Init();
+
     }
 
 

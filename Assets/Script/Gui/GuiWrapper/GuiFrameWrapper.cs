@@ -11,57 +11,37 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
 
-    protected Dictionary<string, GameObject> GameObjectDict
-    {
-        get;
-        private set;
-    }
-    protected Dictionary<string, Button> ButtonDict
-    {
-        get;
-        private set;
-    }
-    protected Dictionary<string, Toggle> ToggleDict
-    {
-        get;
-        private set;
-    }
-    protected Dictionary<string, Dropdown> DropdownDict
-    {
-        get;
-        private set;
-    }
-
     private delegate void ButtonDelegate(Button btn);
     private delegate void ToggleDelegate(Toggle tgl);
     private delegate void DropdownDelegate(Dropdown dpd);
-
-    private ButtonDelegate btnDelegate;
-    private ToggleDelegate tglDelegate;
-    private DropdownDelegate dpdDelegate;
-
-    protected virtual void Init()
+    
+    protected void Init()
     {
-        btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
-        tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
-        dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
-        InitGameObjectDict();
-        InitUnSelectableGui();
-        InitSelectableGui();
+        InitImage();
+        InitText();
+        ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
+        ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
+        DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
+        Dictionary<string, GameObject> GameObjectDict = InitGameObjectDict();
+        Dictionary<string, Button> ButtonDict = InitButton(btnDelegate, GameObjectDict);
+        Dictionary<string, Toggle> ToggleDict = InitToggle(tglDelegate, GameObjectDict);
+        Dictionary<string, Dropdown> DropdownDict = InitDropdown(dpdDelegate, GameObjectDict);
+        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict, ButtonDict, ToggleDict, DropdownDict);
     }
 
-    private void InitGameObjectDict()
+    private Dictionary<string, GameObject> InitGameObjectDict()
     {
-        GameObjectDict = new Dictionary<string, GameObject>();
+        Dictionary<string, GameObject> GameObjectDict = new Dictionary<string, GameObject>();
         Transform[] gameObjectArray = GetComponentsInChildren<Transform>(true);
         for(int i = 0; i < gameObjectArray.Length; i++)
         {
-            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
             //MyDebug.LogYellow(gameObjectArray[i].name);
+            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
         }
+        return GameObjectDict;
     }
 
-    protected void InitUnSelectableGui()
+    protected void RefreshGui()
     {
         InitText();
         InitImage();
@@ -111,16 +91,12 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
     }
 
-    protected void InitSelectableGui()
-    {
-        if (btnDelegate != null) InitButton();
-        if (tglDelegate != null) InitToggle();
-        if (dpdDelegate != null) InitDropdown();
-    }
-    private void InitButton()
+
+    private Dictionary<string, Button> InitButton(ButtonDelegate btnDelegate, Dictionary<string, GameObject> GameObjectDict)
     {
         Button[] buttonArray = GetComponentsInChildren<Button>(true);
-        ButtonDict = new Dictionary<string, Button>();
+        if (buttonArray.Length == 0) return null;
+        Dictionary<string, Button> ButtonDict = new Dictionary<string, Button>();
         for(int i = 0; i < buttonArray.Length; i++)
         {
             Button curButton = buttonArray[i];
@@ -131,11 +107,13 @@ public abstract class GuiFrameWrapper : MonoBehaviour
                 MyDebug.LogYellow(curButton.name + " can NOT be removed from GameObjectDict!!!");
             }
         }
+        return ButtonDict;
     }
-    private void InitToggle()
+    private Dictionary<string, Toggle> InitToggle(ToggleDelegate tglDelegate, Dictionary<string, GameObject> GameObjectDict)
     {
         Toggle[] toggleArray = GetComponentsInChildren<Toggle>(true);
-        ToggleDict = new Dictionary<string, Toggle>();
+        if (toggleArray.Length == 0) return null;
+        Dictionary<string, Toggle> ToggleDict = new Dictionary<string, Toggle>();
         for(int i = 0; i < toggleArray.Length; i++)
         {
             Toggle curToggle = toggleArray[i];
@@ -146,11 +124,13 @@ public abstract class GuiFrameWrapper : MonoBehaviour
                 MyDebug.LogYellow(curToggle.name + " can NOT be removed from GameObjectDict!!!");
             }
         }
+        return ToggleDict;
     }
-    private void InitDropdown()
+    private Dictionary<string, Dropdown> InitDropdown(DropdownDelegate dpdDelegate, Dictionary<string, GameObject> GameObjectDict)
     {
         Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
-        DropdownDict = new Dictionary<string, Dropdown>();
+        if (dropdownArray.Length == 0) return null;
+        Dictionary<string, Dropdown>  DropdownDict = new Dictionary<string, Dropdown>();
         for(int i = 0; i < dropdownArray.Length; i++)
         {
             Dropdown curDropdown = dropdownArray[i];
@@ -161,8 +141,16 @@ public abstract class GuiFrameWrapper : MonoBehaviour
                 MyDebug.LogYellow(curDropdown.name + " can NOT be removed from GameObjectDict!!!");
             }
         }
+        return DropdownDict;
     }
 
+    protected virtual void OnStart(Dictionary<string, GameObject> GameObjectDict, 
+                                   Dictionary<string, Button>     ButtonDict, 
+                                   Dictionary<string, Toggle>     ToggleDict, 
+                                   Dictionary<string, Dropdown>   DropdownDict)
+    {
+
+    }
     protected virtual void OnButtonClick(Button btn)
     {
         if (!btn)

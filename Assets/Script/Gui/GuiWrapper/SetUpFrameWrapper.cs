@@ -41,6 +41,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private Dropdown handednessDropdown;
     void Start () 
 	{
+        id = GuiFrameID.SetUpFrame;
         Init();
 
         languageToggleGroup     = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
@@ -51,11 +52,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
     }
 
-    protected override void Init()
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
+                                    Dictionary<string, Button>     ButtonDict, 
+                                    Dictionary<string, Toggle>     ToggleDict, 
+                                    Dictionary<string, Dropdown>   DropdownDict)
     {
-        id = GuiFrameID.SetUpFrame;
-        base.Init();
-
         strategyWin         = GameObjectDict["StrategyWin"];
         languageWin         = GameObjectDict["LanguageWin"];
         skinWin             = GameObjectDict["SkinWin"];
@@ -72,8 +73,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         layoutApplyBtn      = ButtonDict["LayoutApplyBtn"];
         layoutDropdown      = DropdownDict["LayoutDropdown"];
         handednessDropdown  = DropdownDict["HandednessDropdown"];
-
     }
+
 
 
     /// <summary>
@@ -203,7 +204,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         PlayerPrefs.DeleteKey("SkinID");
         PlayerPrefs.DeleteKey("LayoutID");
         PlayerPrefs.DeleteKey("HandednessID");
-        InitUnSelectableGui();
+        RefreshGui();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -232,7 +233,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurLanguageID = (LanguageID)tempLanguageID;
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
-                InitUnSelectableGui();
+                RefreshGui();
                 break;
             case "LayoutBtn":
                 tempLayoutID = (int)GameManager.Instance.CurLayoutID;
@@ -296,7 +297,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurSkinID = (SkinID)tempSkinID;
                 RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
-                InitUnSelectableGui();
+                RefreshGui();
                 break;
             case "StrategyBtn":
             case "Strategy2SetUpFrameBtn":
