@@ -56,11 +56,11 @@ Image_30021,DigitDropdownArrowImg
 Image_30022,DigitDropdownTemplate
 Image_30023,DigitDropdownItemBackgroundImg
 Image_30024,DigitDropdownItemCheckmarkImg
-Image_30025,
-Image_30026,
-Image_30027,
-Image_30028,
-Image_30029,
+Image_30025,OperandDropdown
+Image_30026,OperandDropdownArrowImg
+Image_30027,OperandDropdownTemplate
+Image_30028,OperandDropdownItemBackgroundImg
+Image_30029,OperandDropdownItemCheckmarkImg
 Image_30030,CategoryTipBg
 Image_30031,CategoryTipPage
 Image_40000,SetUpFrame

@@ -8,7 +8,7 @@ public sealed class FightController : Controller
     private static FightController instance = null;
     private FightController()
     {
-        base.id = ControllerID.ExamController;
+        base.id = ControllerID.FightController;
         InitExamData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -22,9 +22,9 @@ public sealed class FightController : Controller
     {
 
     }
-    public SaveFileInstance GetQuestionInstance()
+    public QuentionInstance GetQuestionInstance(SymbolID symbolID, DigitID digitID, OperandID operandID)
     {
-        return new SaveFileInstance();
+        return new QuentionInstance();
     }
 
 }

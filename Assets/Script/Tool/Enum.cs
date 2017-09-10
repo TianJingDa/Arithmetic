@@ -21,11 +21,12 @@ public enum ControllerID
 {
     MutiLanguageController,    //多语言控制器
     ResourceController,        //资源控制器
-    ExamController,            //考试控制器
+    FightController,           //答题控制器
     AchievementController,     //成就控制器
     SkinController,            //皮肤控制器
     LayoutController,          //布局控制器
-    FontController             //字体控制器
+    FontController,            //字体控制器
+    TextColorController        //字色控制器
 }
 public enum SkinID
 {
@@ -44,5 +45,36 @@ public enum HandednessID
     Right,                     //右撇子
     Left,                      //左撇子
     Custom                     //自定义
-
 }
+public enum PatternID
+{
+    Time,                      //限时
+    Number                     //限数
+}
+public enum AmountID
+{
+    Three,                     //3分钟或30道
+    Five,                      //5分钟或50道
+    Ten                        //10分钟或100道
+}
+public enum SymbolID
+{
+    Addition,                  //加法
+    Subtraction,               //减法
+    Multiplication,            //乘法
+    Division,                  //除法
+    Random                     //随机
+}
+public enum DigitID
+{
+    TwoDigits,                 //两位数
+    ThreeDigits,               //三位数
+    FourDigits,                //四位数
+    FiveDigits                 //五位数
+}
+public enum OperandID
+{
+    TwoNumbers,                //两个操作数
+    ThreeNumbers               //三个操作数
+}
+

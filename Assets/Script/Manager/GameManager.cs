@@ -6,17 +6,19 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    private GameObject                                          m_Root;                             //UI对象的根对象
-    private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
-    private Clock                                               m_Clock;                            //时钟工具
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
-    private FightController                                     c_ExamCtrl;
+    private FightController                                     c_FightCtrl;
     private AchievementController                               c_AchievementCtrl;
     private SkinController                                      c_SkinCtrl;
     private LayoutController                                    c_LayoutCtrl;
     private FontController                                      c_FontCtrl;
     private TextColorController                                 c_TextColorCtrl;
+
+    private GameObject                                          m_Root;                             //UI对象的根对象
+    private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
+    private Clock                                               m_Clock;                            //时钟工具
+    private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
@@ -94,6 +96,19 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HandednessID", handednessID);
         }
     }
+    public CategoryInstance CurCategoryInstance
+    {
+        get { return m_CurCategoryInstance; }
+        set
+        {
+            m_CurCategoryInstance = value;
+            MyDebug.LogGreen(m_CurCategoryInstance.patternID);
+            MyDebug.LogGreen(m_CurCategoryInstance.amountID);
+            MyDebug.LogGreen(m_CurCategoryInstance.symbolID);
+            MyDebug.LogGreen(m_CurCategoryInstance.digitID);
+            MyDebug.LogGreen(m_CurCategoryInstance.operandID);
+        }
+    }
     private int TotalTime
     {
         get
@@ -134,7 +149,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 30;
 
         c_AchievementCtrl = AchievementController.Instance;
-        c_ExamCtrl = FightController.Instance;
+        c_FightCtrl = FightController.Instance;
         c_FontCtrl = FontController.Instance;
         c_LayoutCtrl = LayoutController.Instance;
         c_MutiLanguageCtrl = MutiLanguageController.Instance;
@@ -194,6 +209,10 @@ public class GameManager : MonoBehaviour
     public RectTransform[] GetLayoutData()
     {
         return c_LayoutCtrl.GetLayoutData(CurLayoutID, CurHandednessID);
+    }
+    public QuentionInstance GetQuestionInstance()
+    {
+        return c_FightCtrl.GetQuestionInstance(CurCategoryInstance.symbolID, CurCategoryInstance.digitID, CurCategoryInstance.operandID);
     }
     /// <summary>
     /// 注册时钟
