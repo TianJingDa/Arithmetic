@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
     {
         return c_LayoutCtrl.GetLayoutData(CurLayoutID, CurHandednessID);
     }
-    public QuentionInstance GetQuestionInstance()
+    public List<int> GetQuestionInstance()
     {
         return c_FightCtrl.GetQuestionInstance(CurCategoryInstance.symbolID, CurCategoryInstance.digitID, CurCategoryInstance.operandID);
     }

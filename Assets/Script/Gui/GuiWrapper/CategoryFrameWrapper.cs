@@ -17,6 +17,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
 
     private GameObject  categoryTipBg;
     private Dropdown    amountDropdown;
+    private Dropdown    digitDropdown;
 
     void Start () 
 	{
@@ -35,6 +36,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     {
         categoryTipBg = ButtonDict["CategoryTipBg"].gameObject;
         amountDropdown = DropdownDict["AmountDropdown"];
+        digitDropdown = DropdownDict["DigitDropdown"];
     }
 
     protected override void OnButtonClick(Button btn)
@@ -75,6 +77,10 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 break;
             case "SymbolDropdown":
                 curSymbolID = (SymbolID)dpd.value;
+                if(curSymbolID == SymbolID.Division)
+                {
+                    RefreshDropdown(digitDropdown);
+                }
                 break;
             case "DigitDropdown":
                 curDigitID = (DigitID)dpd.value;
@@ -117,6 +123,10 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         }
         dpd.value = 0;
         dpd.RefreshShownValue();
+    }
+    private void RefreshDropdown(Dropdown dpd)
+    {
+
     }
 }
 public class CategoryInstance
