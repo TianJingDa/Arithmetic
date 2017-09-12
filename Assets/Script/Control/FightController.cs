@@ -136,12 +136,12 @@ public sealed class FightController : Controller
     private List<int> GetDivisionInstance(DigitID digitID, OperandID operandID)
     {
         List<int> instance = null;
-        int min = (int)Mathf.Pow(10, (int)digitID);
-        int max = (int)Mathf.Pow(10, (int)digitID + 2);
+        int min = (int)Mathf.Pow(10, (int)digitID - 1);
+        int max = (int)Mathf.Pow(10, (int)digitID + 1);
         int product = 0;
         do
         {
-            instance = GetInstance(min, max, (int)operandID);
+            instance = GetInstance(min + 1, max, (int)operandID);
         }
         while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || CanDevide(instance, min, max, out product));
         checkList.Add(instance);

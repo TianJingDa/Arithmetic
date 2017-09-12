@@ -51,7 +51,7 @@ public class FightFrameWrapper : GuiFrameWrapper
                 confirmBg.SetActive(false);
                 break;
             case "ConfirmBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.CategoryFrame);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

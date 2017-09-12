@@ -7,7 +7,9 @@ using UnityEngine.UI;
 /// </summary>
 public class CategoryFrameWrapper : GuiFrameWrapper
 {
+    private int delta;
     private Dictionary<int, string[]> amountDropdownTextDict;
+    private List<Dropdown.OptionData> digitDropdownOptionsList;
 
     private PatternID   curPatternID;
     private AmountID    curAmountID;
@@ -23,9 +25,11 @@ public class CategoryFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.CategoryFrame;
         Init();
+        delta = 0;
         amountDropdownTextDict = new Dictionary<int, string[]>();
         amountDropdownTextDict.Add(0, new string[] { "Text_30013", "Text_30014", "Text_30015" });
         amountDropdownTextDict.Add(1, new string[] { "Text_30016", "Text_30017", "Text_30018" });
+        digitDropdownOptionsList = new List<Dropdown.OptionData>(digitDropdown.options);
         RefreshAllDropdown();
     }
 
@@ -70,20 +74,17 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         {
             case "PatternDropdown":
                 curPatternID = (PatternID)dpd.value;
-                RefreshDropdown(amountDropdown, dpd.value);
+                RefreshAmountDropdown(dpd.value);
                 break;
             case "AmountDropdown":
                 curAmountID = (AmountID)dpd.value;
                 break;
             case "SymbolDropdown":
                 curSymbolID = (SymbolID)dpd.value;
-                if(curSymbolID == SymbolID.Division)
-                {
-                    RefreshDropdown(digitDropdown);
-                }
+                RefreshDigitDropdown(dpd.value);
                 break;
             case "DigitDropdown":
-                curDigitID = (DigitID)dpd.value;
+                curDigitID = (DigitID)(dpd.value + delta);
                 break;
             case "OperandDropdown":
                 curOperandID = (OperandID)dpd.value;
@@ -110,23 +111,33 @@ public class CategoryFrameWrapper : GuiFrameWrapper
             }
         }
     }
-    private void RefreshDropdown(Dropdown dpd, int index)
+    private void RefreshAmountDropdown(int index)
     {
-        if (!dpd)
+        for (int i = 0; i < amountDropdown.options.Count; i++)
         {
-            MyDebug.LogYellow("Dropdown is null!");
-            return;
+            amountDropdown.options[i].text = GameManager.Instance.GetMutiLanguage(amountDropdownTextDict[index][i]);
         }
-        for (int i = 0; i < dpd.options.Count; i++)
-        {
-            dpd.options[i].text = GameManager.Instance.GetMutiLanguage(amountDropdownTextDict[index][i]);
-        }
-        dpd.value = 0;
-        dpd.RefreshShownValue();
+        amountDropdown.value = 0;
+        amountDropdown.RefreshShownValue();
     }
-    private void RefreshDropdown(Dropdown dpd)
+    private void RefreshDigitDropdown(int index)
     {
-
+        switch (index)
+        {
+            case 0:
+            case 1:
+            case 2:
+                digitDropdown.options = digitDropdownOptionsList;
+                delta = 0;
+                break;
+            case 3:
+                digitDropdown.options = digitDropdownOptionsList.GetRange(1, 3);
+                delta = 1;
+                break;
+        }
+        digitDropdown.value = 0;
+        digitDropdown.RefreshShownValue();
+        OnDropdownClick(digitDropdown);
     }
 }
 public class CategoryInstance
