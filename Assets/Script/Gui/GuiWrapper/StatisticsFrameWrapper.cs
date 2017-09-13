@@ -71,7 +71,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementWin.SetActive(true);
         ArrayList dataList = new ArrayList();
-        for(int i = 0; i < 30; i++)
+        for(int i = 0; i < 8; i++)
         {
             AchievementInstance instance = new AchievementInstance();
             instance.title = i.ToString();

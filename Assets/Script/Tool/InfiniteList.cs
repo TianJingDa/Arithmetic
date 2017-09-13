@@ -12,7 +12,8 @@ public class InfiniteList : MonoBehaviour
     private int dataAmount;                          //信息的数量
     private int minAmount;                           //Mathf.Min(itemAmount, dataAmount)
     private int realIndex;                           //信息的序号
-    private int extra = 2;                           //额外行数
+    private int extra = 2;                           //额外行（列）数
+    private int maxInView;                           //可显示的最大行（列）数
     private bool init = false;                       //初始化
     private string itemName;                         //prefabItem名字
     private ArrayList dataList;                      //实际信息
@@ -39,12 +40,14 @@ public class InfiniteList : MonoBehaviour
         if (gridLayoutGroup.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
         {
             int row = (int)(parentRectTransform.rect.height / (gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y));
-            itemAmount = (row + extra) * gridLayoutGroup.constraintCount;
+            itemAmount = (2 * row + extra) * gridLayoutGroup.constraintCount;
+            maxInView = row;
         }
         else
         {
             int column = (int)(parentRectTransform.rect.width / (gridLayoutGroup.cellSize.x + gridLayoutGroup.spacing.x));
-            itemAmount = (column + extra) * gridLayoutGroup.constraintCount;
+            itemAmount = (2 * column + extra) * gridLayoutGroup.constraintCount;
+            maxInView = column;
         }
         for (int i = 0; i < itemAmount; i++)
         {
@@ -89,12 +92,15 @@ public class InfiniteList : MonoBehaviour
 
         for (int index = 0; index < itemAmount; index++)
         {
-            realIndex++;
             children.Add(transform.GetChild(index).GetComponent<RectTransform>());
             children[index].anchoredPosition = childrenAnchoredPostion[index];
-            children[index].gameObject.name = itemName + realIndex.ToString();
             children[index].gameObject.SetActive(index < dataAmount);
-            children[index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex]);
+            if(index < dataAmount)
+            {
+                realIndex++;
+                children[index].gameObject.name = itemName + realIndex.ToString();
+                children[index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex]);
+            }
         }
     }
 
@@ -123,7 +129,7 @@ public class InfiniteList : MonoBehaviour
                         return;
                     }
 
-                    float scrollRectUp = scrollRect.transform.TransformPoint(parentRectTransform.rect.max).y;
+                    float scrollRectUp = scrollRect.transform.TransformPoint(parentRectTransform.rect.max + new Vector2(0, maxInView * (gridLayoutGroup.cellSize.y + gridLayoutGroup.spacing.y))).y;
                     float childBottom = children[0].transform.TransformPoint(children[0].rect.min).y;
 
                     if (childBottom >= scrollRectUp)
@@ -209,7 +215,7 @@ public class InfiniteList : MonoBehaviour
                         return;
                     }
 
-                    float scrollRectLeft = scrollRect.transform.TransformPoint(parentRectTransform.rect.min).x;
+                    float scrollRectLeft = scrollRect.transform.TransformPoint(parentRectTransform.rect.min - new Vector2(maxInView * (gridLayoutGroup.cellSize.x + gridLayoutGroup.spacing.x), 0)).x;
                     float childRight = children[0].transform.TransformPoint(children[0].rect.max).x;
 
                     if (childRight <= scrollRectLeft)
