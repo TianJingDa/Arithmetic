@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
-    private Clock                                               m_Clock;                            //时钟工具
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
@@ -174,19 +173,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void Update()
-    {
-        if (m_Clock != null)
-        {
-            m_Clock.Update();
-        }
-        //if (M_CurrentWrapper.id == GuiFrameID.ExamFrame_V)
-        //{
-        //    ((FightFrameWrapper)M_CurrentWrapper).UpdateWrapper();
-        //}
-
-    }
-
     #region 公共方法
     public string GetMutiLanguage(string index)
     {
@@ -214,22 +200,11 @@ public class GameManager : MonoBehaviour
     {
         return c_FightCtrl.GetQuestionInstance(CurCategoryInstance.symbolID, CurCategoryInstance.digitID, CurCategoryInstance.operandID);
     }
-    /// <summary>
-    /// 注册时钟
-    /// </summary>
-    /// <param name="clock"></param>
-    public void RegisterClock(Clock clock)
+    public void GetPatternAndAmount(out PatternID curPatternID,out AmountID curAmountID)
     {
-        this.m_Clock = clock;
+        curPatternID = CurCategoryInstance.patternID;
+        curAmountID = CurCategoryInstance.amountID;
     }
-    /// <summary>
-    /// 注销时钟
-    /// </summary>
-    public void UnRegisterClock()
-    {
-        this.m_Clock = null;
-    }
-
     ///// <summary>
     ///// 激活GUI
     ///// </summary>

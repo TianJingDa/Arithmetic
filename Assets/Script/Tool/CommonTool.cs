@@ -62,7 +62,7 @@ public class CommonTool
         {
             for (int i = 0; i < objArray.Length; i++)
             {
-                if (objArray[i].name == name)//objArray[i].name.Contains(name)  
+                if (objArray[i].name.Contains(name))  
                 {
                     result.Add(objArray[i].gameObject);
                 }
@@ -73,7 +73,6 @@ public class CommonTool
             MyDebug.LogYellow("Can not find :" + name);
         }
         return result;
-
     }
     public static GameObject GetParentByName(GameObject child,string name)
     {
