@@ -10,17 +10,19 @@ using System;
 public class FightFrameWrapper : GuiFrameWrapper
 {
     private int                 countdownTime = 3;
-    private StringBuilder       answer;
+    private float               deltaTime;
+    private StringBuilder       result;
 
     private Action              fighting;
     private GameObject          giveUpBg;
     private GameObject          countdownBg;
+    private GameObject          reverseOrderImage;
     private Text                timeBtn_Text;
-    private Text                indexImg_Text;
     private Text                resultImg_Text;
     private Text                questionImg_Text;
     private List<GameObject>    countdownNumsList;
     private List<Action>        fightActionList;
+    private List<List<int>>     resultList;
 
     private PatternID           curPatternID;
     private AmountID            curAmountID;
@@ -33,19 +35,15 @@ public class FightFrameWrapper : GuiFrameWrapper
         Init();
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsByName(countdownBg, "Countdown_");
-        GameManager.Instance.GetPatternAndAmount(out curPatternID, out curAmountID);
+        GameManager.Instance.GetPatternAndAmount(out curPatternID, out curAmountID);//应该直接取到结果，即判断逻辑应该写在GameManager
+        GameManager.Instance.ResetCheckList();
         fightActionList.Add(FightTime);
         fightActionList.Add(FightNumber);
-        answer = new StringBuilder();
+        result = new StringBuilder();
         ClearAllText();
         StartCoroutine(StartFight());
     }
-
-    void Update()
-    {
-        if (fighting != null) fighting();
-    }
-
+    
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict,
                                 Dictionary<string, Button> ButtonDict,
                                 Dictionary<string, Toggle> ToggleDict,
@@ -54,9 +52,9 @@ public class FightFrameWrapper : GuiFrameWrapper
         giveUpBg            = ButtonDict["GiveUpBg"].gameObject;
         countdownBg         = GameObjectDict["CountdownBg"];
         timeBtn_Text        = GameObjectDict["TimeBtn_Text"].GetComponent<Text>();
-        indexImg_Text       = GameObjectDict["IndexImg_Text"].GetComponent<Text>();
         resultImg_Text      = GameObjectDict["ResultImg_Text"].GetComponent<Text>();
         questionImg_Text    = GameObjectDict["QuestionImg_Text"].GetComponent<Text>();
+        reverseOrderImage   = GameObjectDict["ReverseOrderImage"];
     }
 
 
@@ -122,12 +120,17 @@ public class FightFrameWrapper : GuiFrameWrapper
         countdownBg.SetActive(false);
         ShowNextQuestion();
         fighting = fightActionList[(int)curPatternID];
+        InvokeRepeating("Fighting", 0, 0.1f);
+    }
+
+    private void Fighting()
+    {
+        fighting();
     }
 
     private void ClearAllText()
     {
         timeBtn_Text.text = string.Empty;
-        indexImg_Text.text = string.Empty;
         resultImg_Text.text = string.Empty;
         questionImg_Text.text = string.Empty;
     }
@@ -149,18 +152,19 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void ShowNextQuestion()
     {
+        List<int> instance = GameManager.Instance.GetQuestionInstance();
 
     }
 
     private void ClearResultText()
     {
         resultImg_Text.text = string.Empty;
-        //answer.c
+        result.Length = 0;
     }
 
     private void ChangeInputOrder()
     {
-
+        reverseOrderImage.SetActive(!reverseOrderImage.activeSelf);
     }
 
     private void ChangeTimeVisibility()

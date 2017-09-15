@@ -205,6 +205,10 @@ public class GameManager : MonoBehaviour
         curPatternID = CurCategoryInstance.patternID;
         curAmountID = CurCategoryInstance.amountID;
     }
+    public void ResetCheckList()
+    {
+        c_FightCtrl.ResetCheckList();
+    }
     ///// <summary>
     ///// 激活GUI
     ///// </summary>
