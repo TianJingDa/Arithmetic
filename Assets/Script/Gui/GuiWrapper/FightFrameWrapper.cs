@@ -3,29 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
-using System;
 /// <summary>
 /// 答题界面
 /// </summary>
 public class FightFrameWrapper : GuiFrameWrapper
 {
     private int                 countdownTime = 3;
-    private float               deltaTime;
+    private float               amount;
+    private float               startTime;
+    private float               timeCost;
+    private bool                order;//true: -->; false: <--
+    private string              pattern;
+    private string              symbol;
     private StringBuilder       result;
 
-    private Action              fighting;
     private GameObject          giveUpBg;
     private GameObject          countdownBg;
     private GameObject          reverseOrderImage;
+    private GameObject          timeMaskImage;
     private Text                timeBtn_Text;
     private Text                resultImg_Text;
     private Text                questionImg_Text;
     private List<GameObject>    countdownNumsList;
-    private List<Action>        fightActionList;
+    private List<int>           curInstance;
     private List<List<int>>     resultList;
 
-    private PatternID           curPatternID;
-    private AmountID            curAmountID;
 
     void Start () 
 	{
@@ -33,13 +35,14 @@ public class FightFrameWrapper : GuiFrameWrapper
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
         Init();
+        timeCost = 0;
+        order = true;
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsByName(countdownBg, "Countdown_");
-        GameManager.Instance.GetPatternAndAmount(out curPatternID, out curAmountID);//应该直接取到结果，即判断逻辑应该写在GameManager
+        GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetCheckList();
-        fightActionList.Add(FightTime);
-        fightActionList.Add(FightNumber);
         result = new StringBuilder();
+        resultList = new List<List<int>>();
         ClearAllText();
         StartCoroutine(StartFight());
     }
@@ -55,6 +58,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         resultImg_Text      = GameObjectDict["ResultImg_Text"].GetComponent<Text>();
         questionImg_Text    = GameObjectDict["QuestionImg_Text"].GetComponent<Text>();
         reverseOrderImage   = GameObjectDict["ReverseOrderImage"];
+        timeMaskImage       = GameObjectDict["TimeMaskImage"];
     }
 
 
@@ -119,13 +123,8 @@ public class FightFrameWrapper : GuiFrameWrapper
         }
         countdownBg.SetActive(false);
         ShowNextQuestion();
-        fighting = fightActionList[(int)curPatternID];
-        InvokeRepeating("Fighting", 0, 0.1f);
-    }
-
-    private void Fighting()
-    {
-        fighting();
+        startTime = Time.realtimeSinceStartup;
+        InvokeRepeating(pattern + "Pattern", 0.1f, 0.1f);
     }
 
     private void ClearAllText()
@@ -135,25 +134,56 @@ public class FightFrameWrapper : GuiFrameWrapper
         questionImg_Text.text = string.Empty;
     }
 
-    private void FightTime()
+    private void TimePattern()
     {
-
+        float curTime = Time.realtimeSinceStartup;
+        timeCost = curTime - startTime;
+        amount -= timeCost;
+        timeBtn_Text.text = amount.ToString("f1") + "s";
+        if (amount <= 0)
+        {
+            FightOver();
+        }
     }
 
-    private void FightNumber()
+    private void NumberPattern()
     {
-
+        float curTime = Time.realtimeSinceStartup;
+        timeCost = curTime - startTime;
+        timeBtn_Text.text = timeCost.ToString("f1") + "s";
     }
 
     private void RefreshResultText(string num)
     {
-
+        if (result.ToString() == "0") result.Length = 0;
+        if (order) result.Append(num);
+        else result.Insert(0, num);
+        resultImg_Text.text = result.ToString();
     }
 
     private void ShowNextQuestion()
     {
-        List<int> instance = GameManager.Instance.GetQuestionInstance();
-
+        if (result.Length > 0)//check
+        {
+            curInstance.Add(int.Parse(result.ToString()));
+            resultList.Add(curInstance);
+            if (pattern == "Number" && resultList.Count == amount)
+            {
+                FightOver();
+                return;
+            }
+        }
+        curInstance = GameManager.Instance.GetQuestionInstance();
+        StringBuilder question = new StringBuilder();
+        question.Append(curInstance[0].ToString());
+        for(int i = 1; i < curInstance.Count - 1; i++)
+        {
+            question.Append(symbol);
+            question.Append(curInstance[i].ToString());
+        }
+        questionImg_Text.text = question.ToString();
+        ClearResultText();
+        result.Append("0");
     }
 
     private void ClearResultText()
@@ -164,11 +194,19 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void ChangeInputOrder()
     {
-        reverseOrderImage.SetActive(!reverseOrderImage.activeSelf);
+        order = !order;
+        reverseOrderImage.SetActive(!reverseOrderImage.activeSelf);//暂时先这么处理
     }
 
     private void ChangeTimeVisibility()
     {
+        timeMaskImage.SetActive(!timeMaskImage.activeSelf);//暂时先这么处理
+    }
 
+    private void FightOver()
+    {
+        GameManager.Instance.CurTimeCost = timeCost;
+        GameManager.Instance.CurResultList = resultList;
+        GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }
 }

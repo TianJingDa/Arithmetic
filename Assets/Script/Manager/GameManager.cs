@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     private FontController                                      c_FontCtrl;
     private TextColorController                                 c_TextColorCtrl;
 
+    private int[]                                               m_AmountArray;
+    private string[]                                            m_SymbolArray;
+    private float                                               m_TimeCost;
+    private List<List<int>>                                     m_ResultList;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
@@ -108,7 +112,12 @@ public class GameManager : MonoBehaviour
             MyDebug.LogGreen(m_CurCategoryInstance.operandID);
         }
     }
-    private int TotalTime
+    public List<List<int>> CurResultList
+    {
+        get { return m_ResultList; }
+        set { m_ResultList = value; }
+    }
+    public int TotalTime
     {
         get
         {
@@ -121,7 +130,7 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("TotalTime", totalTime);
         }
     }
-    private int TotalGame
+    public int TotalGame
     {
         get
         {
@@ -133,6 +142,11 @@ public class GameManager : MonoBehaviour
             int totalGame = value;
             PlayerPrefs.SetInt("TotalGame", totalGame);
         }
+    }
+    public float CurTimeCost
+    {
+        get { return m_TimeCost; }
+        set { m_TimeCost = value; }
     }
 
 
@@ -161,6 +175,8 @@ public class GameManager : MonoBehaviour
     {
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
+        m_AmountArray = new int[] { 3, 5, 10 };
+        m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
         Debug.Log(GetMutiLanguage("Text_00001"));
@@ -200,10 +216,23 @@ public class GameManager : MonoBehaviour
     {
         return c_FightCtrl.GetQuestionInstance(CurCategoryInstance.symbolID, CurCategoryInstance.digitID, CurCategoryInstance.operandID);
     }
-    public void GetPatternAndAmount(out PatternID curPatternID,out AmountID curAmountID)
+    public void GetFightParameter(out string pattern, out float amount, out string symbol)
     {
-        curPatternID = CurCategoryInstance.patternID;
-        curAmountID = CurCategoryInstance.amountID;
+        pattern = CurCategoryInstance.patternID.ToString();
+        switch (CurCategoryInstance.patternID)
+        {
+            case PatternID.Time:
+                amount = m_AmountArray[(int)CurCategoryInstance.amountID] * 60;
+                break;
+            case PatternID.Number:
+                amount = m_AmountArray[(int)CurCategoryInstance.amountID] * 10;
+                break;
+            default:
+                amount = -1;
+                MyDebug.LogYellow("Can not get AMOUNT!");
+                break;
+        }
+        symbol = m_SymbolArray[(int)CurCategoryInstance.symbolID];
     }
     public void ResetCheckList()
     {

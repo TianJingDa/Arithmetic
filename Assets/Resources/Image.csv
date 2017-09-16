@@ -163,7 +163,7 @@ Image_50003,GiveUpPage
 Image_50004,CancelBtn
 Image_50005,ConfirmBtn
 Image_50006,QuestionContent
-Image_50007,
+Image_50007,ReverseOrderImage
 Image_50008,QuestionImg
 Image_50009,EqualImg
 Image_50010,ResultImg
@@ -185,6 +185,7 @@ Image_50025,CountdownBg
 Image_50026,Countdown_Three
 Image_50027,Countdown_Two
 Image_50028,Countdown_One
+Image_50029,TimeMaskImage
 Image_60000,SettlementFrame
 Image_60001,SettlementTitleImg
 Image_60002,SettlementContent
