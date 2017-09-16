@@ -47,18 +47,15 @@ public class FightFrameWrapper : GuiFrameWrapper
         StartCoroutine(StartFight());
     }
     
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict,
-                                Dictionary<string, Button> ButtonDict,
-                                Dictionary<string, Toggle> ToggleDict,
-                                Dictionary<string, Dropdown> DropdownDict)
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        giveUpBg            = ButtonDict["GiveUpBg"].gameObject;
+        giveUpBg            = GameObjectDict["GiveUpBg"];
         countdownBg         = GameObjectDict["CountdownBg"];
+        timeMaskImage       = GameObjectDict["TimeMaskImage"];
+        reverseOrderImage   = GameObjectDict["ReverseOrderImage"];
         timeBtn_Text        = GameObjectDict["TimeBtn_Text"].GetComponent<Text>();
         resultImg_Text      = GameObjectDict["ResultImg_Text"].GetComponent<Text>();
         questionImg_Text    = GameObjectDict["QuestionImg_Text"].GetComponent<Text>();
-        reverseOrderImage   = GameObjectDict["ReverseOrderImage"];
-        timeMaskImage       = GameObjectDict["TimeMaskImage"];
     }
 
 

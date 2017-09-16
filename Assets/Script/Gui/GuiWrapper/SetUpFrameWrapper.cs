@@ -49,29 +49,26 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
-                                    Dictionary<string, Button>     ButtonDict, 
-                                    Dictionary<string, Toggle>     ToggleDict, 
-                                    Dictionary<string, Dropdown>   DropdownDict)
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        strategyWin         = GameObjectDict["StrategyWin"];
-        languageWin         = GameObjectDict["LanguageWin"];
         skinWin             = GameObjectDict["SkinWin"];
-        layoutWin           = GameObjectDict["LayoutWin"];
         resetWin            = GameObjectDict["ResetWin"];
+        layoutWin           = GameObjectDict["LayoutWin"];
         aboutUsWin          = GameObjectDict["AboutUsWin"];
+        feedbackWin         = GameObjectDict["FeedbackWin"];
+        languageWin         = GameObjectDict["LanguageWin"];
+        strategyWin         = GameObjectDict["StrategyWin"];
+        resetConfirmBg      = GameObjectDict["ResetConfirmBg"];
         resetToggleGroup    = GameObjectDict["ResetToggleGroup"];
+        thankDevelopersWin  = GameObjectDict["ThankDevelopersWin"];
         skinToggleGroup     = GameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
         languageToggleGroup = GameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
-        feedbackWin         = ButtonDict["FeedbackWin"].gameObject;
-        thankDevelopersWin  = ButtonDict["ThankDevelopersWin"].gameObject;
-        resetConfirmBg      = ButtonDict["ResetConfirmBg"].gameObject;
-        languageApplyBtn    = ButtonDict["LanguageApplyBtn"];
-        skinApplyBtn        = ButtonDict["SkinApplyBtn"];
-        resetApplyBtn       = ButtonDict["ResetApplyBtn"];
-        layoutApplyBtn      = ButtonDict["LayoutApplyBtn"];
-        layoutDropdown      = DropdownDict["LayoutDropdown"];
-        handednessDropdown  = DropdownDict["HandednessDropdown"];
+        skinApplyBtn        = GameObjectDict["SkinApplyBtn"].GetComponent<Button>();
+        resetApplyBtn       = GameObjectDict["ResetApplyBtn"].GetComponent<Button>();
+        layoutApplyBtn      = GameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
+        languageApplyBtn    = GameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
+        layoutDropdown      = GameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
+        handednessDropdown  = GameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
     }
 
 

@@ -14,10 +14,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         Init();
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
-                                    Dictionary<string, Button>     ButtonDict, 
-                                    Dictionary<string, Toggle>     ToggleDict, 
-                                    Dictionary<string, Dropdown>   DropdownDict)
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
 
     }

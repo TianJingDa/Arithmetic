@@ -22,11 +22,11 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
         ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
         DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
+        InitButton(btnDelegate);
+        InitToggle(tglDelegate);
+        InitDropdown(dpdDelegate);
         Dictionary<string, GameObject> GameObjectDict = InitGameObjectDict();
-        Dictionary<string, Button> ButtonDict = InitButton(btnDelegate, GameObjectDict);
-        Dictionary<string, Toggle> ToggleDict = InitToggle(tglDelegate, GameObjectDict);
-        Dictionary<string, Dropdown> DropdownDict = InitDropdown(dpdDelegate, GameObjectDict);
-        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict, ButtonDict, ToggleDict, DropdownDict);
+        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
     }
 
     private Dictionary<string, GameObject> InitGameObjectDict()
@@ -91,63 +91,35 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
     }
 
-
-    private Dictionary<string, Button> InitButton(ButtonDelegate btnDelegate, Dictionary<string, GameObject> GameObjectDict)
+    private void InitButton(ButtonDelegate btnDelegate)
     {
         Button[] buttonArray = GetComponentsInChildren<Button>(true);
-        if (buttonArray.Length == 0) return null;
-        Dictionary<string, Button> ButtonDict = new Dictionary<string, Button>();
         for(int i = 0; i < buttonArray.Length; i++)
         {
             Button curButton = buttonArray[i];
             curButton.onClick.AddListener(() => btnDelegate(curButton));
-            ButtonDict.Add(curButton.name, curButton);
-            if (!GameObjectDict.Remove(curButton.name))
-            {
-                MyDebug.LogYellow(curButton.name + " can NOT be removed from GameObjectDict!!!");
-            }
         }
-        return ButtonDict;
     }
-    private Dictionary<string, Toggle> InitToggle(ToggleDelegate tglDelegate, Dictionary<string, GameObject> GameObjectDict)
+    private void InitToggle(ToggleDelegate tglDelegate)
     {
         Toggle[] toggleArray = GetComponentsInChildren<Toggle>(true);
-        if (toggleArray.Length == 0) return null;
-        Dictionary<string, Toggle> ToggleDict = new Dictionary<string, Toggle>();
         for(int i = 0; i < toggleArray.Length; i++)
         {
             Toggle curToggle = toggleArray[i];
             curToggle.onValueChanged.AddListener(value => tglDelegate(curToggle));
-            ToggleDict.Add(curToggle.name, curToggle);
-            if (!GameObjectDict.Remove(curToggle.name))
-            {
-                MyDebug.LogYellow(curToggle.name + " can NOT be removed from GameObjectDict!!!");
-            }
         }
-        return ToggleDict;
     }
-    private Dictionary<string, Dropdown> InitDropdown(DropdownDelegate dpdDelegate, Dictionary<string, GameObject> GameObjectDict)
+    private void InitDropdown(DropdownDelegate dpdDelegate)
     {
         Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
-        if (dropdownArray.Length == 0) return null;
-        Dictionary<string, Dropdown>  DropdownDict = new Dictionary<string, Dropdown>();
         for(int i = 0; i < dropdownArray.Length; i++)
         {
             Dropdown curDropdown = dropdownArray[i];
             curDropdown.onValueChanged.AddListener(index => dpdDelegate(curDropdown));
-            DropdownDict.Add(curDropdown.name, curDropdown);
-            if (!GameObjectDict.Remove(curDropdown.name))
-            {
-                MyDebug.LogYellow(curDropdown.name + " can NOT be removed from GameObjectDict!!!");
-            }
         }
-        return DropdownDict;
     }
 
-    protected virtual void OnStart(Dictionary<string, GameObject> GameObjectDict, 
-                                   Dictionary<string, Button>     ButtonDict, 
-                                   Dictionary<string, Toggle>     ToggleDict, 
-                                   Dictionary<string, Dropdown>   DropdownDict)
+    protected virtual void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
 
     }

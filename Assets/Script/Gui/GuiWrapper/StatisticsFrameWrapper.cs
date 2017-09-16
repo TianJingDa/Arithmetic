@@ -20,17 +20,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         Init();
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
-                                    Dictionary<string, Button>     ButtonDict, 
-                                    Dictionary<string, Toggle>     ToggleDict, 
-                                    Dictionary<string, Dropdown>   DropdownDict)
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
         achievementWin          = GameObjectDict["AchievementWin"];
         saveFileWin             = GameObjectDict["SaveFileWin"];
         saveFileGrid            = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
         achievementGrid         = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
-        saveFileDetailBg        = ButtonDict["SaveFileDetailBg"].gameObject;
-        achievementDetailBg     = ButtonDict["AchievementDetailBg"].gameObject;
+        saveFileDetailBg        = GameObjectDict["SaveFileDetailBg"];
+        achievementDetailBg     = GameObjectDict["AchievementDetailBg"];
     }
 
     protected override void OnButtonClick(Button btn)
