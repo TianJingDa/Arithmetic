@@ -93,7 +93,6 @@ public class FightFrameWrapper : GuiFrameWrapper
                 break;
             case "Fight2SettlementFrameBtn":
                 giveUpBg.SetActive(true);
-                //不可暂停答题！
                 break;
             case "GiveUpBg":
             case "CancelBtn":
@@ -138,8 +137,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     {
         float curTime = Time.realtimeSinceStartup;
         timeCost = curTime - startTime;
-        amount -= timeCost;
-        timeBtn_Text.text = amount.ToString("f1") + "s";
+        timeBtn_Text.text = (amount - timeCost).ToString("f1") + "s";
         if (amount <= 0)
         {
             FightOver();
@@ -155,9 +153,11 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void RefreshResultText(string num)
     {
-        if (result.ToString() == "0") result.Length = 0;
+        StringBuilder lastResult = new StringBuilder(result.ToString());
+        if (result.ToString() == "-1") result.Length = 0;
         if (order) result.Append(num);
         else result.Insert(0, num);
+        if (long.Parse(result.ToString()) > int.MaxValue) result = lastResult;
         resultImg_Text.text = result.ToString();
     }
 
@@ -183,7 +183,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         }
         questionImg_Text.text = question.ToString();
         ClearResultText();
-        result.Append("0");
+        result.Append("-1");
     }
 
     private void ClearResultText()

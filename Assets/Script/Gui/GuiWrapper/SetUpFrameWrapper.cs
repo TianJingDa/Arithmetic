@@ -44,9 +44,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         id = GuiFrameID.SetUpFrame;
         Init();
 
-        languageToggleGroup     = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "LanguageToggleGroup");
-        skinToggleGroup         = CommonTool.GetComponentByName<ToggleGroup>(gameObject, "SkinToggleGroup");
-
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
 
@@ -64,6 +61,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetWin            = GameObjectDict["ResetWin"];
         aboutUsWin          = GameObjectDict["AboutUsWin"];
         resetToggleGroup    = GameObjectDict["ResetToggleGroup"];
+        skinToggleGroup     = GameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
+        languageToggleGroup = GameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
         feedbackWin         = ButtonDict["FeedbackWin"].gameObject;
         thankDevelopersWin  = ButtonDict["ThankDevelopersWin"].gameObject;
         resetConfirmBg      = ButtonDict["ResetConfirmBg"].gameObject;

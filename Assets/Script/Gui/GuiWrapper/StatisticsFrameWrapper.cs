@@ -18,8 +18,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
-        achievementGrid     = CommonTool.GetComponentByName<InfiniteList>(gameObject, "AchievementGrid");
-        saveFileGrid        = CommonTool.GetComponentByName<InfiniteList>(gameObject, "SaveFileGrid");
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict, 
@@ -29,6 +27,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementWin          = GameObjectDict["AchievementWin"];
         saveFileWin             = GameObjectDict["SaveFileWin"];
+        saveFileGrid            = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
+        achievementGrid         = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
         saveFileDetailBg        = ButtonDict["SaveFileDetailBg"].gameObject;
         achievementDetailBg     = ButtonDict["AchievementDetailBg"].gameObject;
     }
