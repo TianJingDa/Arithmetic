@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 
 
-public class SaveFileItem : MonoBehaviour 
+public class SaveFileItem : Item
 {
     private SaveFileInstance content;//详情
     private GameObject detailWin;
@@ -36,7 +36,7 @@ public class SaveFileItem : MonoBehaviour
         for (int i = 0; i < 30; i++)
         {
             QuentionInstance instance = new QuentionInstance();
-            instance.title = i.ToString();
+            instance.index = i.ToString();
             dataList.Add(instance);
         }
         #endregion

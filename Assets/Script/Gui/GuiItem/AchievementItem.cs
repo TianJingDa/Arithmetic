@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 
 
-public class AchievementItem : MonoBehaviour 
+public class AchievementItem : Item
 {
     private AchievementInstance content;//详情
     private GameObject detailWin;

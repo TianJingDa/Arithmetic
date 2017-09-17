@@ -1,6 +1,9 @@
 Index,name
 Image_00000,AchievementItem
 Image_00001,SaveFileItem
+Image_00002,QuestionItem
+Image_00003,QuestionItem_Wrong
+Image_00004,QuestionRightAnswer
 Image_10000,StartFrame
 Image_10001,StatisticsBtn
 Image_10002,CategoryBtn
@@ -26,8 +29,8 @@ Image_20017,AchievementScrollRect
 Image_20018,AchievementGrid
 Image_20019,SaveFileScrollRect
 Image_20020,SaveFileGrid
-Image_20021,AchievementDetailBg
-Image_20022,AchievementDetailPage
+Image_20021,AchievementDetailBgInStatistics
+Image_20022,AchievementDetailPageInStatistics
 Image_20023,SaveFileDetailScrollRect
 Image_20024,SaveFileDetailGrid
 Image_20025,SaveFileDetailBg
@@ -191,3 +194,5 @@ Image_60001,SettlementTitleImg
 Image_60002,SettlementContent
 Image_60003,SettlementScrollRect
 Image_60004,OnlyWrongBtn
+Image_60005,AchievementDetailBgInSettlement
+Image_60006,AchievementDetailPageInSettlement

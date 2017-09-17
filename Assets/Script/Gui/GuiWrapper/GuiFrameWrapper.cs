@@ -17,78 +17,22 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     
     protected void Init()
     {
-        InitImage();
-        InitText();
+        CommonTool.InitText(gameObject);
+        CommonTool.InitImage(gameObject);
         ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
         ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
         DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
         InitButton(btnDelegate);
         InitToggle(tglDelegate);
         InitDropdown(dpdDelegate);
-        Dictionary<string, GameObject> GameObjectDict = InitGameObjectDict();
+        Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
         GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
-    }
-
-    private Dictionary<string, GameObject> InitGameObjectDict()
-    {
-        Dictionary<string, GameObject> GameObjectDict = new Dictionary<string, GameObject>();
-        Transform[] gameObjectArray = GetComponentsInChildren<Transform>(true);
-        for(int i = 0; i < gameObjectArray.Length; i++)
-        {
-            //MyDebug.LogYellow(gameObjectArray[i].name);
-            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
-        }
-        return GameObjectDict;
     }
 
     protected void RefreshGui()
     {
-        InitText();
-        InitImage();
-    }
-    private void InitImage()
-    {
-        return;
-        Image[] imageArray = gameObject.GetComponentsInChildren<Image>(true);
-        if (imageArray.Length == 0)
-        {
-            return;
-        }
-        for (int i = 0; i < imageArray.Length; i++)
-        {
-            if (imageArray[i].index == "")
-            {
-                continue;
-            }
-            Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
-            if (sprite != null)
-            {
-                imageArray[i].sprite = sprite;
-            }
-            else
-            {
-                MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
-            }
-        }
-    }
-    private void InitText()
-    {
-        Text[] textArray = gameObject.GetComponentsInChildren<Text>(true);
-        if (textArray.Length == 0)
-        {
-            return;
-        }
-        //Font curFont = GameManager.Instance.GetFont();
-        for (int i = 0; i < textArray.Length; i++)
-        {
-            if (textArray[i].index == "")
-            {
-                continue;
-            }
-            //textArray[i].font = curFont;
-            //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
-            textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
-        }
+        CommonTool.InitText(gameObject);
+        CommonTool.InitImage(gameObject);
     }
 
     private void InitButton(ButtonDelegate btnDelegate)

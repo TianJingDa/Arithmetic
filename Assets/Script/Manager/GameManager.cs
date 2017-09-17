@@ -234,6 +234,12 @@ public class GameManager : MonoBehaviour
         }
         symbol = m_SymbolArray[(int)CurCategoryInstance.symbolID];
     }
+    public void GetSettlementParameter(out float timeCost, out List<List<int>> resultList, out string symbol)
+    {
+        symbol      = m_SymbolArray[(int)CurCategoryInstance.symbolID];
+        timeCost    = CurTimeCost;
+        resultList  = CurResultList;
+    }
     public void ResetCheckList()
     {
         c_FightCtrl.ResetCheckList();

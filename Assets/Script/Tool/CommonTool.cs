@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CommonTool 
+public static class CommonTool 
 {
     public static T GetComponentByName<T>(GameObject root, string name) where T : Component
     {
@@ -96,4 +97,60 @@ public class CommonTool
 
 
     }
+    public static void InitText(GameObject root)
+    {
+        Text[] textArray = root.GetComponentsInChildren<Text>(true);
+        if (textArray.Length == 0)
+        {
+            return;
+        }
+        //Font curFont = GameManager.Instance.GetFont();
+        for (int i = 0; i < textArray.Length; i++)
+        {
+            //textArray[i].font = curFont;
+            //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
+            if (textArray[i].index == "") continue;
+            textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
+        }
+    }
+    public static void InitImage(GameObject root)
+    {
+        return;
+        Image[] imageArray = root.GetComponentsInChildren<Image>(true);
+        if (imageArray.Length == 0)
+        {
+            return;
+        }
+        for (int i = 0; i < imageArray.Length; i++)
+        {
+            if (imageArray[i].index == "")
+            {
+                continue;
+            }
+            Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
+            if (sprite != null)
+            {
+                imageArray[i].sprite = sprite;
+            }
+            else
+            {
+                MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
+            }
+        }
+    }
+
+    public static Dictionary<string, GameObject> InitGameObjectDict(GameObject root)
+    {
+        Dictionary<string, GameObject> GameObjectDict = new Dictionary<string, GameObject>();
+        Transform[] gameObjectArray = root.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < gameObjectArray.Length; i++)
+        {
+            //MyDebug.LogYellow(gameObjectArray[i].name);
+            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+        }
+        return GameObjectDict;
+    }
+
+
+
 }
