@@ -180,13 +180,13 @@ public class FightFrameWrapper : GuiFrameWrapper
         }
         questionImg_Text.text = question.ToString();
         ClearResultText();
-        result.Append("-1");
     }
 
     private void ClearResultText()
     {
         resultImg_Text.text = string.Empty;
         result.Length = 0;
+        result.Append("-1");
     }
 
     private void ChangeInputOrder()

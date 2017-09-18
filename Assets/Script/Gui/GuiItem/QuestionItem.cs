@@ -9,20 +9,19 @@ using System.Text;
 
 public class QuestionItem : Item
 {
+    private int count;
     private QuentionInstance content;//详情
-    private GameObject questionItem_Wrong;
-    private GameObject questionRightAnswer;
+    private GameObject questionRightAnswerBg;
     private Text questionIndex;
     private Text questionContent;
-    private Text questionRightAnswer_Text;
+    private Text questionRightAnswerPage_Text;
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        questionItem_Wrong          = GameObjectDict["QuestionItem_Wrong"];
-        questionRightAnswer         = GameObjectDict["QuestionRightAnswer"];
-        questionIndex               = GameObjectDict["QuestionIndex"].GetComponent<Text>();
-        questionContent             = GameObjectDict["QuestionContent"].GetComponent<Text>();
-        questionRightAnswer_Text    = GameObjectDict["QuestionRightAnswer_Text"].GetComponent<Text>();
+        questionRightAnswerBg           = GameObjectDict["QuestionRightAnswerBg"];
+        questionIndex                   = GameObjectDict["QuestionIndex"].GetComponent<Text>();
+        questionContent                 = GameObjectDict["QuestionContent"].GetComponent<Text>();
+        questionRightAnswerPage_Text    = GameObjectDict["QuestionRightAnswerPage_Text"].GetComponent<Text>();
     }
 
     private void InitPrefabItem(object data)
@@ -30,7 +29,7 @@ public class QuestionItem : Item
         content = data as QuentionInstance;
         Init();
         questionIndex.text = content.index;
-        int count = content.instance.Count;
+        count = content.instance.Count;
         StringBuilder question = new StringBuilder();
         question.Append(content.instance[0].ToString());
         for(int i = 1; i < count - 2; i++)
@@ -41,20 +40,9 @@ public class QuestionItem : Item
         question.Append("=");
         question.Append(content.instance[count - 1].ToString());
         questionContent.text = question.ToString();
-        if (content.instance[count - 2] != content.instance[count - 1])
-        {
-            questionItem_Wrong.SetActive(true);
-            questionRightAnswer_Text.text = questionRightAnswer_Text.text + content.instance[count - 2].ToString();
-            Button btn = GetComponent<Button>();
-            btn.onClick.AddListener(OnClick);
-        }
-
+        questionRightAnswerBg.SetActive(content.instance[count - 2] != content.instance[count - 1]);
+        questionRightAnswerPage_Text.text = content.instance[count - 2].ToString();
     }
-    private void OnClick()
-    {
-        questionRightAnswer.SetActive(!questionRightAnswer.activeSelf);
-    }
-
 }
 [Serializable]
 public class QuentionInstance

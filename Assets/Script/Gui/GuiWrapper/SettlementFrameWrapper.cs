@@ -67,7 +67,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         GameManager.Instance.GetSettlementParameter(out timeCost, out resultList, out symbol);
         settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", timeCost.ToString("f1"));
         settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", resultList.Count.ToString());
-        onlyWrongList = resultList;
+        onlyWrongList = resultList.FindAll(x => x[x.Count - 1] != x[x.Count - 2]);
         settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", ((float)onlyWrongList.Count * 100 / (float)resultList.Count).ToString("f1"));
         ArrayList dataList = new ArrayList();
         for (int i = 0; i < resultList.Count; i++)

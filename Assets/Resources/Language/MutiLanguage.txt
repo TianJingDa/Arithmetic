@@ -1,5 +1,4 @@
 Index,Chinese,English
-Text_00000,正确答案：,TJD
 Text_20000,统计数据,TJD
 Text_20001,游戏时间,TJD
 Text_20002,{0}小时{1}分钟,TJD
