@@ -54,7 +54,7 @@ public class InfiniteList : MonoBehaviour
             GameObject item = GameManager.Instance.GetPrefabItem(itemName);
             item.transform.SetParent(transform);
             item.transform.localScale = Vector3.one;
-            childrenAnchoredPostion.Add(item.GetComponent<RectTransform>().anchoredPosition);
+            //childrenAnchoredPostion.Add(item.GetComponent<RectTransform>().anchoredPosition);
         }
         if (detailWin != null)
         {
@@ -63,13 +63,13 @@ public class InfiniteList : MonoBehaviour
                 transform.GetChild(i).SendMessage("InitDetailWin", detailWin);
             }
         }
+        StartCoroutine(RecordChildrenAnchoredPostion());
         init = true;
     }
 
     public void InitList(ArrayList dataList ,string itemName ,GameObject detailWin = null)
     {
         Init(itemName,detailWin);
-        gridLayoutGroup.enabled = true;
         gridRectTransform.offsetMin = Vector2.zero;
         gridRectTransform.offsetMax = Vector2.zero;
         this.dataList = dataList;
@@ -93,13 +93,19 @@ public class InfiniteList : MonoBehaviour
         for (int index = 0; index < itemAmount; index++)
         {
             children.Add(transform.GetChild(index).GetComponent<RectTransform>());
-            children[index].anchoredPosition = childrenAnchoredPostion[index];
             children[index].gameObject.SetActive(index < dataAmount);
             if(index < dataAmount)
             {
                 realIndex++;
                 children[index].gameObject.name = itemName + realIndex.ToString();
                 children[index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex]);
+            }
+        }
+        if(itemAmount <= childrenAnchoredPostion.Count)
+        {
+            for(int index = 0; index < itemAmount; index++)
+            {
+                children[index].anchoredPosition = childrenAnchoredPostion[index];
             }
         }
     }
@@ -306,5 +312,17 @@ public class InfiniteList : MonoBehaviour
         Vector3 min = transform.TransformPoint(gridRectTransform.rect.min);
         return min;
     }
+    /// <summary>
+    /// 延迟一帧记录所有子物体的锚点位置
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator RecordChildrenAnchoredPostion()
+    {
+        yield return null;
+        for (int index = 0; index < transform.childCount; index++)
+        {
+            childrenAnchoredPostion.Add(transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition);
+        }
 
+    }
 }
