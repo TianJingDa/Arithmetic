@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -11,6 +12,7 @@ public class StartFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.StartFrame;
         Init();
+        //List<QuentionInstance> dataList = (List<QuentionInstance>)IOHelper.GetData(@"C:\Users\TJD\AppData\LocalLow\DefaultCompany\Arithmetic\Save\20170920235811.sav", typeof(List<QuentionInstance>));
     }
 
     protected override void OnButtonClick(Button btn)

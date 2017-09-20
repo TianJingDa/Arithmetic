@@ -65,23 +65,12 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private void InitSettlement()
     {
         float timeCost;
-        string symbol;
-        List<List<int>> resultTempList;
-        GameManager.Instance.GetSettlementParameter(out timeCost, out resultTempList, out symbol);
-        string count = resultTempList.Count.ToString();
+        GameManager.Instance.GetSettlementParameter(out timeCost, out resultList);
+        string count = resultList.Count.ToString();
         settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", timeCost.ToString("f1"));
         settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", count);
-        resultList = new List<QuentionInstance>();
-        for (int i = 0; i < resultTempList.Count; i++)
-        {
-            QuentionInstance questionInstance = new QuentionInstance();
-            questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
-            questionInstance.symbol = symbol;
-            questionInstance.instance = resultTempList[i];
-            resultList.Add(questionInstance);
-        }
         onlyWrongList = resultList.FindAll(FindWrong);
-        settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", (100 - ((float)onlyWrongList.Count * 100 / resultTempList.Count)).ToString("f1"));
+        settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", (100 - ((float)onlyWrongList.Count * 100 / resultList.Count)).ToString("f1"));
         onlyWrong = false;
         RefreshSettlementGrid();
     }
@@ -105,8 +94,6 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         }
         settlementGrid.InitList(dataList, "QuestionItem");
     }
-
-
     private void ShowAchievement()
     {
         achievementDetailBgInSettlement.SetActive(true);

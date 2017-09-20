@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
+using System;
+
 /// <summary>
 /// 答题界面
 /// </summary>
@@ -202,8 +204,27 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void FightOver()
     {
+        List<QuentionInstance> dataList = new List<QuentionInstance>();
+        string count = resultList.Count.ToString();
+        for (int i = 0; i < resultList.Count; i++)
+        {
+            QuentionInstance questionInstance = new QuentionInstance();
+            questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
+            questionInstance.symbol = symbol;
+            questionInstance.instance = resultList[i];
+            dataList.Add(questionInstance);
+        }
+        SaveResultList(dataList);
         GameManager.Instance.CurTimeCost = timeCost;
-        GameManager.Instance.CurResultList = resultList;
+        GameManager.Instance.CurResultList = dataList;
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }
+    private void SaveResultList(List<QuentionInstance> data)
+    {
+        string dirPath = Application.persistentDataPath + "/Save";
+        IOHelper.CreateDirectory(dirPath);
+        string fileName = dirPath + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".sav";
+        IOHelper.SetData(fileName, data);
+    }
+
 }

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private int[]                                               m_AmountArray;
     private string[]                                            m_SymbolArray;
     private float                                               m_TimeCost;
-    private List<List<int>>                                     m_ResultList;
+    private List<QuentionInstance> m_ResultList;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
             MyDebug.LogGreen(m_CurCategoryInstance.operandID);
         }
     }
-    public List<List<int>> CurResultList
+    public List<QuentionInstance> CurResultList
     {
         get { return m_ResultList; }
         set { m_ResultList = value; }
@@ -234,9 +234,8 @@ public class GameManager : MonoBehaviour
         }
         symbol = m_SymbolArray[(int)CurCategoryInstance.symbolID];
     }
-    public void GetSettlementParameter(out float timeCost, out List<List<int>> resultList, out string symbol)
+    public void GetSettlementParameter(out float timeCost, out List<QuentionInstance> resultList)
     {
-        symbol      = m_SymbolArray[(int)CurCategoryInstance.symbolID];
         timeCost    = CurTimeCost;
         resultList  = CurResultList;
     }
