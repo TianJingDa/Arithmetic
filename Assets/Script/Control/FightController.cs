@@ -114,14 +114,14 @@ public sealed class FightController : Controller
     {
         List<int> instance = null;
         int product = 0;
-        int min = (int)Mathf.Pow(10, (int)digitID + 1);
+        int min = (int)Mathf.Pow(10, (int)digitID);
         int max = (int)Mathf.Pow(10, (int)digitID + 2);
         do
         {
-            instance = GetInstance(min, max, (int)operandID);
+            instance = GetInstance(min + 1, max, (int)operandID);
             product = GetProduct(instance);
         }
-        while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance));
+        while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanMultiply(instance, min));
         checkList.Add(instance);
         instance = Shuffle(instance);
         instance.Add(product);
@@ -244,6 +244,16 @@ public sealed class FightController : Controller
         return (difference >= min && difference % 10 != 0);
     }
     /// <summary>
+    /// 是否满足乘法条件
+    /// </summary>
+    /// <param name="instance"></param>
+    /// <param name="min"></param>
+    /// <returns></returns>
+    private bool CanMultiply(List<int> instance, int min)
+    {
+        return instance[0] * instance[1] > (10 * min - 1) * (10 * min - 1);
+    }
+    /// <summary>
     /// 是否满足除法条件
     /// </summary>
     /// <param name="instance"></param>
@@ -304,7 +314,6 @@ public sealed class FightController : Controller
             product *= instance[i];
         }
         return product;
-
     }
 }
 
