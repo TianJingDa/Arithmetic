@@ -30,23 +30,14 @@ public class SaveFileItem : Item
     private void OnClick()
     {
         detailWin.SetActive(true);
-
-        #region 假数据
-        ArrayList dataList = new ArrayList();
-        for (int i = 0; i < 30; i++)
-        {
-            QuentionInstance instance = new QuentionInstance();
-            instance.index = i.ToString();
-            dataList.Add(instance);
-        }
-        #endregion
-
+        ArrayList dataList = new ArrayList(content.instance);
         detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
     }
 
 }
 [Serializable]
-public class SaveFileInstance
+public class SaveFileInstance//还需要添加成就相关字段
 {
     public string title;
+    public List<QuentionInstance> instance;
 }

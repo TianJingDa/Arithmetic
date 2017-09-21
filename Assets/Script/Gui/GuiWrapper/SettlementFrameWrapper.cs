@@ -40,12 +40,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         base.OnButtonClick(btn);
         switch (btn.name)
         {
-            case "AchievementDetailBgInSettlement":
+            case "AchievementDetailBgInSettlement"://容易误点
                 achievementDetailBgInSettlement.SetActive(false);
                 if (false)
                 {
                     ShowAchievement();
                 }
+                break;
+            case "CurAchievementBtn":
+                ShowAchievement();
                 break;
             case "OnlyWrongBtn":
                 onlyWrong = !onlyWrong;

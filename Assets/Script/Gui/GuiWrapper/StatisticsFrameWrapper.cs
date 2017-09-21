@@ -8,26 +8,31 @@ using UnityEngine.UI;
 /// </summary>
 public class StatisticsFrameWrapper : GuiFrameWrapper
 {
+    private bool onlyWrong;
+
     private GameObject achievementWin;
     private GameObject saveFileWin;
-    private GameObject achievementDetailBg;
     private GameObject saveFileDetailBg;
+    private GameObject achievementDetailBgInSaveFile;
+    private GameObject achievementDetailBgInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     void Start () 
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
+        onlyWrong = false;
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        achievementWin          = GameObjectDict["AchievementWin"];
-        saveFileWin             = GameObjectDict["SaveFileWin"];
-        saveFileGrid            = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
-        achievementGrid         = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
-        saveFileDetailBg        = GameObjectDict["SaveFileDetailBg"];
-        achievementDetailBg     = GameObjectDict["AchievementDetailBg"];
+        achievementWin                  = GameObjectDict["AchievementWin"];
+        saveFileWin                     = GameObjectDict["SaveFileWin"];
+        saveFileGrid                    = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
+        achievementGrid                 = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
+        saveFileDetailBg                = GameObjectDict["SaveFileDetailBg"];
+        achievementDetailBgInSaveFile   = GameObjectDict["AchievementDetailBgInSaveFile"];
+        achievementDetailBgInStatistics = GameObjectDict["AchievementDetailBgInStatistics"];
     }
 
     protected override void OnButtonClick(Button btn)
@@ -47,16 +52,32 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 InitAchievementList();
                 break;
             case "AchievementDetailBg":
-                achievementDetailBg.SetActive(false);
+                achievementDetailBgInStatistics.SetActive(false);
+                break;
+            case "AchievementDetailBgInSaveFile":
+                achievementDetailBgInSaveFile.SetActive(false);
+                break;
+            case "OnlyWrongBtnInStatistics":
+                onlyWrong = !onlyWrong;
+                RefreshSettlementGrid();
+                break;
+            case "CurAchievementBtnInStatistics":
+                achievementDetailBgInSaveFile.SetActive(true);
+                ShowAchievement();
                 break;
             case "Save2StatisticsFrameBtn":
                 saveFileWin.SetActive(false);
                 break;
             case "SaveFileBtn":
+                saveFileWin.SetActive(true);
                 InitSaveFileList();
                 break;
-            case "SaveFileDetailBg":
+            case "SaveFileDetai2SaveFileWinBtn":
                 saveFileDetailBg.SetActive(false);
+                break;
+            case "SaveFileDetai2StatisticsFrameBtn":
+                saveFileDetailBg.SetActive(false);
+                saveFileWin.SetActive(false);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button:" + btn.name);
@@ -75,20 +96,30 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             instance.detail = i.ToString();
             dataList.Add(instance);
         }
-        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBg);
+        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics);
     }
 
     private void InitSaveFileList()
     {
-        saveFileWin.SetActive(true);
+        Dictionary<string, List<QuentionInstance>> recordDict = GameManager.Instance.ReadRecord();
         ArrayList dataList = new ArrayList();
-        for (int i = 0; i < 30; i++)
+        foreach(string key in recordDict.Keys)
         {
-            SaveFileInstance instance = new SaveFileInstance();
-            instance.title = i.ToString();
-            dataList.Add(instance);
+            SaveFileInstance saveFileInstance = new SaveFileInstance();
+            saveFileInstance.title = key;
+            saveFileInstance.instance = recordDict[key];
+            dataList.Add(saveFileInstance);
         }
         saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailBg);
+    }
+
+    private void RefreshSettlementGrid()
+    {
+
+    }
+    private void ShowAchievement()
+    {
+
     }
 
 }

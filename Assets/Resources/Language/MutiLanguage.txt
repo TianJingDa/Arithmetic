@@ -8,6 +8,12 @@ Text_20005,成就,TJD
 Text_20006,存档,TJD
 Text_20007,成就,TJD
 Text_20008,存档,TJD
+Text_20009,时    间：,TJD
+Text_20010,{0}秒,TJD
+Text_20011,总    数：,TJD
+Text_20012,{0}道,TJD
+Text_20013,正确率：,TJD
+Text_20014,{0}%,TJD
 Text_30000,选项,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
