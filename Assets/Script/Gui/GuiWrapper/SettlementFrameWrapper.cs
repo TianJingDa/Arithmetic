@@ -7,6 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SettlementFrameWrapper : GuiFrameWrapper
 {
+    private float timeCost;
     private bool onlyWrong;
 
     private Text settlementTime_Text;
@@ -64,11 +65,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void InitSettlement()
     {
-        float timeCost;
         GameManager.Instance.GetSettlementParameter(out timeCost, out resultList);
-        string count = resultList.Count.ToString();
         settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", timeCost.ToString("f1"));
-        settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", count);
+        settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", resultList.Count.ToString());
         onlyWrongList = resultList.FindAll(FindWrong);
         settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", (100 - ((float)onlyWrongList.Count * 100 / resultList.Count)).ToString("f1"));
         onlyWrong = false;

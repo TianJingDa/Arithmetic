@@ -37,14 +37,15 @@ public class FightFrameWrapper : GuiFrameWrapper
         RectTransform[] transforms = GameManager.Instance.GetLayoutData();
         InitLayout(transforms);
         Init();
-        timeCost = 0;
-        order = true;
+
+        timeCost    = 0;
+        order       = true;
+        result      = new StringBuilder();
+        resultList  = new List<List<int>>();
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsByName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetCheckList();
-        result = new StringBuilder();
-        resultList = new List<List<int>>();
         ClearAllText();
         StartCoroutine(StartFight());
     }
@@ -214,17 +215,9 @@ public class FightFrameWrapper : GuiFrameWrapper
             questionInstance.instance = resultList[i];
             dataList.Add(questionInstance);
         }
-        SaveResultList(dataList);
         GameManager.Instance.CurTimeCost = timeCost;
         GameManager.Instance.CurResultList = dataList;
+        GameManager.Instance.SaveRecord(dataList);
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }
-    private void SaveResultList(List<QuentionInstance> data)
-    {
-        string dirPath = Application.persistentDataPath + "/Save";
-        IOHelper.CreateDirectory(dirPath);
-        string fileName = dirPath + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".sav";
-        IOHelper.SetData(fileName, data);
-    }
-
 }

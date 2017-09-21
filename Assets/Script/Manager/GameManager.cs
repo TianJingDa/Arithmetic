@@ -14,11 +14,12 @@ public class GameManager : MonoBehaviour
     private LayoutController                                    c_LayoutCtrl;
     private FontController                                      c_FontCtrl;
     private TextColorController                                 c_TextColorCtrl;
+    private RecordController                                    c_RecordCtrl;
 
     private int[]                                               m_AmountArray;
     private string[]                                            m_SymbolArray;
     private float                                               m_TimeCost;
-    private List<QuentionInstance> m_ResultList;
+    private List<QuentionInstance>                              m_ResultList;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
@@ -161,14 +162,15 @@ public class GameManager : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 30;
 
-        c_AchievementCtrl = AchievementController.Instance;
-        c_FightCtrl = FightController.Instance;
-        c_FontCtrl = FontController.Instance;
-        c_LayoutCtrl = LayoutController.Instance;
-        c_MutiLanguageCtrl = MutiLanguageController.Instance;
-        c_ResourceCtrl = ResourceController.Instance;
-        c_SkinCtrl = SkinController.Instance;
-        c_TextColorCtrl = TextColorController.Instance;
+        c_AchievementCtrl       = AchievementController.Instance;
+        c_FightCtrl             = FightController.Instance;
+        c_FontCtrl              = FontController.Instance;
+        c_LayoutCtrl            = LayoutController.Instance;
+        c_MutiLanguageCtrl      = MutiLanguageController.Instance;
+        c_ResourceCtrl          = ResourceController.Instance;
+        c_SkinCtrl              = SkinController.Instance;
+        c_TextColorCtrl         = TextColorController.Instance;
+        c_RecordCtrl            = RecordController.Instance;
     }
 
     void Start()
@@ -242,6 +244,14 @@ public class GameManager : MonoBehaviour
     public void ResetCheckList()
     {
         c_FightCtrl.ResetCheckList();
+    }
+    public void SaveRecord(object obj)
+    {
+        c_RecordCtrl.SaveRecord(obj);
+    }
+    public Dictionary<string, List<QuentionInstance>> ReadRecord()
+    {
+        return c_RecordCtrl.ReadRecord();
     }
     ///// <summary>
     ///// 激活GUI

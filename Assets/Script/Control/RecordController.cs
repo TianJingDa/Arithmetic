@@ -7,56 +7,60 @@ using System.Text;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 
-
-public class IOHelper 
+public sealed class RecordController : Controller 
 {
+    #region C#单例
+    private static RecordController instance = null;
+    private RecordController()
+    {
+        base.id = ControllerID.RecordController;
+        InitRecordData();
+        Debug.Log("Loading Controller:" + id.ToString());
+    }
+    public static RecordController Instance
+    {
+        get { return instance ?? (instance = new RecordController()); }
+    }
+    #endregion
+
+    private void InitRecordData()
+    {
+
+    }
+
     //File.Delete(string path) 用于删除文件，未确定！！！
-    /**
-     * Unity3D数据持久化辅助类
-     * 作者:秦元培
-     * 时间:2015年8月14日
-     **/
 
-    /// <summary>
-    /// 判断文件是否存在
-    /// </summary>
-    public static bool IsFileExists(string fileName)
+    public void SaveRecord(object obj)
     {
-        return File.Exists(fileName);
+        string dirPath = Application.persistentDataPath + "/Save";
+        CreateDirectory(dirPath);
+        string fileName = dirPath + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".sav";
+        SetData(fileName, obj);
     }
 
-    /// <summary>
-    /// 判断文件夹是否存在
-    /// </summary>
-    public static bool IsDirectoryExists(string fileName)
+    public Dictionary<string, List<QuentionInstance>> ReadRecord()
     {
-        return Directory.Exists(fileName);
-    }
-
-    /// <summary>
-    /// 创建一个文本文件    
-    /// </summary>
-    /// <param name="fileName">文件路径</param>
-    /// <param name="content">文件内容</param>
-    public static void CreateFile(string fileName, string content)
-    {
-        StreamWriter streamWriter = File.CreateText(fileName);
-        streamWriter.Write(content);
-        streamWriter.Close();
+        Dictionary<string, List<QuentionInstance>> recordDict = new Dictionary<string, List<QuentionInstance>>();
+        return recordDict;
     }
 
     /// <summary>
     /// 创建一个文件夹
     /// </summary>
-    public static void CreateDirectory(string fileName)
+    private void CreateDirectory(string fileName)
     {
         //文件夹存在则返回
-        if (IsDirectoryExists(fileName))
+        if (Directory.Exists(fileName))
             return;
         Directory.CreateDirectory(fileName);
     }
 
-    public static void SetData(string fileName, object pObject)
+    /// <summary>
+    /// 保存数据
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <param name="pObject"></param>
+    private void SetData(string fileName, object pObject)
     {
         //将对象序列化为字符串
         string toSave = SerializeObject(pObject);
@@ -67,7 +71,13 @@ public class IOHelper
         streamWriter.Close();
     }
 
-    public static object GetData(string fileName, Type pType)
+    /// <summary>
+    /// 读取数据
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <param name="pType"></param>
+    /// <returns></returns>
+    private object GetData(string fileName, Type pType)
     {
         StreamReader streamReader = File.OpenText(fileName);
         string data = streamReader.ReadToEnd();
@@ -84,7 +94,7 @@ public class IOHelper
     /// <param name="pKey">密钥,长度可以为:64位(byte[8]),128位(byte[16]),192位(byte[24]),256位(byte[32])</param>
     /// <param name="iv">iv向量,长度为128（byte[16])</param>
     /// <returns></returns>
-    private static string RijndaelEncrypt(string pString, string pKey)
+    private string RijndaelEncrypt(string pString, string pKey)
     {
         //密钥
         byte[] keyArray = Encoding.UTF8.GetBytes(pKey);
@@ -110,7 +120,7 @@ public class IOHelper
     /// <param name="pKey">密钥,长度可以为:64位(byte[8]),128位(byte[16]),192位(byte[24]),256位(byte[32])</param>
     /// <param name="iv">iv向量,长度为128（byte[16])</param>
     /// <returns></returns>
-    private static string RijndaelDecrypt(string pString, string pKey)
+    private string RijndaelDecrypt(string pString, string pKey)
     {
         //解密密钥
         byte[] keyArray = Encoding.UTF8.GetBytes(pKey);
@@ -129,14 +139,13 @@ public class IOHelper
         return Encoding.UTF8.GetString(resultArray);
     }
 
-
     /// <summary>
     /// 将一个对象序列化为字符串
     /// </summary>
     /// <returns>The object.</returns>
     /// <param name="pObject">对象</param>
     /// <param name="pType">对象类型</param>
-    private static string SerializeObject(object pObject)
+    private string SerializeObject(object pObject)
     {
         //序列化后的字符串
         string serializedString = string.Empty;
@@ -151,7 +160,7 @@ public class IOHelper
     /// <returns>The object.</returns>
     /// <param name="pString">字符串</param>
     /// <param name="pType">对象类型</param>
-    private static object DeserializeObject(string pString, Type pType)
+    private object DeserializeObject(string pString, Type pType)
     {
         //反序列化后的对象
         object deserializedObject = null;
@@ -159,4 +168,5 @@ public class IOHelper
         deserializedObject = JsonConvert.DeserializeObject(pString, pType);
         return deserializedObject;
     }
+
 }

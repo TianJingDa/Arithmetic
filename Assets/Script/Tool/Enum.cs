@@ -26,7 +26,8 @@ public enum ControllerID
     SkinController,            //皮肤控制器
     LayoutController,          //布局控制器
     FontController,            //字体控制器
-    TextColorController        //字色控制器
+    TextColorController,       //字色控制器
+    RecordController           //存档控制器
 }
 public enum SkinID
 {
