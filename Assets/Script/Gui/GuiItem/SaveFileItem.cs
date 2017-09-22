@@ -9,7 +9,7 @@ public class SaveFileItem : Item
 {
     private SaveFileInstance content;//详情
     private GameObject detailWin;
-    private Image image;//Item的Image！！
+    private Text saveFileIndex;
 
 
     private void InitDetailWin(GameObject detailWin)
@@ -17,10 +17,16 @@ public class SaveFileItem : Item
         this.detailWin = detailWin;
     }
 
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    {
+        saveFileIndex = GameObjectDict["SaveFileIndex"].GetComponent<Text>();
+    }
+
+
     private void InitPrefabItem(object data)
     {
+        Init();
         content = data as SaveFileInstance;
-        Text saveFileIndex = CommonTool.GetComponentByName<Text>(gameObject, "SaveFileIndex");
         saveFileIndex.text = content.title;
 
         Button btn = GetComponent<Button>();

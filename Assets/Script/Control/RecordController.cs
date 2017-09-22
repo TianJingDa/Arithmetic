@@ -41,12 +41,12 @@ public sealed class RecordController : Controller
     public Dictionary<string, List<QuentionInstance>> ReadRecord()
     {
         Dictionary<string, List<QuentionInstance>> recordDict = new Dictionary<string, List<QuentionInstance>>();
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/Save");
         string[] fileNames = Directory.GetFiles(Application.persistentDataPath + "/Save", "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
         {
             List<QuentionInstance> dataList = (List<QuentionInstance>)GetData(fileNames[i], typeof(List<QuentionInstance>));
-            recordDict.Add(fileNames[i], dataList);
+            string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
+            recordDict.Add(fileName, dataList);
         }
         return recordDict;
     }

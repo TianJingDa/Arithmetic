@@ -26,8 +26,8 @@ public class QuestionItem : Item
 
     private void InitPrefabItem(object data)
     {
-        content = data as QuentionInstance;
         Init();
+        content = data as QuentionInstance;
         questionIndex.text = content.index;
         count = content.instance.Count;
         StringBuilder question = new StringBuilder();
