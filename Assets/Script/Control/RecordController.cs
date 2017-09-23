@@ -23,8 +23,13 @@ public sealed class RecordController : Controller
     }
     #endregion
 
+    private string saveDir;
+    private string fileFullName;
+
     private void InitRecordData()
     {
+        saveDir = Application.persistentDataPath + "/Save";
+        fileFullName = saveDir + "/{0}.sav";
 
     }
 
@@ -32,16 +37,15 @@ public sealed class RecordController : Controller
 
     public void SaveRecord(object obj, string fileName)
     {
-        string dirPath = Application.persistentDataPath + "/Save";
-        CreateDirectory(dirPath);
-        string fileFullName = dirPath + "/" + fileName + ".sav";
+        CreateDirectory(saveDir);
+        fileFullName = fileFullName.Replace("{0}", fileName);
         SetData(fileFullName, obj);
     }
 
-    public List<SaveFileInstance> ReadRecord()
+    public List<SaveFileInstance> ReadAllRecord()
     {
         List<SaveFileInstance> recordList = new List<SaveFileInstance>();
-        string[] fileNames = Directory.GetFiles(Application.persistentDataPath + "/Save", "*.sav");
+        string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
         {
             SaveFileInstance saveFileInstance = (SaveFileInstance)GetData(fileNames[i], typeof(SaveFileInstance));
@@ -49,6 +53,14 @@ public sealed class RecordController : Controller
         }
         return recordList;
     }
+
+    public SaveFileInstance ReadRecord(string fileName)
+    {
+        fileFullName = fileFullName.Replace("{0}",fileName);
+        SaveFileInstance saveFileInstance = (SaveFileInstance)GetData(fileFullName, typeof(SaveFileInstance));
+        return saveFileInstance;
+    }
+
 
     /// <summary>
     /// 创建一个文件夹

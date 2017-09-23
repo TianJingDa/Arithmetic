@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
     
     public List<SaveFileInstance> ReadRecord()
     {
-        return c_RecordCtrl.ReadRecord();
+        return c_RecordCtrl.ReadAllRecord();
     }
     ///// <summary>
     ///// 激活GUI
