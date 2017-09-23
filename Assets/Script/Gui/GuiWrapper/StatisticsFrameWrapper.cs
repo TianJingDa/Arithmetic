@@ -92,7 +92,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         for(int i = 0; i < 8; i++)
         {
             AchievementInstance instance = new AchievementInstance();
-            instance.title = i.ToString();
+            instance.achievementKey = i.ToString();
             instance.detail = i.ToString();
             dataList.Add(instance);
         }
@@ -101,15 +101,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 
     private void InitSaveFileList()
     {
-        Dictionary<string, List<QuentionInstance>> recordDict = GameManager.Instance.ReadRecord();
-        ArrayList dataList = new ArrayList();
-        foreach(string key in recordDict.Keys)
-        {
-            SaveFileInstance saveFileInstance = new SaveFileInstance();
-            saveFileInstance.title = key;
-            saveFileInstance.instance = recordDict[key];
-            dataList.Add(saveFileInstance);
-        }
+        List<SaveFileInstance> recordList = GameManager.Instance.ReadRecord();
+        ArrayList dataList = new ArrayList(recordList);
         saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailBg);
     }
 

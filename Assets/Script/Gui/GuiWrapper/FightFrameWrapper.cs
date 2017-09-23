@@ -205,19 +205,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void FightOver()
     {
-        List<QuentionInstance> dataList = new List<QuentionInstance>();
-        string count = resultList.Count.ToString();
-        for (int i = 0; i < resultList.Count; i++)
-        {
-            QuentionInstance questionInstance = new QuentionInstance();
-            questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
-            questionInstance.symbol = symbol;
-            questionInstance.instance = resultList[i];
-            dataList.Add(questionInstance);
-        }
-        GameManager.Instance.CurTimeCost = timeCost;
-        GameManager.Instance.CurResultList = dataList;
-        GameManager.Instance.SaveRecord(dataList);
+        GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }
 }

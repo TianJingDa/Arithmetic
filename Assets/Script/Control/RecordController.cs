@@ -30,25 +30,24 @@ public sealed class RecordController : Controller
 
     //File.Delete(string path) 用于删除文件，未确定！！！
 
-    public void SaveRecord(object obj)
+    public void SaveRecord(object obj, string fileName)
     {
         string dirPath = Application.persistentDataPath + "/Save";
         CreateDirectory(dirPath);
-        string fileName = dirPath + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".sav";
-        SetData(fileName, obj);
+        string fileFullName = dirPath + "/" + fileName + ".sav";
+        SetData(fileFullName, obj);
     }
 
-    public Dictionary<string, List<QuentionInstance>> ReadRecord()
+    public List<SaveFileInstance> ReadRecord()
     {
-        Dictionary<string, List<QuentionInstance>> recordDict = new Dictionary<string, List<QuentionInstance>>();
+        List<SaveFileInstance> recordList = new List<SaveFileInstance>();
         string[] fileNames = Directory.GetFiles(Application.persistentDataPath + "/Save", "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
         {
-            List<QuentionInstance> dataList = (List<QuentionInstance>)GetData(fileNames[i], typeof(List<QuentionInstance>));
-            string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
-            recordDict.Add(fileName, dataList);
+            SaveFileInstance saveFileInstance = (SaveFileInstance)GetData(fileNames[i], typeof(SaveFileInstance));
+            recordList.Add(saveFileInstance);
         }
-        return recordDict;
+        return recordList;
     }
 
     /// <summary>

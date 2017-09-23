@@ -18,8 +18,7 @@ public class GameManager : MonoBehaviour
 
     private int[]                                               m_AmountArray;
     private string[]                                            m_SymbolArray;
-    private float                                               m_TimeCost;
-    private List<QuentionInstance>                              m_ResultList;
+    private SaveFileInstance                                    m_SaveFileInstance;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
@@ -102,7 +101,6 @@ public class GameManager : MonoBehaviour
     }
     public CategoryInstance CurCategoryInstance
     {
-        get { return m_CurCategoryInstance; }
         set
         {
             m_CurCategoryInstance = value;
@@ -113,10 +111,9 @@ public class GameManager : MonoBehaviour
             MyDebug.LogGreen(m_CurCategoryInstance.operandID);
         }
     }
-    public List<QuentionInstance> CurResultList
+    public SaveFileInstance CurSaveFileInstance
     {
-        get { return m_ResultList; }
-        set { m_ResultList = value; }
+        get { return m_SaveFileInstance; }
     }
     public int TotalTime
     {
@@ -143,11 +140,6 @@ public class GameManager : MonoBehaviour
             int totalGame = value;
             PlayerPrefs.SetInt("TotalGame", totalGame);
         }
-    }
-    public float CurTimeCost
-    {
-        get { return m_TimeCost; }
-        set { m_TimeCost = value; }
     }
 
 
@@ -216,40 +208,49 @@ public class GameManager : MonoBehaviour
     }
     public List<int> GetQuestionInstance()
     {
-        return c_FightCtrl.GetQuestionInstance(CurCategoryInstance.symbolID, CurCategoryInstance.digitID, CurCategoryInstance.operandID);
+        return c_FightCtrl.GetQuestionInstance(m_CurCategoryInstance.symbolID, m_CurCategoryInstance.digitID, m_CurCategoryInstance.operandID);
     }
     public void GetFightParameter(out string pattern, out float amount, out string symbol)
     {
-        pattern = CurCategoryInstance.patternID.ToString();
-        switch (CurCategoryInstance.patternID)
+        pattern = m_CurCategoryInstance.patternID.ToString();
+        switch (m_CurCategoryInstance.patternID)
         {
             case PatternID.Time:
-                amount = m_AmountArray[(int)CurCategoryInstance.amountID] * 60;
+                amount = m_AmountArray[(int)m_CurCategoryInstance.amountID] * 60;
                 break;
             case PatternID.Number:
-                amount = m_AmountArray[(int)CurCategoryInstance.amountID] * 10;
+                amount = m_AmountArray[(int)m_CurCategoryInstance.amountID] * 10;
                 break;
             default:
                 amount = -1;
                 MyDebug.LogYellow("Can not get AMOUNT!");
                 break;
         }
-        symbol = m_SymbolArray[(int)CurCategoryInstance.symbolID];
-    }
-    public void GetSettlementParameter(out float timeCost, out List<QuentionInstance> resultList)
-    {
-        timeCost    = CurTimeCost;
-        resultList  = CurResultList;
+        symbol = m_SymbolArray[(int)m_CurCategoryInstance.symbolID];
     }
     public void ResetCheckList()
     {
         c_FightCtrl.ResetCheckList();
     }
-    public void SaveRecord(object obj)
+    public void SaveRecord(List<List<int>> resultList, string symbol,float timeCost)
     {
-        c_RecordCtrl.SaveRecord(obj);
+        string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
+        float accuracy = CalculateAccuracy(resultList);
+        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
+        List<string> achievementKeys = CheckAchievement(timeCost, resultList.Count, accuracy);
+
+        SaveFileInstance curSaveFileInstance = new SaveFileInstance();
+        curSaveFileInstance.timeCost = timeCost;
+        curSaveFileInstance.fileName = fileName;
+        curSaveFileInstance.accuracy = accuracy.ToString("f1");
+        curSaveFileInstance.qInstancList = qInstanceList;
+        curSaveFileInstance.achievementKeys = achievementKeys;
+
+        m_SaveFileInstance = curSaveFileInstance;
+        c_RecordCtrl.SaveRecord(curSaveFileInstance, fileName);
     }
-    public Dictionary<string, List<QuentionInstance>> ReadRecord()
+    
+    public List<SaveFileInstance> ReadRecord()
     {
         return c_RecordCtrl.ReadRecord();
     }
@@ -330,8 +331,31 @@ public class GameManager : MonoBehaviour
     {
         return M_CurrentWrapper.id == id;
     }
-
-
+    private float CalculateAccuracy(List<List<int>> resultList)
+    {
+        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
+        float accuracy = (float)rightList.Count * 100 / resultList.Count;
+        return accuracy;
+    }
+    private List<QuentionInstance> ConvertToInstanceList(List<List<int>> resultList, string symbol)
+    {
+        List<QuentionInstance> qInstanceList = new List<QuentionInstance>();
+        string count = resultList.Count.ToString();
+        for (int i = 0; i < resultList.Count; i++)
+        {
+            QuentionInstance questionInstance = new QuentionInstance();
+            questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
+            questionInstance.symbol = symbol;
+            questionInstance.instance = resultList[i];
+            qInstanceList.Add(questionInstance);
+        }
+        return qInstanceList;
+    }
+    private List<string> CheckAchievement(float timeCost, int instanceCount, float accuracy)
+    {
+        List<string> achievementKeys = new List<string>();
+        return achievementKeys;
+    }
     #endregion
 
 }

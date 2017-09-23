@@ -27,7 +27,7 @@ public class SaveFileItem : Item
     {
         Init();
         content = data as SaveFileInstance;
-        saveFileIndex.text = content.title;
+        saveFileIndex.text = content.fileName;
 
         Button btn = GetComponent<Button>();
         btn.onClick.AddListener(OnClick);
@@ -36,14 +36,17 @@ public class SaveFileItem : Item
     private void OnClick()
     {
         detailWin.SetActive(true);
-        ArrayList dataList = new ArrayList(content.instance);
+        ArrayList dataList = new ArrayList(content.qInstancList);
         detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
     }
 
 }
 [Serializable]
-public class SaveFileInstance//还需要添加成就相关字段
+public class SaveFileInstance
 {
-    public string title;
-    public List<QuentionInstance> instance;
+    public float timeCost;
+    public string fileName;
+    public string accuracy;
+    public List<QuentionInstance> qInstancList;
+    public List<string> achievementKeys;//所获成就
 }

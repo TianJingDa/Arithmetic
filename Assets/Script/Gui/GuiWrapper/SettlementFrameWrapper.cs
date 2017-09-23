@@ -7,7 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class SettlementFrameWrapper : GuiFrameWrapper
 {
-    private float timeCost;
     private bool onlyWrong;
 
     private Text settlementTime_Text;
@@ -15,8 +14,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private Text settlementAccuracy_Text;
     private GameObject achievementDetailBgInSettlement;
     private InfiniteList settlementGrid;
-    private List<QuentionInstance> resultList;
+    private SaveFileInstance curSaveFileInstance;
     private List<QuentionInstance> onlyWrongList;
+    private List<QuentionInstance> allInstanceList;
 
     void Start () 
 	{
@@ -68,11 +68,12 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void InitSettlement()
     {
-        GameManager.Instance.GetSettlementParameter(out timeCost, out resultList);
-        settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", timeCost.ToString("f1"));
-        settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", resultList.Count.ToString());
-        onlyWrongList = resultList.FindAll(FindWrong);
-        settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", (100 - ((float)onlyWrongList.Count * 100 / resultList.Count)).ToString("f1"));
+        curSaveFileInstance = GameManager.Instance.CurSaveFileInstance;
+        settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", curSaveFileInstance.timeCost.ToString("f1"));
+        settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", curSaveFileInstance.qInstancList.Count.ToString());
+        settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", curSaveFileInstance.accuracy);
+        allInstanceList = curSaveFileInstance.qInstancList;
+        onlyWrongList = allInstanceList.FindAll(FindWrong);
         onlyWrong = false;
         RefreshSettlementGrid();
     }
@@ -92,7 +93,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         }
         else
         {
-            dataList = new ArrayList(resultList);
+            dataList = new ArrayList(allInstanceList);
         }
         settlementGrid.InitList(dataList, "QuestionItem");
     }

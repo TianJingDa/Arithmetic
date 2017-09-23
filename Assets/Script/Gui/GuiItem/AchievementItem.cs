@@ -20,7 +20,7 @@ public class AchievementItem : Item
     {
         content = data as AchievementInstance;
         Text achievementName = CommonTool.GetComponentByName<Text>(gameObject, "AchievementName");
-        achievementName.text = content.title;
+        achievementName.text = content.achievementKey;
 
         Button btn = GetComponent<Button>();
         btn.onClick.AddListener(OnClick);
@@ -36,7 +36,8 @@ public class AchievementItem : Item
 [Serializable]
 public class AchievementInstance
 {
-    public string title;
+    public string achievementKey;
     public string detail;
+    public string fileName;//存档名
 }
 
