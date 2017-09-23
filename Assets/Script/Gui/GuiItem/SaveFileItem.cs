@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System;
 
 
-public class SaveFileItem : Item,IPointerDownHandler,IPointerUpHandler,IPointerExitHandler,IPointerEnterHandler
+public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPointerClickHandler
 {
     private float durationThreshold = 1.0f;
     private bool isLongPress;
@@ -59,32 +59,22 @@ public class SaveFileItem : Item,IPointerDownHandler,IPointerUpHandler,IPointerE
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        MyDebug.LogYellow("OnPointerDown");
-        //isLongPress = false;
-        //StartCoroutine("TimeCounter");
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        MyDebug.LogYellow("OnPointerUp");
-
-        //if (!isLongPress)
-        //{
-        //    StopCoroutine("TimeCounter");
-        //    OnShortPress();
-        //}
+        isLongPress = false;
+        StartCoroutine("TimeCounter");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        MyDebug.LogYellow("OnPointerExit");
-        //isLongPress = true;
-        //StopCoroutine("TimeCounter");
+        StopCoroutine("TimeCounter");
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        MyDebug.LogYellow("OnPointerEnter"+ eventData.pointerEnter.name);
+        if (!isLongPress)
+        {
+            StopCoroutine("TimeCounter");
+            OnShortPress();
+        }
     }
 }
 [Serializable]
