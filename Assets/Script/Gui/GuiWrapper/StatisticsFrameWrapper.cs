@@ -8,12 +8,11 @@ using UnityEngine.UI;
 /// </summary>
 public class StatisticsFrameWrapper : GuiFrameWrapper
 {
-    private bool onlyWrong;
-
     private GameObject achievementWin;
     private GameObject saveFileWin;
     private GameObject saveFileDetailBg;
-    private GameObject achievementDetailBgInSaveFile;
+    private GameObject deleteSaveFileBg;
+    //private GameObject achievementDetailBgInSaveFile;
     private GameObject achievementDetailBgInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
@@ -21,7 +20,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
-        onlyWrong = false;
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
@@ -31,7 +29,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileGrid                    = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
         achievementGrid                 = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
         saveFileDetailBg                = GameObjectDict["SaveFileDetailBg"];
-        achievementDetailBgInSaveFile   = GameObjectDict["AchievementDetailBgInSaveFile"];
+        deleteSaveFileBg                = GameObjectDict["DeleteSaveFileBg"];
+        //achievementDetailBgInSaveFile   = GameObjectDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInStatistics = GameObjectDict["AchievementDetailBgInStatistics"];
     }
 
@@ -49,33 +48,33 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 achievementWin.SetActive(false);
                 break;
             case "AchievementBtn":
+                achievementWin.SetActive(true);
                 InitAchievementList();
                 break;
             case "AchievementDetailBg":
                 achievementDetailBgInStatistics.SetActive(false);
                 break;
-            case "AchievementDetailBgInSaveFile":
-                achievementDetailBgInSaveFile.SetActive(false);
-                break;
-            case "OnlyWrongBtnInStatistics":
-                onlyWrong = !onlyWrong;
-                RefreshSettlementGrid();
-                break;
-            case "CurAchievementBtnInStatistics":
-                achievementDetailBgInSaveFile.SetActive(true);
-                ShowAchievement();
+            //case "AchievementDetailBgInSaveFile":
+            //    achievementDetailBgInSaveFile.SetActive(false);
+            //    break;
+            case "DeleteSaveFileBg":
+            case "DeleteCancelBtn":
+                deleteSaveFileBg.SetActive(false);
                 break;
             case "Save2StatisticsFrameBtn":
+                GameManager.Instance.CurAction = null;
                 saveFileWin.SetActive(false);
                 break;
             case "SaveFileBtn":
                 saveFileWin.SetActive(true);
+                GameManager.Instance.CurAction = InitSaveFileList;
                 InitSaveFileList();
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
                 saveFileDetailBg.SetActive(false);
                 break;
             case "SaveFileDetai2StatisticsFrameBtn":
+                GameManager.Instance.CurAction = null;
                 saveFileDetailBg.SetActive(false);
                 saveFileWin.SetActive(false);
                 break;
@@ -87,7 +86,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 
     private void InitAchievementList()
     {
-        achievementWin.SetActive(true);
         ArrayList dataList = new ArrayList();
         for(int i = 0; i < 8; i++)
         {
@@ -103,16 +101,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         List<SaveFileInstance> recordList = GameManager.Instance.ReadRecord();
         ArrayList dataList = new ArrayList(recordList);
-        saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailBg);
+        saveFileGrid.InitList(dataList, "SaveFileItem" , saveFileDetailBg, deleteSaveFileBg);
     }
-
-    private void RefreshSettlementGrid()
-    {
-
-    }
-    private void ShowAchievement()
-    {
-
-    }
-
 }

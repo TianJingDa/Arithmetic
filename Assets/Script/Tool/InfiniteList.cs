@@ -26,7 +26,7 @@ public class InfiniteList : MonoBehaviour
     private List<Vector2> childrenAnchoredPostion;
 
 
-    private void Init(string itemName,GameObject detailWin = null)
+    private void Init(string itemName, GameObject detailWin = null, GameObject deleteWin = null)
     {
         if (init) return;
         this.itemName = itemName;
@@ -63,13 +63,20 @@ public class InfiniteList : MonoBehaviour
                 transform.GetChild(i).SendMessage("InitDetailWin", detailWin);
             }
         }
+        if (deleteWin != null)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).SendMessage("InitDeleteWin", deleteWin);
+            }
+        }
         StartCoroutine(RecordChildrenAnchoredPostion());
         init = true;
     }
 
-    public void InitList(ArrayList dataList ,string itemName ,GameObject detailWin = null)
+    public void InitList(ArrayList dataList, string itemName, GameObject detailWin = null, GameObject deleteWin = null)
     {
-        Init(itemName,detailWin);
+        Init(itemName, detailWin, deleteWin);
         gridRectTransform.offsetMin = Vector2.zero;
         gridRectTransform.offsetMax = Vector2.zero;
         this.dataList = dataList;

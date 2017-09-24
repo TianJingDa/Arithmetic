@@ -189,7 +189,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     /// </summary>
     private void ResetSaveFile()
     {
-        MyDebug.LogGreen("ResetSaveFile Success!!!");
+        GameManager.Instance.ResetSaveFile();
     }
     /// <summary>
     /// 重置游戏设置

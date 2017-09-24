@@ -38,8 +38,8 @@ public sealed class RecordController : Controller
     public void SaveRecord(object obj, string fileName)
     {
         CreateDirectory(saveDir);
-        fileFullName = fileFullName.Replace("{0}", fileName);
-        SetData(fileFullName, obj);
+        string fullName = fileFullName.Replace("{0}", fileName);
+        SetData(fullName, obj);
     }
 
     public List<SaveFileInstance> ReadAllRecord()
@@ -56,11 +56,34 @@ public sealed class RecordController : Controller
 
     public SaveFileInstance ReadRecord(string fileName)
     {
-        fileFullName = fileFullName.Replace("{0}",fileName);
-        SaveFileInstance saveFileInstance = (SaveFileInstance)GetData(fileFullName, typeof(SaveFileInstance));
+        string fullName = fileFullName.Replace("{0}",fileName);
+        SaveFileInstance saveFileInstance = (SaveFileInstance)GetData(fullName, typeof(SaveFileInstance));
         return saveFileInstance;
     }
 
+    public void DeleteAllRecord()
+    {
+        string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
+        for(int i = 0; i < fileNames.Length; i++)
+        {
+            File.Delete(fileNames[i]);
+        }
+    }
+
+    public bool DeleteRecord(string fileName)
+    {
+        string fullName = fileFullName.Replace("{0}", fileName);
+        if (File.Exists(fullName))
+        {
+            File.Delete(fullName);
+            return !File.Exists(fullName);
+        }
+        else
+        {
+            MyDebug.LogYellow("The file does not exist!!!");
+            return false;
+        }
+    }
 
     /// <summary>
     /// 创建一个文件夹

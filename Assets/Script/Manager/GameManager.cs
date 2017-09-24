@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
+    private System.Action                                       m_CurAction;                        //用于刷新SaveFile和Achievement列表
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
@@ -114,6 +115,10 @@ public class GameManager : MonoBehaviour
     public SaveFileInstance CurSaveFileInstance
     {
         get { return m_SaveFileInstance; }
+    }
+    public System.Action CurAction
+    {
+        set { m_CurAction = value; }
     }
     public int TotalTime
     {
@@ -253,6 +258,22 @@ public class GameManager : MonoBehaviour
     public List<SaveFileInstance> ReadRecord()
     {
         return c_RecordCtrl.ReadAllRecord();
+    }
+    public void ResetSaveFile()
+    {
+        c_RecordCtrl.DeleteAllRecord();
+    }
+    public void DeleteRecord(string fileName)
+    {
+        if (c_RecordCtrl.DeleteRecord(fileName))
+        {
+            if (m_CurAction != null) m_CurAction();
+            else MyDebug.LogYellow("UnRegister Function!");
+        }
+        else
+        {
+            MyDebug.LogYellow("Delete File Fail!");
+        }
     }
     ///// <summary>
     ///// 激活GUI

@@ -14,6 +14,9 @@ Text_20011,总    数：,TJD
 Text_20012,{0}道,TJD
 Text_20013,正确率：,TJD
 Text_20014,{0}%,TJD
+Text_20015,是否删除？,TJD
+Text_20016,否,TJD
+Text_20017,是，删除,TJD
 Text_30000,选项,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
@@ -84,8 +87,8 @@ Text_40037,重置,TJD
 Text_40038,是否重置,TJD
 Text_40039,否,TJD
 Text_40040,是，重置,TJD
-Text_50000,是否放弃,TJD
-Text_50001,否，继续,TJD
+Text_50000,是否放弃？,TJD
+Text_50001,否,TJD
 Text_50002,是，放弃,TJD
 Text_60000,成绩,TJD
 Text_60001,时    间：,TJD
