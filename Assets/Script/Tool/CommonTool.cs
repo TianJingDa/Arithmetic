@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public static class CommonTool 
 {
@@ -138,7 +140,6 @@ public static class CommonTool
             }
         }
     }
-
     public static Dictionary<string, GameObject> InitGameObjectDict(GameObject root)
     {
         Dictionary<string, GameObject> GameObjectDict = new Dictionary<string, GameObject>();
@@ -150,7 +151,24 @@ public static class CommonTool
         }
         return GameObjectDict;
     }
+    public static void AddEventTriggerListener(GameObject obj, EventTriggerType eventID, UnityAction<BaseEventData> action)
+    {
+        EventTrigger trigger = obj.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = obj.AddComponent<EventTrigger>();
+        }
 
+        if (trigger.triggers.Count == 0)
+        {
+            trigger.triggers = new List<EventTrigger.Entry>();
+        }
 
+        UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(action);
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = eventID;
+        entry.callback.AddListener(callback);
+        trigger.triggers.Add(entry);
+    }
 
 }

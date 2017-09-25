@@ -18,84 +18,22 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     private GameObject deleteWin;
     private Text saveFileIndex;
 
-
-    private void InitDetailWin(GameObject detailWin)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        this.detailWin = detailWin;
+        isLongPress = false;
+        StartCoroutine("TimeCounter");
     }
-
-    private void InitDeleteWin(GameObject deleteWin)
+    public void OnPointerExit(PointerEventData eventData)
     {
-        this.deleteWin = deleteWin;
+        StopCoroutine("TimeCounter");
     }
-
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        saveFileIndex = GameObjectDict["SaveFileIndex"].GetComponent<Text>();
-    }
-
-
-    private void InitPrefabItem(object data)
-    {
-        Init();
-        content = data as SaveFileInstance;
-        saveFileIndex.text = content.fileName;
-
-    }
-
-    private void OnShortPress()
-    {
-        detailWin.SetActive(true);
-        Text saveFileDetailTime_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime_Text");
-        Text saveFileDetailAmount_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAmount_Text");
-        Text saveFileDetailAccuracy_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy_Text");
-        Button onlyWrongBtnInStatistics = CommonTool.GetComponentByName<Button>(detailWin, "OnlyWrongBtnInStatistics");
-        Button curAchievementBtnInStatistics = CommonTool.GetComponentByName<Button>(detailWin, "CurAchievementBtnInStatistics");
-        saveFileDetailTime_Text.text = saveFileDetailTime_Text.text.Replace("{0}", content.timeCost.ToString("f1"));
-        saveFileDetailAmount_Text.text = saveFileDetailAmount_Text.text.Replace("{0}", content.qInstancList.Count.ToString());
-        saveFileDetailAccuracy_Text.text = saveFileDetailAccuracy_Text.text.Replace("{0}", content.accuracy);
-        onlyWrongList = content.qInstancList.FindAll(FindWrong);
-        onlyWrong = false;
-        RefreshSettlementGrid();
-        onlyWrongBtnInStatistics.onClick.AddListener(OnOnlyWrongBtn);
-    }
-
-    private void OnOnlyWrongBtn()
-    {
-        onlyWrong = !onlyWrong;
-        RefreshSettlementGrid();
-    }
-
-    private void RefreshSettlementGrid()
-    {
-        ArrayList dataList;
-        if (onlyWrong)
+        if (!isLongPress)
         {
-            dataList = new ArrayList(onlyWrongList);
+            StopCoroutine("TimeCounter");
+            OnShortPress();
         }
-        else
-        {
-            dataList = new ArrayList(content.qInstancList);
-        }
-        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
-    }
-
-    private bool FindWrong(QuentionInstance questionInstance)
-    {
-        int count = questionInstance.instance.Count;
-        return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
-    }
-
-    private void OnLongPress()
-    {
-        deleteWin.SetActive(true);
-        Button deleteConfirmBtn = CommonTool.GetComponentByName<Button>(deleteWin, "DeleteConfirmBtn");
-        deleteConfirmBtn.onClick.AddListener(
-            () => 
-            {
-                deleteWin.SetActive(false);
-                GameManager.Instance.DeleteRecord(content.fileName);
-            } );
     }
     private IEnumerator TimeCounter()
     {
@@ -109,25 +47,83 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         OnLongPress();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        isLongPress = false;
-        StartCoroutine("TimeCounter");
+        saveFileIndex = GameObjectDict["SaveFileIndex"].GetComponent<Text>();
+    }
+    private void InitDetailWin(GameObject detailWin)
+    {
+        this.detailWin = detailWin;
+    }
+    private void InitDeleteWin(GameObject deleteWin)
+    {
+        this.deleteWin = deleteWin;
+    }
+    private void InitPrefabItem(object data)
+    {
+        Init();
+        content = data as SaveFileInstance;
+        saveFileIndex.text = content.fileName;
+
+    }
+    private void OnShortPress()
+    {
+        detailWin.SetActive(true);
+        Text saveFileDetailTime_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime_Text");
+        Text saveFileDetailAmount_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAmount_Text");
+        Text saveFileDetailAccuracy_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy_Text");
+        GameObject onlyWrongBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongBtnInStatistics");
+        GameObject curAchievementBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "CurAchievementBtnInStatistics");
+        saveFileDetailTime_Text.text = saveFileDetailTime_Text.text.Replace("{0}", content.timeCost.ToString("f1"));
+        saveFileDetailAmount_Text.text = saveFileDetailAmount_Text.text.Replace("{0}", content.qInstancList.Count.ToString());
+        saveFileDetailAccuracy_Text.text = saveFileDetailAccuracy_Text.text.Replace("{0}", content.accuracy);
+        onlyWrongList = content.qInstancList.FindAll(FindWrong);
+        onlyWrong = false;
+        RefreshSettlementGrid();
+        CommonTool.AddEventTriggerListener(onlyWrongBtnInStatistics, EventTriggerType.PointerClick, OnOnlyWrongBtn);
+        CommonTool.AddEventTriggerListener(curAchievementBtnInStatistics, EventTriggerType.PointerClick, OnAchievementBtn);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    private void OnAchievementBtn(BaseEventData data)
     {
-        StopCoroutine("TimeCounter");
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
+    }
+    private void OnOnlyWrongBtn(BaseEventData data)
     {
-        if (!isLongPress)
+        onlyWrong = !onlyWrong;
+        RefreshSettlementGrid();
+    }
+    private void RefreshSettlementGrid()
+    {
+        ArrayList dataList;
+        if (onlyWrong)
         {
-            StopCoroutine("TimeCounter");
-            OnShortPress();
+            dataList = new ArrayList(onlyWrongList);
         }
+        else
+        {
+            dataList = new ArrayList(content.qInstancList);
+        }
+        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
     }
+    private bool FindWrong(QuentionInstance questionInstance)
+    {
+        int count = questionInstance.instance.Count;
+        return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
+    }
+
+    private void OnLongPress()
+    {
+        deleteWin.SetActive(true);
+        GameObject deleteConfirmBtn = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtn");
+        CommonTool.AddEventTriggerListener(deleteConfirmBtn, EventTriggerType.PointerClick, OnLongPress);
+    }
+    private void OnLongPress(BaseEventData data)
+    {
+        deleteWin.SetActive(false);
+        GameManager.Instance.DeleteRecord(content.fileName);
+    }
+
 }
 [Serializable]
 public class SaveFileInstance

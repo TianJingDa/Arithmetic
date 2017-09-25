@@ -136,17 +136,17 @@ public sealed class FightController : Controller
     private List<int> GetDivisionInstance(DigitID digitID, OperandID operandID)
     {
         List<int> instance = null;
-        int min = (int)Mathf.Pow(10, (int)digitID - 1);
-        int max = (int)Mathf.Pow(10, (int)digitID + 1);
+        int min = 1;
+        int max = 1000;
         int product = 0;
         do
         {
             instance = GetInstance(min + 1, max, (int)operandID);
         }
-        while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || CanDevide(instance, min, max, out product));
+        while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanDevide(instance, digitID, out product));
         checkList.Add(instance);
         instance = Shuffle(instance);
-        instance[0] = product;
+        instance.Insert(0, product);
         return instance;
     }
     /// <summary>
@@ -251,7 +251,7 @@ public sealed class FightController : Controller
     /// <returns></returns>
     private bool CanMultiply(List<int> instance, int min)
     {
-        return instance[0] * instance[1] > (10 * min - 1) * (10 * min - 1);
+        return instance[0] > min && instance[1] > 10 * min;
     }
     /// <summary>
     /// 是否满足除法条件
@@ -260,14 +260,24 @@ public sealed class FightController : Controller
     /// <param name="min"></param>
     /// <param name="max"></param>
     /// <returns></returns>
-    private bool CanDevide(List<int> instance, int min, int max, out int product)
+    private bool CanDevide(List<int> instance, DigitID digitID, out int product)
     {
-        product = 1;
-        for(int i = 0; i < instance.Count; i++)
+        long tempProduct = 1;
+        int max = (int)Mathf.Pow(10, (int)digitID + 1);
+        for (int i = 0; i < instance.Count; i++)
         {
-            product *= instance[i];
+            tempProduct *= instance[i];
         }
-        return (product > min && product < max);
+        if (tempProduct > max && tempProduct < max * 10)
+        {
+            product = (int)tempProduct;
+            return true;
+        }
+        else
+        {
+            product = 1;
+            return false;
+        }
     }
     /// <summary>
     /// 打乱排序
