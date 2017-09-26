@@ -166,6 +166,17 @@ public class UITool : Editor
 
         return imageDict;
     }
+    [MenuItem("Custom Editor/抓取布局")]
+    public static void GetLayout()
+    {
+        Dictionary<string, RectTransform> rectTransformDict = new Dictionary<string, RectTransform>();
+        for (int i = 0; i < Selection.gameObjects.Length; i++)
+        {
+            RectTransform[] rectTransformArray = Selection.gameObjects[i].GetComponentsInChildren<RectTransform>(true);
+            rectTransformDict.Add(rectTransformArray[i].name, rectTransformArray[i]);
+        }
+        IOHelper.SetData(Application.dataPath + "/Resources/Layout/Vertical/Default.sav", rectTransformDict);
+    }
 
 
 }

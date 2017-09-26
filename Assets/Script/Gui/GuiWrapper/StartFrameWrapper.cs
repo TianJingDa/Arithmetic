@@ -14,7 +14,8 @@ public class StartFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.StartFrame;
         Init();
-        //List<QuentionInstance> dataList = (List<QuentionInstance>)IOHelper.GetData(@"C:\Users\TJD\AppData\LocalLow\DefaultCompany\Arithmetic\Save\20170920235811.sav", typeof(List<QuentionInstance>));
+        //string path = Application.dataPath + "/Resources/20170926220735.sav";
+        //SaveFileInstance dataList = (SaveFileInstance)IOHelper.GetData(path, typeof(SaveFileInstance));
     }
 
     protected override void OnButtonClick(Button btn)
