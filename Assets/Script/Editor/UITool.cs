@@ -169,11 +169,20 @@ public class UITool : Editor
     [MenuItem("Custom Editor/抓取布局")]
     public static void GetLayout()
     {
-        Dictionary<string, RectTransform> rectTransformDict = new Dictionary<string, RectTransform>();
-        for (int i = 0; i < Selection.gameObjects.Length; i++)
+        Dictionary<string, MyRectTransform> rectTransformDict = new Dictionary<string, MyRectTransform>();
+        RectTransform[] rectTransformArray = Selection.gameObjects[0].GetComponentsInChildren<RectTransform>(true);
+        for (int i = 0; i < rectTransformArray.Length; i++)
         {
-            RectTransform[] rectTransformArray = Selection.gameObjects[i].GetComponentsInChildren<RectTransform>(true);
-            rectTransformDict.Add(rectTransformArray[i].name, rectTransformArray[i]);
+            if (rectTransformArray[i].name == "FightFrame") continue;
+            MyRectTransform rect = new MyRectTransform();
+            rect.anchorMax = new Vector2(rectTransformArray[i].anchorMax.x, rectTransformArray[i].anchorMax.y);
+            rect.anchorMin = rectTransformArray[i].anchorMin;
+            rect.offsetMax = rectTransformArray[i].offsetMax;
+            rect.offsetMin = rectTransformArray[i].offsetMin;
+            rect.pivot = rectTransformArray[i].pivot;
+            rect.localEulerAngles = rectTransformArray[i].localEulerAngles;
+
+            rectTransformDict.Add(rectTransformArray[i].name, rect);
         }
         IOHelper.SetData(Application.dataPath + "/Resources/Layout/Vertical/Default.sav", rectTransformDict);
     }

@@ -14,8 +14,8 @@ public class StartFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.StartFrame;
         Init();
-        //string path = Application.dataPath + "/Resources/20170926220735.sav";
-        //SaveFileInstance dataList = (SaveFileInstance)IOHelper.GetData(path, typeof(SaveFileInstance));
+        //string path = Application.dataPath + "/Resources/Layout/Vertical/Default.sav";
+        //Dictionary<string, RectTransform> dataList = (Dictionary<string, RectTransform>)IOHelper.GetData(path, typeof(Dictionary<string, RectTransform>));
     }
 
     protected override void OnButtonClick(Button btn)

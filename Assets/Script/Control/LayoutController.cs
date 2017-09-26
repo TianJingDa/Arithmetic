@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class LayoutController : Controller 
 {
@@ -29,4 +30,14 @@ public class LayoutController : Controller
         RectTransform[] transforms = null;
         return transforms;
     }
+}
+[Serializable]
+public class MyRectTransform
+{
+    public Vector2 anchorMax;
+    public Vector2 anchorMin;
+    public Vector2 offsetMax;
+    public Vector2 offsetMin;
+    public Vector2 pivot;
+    public Vector3 localEulerAngles;
 }
