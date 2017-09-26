@@ -136,8 +136,18 @@ public sealed class FightController : Controller
     private List<int> GetDivisionInstance(DigitID digitID, OperandID operandID)
     {
         List<int> instance = null;
-        int min = 1;
-        int max = 1000;
+        int min = 0;
+        int max = 0;
+        if(digitID == DigitID.FourDigits && operandID == OperandID.TwoNumbers)
+        {
+            min = 10;
+            max = 1000;
+        }
+        else
+        {
+            min = 1;
+            max = 100;
+        }
         int product = 0;
         do
         {
@@ -262,22 +272,13 @@ public sealed class FightController : Controller
     /// <returns></returns>
     private bool CanDevide(List<int> instance, DigitID digitID, out int product)
     {
-        long tempProduct = 1;
+        product = 1;
         int max = (int)Mathf.Pow(10, (int)digitID + 1);
         for (int i = 0; i < instance.Count; i++)
         {
-            tempProduct *= instance[i];
+            product *= instance[i];
         }
-        if (tempProduct > max && tempProduct < max * 10)
-        {
-            product = (int)tempProduct;
-            return true;
-        }
-        else
-        {
-            product = 1;
-            return false;
-        }
+        return product > max && product < max * 10;
     }
     /// <summary>
     /// 打乱排序

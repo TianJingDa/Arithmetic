@@ -131,7 +131,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 delta = 0;
                 break;
             case 3:
-                digitDropdown.options = digitDropdownOptionsList.GetRange(1, 3);
+                digitDropdown.options = digitDropdownOptionsList.GetRange(1, 2);
                 delta = 1;
                 break;
         }

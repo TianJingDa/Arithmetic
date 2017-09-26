@@ -17,10 +17,12 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     private GameObject detailWin;
     private GameObject deleteWin;
     private Text saveFileIndex;
+    private Vector3 pivotPos;
 
     public void OnPointerDown(PointerEventData eventData)
     {
         isLongPress = false;
+        pivotPos = transform.TransformPoint(((RectTransform)transform).pivot);
         StartCoroutine("TimeCounter");
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -44,7 +46,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             yield return null;
         }
         isLongPress = true;
-        OnLongPress();
+        Vector3 curPivotPos = transform.TransformPoint(((RectTransform)transform).pivot);
+        float distance = Mathf.Abs(pivotPos.y - curPivotPos.y);
+        if (distance <= 2) OnLongPress();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
