@@ -34,8 +34,8 @@ public class FightFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         id = GuiFrameID.FightFrame;
-        RectTransform[] transforms = GameManager.Instance.GetLayoutData();
-        InitLayout(transforms);
+        Dictionary<string, MyRectTransform> rectTransforms = GameManager.Instance.GetLayoutData();
+        InitLayout(rectTransforms);
         Init();
 
         timeCost    = 0;
@@ -107,9 +107,19 @@ public class FightFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private void InitLayout(RectTransform[] transforms)
+    private void InitLayout(Dictionary<string, MyRectTransform> transforms)
     {
-
+        Dictionary<string, RectTransform> rectTransformDict = CommonTool.InitRectTransformDict(gameObject);
+        foreach(KeyValuePair<string, MyRectTransform> pair in transforms)
+        {
+            RectTransform myTrans = rectTransformDict[pair.Key];
+            myTrans.pivot = new Vector2(pair.Value.pivot.x, pair.Value.pivot.y);
+            myTrans.anchorMax = new Vector2(pair.Value.anchorMax.x, pair.Value.anchorMax.y);
+            myTrans.anchorMin = new Vector2(pair.Value.anchorMin.x, pair.Value.anchorMin.y);
+            myTrans.offsetMax = new Vector2(pair.Value.offsetMax.x, pair.Value.offsetMax.y);
+            myTrans.offsetMin = new Vector2(pair.Value.offsetMin.x, pair.Value.offsetMin.y);
+            myTrans.localEulerAngles = new Vector3(pair.Value.localEulerAngles.x, pair.Value.localEulerAngles.y, pair.Value.localEulerAngles.z);
+        }
     }
 
     private IEnumerator StartFight()

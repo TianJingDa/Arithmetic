@@ -142,14 +142,24 @@ public static class CommonTool
     }
     public static Dictionary<string, GameObject> InitGameObjectDict(GameObject root)
     {
-        Dictionary<string, GameObject> GameObjectDict = new Dictionary<string, GameObject>();
+        Dictionary<string, GameObject> gameObjectDict = new Dictionary<string, GameObject>();
         Transform[] gameObjectArray = root.GetComponentsInChildren<Transform>(true);
         for (int i = 0; i < gameObjectArray.Length; i++)
         {
             //MyDebug.LogYellow(gameObjectArray[i].name);
-            GameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+            gameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
         }
-        return GameObjectDict;
+        return gameObjectDict;
+    }
+    public static Dictionary<string, RectTransform> InitRectTransformDict(GameObject root)
+    {
+        Dictionary<string, RectTransform> rectTransformDict = new Dictionary<string, RectTransform>();
+        RectTransform[] rectTransformArray = root.GetComponentsInChildren<RectTransform>(true);
+        for (int i = 0; i < rectTransformArray.Length; i++)
+        {
+            rectTransformDict.Add(rectTransformArray[i].name, rectTransformArray[i]);
+        }
+        return rectTransformDict;
     }
     public static void AddEventTriggerListener(GameObject obj, EventTriggerType eventID, UnityAction<BaseEventData> action)
     {

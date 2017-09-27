@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using System.IO;
 
 public class UITool : Editor 
 {
@@ -175,16 +176,17 @@ public class UITool : Editor
         {
             if (rectTransformArray[i].name == "FightFrame") continue;
             MyRectTransform rect = new MyRectTransform();
-            rect.anchorMax = new Vector2(rectTransformArray[i].anchorMax.x, rectTransformArray[i].anchorMax.y);
-            rect.anchorMin = rectTransformArray[i].anchorMin;
-            rect.offsetMax = rectTransformArray[i].offsetMax;
-            rect.offsetMin = rectTransformArray[i].offsetMin;
-            rect.pivot = rectTransformArray[i].pivot;
-            rect.localEulerAngles = rectTransformArray[i].localEulerAngles;
+            rect.pivot = new MyVector2(rectTransformArray[i].pivot.x, rectTransformArray[i].pivot.y);
+            rect.anchorMax = new MyVector2(rectTransformArray[i].anchorMax.x, rectTransformArray[i].anchorMax.y);
+            rect.anchorMin = new MyVector2(rectTransformArray[i].anchorMin.x, rectTransformArray[i].anchorMin.y);
+            rect.offsetMax = new MyVector2(rectTransformArray[i].offsetMax.x, rectTransformArray[i].offsetMax.y);
+            rect.offsetMin = new MyVector2(rectTransformArray[i].offsetMin.x, rectTransformArray[i].offsetMin.y);
+            rect.localEulerAngles = new MyVector3(rectTransformArray[i].localEulerAngles.x, rectTransformArray[i].localEulerAngles.y, rectTransformArray[i].localEulerAngles.z);
 
             rectTransformDict.Add(rectTransformArray[i].name, rect);
         }
-        IOHelper.SetData(Application.dataPath + "/Resources/Layout/Vertical/Default.sav", rectTransformDict);
+        string path = Application.dataPath + "/Resources/Layout/Vertical/Default.txt";
+        IOHelper.SetData(path, rectTransformDict);
     }
 
 

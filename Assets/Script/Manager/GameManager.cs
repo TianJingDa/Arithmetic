@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
     {
         return c_TextColorCtrl.GetColorData(CurSkinID, index);
     }
-    public RectTransform[] GetLayoutData()
+    public Dictionary<string, MyRectTransform> GetLayoutData()
     {
         return c_LayoutCtrl.GetLayoutData(CurLayoutID, CurHandednessID);
     }
