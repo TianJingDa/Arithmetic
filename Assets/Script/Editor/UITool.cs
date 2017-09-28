@@ -185,7 +185,7 @@ public class UITool : Editor
 
             rectTransformDict.Add(rectTransformArray[i].name, rect);
         }
-        string path = Application.dataPath + "/Resources/Layout/Vertical/Left.txt";
+        string path = Application.dataPath + "/Resources/Layout/Vertical/Right.txt";
         IOHelper.SetData(path, rectTransformDict);
     }
 
