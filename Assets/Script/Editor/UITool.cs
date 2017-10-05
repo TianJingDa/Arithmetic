@@ -188,6 +188,35 @@ public class UITool : Editor
         string path = Application.dataPath + "/Resources/Layout/Vertical/Right.txt";
         IOHelper.SetData(path, rectTransformDict);
     }
+    [MenuItem("Custom Editor/生成试题")]
+    public static void ProduceQuestion()
+    {
+        List<List<int>> questionList = new List<List<int>>();
+        for(int i = 10; i < 1000; i++)
+        {
+            for(int j = i + 1; j < 1000; j++)
+            {
+                if (i * j % 10 != 0 && i * j > 1000 && i * j < 10000)
+                {
+                    List<int> list = new List<int>();
+                    list.Add(i);
+                    list.Add(j);
+                    questionList.Add(list);
+                }
+
+                //for (int k = j + 1; k < 100; k++)
+                //{
+                //}
+            }
+        }
+        Debug.Log(questionList.Count.ToString());
+        DivisionDataBase data = new DivisionDataBase();
+        data.digitID = DigitID.FourDigits;
+        data.operandID = OperandID.TwoNumbers;
+        data.questionList = questionList;
+        string path = Application.dataPath + "/Resources/FightData/d_4_2List.data";
+        IOHelper.SetData(path, data);
+    }
 
 
 }

@@ -18,6 +18,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     private string              pattern;
     private string              symbol;
     private StringBuilder       result;
+    private StringBuilder       question;
 
     private GameObject          giveUpBg;
     private GameObject          countdownBg;
@@ -41,11 +42,12 @@ public class FightFrameWrapper : GuiFrameWrapper
         timeCost    = 0;
         order       = true;
         result      = new StringBuilder();
+        question    = new StringBuilder();
         resultList  = new List<List<int>>();
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsByName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
-        GameManager.Instance.ResetCheckList();
+        GameManager.Instance.ResetList();
         ClearAllText();
         StartCoroutine(StartFight());
     }
@@ -99,6 +101,8 @@ public class FightFrameWrapper : GuiFrameWrapper
                 giveUpBg.SetActive(false);
                 break;
             case "ConfirmBtn":
+                StopAllCoroutines();
+                CancelInvoke();
                 GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.CategoryFrame);
                 break;
             default:
@@ -133,7 +137,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         countdownBg.SetActive(false);
         ShowNextQuestion();
         startTime = Time.realtimeSinceStartup;
-        InvokeRepeating(pattern + "Pattern", 0.1f, 0.1f);
+        InvokeRepeating(pattern + "Pattern", 0f, 0.1f);
     }
 
     private void ClearAllText()
@@ -145,10 +149,9 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void TimePattern()
     {
-        float curTime = Time.realtimeSinceStartup;
-        timeCost = curTime - startTime;
+        timeCost = Time.realtimeSinceStartup - startTime;
         timeBtn_Text.text = (amount - timeCost).ToString("f1") + "s";
-        if (amount <= 0)
+        if (amount - timeCost <= 0)
         {
             FightOver();
         }
@@ -156,8 +159,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void NumberPattern()
     {
-        float curTime = Time.realtimeSinceStartup;
-        timeCost = curTime - startTime;
+        timeCost = Time.realtimeSinceStartup - startTime;
         timeBtn_Text.text = timeCost.ToString("f1") + "s";
     }
 
@@ -184,7 +186,12 @@ public class FightFrameWrapper : GuiFrameWrapper
             }
         }
         curInstance = GameManager.Instance.GetQuestionInstance();
-        StringBuilder question = new StringBuilder();
+        if (curInstance == null)
+        {
+            MyDebug.LogYellow("curInstance is NULL!");
+            FightOver();
+        }
+        question.Length = 0;
         question.Append(curInstance[0].ToString());
         for(int i = 1; i < curInstance.Count - 1; i++)
         {
@@ -215,6 +222,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     private void FightOver()
     {
+        CancelInvoke();
         GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }

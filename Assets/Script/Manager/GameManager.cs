@@ -211,6 +211,10 @@ public class GameManager : MonoBehaviour
     {
         return c_LayoutCtrl.GetLayoutData(CurLayoutID, CurHandednessID);
     }
+    public void ResetList()
+    {
+        c_FightCtrl.ResetList(m_CurCategoryInstance.symbolID, m_CurCategoryInstance.digitID, m_CurCategoryInstance.operandID);
+    }
     public List<int> GetQuestionInstance()
     {
         return c_FightCtrl.GetQuestionInstance(m_CurCategoryInstance.symbolID, m_CurCategoryInstance.digitID, m_CurCategoryInstance.operandID);
@@ -232,10 +236,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
         symbol = m_SymbolArray[(int)m_CurCategoryInstance.symbolID];
-    }
-    public void ResetCheckList()
-    {
-        c_FightCtrl.ResetCheckList();
     }
     public void SaveRecord(List<List<int>> resultList, string symbol,float timeCost)
     {

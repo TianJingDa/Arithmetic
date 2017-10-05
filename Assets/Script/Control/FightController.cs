@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public sealed class FightController : Controller
 {
     #region C#单例
@@ -9,6 +10,8 @@ public sealed class FightController : Controller
     private FightController()
     {
         base.id = ControllerID.FightController;
+        checkList = new List<List<int>>();
+        dataBase = new List<DivisionDataBase>();
         InitFightData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -18,16 +21,32 @@ public sealed class FightController : Controller
     }
     #endregion
 
+    private List<List<int>> workList;
     private List<List<int>> checkList;
+    private List<DivisionDataBase> dataBase;
 
     private void InitFightData()
     {
-        checkList = new List<List<int>>();
+        DivisionDataBase d_3_2List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_3_2List.data", typeof(DivisionDataBase));
+        DivisionDataBase d_3_3List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_3_3List.data", typeof(DivisionDataBase));
+        DivisionDataBase d_4_2List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_4_2List.data", typeof(DivisionDataBase));
+        DivisionDataBase d_4_3List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_4_3List.data", typeof(DivisionDataBase));
+        dataBase.Add(d_3_2List);
+        dataBase.Add(d_3_3List);
+        dataBase.Add(d_4_2List);
+        dataBase.Add(d_4_3List);
     }
 
-    public void ResetCheckList()
+    public void ResetList(SymbolID symbolID, DigitID digitID, OperandID operandID)
     {
-        checkList.Clear();
+        if (symbolID == SymbolID.Division)
+        {
+            workList = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID).questionList;
+        }
+        else
+        {
+            checkList.Clear();
+        }
     }
     /// <summary>
     /// 获取试题
@@ -135,28 +154,33 @@ public sealed class FightController : Controller
     /// <returns></returns>
     private List<int> GetDivisionInstance(DigitID digitID, OperandID operandID)
     {
-        List<int> instance = null;
-        int min = 0;
-        int max = 0;
-        if(digitID == DigitID.FourDigits && operandID == OperandID.TwoNumbers)
-        {
-            min = 10;
-            max = 1000;
-        }
-        else
-        {
-            min = 1;
-            max = 100;
-        }
-        int product = 0;
-        do
-        {
-            instance = GetInstance(min + 1, max, (int)operandID);
-        }
-        while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanDevide(instance, digitID, out product));
-        checkList.Add(instance);
+        #region 原算法
+        //int min = 0;
+        //int max = 0;
+        //if(digitID == DigitID.FourDigits && operandID == OperandID.TwoNumbers)
+        //{
+        //    min = 10;
+        //    max = 1000;
+        //}
+        //else
+        //{
+        //    min = 1;
+        //    max = 100;
+        //}
+        //
+        //do
+        //{
+        //    instance = GetInstance(min + 1, max, (int)operandID);
+        //}
+        //while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanDevide(instance, digitID, out product));
+        #endregion
+        if (workList.Count <= 0) return null;
+        int index = Random.Range(0, workList.Count);
+        List<int> instance = workList[index];
+        int product = GetProduct(instance);
         instance = Shuffle(instance);
         instance.Insert(0, product);
+        workList.RemoveAt(index);
         return instance;
     }
     /// <summary>
@@ -327,4 +351,10 @@ public sealed class FightController : Controller
         return product;
     }
 }
-
+[System.Serializable]
+public class DivisionDataBase
+{
+    public DigitID digitID;
+    public OperandID operandID;
+    public List<List<int>> questionList;
+}
