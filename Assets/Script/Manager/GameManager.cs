@@ -120,17 +120,17 @@ public class GameManager : MonoBehaviour
     {
         set { m_CurAction = value; }
     }
-    public int TotalTime
+    public float TotalTime
     {
         get
         {
-            int totalTime = PlayerPrefs.GetInt("TotalTime", 0);
+            float totalTime = PlayerPrefs.GetFloat("TotalTime", 0);
             return totalTime;
         }
         set
         {
-            int totalTime = value;
-            PlayerPrefs.SetInt("TotalTime", totalTime);
+            float totalTime = value;
+            PlayerPrefs.SetFloat("TotalTime", totalTime);
         }
     }
     public int TotalGame

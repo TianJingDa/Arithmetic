@@ -35,7 +35,7 @@ public sealed class RecordController : Controller
     public void SaveRecord(object obj, string fileName)
     {
         if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
-        string fullName = fileFullName.Replace("{0}", fileName);
+        string fullName = string.Format(fileFullName, fileName);
         IOHelper.SetData(fullName, obj);
     }
 
@@ -53,7 +53,7 @@ public sealed class RecordController : Controller
 
     public SaveFileInstance ReadRecord(string fileName)
     {
-        string fullName = fileFullName.Replace("{0}",fileName);
+        string fullName = string.Format(fileFullName, fileName);
         SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetData(fullName, typeof(SaveFileInstance));
         return saveFileInstance;
     }
@@ -69,7 +69,7 @@ public sealed class RecordController : Controller
 
     public bool DeleteRecord(string fileName)
     {
-        string fullName = fileFullName.Replace("{0}", fileName);
+        string fullName = string.Format(fileFullName, fileName);
         if (File.Exists(fullName))
         {
             File.Delete(fullName);

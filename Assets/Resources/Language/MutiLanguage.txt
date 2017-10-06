@@ -1,7 +1,7 @@
 Index,Chinese,English
 Text_20000,统计数据,TJD
 Text_20001,游戏时间,TJD
-Text_20002,{0}小时{1}分钟,TJD
+Text_20002,{0}小时{1}分钟{2}秒,TJD
 Text_20003,游戏次数,TJD
 Text_20004,{0}次,TJD
 Text_20005,成就,TJD

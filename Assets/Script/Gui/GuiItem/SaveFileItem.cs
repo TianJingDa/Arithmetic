@@ -81,9 +81,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Text saveFileDetailAccuracy_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy_Text");
         GameObject onlyWrongBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongBtnInStatistics");
         GameObject curAchievementBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "CurAchievementBtnInStatistics");
-        saveFileDetailTime_Text.text = saveFileDetailTime_Text.text.Replace("{0}", content.timeCost.ToString("f1"));
-        saveFileDetailAmount_Text.text = saveFileDetailAmount_Text.text.Replace("{0}", content.qInstancList.Count.ToString());
-        saveFileDetailAccuracy_Text.text = saveFileDetailAccuracy_Text.text.Replace("{0}", content.accuracy);
+        saveFileDetailTime_Text.text = string.Format(saveFileDetailTime_Text.text, content.timeCost.ToString("f1"));
+        saveFileDetailAmount_Text.text = string.Format(saveFileDetailAmount_Text.text, content.qInstancList.Count);
+        saveFileDetailAccuracy_Text.text = string.Format(saveFileDetailAccuracy_Text.text, content.accuracy);
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         onlyWrong = false;
         RefreshSettlementGrid();

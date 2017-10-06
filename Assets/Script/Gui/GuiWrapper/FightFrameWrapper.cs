@@ -223,6 +223,8 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
+        GameManager.Instance.TotalTime += timeCost;
+        GameManager.Instance.TotalGame++;
         GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
     }

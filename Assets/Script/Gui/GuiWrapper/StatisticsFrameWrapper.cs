@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// 统计数据界面
 /// </summary>
 public class StatisticsFrameWrapper : GuiFrameWrapper
 {
+    private Text totelTimeImg_Text2;
+    private Text totelGameImg_Text2;
     private GameObject achievementWin;
     private GameObject saveFileWin;
     private GameObject saveFileDetailBg;
@@ -20,6 +23,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
+        int totalTime = (int)GameManager.Instance.TotalTime;
+        TimeSpan ts = new TimeSpan(0, 0, totalTime);
+        totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
+        totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
@@ -30,6 +37,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementGrid                 = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
         saveFileDetailBg                = GameObjectDict["SaveFileDetailBg"];
         deleteSaveFileBg                = GameObjectDict["DeleteSaveFileBg"];
+        totelTimeImg_Text2              = GameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
+        totelGameImg_Text2              = GameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
         //achievementDetailBgInSaveFile   = GameObjectDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInStatistics = GameObjectDict["AchievementDetailBgInStatistics"];
     }

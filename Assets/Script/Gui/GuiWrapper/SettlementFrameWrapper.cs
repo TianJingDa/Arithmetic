@@ -69,9 +69,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private void InitSettlement()
     {
         curSaveFileInstance = GameManager.Instance.CurSaveFileInstance;
-        settlementTime_Text.text = settlementTime_Text.text.Replace("{0}", curSaveFileInstance.timeCost.ToString("f1"));
-        settlementAmount_Text.text = settlementAmount_Text.text.Replace("{0}", curSaveFileInstance.qInstancList.Count.ToString());
-        settlementAccuracy_Text.text = settlementAccuracy_Text.text.Replace("{0}", curSaveFileInstance.accuracy);
+        settlementTime_Text.text = string.Format(settlementTime_Text.text, curSaveFileInstance.timeCost.ToString("f1"));
+        settlementAmount_Text.text = string.Format(settlementAmount_Text.text, curSaveFileInstance.qInstancList.Count);
+        settlementAccuracy_Text.text = string.Format(settlementAccuracy_Text.text, curSaveFileInstance.accuracy);
         allInstanceList = curSaveFileInstance.qInstancList;
         onlyWrongList = allInstanceList.FindAll(FindWrong);
         onlyWrong = false;
