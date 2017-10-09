@@ -146,8 +146,33 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("TotalGame", totalGame);
         }
     }
-
-
+    public bool NewAchievement
+    {
+        get
+        {
+            int newAchievement = PlayerPrefs.GetInt("NewAchievement", 0);
+            return newAchievement != 0;
+        }
+        set
+        {
+            int newAchievement = value ? 1 : 0;
+            PlayerPrefs.SetInt("NewAchievement", newAchievement);
+        }
+    }
+    public bool NewSaveFile
+    {
+        get
+        {
+            int newSaveFile = PlayerPrefs.GetInt("NewSaveFile", 0);
+            return newSaveFile != 0;
+        }
+        set
+        {
+            int newSaveFile = value ? 1 : 0;
+            PlayerPrefs.SetInt("NewSaveFile", newSaveFile);
+        }
+    }
+    
     public static GameManager Instance//单例
     {
         get;
