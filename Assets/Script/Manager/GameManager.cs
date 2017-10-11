@@ -267,14 +267,15 @@ public class GameManager : MonoBehaviour
         string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         float accuracy = CalculateAccuracy(resultList);
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        List<string> achievementKeys = CheckAchievement(timeCost, resultList.Count, accuracy);
+        string achievementKey = CheckAchievement(timeCost, resultList.Count, accuracy);
 
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
         curSaveFileInstance.timeCost = timeCost;
         curSaveFileInstance.fileName = fileName;
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
         curSaveFileInstance.qInstancList = qInstanceList;
-        curSaveFileInstance.achievementKeys = achievementKeys;
+        curSaveFileInstance.achievementKey = achievementKey;
+        CurSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;
         c_RecordCtrl.SaveRecord(curSaveFileInstance, fileName);
@@ -397,10 +398,10 @@ public class GameManager : MonoBehaviour
         }
         return qInstanceList;
     }
-    private List<string> CheckAchievement(float timeCost, int instanceCount, float accuracy)
+    private string CheckAchievement(float timeCost, int instanceCount, float accuracy)
     {
-        List<string> achievementKeys = new List<string>();
-        return achievementKeys;
+        string achievementKey = "";
+        return achievementKey;
     }
     #endregion
 

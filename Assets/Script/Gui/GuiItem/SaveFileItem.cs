@@ -16,7 +16,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     private List<QuentionInstance> onlyWrongList;
     private GameObject detailWin;
     private GameObject deleteWin;
-    private Text saveFileIndex;
+    private GameObject saveFileAchievement_No;
+    private Text saveFileName;
+    private Text saveFileType;
     private Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -48,15 +50,14 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         isLongPress = true;
         Vector3 curPosition = ((RectTransform)transform).position;
         float distance = Mathf.Abs(position.y - curPosition.y);
-        //MyDebug.LogYellow(position.ToString());
-        //MyDebug.LogYellow(curPosition.ToString());
-        //MyDebug.LogYellow(distance.ToString());
         if (distance <= 2) OnLongPress();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        saveFileIndex = GameObjectDict["SaveFileIndex"].GetComponent<Text>();
+        saveFileName = GameObjectDict["SaveFileName"].GetComponent<Text>();
+        saveFileType = GameObjectDict["SaveFileType"].GetComponent<Text>();
+        saveFileAchievement_No = GameObjectDict["SaveFileAchievement_No"];
     }
     private void InitDetailWin(GameObject detailWin)
     {
@@ -70,8 +71,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     {
         Init();
         content = data as SaveFileInstance;
-        saveFileIndex.text = content.fileName;
-
+        saveFileName.text = content.fileName;
+        saveFileAchievement_No.SetActive(string.IsNullOrEmpty(content.achievementKey));
     }
     private void OnShortPress()
     {
@@ -139,5 +140,6 @@ public class SaveFileInstance
     public string fileName;
     public string accuracy;
     public List<QuentionInstance> qInstancList;
-    public List<string> achievementKeys;//所获成就
+    public string achievementKey;//所获成就
+    public CategoryInstance cInstance;
 }
