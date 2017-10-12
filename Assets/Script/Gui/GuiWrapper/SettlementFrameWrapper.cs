@@ -9,9 +9,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
 
-    private Text settlementTime_Text;
-    private Text settlementAmount_Text;
-    private Text settlementAccuracy_Text;
+    private Text settlementTime;
+    private Text settlementAmount;
+    private Text settlementAccuracy;
     private GameObject achievementDetailBgInSettlement;
     private InfiniteList settlementGrid;
     private SaveFileInstance curSaveFileInstance;
@@ -29,9 +29,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
         settlementGrid                  = GameObjectDict["SettlementGrid"].GetComponent<InfiniteList>();
-        settlementTime_Text             = GameObjectDict["SettlementTime_Text"].GetComponent<Text>();
-        settlementAmount_Text           = GameObjectDict["SettlementAmount_Text"].GetComponent<Text>();
-        settlementAccuracy_Text         = GameObjectDict["SettlementAccuracy_Text"].GetComponent<Text>();
+        settlementTime                  = GameObjectDict["SettlementTime"].GetComponent<Text>();
+        settlementAmount                = GameObjectDict["SettlementAmount"].GetComponent<Text>();
+        settlementAccuracy              = GameObjectDict["SettlementAccuracy"].GetComponent<Text>();
         achievementDetailBgInSettlement = GameObjectDict["AchievementDetailBgInSettlement"];
     }
 
@@ -54,6 +54,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 onlyWrong = !onlyWrong;
                 RefreshSettlementGrid();
                 break;
+            case "ShareBtn":
+                MyDebug.LogYellow("ShareBtn");
+                break;
             case "Settlement2CategoryFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.CategoryFrame);
                 break;
@@ -69,9 +72,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private void InitSettlement()
     {
         curSaveFileInstance = GameManager.Instance.CurSaveFileInstance;
-        settlementTime_Text.text = string.Format(settlementTime_Text.text, curSaveFileInstance.timeCost.ToString("f1"));
-        settlementAmount_Text.text = string.Format(settlementAmount_Text.text, curSaveFileInstance.qInstancList.Count);
-        settlementAccuracy_Text.text = string.Format(settlementAccuracy_Text.text, curSaveFileInstance.accuracy);
+        settlementTime.text = string.Format(settlementTime.text, curSaveFileInstance.timeCost.ToString("f1"));
+        settlementAmount.text = string.Format(settlementAmount.text, curSaveFileInstance.qInstancList.Count);
+        settlementAccuracy.text = string.Format(settlementAccuracy.text, curSaveFileInstance.accuracy);
         allInstanceList = curSaveFileInstance.qInstancList;
         onlyWrongList = allInstanceList.FindAll(FindWrong);
         onlyWrong = false;

@@ -1,4 +1,6 @@
 Index,Chinese,English
+Text_00000,{0}min{1}&{2},TJD
+Text_00001,{0}pcs{1}&{2},TJD
 Text_20000,统计数据,TJD
 Text_20001,游戏时间,TJD
 Text_20002,{0}小时{1}分钟{2}秒,TJD
@@ -8,12 +10,12 @@ Text_20005,成就,TJD
 Text_20006,存档,TJD
 Text_20007,成就,TJD
 Text_20008,存档,TJD
-Text_20009,时    间：,TJD
-Text_20010,{0}秒,TJD
-Text_20011,总    数：,TJD
-Text_20012,{0}道,TJD
-Text_20013,正确率：,TJD
-Text_20014,{0}%,TJD
+Text_20009,时间：{0}秒,TJD
+Text_20010,总数：{0}道,TJD
+Text_20011,正确率：{0}%,TJD
+Text_20012,,TJD
+Text_20013,,TJD
+Text_20014,,TJD
 Text_20015,是否删除？,TJD
 Text_20016,否,TJD
 Text_20017,是，删除,TJD
@@ -91,9 +93,6 @@ Text_50000,是否放弃？,TJD
 Text_50001,否,TJD
 Text_50002,是，放弃,TJD
 Text_60000,成绩,TJD
-Text_60001,时    间：,TJD
-Text_60002,{0}秒,TJD
-Text_60003,总    数：,TJD
-Text_60004,{0}道,TJD
-Text_60005,正确率：,TJD
-Text_60006,{0}%,TJD
+Text_60001,时间：{0}秒,TJD
+Text_60002,总数：{0}道,TJD
+Text_60003,正确率：{0}%,TJD

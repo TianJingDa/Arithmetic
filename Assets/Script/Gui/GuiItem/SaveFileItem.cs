@@ -18,7 +18,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     private GameObject deleteWin;
     private GameObject saveFileAchievement_No;
     private Text saveFileName;
-    private Text saveFileType;
+    private Text saveFileType_Time;
+    private Text saveFileType_Number;
     private Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -56,7 +57,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
         saveFileName = GameObjectDict["SaveFileName"].GetComponent<Text>();
-        saveFileType = GameObjectDict["SaveFileType"].GetComponent<Text>();
+        saveFileType_Time = GameObjectDict["SaveFileType_Time"].GetComponent<Text>();
+        saveFileType_Number = GameObjectDict["SaveFileType_Number"].GetComponent<Text>();
         saveFileAchievement_No = GameObjectDict["SaveFileAchievement_No"];
     }
     private void InitDetailWin(GameObject detailWin)
@@ -73,25 +75,44 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         content = data as SaveFileInstance;
         saveFileName.text = content.fileName;
         saveFileAchievement_No.SetActive(string.IsNullOrEmpty(content.achievementKey));
+        int digit = (int)content.cInstance.digitID + 2;
+        int operand = (int)content.cInstance.operandID + 2;
+        if (content.cInstance.patternID == PatternID.Time)
+        {
+            int pattern = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
+            saveFileType_Time.text = string.Format(saveFileType_Time.text, pattern, digit, operand);
+            saveFileType_Number.gameObject.SetActive(false);
+        }
+        else
+        {
+            int pattern = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
+            saveFileType_Number.text = string.Format(saveFileType_Number.text, pattern, digit, operand);
+            saveFileType_Time.gameObject.SetActive(false);
+        }
     }
     private void OnShortPress()
     {
         detailWin.SetActive(true);
-        Text saveFileDetailTime_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime_Text");
-        Text saveFileDetailAmount_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAmount_Text");
-        Text saveFileDetailAccuracy_Text = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy_Text");
+        Text saveFileDetailTime = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime");
+        Text saveFileDetailAmount = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAmount");
+        Text saveFileDetailAccuracy = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy");
+        GameObject shareBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "ShareBtnInStatistics");
         GameObject onlyWrongBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongBtnInStatistics");
         GameObject curAchievementBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "CurAchievementBtnInStatistics");
-        saveFileDetailTime_Text.text = string.Format(saveFileDetailTime_Text.text, content.timeCost.ToString("f1"));
-        saveFileDetailAmount_Text.text = string.Format(saveFileDetailAmount_Text.text, content.qInstancList.Count);
-        saveFileDetailAccuracy_Text.text = string.Format(saveFileDetailAccuracy_Text.text, content.accuracy);
+        saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
+        saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
+        saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         onlyWrong = false;
         RefreshSettlementGrid();
+        CommonTool.AddEventTriggerListener(shareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
         CommonTool.AddEventTriggerListener(onlyWrongBtnInStatistics, EventTriggerType.PointerClick, OnOnlyWrongBtn);
         CommonTool.AddEventTriggerListener(curAchievementBtnInStatistics, EventTriggerType.PointerClick, OnAchievementBtn);
     }
+    private void OnShareBtn(BaseEventData data)
+    {
 
+    }
     private void OnAchievementBtn(BaseEventData data)
     {
 

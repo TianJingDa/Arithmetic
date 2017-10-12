@@ -39,6 +39,7 @@ Image_20027,OnlyWrongBtnInStatistics
 Image_20028,CurAchievementBtnInStatistics
 Image_20029,AchievementDetailBgInSaveFile
 Image_20030,AchievementDetailPageInSaveFile
+Image_20031,ShareBtnInStatistics
 Image_20031,DeleteSaveFileBg
 Image_20032,DeleteSaveFilePage
 Image_20033,DeleteCancelBtn
@@ -208,3 +209,4 @@ Image_60006,AchievementDetailPageInSettlement
 Image_60007,Settlement2CategoryFrameBtn
 Image_60008,Settlement2StartFrameBtn
 Image_60009,CurAchievementBtn
+Image_60010,ShareBtn

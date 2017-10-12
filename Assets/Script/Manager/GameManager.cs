@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     private TextColorController                                 c_TextColorCtrl;
     private RecordController                                    c_RecordCtrl;
 
-    private int[]                                               m_AmountArray;
+    private int[]                                               m_AmountArray_Time;
+    private int[]                                               m_AmountArray_Number;
     private string[]                                            m_SymbolArray;
     private SaveFileInstance                                    m_SaveFileInstance;
     private GameObject                                          m_Root;                             //UI对象的根对象
@@ -172,7 +173,15 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("NewSaveFile", newSaveFile);
         }
     }
-    
+    public int[] AmountArray_Time
+    {
+        get { return m_AmountArray_Time; }
+    }
+    public int[] AmountArray_Number
+    {
+        get { return m_AmountArray_Number; }
+    }
+
     public static GameManager Instance//单例
     {
         get;
@@ -199,7 +208,8 @@ public class GameManager : MonoBehaviour
     {
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
-        m_AmountArray = new int[] { 3, 5, 10 };
+        m_AmountArray_Time = new int[] { 180, 300, 600 };
+        m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
@@ -250,10 +260,10 @@ public class GameManager : MonoBehaviour
         switch (m_CurCategoryInstance.patternID)
         {
             case PatternID.Time:
-                amount = m_AmountArray[(int)m_CurCategoryInstance.amountID] * 60;
+                amount = m_AmountArray_Time[(int)m_CurCategoryInstance.amountID];
                 break;
             case PatternID.Number:
-                amount = m_AmountArray[(int)m_CurCategoryInstance.amountID] * 10;
+                amount = m_AmountArray_Number[(int)m_CurCategoryInstance.amountID];
                 break;
             default:
                 amount = -1;
@@ -275,7 +285,7 @@ public class GameManager : MonoBehaviour
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
         curSaveFileInstance.qInstancList = qInstanceList;
         curSaveFileInstance.achievementKey = achievementKey;
-        CurSaveFileInstance.cInstance = m_CurCategoryInstance;
+        curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;
         c_RecordCtrl.SaveRecord(curSaveFileInstance, fileName);
