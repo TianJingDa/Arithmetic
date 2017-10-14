@@ -8,19 +8,19 @@ using System;
 
 public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private float durationThreshold = 1.0f;
-    private bool isLongPress;
-    private bool onlyWrong;
+    protected float durationThreshold = 1.0f;
+    protected bool isLongPress;
+    protected bool onlyWrong;
 
-    private SaveFileInstance content;//详情
-    private List<QuentionInstance> onlyWrongList;
-    private GameObject detailWin;
-    private GameObject deleteWin;
-    private GameObject saveFileAchievement_No;
-    private Text saveFileName;
-    private Text saveFileType_Time;
-    private Text saveFileType_Number;
-    private Vector3 position;
+    protected SaveFileInstance content;//详情
+    protected List<QuentionInstance> onlyWrongList;
+    protected GameObject detailWin;
+    protected GameObject deleteWin;
+    protected GameObject saveFileAchievement_No;
+    protected Text saveFileName;
+    protected Text saveFileType_Time;
+    protected Text saveFileType_Number;
+    protected Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -40,7 +40,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             OnShortPress();
         }
     }
-    private IEnumerator TimeCounter()
+    protected IEnumerator TimeCounter()
     {
         float duration = 0;
         while (duration < durationThreshold)
@@ -48,10 +48,10 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             duration += Time.deltaTime;
             yield return null;
         }
-        isLongPress = true;
+        isLongPress = deleteWin != null;
         Vector3 curPosition = ((RectTransform)transform).position;
         float distance = Mathf.Abs(position.y - curPosition.y);
-        if (distance <= 2) OnLongPress();
+        if (distance <= 2 && isLongPress) OnLongPress();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
@@ -61,15 +61,15 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileType_Number = GameObjectDict["SaveFileType_Number"].GetComponent<Text>();
         saveFileAchievement_No = GameObjectDict["SaveFileAchievement_No"];
     }
-    private void InitDetailWin(GameObject detailWin)
+    protected void InitDetailWin(GameObject detailWin)
     {
         this.detailWin = detailWin;
     }
-    private void InitDeleteWin(GameObject deleteWin)
+    protected void InitDeleteWin(GameObject deleteWin)
     {
         this.deleteWin = deleteWin;
     }
-    private void InitPrefabItem(object data)
+    protected void InitPrefabItem(object data)
     {
         Init();
         content = data as SaveFileInstance;
@@ -90,7 +90,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             saveFileType_Time.gameObject.SetActive(false);
         }
     }
-    private void OnShortPress()
+    protected void OnShortPress()
     {
         detailWin.SetActive(true);
         Text saveFileDetailTime = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime");
@@ -109,20 +109,20 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         CommonTool.AddEventTriggerListener(onlyWrongBtnInStatistics, EventTriggerType.PointerClick, OnOnlyWrongBtn);
         CommonTool.AddEventTriggerListener(curAchievementBtnInStatistics, EventTriggerType.PointerClick, OnAchievementBtn);
     }
-    private void OnShareBtn(BaseEventData data)
+    protected void OnShareBtn(BaseEventData data)
     {
 
     }
-    private void OnAchievementBtn(BaseEventData data)
+    protected void OnAchievementBtn(BaseEventData data)
     {
 
     }
-    private void OnOnlyWrongBtn(BaseEventData data)
+    protected void OnOnlyWrongBtn(BaseEventData data)
     {
         onlyWrong = !onlyWrong;
         RefreshSettlementGrid();
     }
-    private void RefreshSettlementGrid()
+    protected void RefreshSettlementGrid()
     {
         ArrayList dataList;
         if (onlyWrong)
@@ -135,19 +135,19 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         }
         detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
     }
-    private bool FindWrong(QuentionInstance questionInstance)
+    protected bool FindWrong(QuentionInstance questionInstance)
     {
         int count = questionInstance.instance.Count;
         return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
     }
 
-    private void OnLongPress()
+    protected void OnLongPress()
     {
         deleteWin.SetActive(true);
         GameObject deleteConfirmBtn = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtn");
         CommonTool.AddEventTriggerListener(deleteConfirmBtn, EventTriggerType.PointerClick, OnLongPress);
     }
-    private void OnLongPress(BaseEventData data)
+    protected void OnLongPress(BaseEventData data)
     {
         deleteWin.SetActive(false);
         GameManager.Instance.DeleteRecord(content.fileName);

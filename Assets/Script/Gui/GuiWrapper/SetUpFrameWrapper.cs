@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 /// <summary>
 /// 设置界面
 /// </summary>
 public class SetUpFrameWrapper : GuiFrameWrapper
 {
-    private delegate void resetDelegate();
-
     private int tempLanguageID;
     private int tempSkinID;
     private int tempLayoutID;
@@ -18,7 +15,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private List<int> resetTogglesIndexList;
     private List<Vector2> languageTogglesAnchoredPositonList;
     private List<Vector2> skinTogglesAnchoredPositonList;
-    private Dictionary<int, resetDelegate> resetDelegateDict;
+    private Dictionary<int, System.Action> resetDelegateDict;
 
     private GameObject strategyWin;
     private GameObject languageWin;
@@ -155,7 +152,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetTogglesIndexList = new List<int>();
         if (resetDelegateDict == null)
         {
-            resetDelegateDict = new Dictionary<int, resetDelegate>();
+            resetDelegateDict = new Dictionary<int, System.Action>();
             resetDelegateDict.Add(0, ResetTotalTime);
             resetDelegateDict.Add(1, ResetTotalGame);
             resetDelegateDict.Add(2, ResetAchievement);

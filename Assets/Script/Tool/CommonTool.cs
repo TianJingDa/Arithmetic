@@ -28,6 +28,27 @@ public static class CommonTool
         }
         return result;
     }
+    public static T GetComponentContainsName<T>(GameObject root, string name) where T : Component
+    {
+        T[] array = root.GetComponentsInChildren<T>(true);
+        T result = null;
+        if (array != null)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i].name.Contains(name))
+                {
+                    result = array[i];
+                    break;
+                }
+            }
+        }
+        if (result == null)
+        {
+            MyDebug.LogYellow("Can not find :" + name);
+        }
+        return result;
+    }
     public static T[] GetComponentsByName<T>(string name) where T : Component
     {
         T[] result = null;
@@ -44,6 +65,30 @@ public static class CommonTool
                 for (int i = 0; i < objArray.Length; i++)
                 {
                     if (objArray[i].name == name)
+                    {
+                        result = objArray[i].gameObject;
+                        break;
+                    }
+                }
+            }
+        }
+        if (result == null)
+        {
+            MyDebug.LogYellow("Can not find :" + name);
+        }
+        return result;
+    }
+    public static GameObject GetGameObjectContainsName(GameObject root, string name)
+    {
+        GameObject result = null;
+        if (root != null)
+        {
+            Transform[] objArray = root.GetComponentsInChildren<Transform>(true);
+            if (objArray != null)
+            {
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    if (objArray[i].name.Contains(name))
                     {
                         result = objArray[i].gameObject;
                         break;
