@@ -30,7 +30,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private SummarySaveFileItem subtractionSaveFileItem;
     private SummarySaveFileItem multiplicationSaveFileItem;
     private SummarySaveFileItem divisionSaveFileItem;
-    private List<SaveFileInstance> saveFileList;
+    private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
     void Start () 
 	{
         id = GuiFrameID.StatisticsFrame;
@@ -39,7 +39,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
         totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
-        saveFileList = GameManager.Instance.ReadRecord();
+        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadRecord();
+        saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
+        {
+            {SymbolID.Addition, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
+            {SymbolID.Subtraction, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
+            {SymbolID.Multiplication, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
+            {SymbolID.Division, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)}
+        };
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
@@ -101,8 +108,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 saveFileWin.SetActive(true);
                 saveFileToggleGroup.SetAllTogglesOff();
                 saveFileToggleGroup.toggles[0].isOn = true;
-                GameManager.Instance.CurAction = RefreshSaveFileList;
-                RefreshSaveFileList();
+                GameManager.Instance.CurAction = RefreshSaveFileDict;
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
                 saveFileDetailBg.SetActive(false);
@@ -121,6 +127,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     protected override void OnToggleClick(Toggle tgl)
     {
         base.OnToggleClick(tgl);
+        if (!tgl.isOn) return;
         if (tgl.index < 0)
         {
             ShowSummaryPage();
@@ -143,7 +150,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private void RefreshLatestSaveFile(SummarySaveFileItem item, SymbolID symbolID, Text summary)
     {
-        List<SaveFileInstance> instanceList = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
+        List<SaveFileInstance> instanceList = saveFileDict[symbolID];
         if (instanceList.Count > 0)
         {
             SaveFileInstance latestInstance = instanceList[instanceList.Count - 1];
@@ -154,7 +161,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         {
             item.gameObject.SetActive(false);
         }
-        summary.text = string.Format(summary.text, instanceList.Count, saveFileList.Count);
+        summary.text = string.Format(summary.text, instanceList.Count, GameManager.Instance.ReadRecord().Count);
     }
 
     private void InitAchievementList()
@@ -174,8 +181,18 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         saveFileSummary.SetActive(false);
         SymbolID symbolID = (SymbolID)curIndex;
-        List<SaveFileInstance> recordList = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
-        ArrayList dataList = new ArrayList(recordList);
+        ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
+        saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
+    }
+    /// <summary>
+    /// 用于删除存档时对saveFileDict进行更新，并更新显示
+    /// 根据成就系统相关函数进行调整
+    /// </summary>
+    private void RefreshSaveFileDict()
+    {
+        SymbolID symbolID = (SymbolID)curIndex;
+        saveFileDict[symbolID] = GameManager.Instance.ReadRecord().FindAll(x => x.cInstance.symbolID == symbolID);
+        ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
         saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
     }
 }
