@@ -73,6 +73,7 @@ public sealed class RecordController : Controller
         if (File.Exists(fullName))
         {
             File.Delete(fullName);
+            MyDebug.LogGreen("Delete:" + fileName);
             return !File.Exists(fullName);
         }
         else

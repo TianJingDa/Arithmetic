@@ -213,12 +213,7 @@ public static class CommonTool
         {
             trigger = obj.AddComponent<EventTrigger>();
         }
-
-        if (trigger.triggers.Count == 0)
-        {
-            trigger.triggers = new List<EventTrigger.Entry>();
-        }
-
+        trigger.triggers = new List<EventTrigger.Entry>();
         UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(action);
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = eventID;

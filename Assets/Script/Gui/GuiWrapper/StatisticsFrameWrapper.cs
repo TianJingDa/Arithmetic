@@ -10,6 +10,7 @@ using System;
 public class StatisticsFrameWrapper : GuiFrameWrapper
 {
     private int curIndex;//当前所选存档类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
+    private int curCount;//存档总数量
     private Text totelTimeImg_Text2;
     private Text totelGameImg_Text2;
     private Text additionSummary_Text;
@@ -30,6 +31,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private SummarySaveFileItem subtractionSaveFileItem;
     private SummarySaveFileItem multiplicationSaveFileItem;
     private SummarySaveFileItem divisionSaveFileItem;
+    private Dictionary<SymbolID, string> rawStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
     void Start () 
 	{
@@ -39,13 +41,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
         totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
-        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadRecord();
-        saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
+        rawStringDict = new Dictionary<SymbolID, string>
         {
-            {SymbolID.Addition, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
-            {SymbolID.Subtraction, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
-            {SymbolID.Multiplication, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
-            {SymbolID.Division, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)}
+            {SymbolID.Addition, additionSummary_Text.text },
+            {SymbolID.Subtraction, subtractionSummary_Text.text },
+            {SymbolID.Multiplication, multiplicationSummary_Text.text },
+            {SymbolID.Division, divisionSummary_Text.text }
         };
     }
 
@@ -105,10 +106,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 saveFileWin.SetActive(false);
                 break;
             case "SaveFileBtn":
-                saveFileWin.SetActive(true);
-                saveFileToggleGroup.SetAllTogglesOff();
-                saveFileToggleGroup.toggles[0].isOn = true;
-                GameManager.Instance.CurAction = RefreshSaveFileDict;
+                RefreshSaveFileWin();
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
                 saveFileDetailBg.SetActive(false);
@@ -130,7 +128,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         if (!tgl.isOn) return;
         if (tgl.index < 0)
         {
-            ShowSummaryPage();
+            RefreshSummaryPage();
         }
         else
         {
@@ -139,7 +137,23 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private void ShowSummaryPage()
+    private void RefreshSaveFileWin()
+    {
+        saveFileWin.SetActive(true);
+        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadRecord();
+        curCount = saveFileList.Count;
+        saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
+                {
+                    {SymbolID.Addition, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
+                    {SymbolID.Subtraction, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
+                    {SymbolID.Multiplication, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
+                    {SymbolID.Division, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)}
+                };
+        saveFileToggleGroup.SetAllTogglesOff();
+        saveFileToggleGroup.toggles[0].isOn = true;
+        GameManager.Instance.CurAction = RefreshSaveFileDict;
+    }
+    private void RefreshSummaryPage()
     {
         saveFileSummary.SetActive(true);
 
@@ -161,7 +175,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         {
             item.gameObject.SetActive(false);
         }
-        summary.text = string.Format(summary.text, instanceList.Count, GameManager.Instance.ReadRecord().Count);
+        summary.text = string.Format(rawStringDict[symbolID], instanceList.Count, curCount);
     }
 
     private void InitAchievementList()
@@ -191,7 +205,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshSaveFileDict()
     {
         SymbolID symbolID = (SymbolID)curIndex;
-        saveFileDict[symbolID] = GameManager.Instance.ReadRecord().FindAll(x => x.cInstance.symbolID == symbolID);
+        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadRecord();
+        curCount = saveFileList.Count;
+        saveFileDict[symbolID] = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
         saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
     }
