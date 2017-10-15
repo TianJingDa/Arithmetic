@@ -54,7 +54,6 @@ public class InfiniteList : MonoBehaviour
             GameObject item = GameManager.Instance.GetPrefabItem(itemName);
             item.transform.SetParent(transform);
             item.transform.localScale = Vector3.one;
-            //childrenAnchoredPostion.Add(item.GetComponent<RectTransform>().anchoredPosition);
         }
         if (detailWin != null)
         {
@@ -108,13 +107,24 @@ public class InfiniteList : MonoBehaviour
                 children[index].gameObject.SendMessage("InitPrefabItem", dataList[realIndex]);
             }
         }
-        if(itemAmount <= childrenAnchoredPostion.Count)
+        if (childrenAnchoredPostion.Count > 0)
         {
-            for(int index = 0; index < itemAmount; index++)
+            for (int index = 0; index < transform.childCount; index++)
             {
                 children[index].anchoredPosition = childrenAnchoredPostion[index];
             }
         }
+        else
+        {
+            StartCoroutine(RefreshChildrenAnchoredPostion());
+        }
+        //if(itemAmount <= childrenAnchoredPostion.Count)
+        //{
+        //    for(int index = 0; index < itemAmount; index++)
+        //    {
+        //        children[index].anchoredPosition = childrenAnchoredPostion[index];
+        //    }
+        //}
     }
 
     void ScrollCallback(Vector2 data)
@@ -320,16 +330,32 @@ public class InfiniteList : MonoBehaviour
         return min;
     }
     /// <summary>
-    /// 延迟一帧记录所有子物体的锚点位置
+    /// 延迟两帧记录所有子物体的锚点位置
+    /// 因为GridLayoutGroup是下一帧才刷新子物体的布局，如果仅延迟一帧进行记录，有可能记录的是刷新子物体布局前的位置
+    /// 这就会产生一个随机的BUG，如果是先刷新子物体的布局，就正常显示，如果是先记录的布局，就会导致子物体位置异常
     /// </summary>
     /// <returns></returns>
     private IEnumerator RecordChildrenAnchoredPostion()
     {
         yield return null;
+        yield return null;
         for (int index = 0; index < transform.childCount; index++)
         {
             childrenAnchoredPostion.Add(transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition);
         }
-
+    }
+    /// <summary>
+    /// 延迟三帧刷新子物体的锚点，此方法仅在第一次刷新列表时候使用，因为要保证在RecordChildrenAnchoredPostion方法之后执行
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator RefreshChildrenAnchoredPostion()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        for (int index = 0; index < transform.childCount; index++)
+        {
+            children[index].anchoredPosition = childrenAnchoredPostion[index];
+        }
     }
 }
