@@ -217,6 +217,24 @@ public class UITool : Editor
         string path = Application.dataPath + "/Resources/FightData/d_4_2List.data";
         IOHelper.SetData(path, data);
     }
+    [MenuItem("Custom Editor/转换成就")]
+    public static void ExchangeAchievement()
+    {
+        TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
+        if (mutiLanguageAsset == null)
+        {
+            MyDebug.LogYellow("Load File Error!");
+            return;
+        }
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        List<string> lineList;
+        for (int i = 0; i < lineArray.Length; i++)
+        {
+            lineList = new List<string>(lineArray[i].Split(','));
+            //mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
+        }
+    }
 
 
 }

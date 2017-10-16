@@ -74,7 +74,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Init();
         content = data as SaveFileInstance;
         saveFileName.text = content.fileName;
-        saveFileAchievement_No.SetActive(string.IsNullOrEmpty(content.achievementKey));
+        saveFileAchievement_No.SetActive(string.IsNullOrEmpty(content.achievementName));
         int digit = (int)content.cInstance.digitID + 2;
         int operand = (int)content.cInstance.operandID + 2;
         if (content.cInstance.patternID == PatternID.Time)
@@ -161,6 +161,6 @@ public class SaveFileInstance
     public string fileName;
     public string accuracy;
     public List<QuentionInstance> qInstancList;
-    public string achievementKey;//所获成就
+    public string achievementName;//所获成就
     public CategoryInstance cInstance;
 }

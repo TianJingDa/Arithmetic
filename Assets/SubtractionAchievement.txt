@@ -1,0 +1,5 @@
+AchievementName,Type,Accuracy,MeanTime,MainTitle,SubTitle
+Subtraction_0,,,,,
+Subtraction_1,,,,,
+Subtraction_2,,,,,
+Subtraction_3,,,,,

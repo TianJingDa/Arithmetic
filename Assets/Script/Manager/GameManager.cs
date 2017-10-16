@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
         curSaveFileInstance.fileName = fileName;
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
         curSaveFileInstance.qInstancList = qInstanceList;
-        curSaveFileInstance.achievementKey = achievementKey;
+        curSaveFileInstance.achievementName = achievementKey;
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;

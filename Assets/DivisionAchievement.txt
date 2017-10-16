@@ -1,0 +1,5 @@
+AchievementName,Type,Accuracy,MeanTime,MainTitle,SubTitle
+Division_0,,,,,
+Division_1,,,,,
+Division_2,,,,,
+Division_3,,,,,

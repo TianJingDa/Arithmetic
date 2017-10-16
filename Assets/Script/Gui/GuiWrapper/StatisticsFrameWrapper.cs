@@ -184,8 +184,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         for(int i = 0; i < 8; i++)
         {
             AchievementInstance instance = new AchievementInstance();
-            instance.achievementKey = i.ToString();
-            instance.detail = i.ToString();
+            instance.achievementName = i.ToString();
             dataList.Add(instance);
         }
         achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics);
