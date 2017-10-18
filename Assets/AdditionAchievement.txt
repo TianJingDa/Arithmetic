@@ -1,5 +1,5 @@
-AchievementName,Type,Accuracy,MeanTime,MainTitle,SubTitle
-Addition_0,,,,,
-Addition_1,,,,,
-Addition_2,,,,,
-Addition_3,,,,,
+achievementName,type,accuracy,meanTime,mainTitleIndex,subTitleIndex,imageIndex,fileName
+Addition_0,1,0.8,0.2,Text,Text,Image,
+Addition_0,1,0.8,0.2,Text,Text,Image,
+Addition_0,1,0.8,0.2,Text,Text,Image,
+Addition_0,1,0.8,0.2,Text,Text,Image,

@@ -217,24 +217,78 @@ public class UITool : Editor
         string path = Application.dataPath + "/Resources/FightData/d_4_2List.data";
         IOHelper.SetData(path, data);
     }
-    [MenuItem("Custom Editor/转换成就")]
+    [MenuItem("Custom Editor/生成成就")]
     public static void ExchangeAchievement()
     {
-        TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
+        List<string> addressList = new List<string>
+        {
+            Application.dataPath + "/AdditionAchievement.txt",
+            Application.dataPath + "/SubtractionAchievement.txt",
+            Application.dataPath + "/MultiplicationAchievement.txt",
+            Application.dataPath + "/DivisionAchievement.txt",
+        };
+        List<string> targetList = new List<string>
+        {
+            Application.dataPath + "/Resources/Achievement/AdditionAchievement.ach",
+            Application.dataPath + "/Resources/Achievement/SubtractionAchievement.ach",
+            Application.dataPath + "/Resources/Achievement/MultiplicationAchievement.ach",
+            Application.dataPath + "/Resources/Achievement/DivisionAchievement.ach",
+        };
+        for (int i = 0; i < addressList.Count; i++)
+        {
+            StreamReader mutiLanguageAsset = new StreamReader(addressList[i]);
+            if (mutiLanguageAsset == null)
+            {
+                MyDebug.LogYellow("Can not find: " + addressList[i]);
+                return;
+            }
+            char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+            string asset = mutiLanguageAsset.ReadToEnd();
+            string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+            string[] lineList;
+            List<AchievementInstance> achList = new List<AchievementInstance>();
+            for (int j = 1; j < lineArray.Length; j++)
+            {
+                AchievementInstance instance = new AchievementInstance();
+                lineList = lineArray[j].Split(',');
+                instance.achievementName = lineList[0];
+                int.TryParse(lineList[1], out instance.type);
+                float.TryParse(lineList[2], out instance.accuracy);
+                float.TryParse(lineList[3], out instance.meanTime);
+                instance.mainTitleIndex = lineList[4];
+                instance.subTitleIndex = lineList[5];
+                instance.imageIndex = lineList[6];
+                instance.fileName = lineList[7];
+                achList.Add(instance);
+            }
+            if (File.Exists(targetList[i])) File.Delete(targetList[i]);
+            IOHelper.SetData(targetList[i], achList);
+        }
+    }
+    [MenuItem("Custom Editor/生成多语言")]
+    public static void MakeMutiLanguageJson()
+    {
+        StreamReader mutiLanguageAsset = new StreamReader(Application.dataPath + "/MutiLanguage.txt");
         if (mutiLanguageAsset == null)
         {
-            MyDebug.LogYellow("Load File Error!");
+            MyDebug.LogYellow("Can not find MutiLanguage.txt !!");
             return;
         }
+        Dictionary<string, string[]> mutiLanguageDict = new Dictionary<string, string[]>();
         char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
-        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        string asset = mutiLanguageAsset.ReadToEnd();
+        string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
         List<string> lineList;
         for (int i = 0; i < lineArray.Length; i++)
         {
             lineList = new List<string>(lineArray[i].Split(','));
-            //mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
+            mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
         }
+        string path = Application.dataPath + "/Resources/Language/MutiLanguage.lang";
+        if (File.Exists(path)) File.Delete(path);
+        IOHelper.SetData(path, mutiLanguageDict);
     }
+
 
 
 }

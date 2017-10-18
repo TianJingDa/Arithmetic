@@ -13,6 +13,11 @@ public static class IOHelper
     /// <param name="pObject"></param>
     public static void SetData(string fileName, object pObject)
     {
+        if (File.Exists(fileName))
+        {
+            MyDebug.LogYellow("File exit:" + fileName);
+            return ;
+        }
         //将对象序列化为字符串
         string toSave = SerializeObject(pObject);
         //对字符串进行加密,32位加密密钥
@@ -30,6 +35,11 @@ public static class IOHelper
     /// <returns></returns>
     public static object GetData(string fileName, Type pType)
     {
+        if (!File.Exists(fileName))
+        {
+            MyDebug.LogYellow("File does not exit:" + fileName);
+            return null;
+        }
         StreamReader streamReader = File.OpenText(fileName);
         string data = streamReader.ReadToEnd();
         //对数据进行解密，32位解密密钥

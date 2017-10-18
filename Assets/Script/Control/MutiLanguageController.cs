@@ -10,7 +10,6 @@ public sealed class MutiLanguageController: Controller
     private MutiLanguageController()
     {
         base.id = ControllerID.MutiLanguageController;
-        mutiLanguageDict = new Dictionary<string, string[]>();
         InitLanguageData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -26,20 +25,8 @@ public sealed class MutiLanguageController: Controller
     /// </summary>
     private void InitLanguageData()
     {
-        TextAsset mutiLanguageAsset = Resources.Load("Language/MutiLanguage", typeof(TextAsset)) as TextAsset;
-        if (mutiLanguageAsset == null)
-        {
-            MyDebug.LogYellow("Load File Error!");
-            return;
-        }
-        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
-        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
-        List<string> lineList;
-        for (int i = 0; i < lineArray.Length; i++)
-        {
-            lineList = new List<string>(lineArray[i].Split(','));
-            mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
-        }
+        string path = Application.dataPath + "/Resources/Language/MutiLanguage.lang";
+        mutiLanguageDict = (Dictionary<string, string[]>)IOHelper.GetData(path, typeof(Dictionary<string, string[]>));
     }
     /// <summary>
     /// 获取多语言
