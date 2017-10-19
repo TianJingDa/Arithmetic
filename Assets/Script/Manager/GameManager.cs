@@ -277,7 +277,7 @@ public class GameManager : MonoBehaviour
         string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         float accuracy = CalculateAccuracy(resultList);
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        string achievementKey = CheckAchievement(timeCost, resultList.Count, accuracy);
+        string achievementKey = CheckAchievement(timeCost, resultList.Count, accuracy, fileName);
 
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
         curSaveFileInstance.timeCost = timeCost;
@@ -309,6 +309,38 @@ public class GameManager : MonoBehaviour
         else
         {
             MyDebug.LogYellow("Delete File Fail!");
+        }
+    }
+    public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
+    {
+        List<AchievementInstance> instanceList = c_AchievementCtrl.GetAchievementList(symbolID);
+        for(int i = 0; i < instanceList.Count; i++)
+        {
+            instanceList[i].fileName = PlayerPrefs.GetString(instanceList[i].achievementName, "");
+        }
+        return instanceList;
+    }
+    public Dictionary<SymbolID, List<AchievementInstance>> GetAchievementDict()
+    {
+        Dictionary<SymbolID, List<AchievementInstance>> instanceDict = c_AchievementCtrl.GetAchievementDict();
+        foreach(KeyValuePair<SymbolID,List<AchievementInstance>> pair in instanceDict)
+        {
+            for (int i = 0; i < pair.Value.Count; i++)
+            {
+                pair.Value[i].fileName = PlayerPrefs.GetString(pair.Value[i].achievementName, "");
+            }
+        }
+        return instanceDict;
+    }
+    public void ResetAchievement()
+    {
+        Dictionary<SymbolID, List<AchievementInstance>> instanceDict = c_AchievementCtrl.GetAchievementDict();
+        foreach (KeyValuePair<SymbolID, List<AchievementInstance>> pair in instanceDict)
+        {
+            for (int i = 0; i < pair.Value.Count; i++)
+            {
+                PlayerPrefs.DeleteKey(pair.Value[i].achievementName);
+            }
         }
     }
     ///// <summary>
@@ -408,10 +440,11 @@ public class GameManager : MonoBehaviour
         }
         return qInstanceList;
     }
-    private string CheckAchievement(float timeCost, int instanceCount, float accuracy)
+    private string CheckAchievement(float timeCost, int instanceCount, float accuracy, string fileName)
     {
-        string achievementKey = "";
-        return achievementKey;
+        string achievementName = "";
+        PlayerPrefs.SetString(achievementName, fileName);
+        return achievementName;
     }
     #endregion
 

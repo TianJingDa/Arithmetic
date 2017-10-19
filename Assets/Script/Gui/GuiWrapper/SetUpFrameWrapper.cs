@@ -179,7 +179,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     /// </summary>
     private void ResetAchievement()
     {
-        MyDebug.LogGreen("ResetAchievement Success!!!");
+        GameManager.Instance.ResetAchievement();
     }
     /// <summary>
     /// 重置游戏存档

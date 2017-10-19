@@ -36,7 +36,7 @@ public class AchievementItem : Item
 public class AchievementInstance
 {
     public string achievementName;
-    public int type;
+    public string condition;
     public float accuracy;
     public float meanTime;
     public string mainTitleIndex;

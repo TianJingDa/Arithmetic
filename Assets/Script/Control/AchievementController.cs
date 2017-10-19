@@ -32,7 +32,7 @@ public class AchievementController : Controller
         achievementDict.Add(SymbolID.Multiplication, multiplication);
         achievementDict.Add(SymbolID.Division, division);
     }
-    public List<AchievementInstance> GetAchievementInstance(SymbolID symbolID)
+    public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {
         return achievementDict[symbolID];
     }

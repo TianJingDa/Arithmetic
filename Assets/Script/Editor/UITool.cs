@@ -252,7 +252,7 @@ public class UITool : Editor
                 AchievementInstance instance = new AchievementInstance();
                 lineList = lineArray[j].Split(',');
                 instance.achievementName = lineList[0];
-                int.TryParse(lineList[1], out instance.type);
+                instance.condition = lineList[1];
                 float.TryParse(lineList[2], out instance.accuracy);
                 float.TryParse(lineList[3], out instance.meanTime);
                 instance.mainTitleIndex = lineList[4];
