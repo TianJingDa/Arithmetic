@@ -299,12 +299,21 @@ public class GameManager : MonoBehaviour
     {
         c_RecordCtrl.DeleteAllRecord();
     }
-    public void DeleteRecord(string fileName)
+    public void ResetSaveFileWithoutAchievement()
+    {
+        List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
+        c_RecordCtrl.DeleteRecordWithoutAchievement(fileNameList);
+    }
+    public void DeleteRecord(string fileName, string achievementName)
     {
         if (c_RecordCtrl.DeleteRecord(fileName))
         {
             if (m_CurAction != null) m_CurAction();
             else MyDebug.LogYellow("UnRegister Function!");
+            if (!string.IsNullOrEmpty(achievementName))
+            {
+                PlayerPrefs.DeleteKey(achievementName);
+            }
         }
         else
         {
@@ -313,24 +322,11 @@ public class GameManager : MonoBehaviour
     }
     public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {
-        List<AchievementInstance> instanceList = c_AchievementCtrl.GetAchievementList(symbolID);
-        for(int i = 0; i < instanceList.Count; i++)
-        {
-            instanceList[i].fileName = PlayerPrefs.GetString(instanceList[i].achievementName, "");
-        }
-        return instanceList;
+        return c_AchievementCtrl.GetAchievementList(symbolID);
     }
     public Dictionary<SymbolID, List<AchievementInstance>> GetAchievementDict()
     {
-        Dictionary<SymbolID, List<AchievementInstance>> instanceDict = c_AchievementCtrl.GetAchievementDict();
-        foreach(KeyValuePair<SymbolID,List<AchievementInstance>> pair in instanceDict)
-        {
-            for (int i = 0; i < pair.Value.Count; i++)
-            {
-                pair.Value[i].fileName = PlayerPrefs.GetString(pair.Value[i].achievementName, "");
-            }
-        }
-        return instanceDict;
+        return c_AchievementCtrl.GetAchievementDict();
     }
     public void ResetAchievement()
     {

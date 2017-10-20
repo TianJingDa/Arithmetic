@@ -15,7 +15,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private List<int> resetTogglesIndexList;
     private List<Vector2> languageTogglesAnchoredPositonList;
     private List<Vector2> skinTogglesAnchoredPositonList;
-    private Dictionary<int, System.Action> resetDelegateDict;
+    private List<System.Action> resetDelegateList;
 
     private GameObject strategyWin;
     private GameObject languageWin;
@@ -150,14 +150,15 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             resetToggleGroup.transform.GetChild(i).GetComponent<Toggle>().isOn = false;
         }
         resetTogglesIndexList = new List<int>();
-        if (resetDelegateDict == null)
+        if (resetDelegateList == null)
         {
-            resetDelegateDict = new Dictionary<int, System.Action>();
-            resetDelegateDict.Add(0, ResetTotalTime);
-            resetDelegateDict.Add(1, ResetTotalGame);
-            resetDelegateDict.Add(2, ResetAchievement);
-            resetDelegateDict.Add(3, ResetSaveFile);
-            resetDelegateDict.Add(4, ResetSetUp);
+            resetDelegateList = new List<System.Action>();
+            resetDelegateList.Add(ResetTotalTime);
+            resetDelegateList.Add(ResetTotalGame);
+            resetDelegateList.Add(ResetAchievement);
+            resetDelegateList.Add(ResetSaveFile);
+            resetDelegateList.Add(ResetSaveFileWithoutAchievement);
+            resetDelegateList.Add(ResetSetUp);
         }
     }
     /// <summary>
@@ -182,11 +183,18 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         GameManager.Instance.ResetAchievement();
     }
     /// <summary>
-    /// 重置游戏存档
+    /// 重置所有游戏存档
     /// </summary>
     private void ResetSaveFile()
     {
         GameManager.Instance.ResetSaveFile();
+    }
+    /// <summary>
+    /// 重置所有不带成就的游戏存档
+    /// </summary>
+    private void ResetSaveFileWithoutAchievement()
+    {
+        GameManager.Instance.ResetSaveFileWithoutAchievement();
     }
     /// <summary>
     /// 重置游戏设置
@@ -273,7 +281,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 resetConfirmBg.SetActive(false);
                 for (int i = 0; i < resetTogglesIndexList.Count; i++)
                 {
-                    resetDelegateDict[resetTogglesIndexList[i]]();
+                    int index = resetTogglesIndexList[i];
+                    resetDelegateList[index]();
                 }
                 RefreshResetWin();
                 break;

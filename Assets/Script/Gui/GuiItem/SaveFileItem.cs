@@ -150,7 +150,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected void OnLongPress(BaseEventData data)
     {
         deleteWin.SetActive(false);
-        GameManager.Instance.DeleteRecord(content.fileName);
+        GameManager.Instance.DeleteRecord(content.fileName, content.achievementName);
     }
 
 }

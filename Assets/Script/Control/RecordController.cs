@@ -66,6 +66,16 @@ public sealed class RecordController : Controller
             File.Delete(fileNames[i]);
         }
     }
+    public void DeleteRecordWithoutAchievement(List<string> fileNameList)
+    {
+        string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
+        for (int i = 0; i < fileNames.Length; i++)
+        {
+            if (fileNameList.Contains(fileNames[i])) continue;
+            File.Delete(fileNames[i]);
+        }
+
+    }
 
     public bool DeleteRecord(string fileName)
     {

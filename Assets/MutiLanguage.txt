@@ -145,6 +145,7 @@ Text_40037,重置,TJD
 Text_40038,是否重置,TJD
 Text_40039,否,TJD
 Text_40040,是，重置,TJD
+Text_40041,重置游戏存档（非成就）,TJD
 Text_50000,是否放弃？,TJD
 Text_50001,否,TJD
 Text_50002,是，放弃,TJD
