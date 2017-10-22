@@ -61,15 +61,15 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileType_Number = GameObjectDict["SaveFileType_Number"].GetComponent<Text>();
         saveFileAchievement_No = GameObjectDict["SaveFileAchievement_No"];
     }
-    protected void InitDetailWin(GameObject detailWin)
+    protected override void InitDetailWin(GameObject detailWin)
     {
         this.detailWin = detailWin;
     }
-    protected void InitDeleteWin(GameObject deleteWin)
+    protected override void InitDeleteWin(GameObject deleteWin)
     {
         this.deleteWin = deleteWin;
     }
-    protected void InitPrefabItem(object data)
+    protected override void InitPrefabItem(object data)
     {
         Init();
         content = data as SaveFileInstance;

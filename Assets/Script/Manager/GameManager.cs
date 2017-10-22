@@ -439,7 +439,8 @@ public class GameManager : MonoBehaviour
     private string CheckAchievement(float timeCost, int instanceCount, float accuracy, string fileName)
     {
         string achievementName = "";
-        PlayerPrefs.SetString(achievementName, fileName);
+        bool hasAchievement = PlayerPrefs.HasKey(achievementName);
+        if (!hasAchievement) PlayerPrefs.SetString(achievementName, fileName);
         return achievementName;
     }
     #endregion

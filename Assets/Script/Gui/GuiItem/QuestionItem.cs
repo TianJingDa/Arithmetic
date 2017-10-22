@@ -24,7 +24,7 @@ public class QuestionItem : Item
         questionRightAnswerPage_Text    = GameObjectDict["QuestionRightAnswerPage_Text"].GetComponent<Text>();
     }
 
-    private void InitPrefabItem(object data)
+    protected override void InitPrefabItem(object data)
     {
         Init();
         content = data as QuentionInstance;

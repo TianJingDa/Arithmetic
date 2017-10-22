@@ -27,6 +27,7 @@ public class AchievementController : Controller
         List<AchievementInstance> subtraction       = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/SubtractionAchievement.ach", typeof(List<AchievementInstance>));
         List<AchievementInstance> multiplication    = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/MultiplicationAchievement.ach", typeof(List<AchievementInstance>));
         List<AchievementInstance> division          = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/DivisionAchievement.ach", typeof(List<AchievementInstance>));
+        List<AchievementInstance> summary           = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/SummaryAchievement.ach", typeof(List<AchievementInstance>));
         WriteFileName(addition);
         WriteFileName(subtraction);
         WriteFileName(multiplication);
@@ -35,6 +36,7 @@ public class AchievementController : Controller
         achievementDict.Add(SymbolID.Subtraction, subtraction);
         achievementDict.Add(SymbolID.Multiplication, multiplication);
         achievementDict.Add(SymbolID.Division, division);
+        achievementDict.Add(SymbolID.Summary, summary);
     }
     public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {

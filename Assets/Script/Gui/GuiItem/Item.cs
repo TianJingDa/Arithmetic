@@ -15,5 +15,16 @@ public abstract class Item : MonoBehaviour
     {
 
     }
+    protected virtual void InitPrefabItem(object data)
+    {
 
+    }
+    protected virtual void InitDetailWin(GameObject detailWin)
+    {
+
+    }
+    protected virtual void InitDeleteWin(GameObject deleteWin)
+    {
+
+    }
 }

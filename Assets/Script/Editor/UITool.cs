@@ -226,6 +226,7 @@ public class UITool : Editor
             Application.dataPath + "/SubtractionAchievement.txt",
             Application.dataPath + "/MultiplicationAchievement.txt",
             Application.dataPath + "/DivisionAchievement.txt",
+            Application.dataPath + "/SummaryAchievement.txt",
         };
         List<string> targetList = new List<string>
         {
@@ -233,6 +234,7 @@ public class UITool : Editor
             Application.dataPath + "/Resources/Achievement/SubtractionAchievement.ach",
             Application.dataPath + "/Resources/Achievement/MultiplicationAchievement.ach",
             Application.dataPath + "/Resources/Achievement/DivisionAchievement.ach",
+            Application.dataPath + "/Resources/Achievement/SummaryAchievement.ach",
         };
         for (int i = 0; i < addressList.Count; i++)
         {
@@ -259,6 +261,7 @@ public class UITool : Editor
                 instance.subTitleIndex = lineList[5];
                 instance.imageIndex = lineList[6];
                 instance.fileName = lineList[7];
+                instance.type = lineList[8];
                 achList.Add(instance);
             }
             if (File.Exists(targetList[i])) File.Delete(targetList[i]);

@@ -1,5 +1,5 @@
-achievementName,condition,accuracy,meanTime,mainTitleIndex,subTitleIndex,imageIndex,fileName
-Addition_0,Text_00002,0.8,1.2,Text_00006,Text_00010,Image_00005,
-Addition_1,Text_00003,0.8,1.2,Text_00007,Text_00011,Image_00006,
-Addition_2,Text_00004,0.8,1.2,Text_00008,Text_00012,Image_00007,
-Addition_3,Text_00005,0.8,1.2,Text_00009,Text_00013,Image_00008,
+achievementName,condition,accuracy,meanTime,mainTitleIndex,subTitleIndex,imageIndex,fileName,type
+Addition_0,Text_00002,0.8,1.2,Text_00006,Text_00010,Image_00005,,Text_00050
+Addition_1,Text_00003,0.8,1.2,Text_00007,Text_00011,Image_00006,,Text_00051
+Addition_2,Text_00004,0.8,1.2,Text_00008,Text_00012,Image_00007,,Text_00052
+Addition_3,Text_00005,0.8,1.2,Text_00009,Text_00013,Image_00008,,Text_00053

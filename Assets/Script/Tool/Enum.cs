@@ -64,7 +64,8 @@ public enum SymbolID
     Subtraction,               //减法
     Multiplication,            //乘法
     Division,                  //除法
-    Random                     //随机
+    Random,                    //随机
+    Summary                    //这项并非是某种法则，而是用于成就系统中初始化数据
 }
 public enum DigitID
 {
