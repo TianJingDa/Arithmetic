@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using System.Text;
 
 
 public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPointerClickHandler
@@ -96,18 +97,18 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Text saveFileDetailTime = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailTime");
         Text saveFileDetailAmount = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAmount");
         Text saveFileDetailAccuracy = CommonTool.GetComponentByName<Text>(detailWin, "SaveFileDetailAccuracy");
-        GameObject shareBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "ShareBtnInStatistics");
-        GameObject onlyWrongBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongBtnInStatistics");
-        GameObject curAchievementBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "CurAchievementBtnInStatistics");
+        GameObject shareBtnInSaveFile = CommonTool.GetGameObjectByName(detailWin, "ShareBtnInSaveFile");
+        GameObject onlyWrongBtnInSaveFile = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongBtnInSaveFile");
+        GameObject curAchievementBtnInSaveFile = CommonTool.GetGameObjectByName(detailWin, "CurAchievementBtnInSaveFile");
         saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
         saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
+        CommonTool.AddEventTriggerListener(shareBtnInSaveFile, EventTriggerType.PointerClick, OnShareBtn);
+        CommonTool.AddEventTriggerListener(onlyWrongBtnInSaveFile, EventTriggerType.PointerClick, OnOnlyWrongBtn);
+        CommonTool.AddEventTriggerListener(curAchievementBtnInSaveFile, EventTriggerType.PointerClick, OnAchievementBtn);
         onlyWrong = false;
         RefreshSettlementGrid();
-        CommonTool.AddEventTriggerListener(shareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
-        CommonTool.AddEventTriggerListener(onlyWrongBtnInStatistics, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-        CommonTool.AddEventTriggerListener(curAchievementBtnInStatistics, EventTriggerType.PointerClick, OnAchievementBtn);
     }
     protected void OnShareBtn(BaseEventData data)
     {
@@ -115,7 +116,25 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected void OnAchievementBtn(BaseEventData data)
     {
+        GameObject achievementDetailBgInSaveFile = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailBgInSaveFile");
+        achievementDetailBgInSaveFile.SetActive(true);
+        Image achievementDetailImageInSaveFile = CommonTool.GetComponentByName<Image>(achievementDetailBgInSaveFile, "AchievementDetailImageInSaveFile");
+        Text achievementDetailMainTitleInSaveFile = CommonTool.GetComponentByName<Text>(achievementDetailBgInSaveFile, "AchievementDetailMainTitleInSaveFile");
+        Text achievementDetailSubTitleInSaveFile = CommonTool.GetComponentByName<Text>(achievementDetailBgInSaveFile, "AchievementDetailSubTitleInSaveFile");
+        Text achievementDetailFinishTimeInSaveFile = CommonTool.GetComponentByName<Text>(achievementDetailBgInSaveFile, "AchievementDetailFinishTimeInSaveFile");
+        AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
+        achievementDetailImageInSaveFile.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+        achievementDetailMainTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+        achievementDetailSubTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+        achievementDetailFinishTimeInSaveFile.text = GetFinishTime(content.fileName);
 
+    }
+    protected string GetFinishTime(string time)
+    {
+        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
+        newTime.Insert(4, ".");
+        newTime.Insert(7, ".");
+        return newTime.ToString();
     }
     protected void OnOnlyWrongBtn(BaseEventData data)
     {
@@ -144,8 +163,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected void OnLongPress()
     {
         deleteWin.SetActive(true);
-        GameObject deleteConfirmBtn = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtn");
-        CommonTool.AddEventTriggerListener(deleteConfirmBtn, EventTriggerType.PointerClick, OnLongPress);
+        GameObject deleteConfirmBtnInSaveFile = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtnInSaveFile");
+        CommonTool.AddEventTriggerListener(deleteConfirmBtnInSaveFile, EventTriggerType.PointerClick, OnLongPress);
     }
     protected void OnLongPress(BaseEventData data)
     {

@@ -1,5 +1,0 @@
-achievementName,condition,accuracy,meanTime,mainTitleIndex,subTitleIndex,imageIndex,fileName,type
-Subtraction_0,Text_00014,0.8,1.2,Text_00018,Text_00022,Image_00009,,Text_00050
-Subtraction_1,Text_00015,0.8,1.2,Text_00019,Text_00023,Image_00010,,Text_00051
-Subtraction_2,Text_00016,0.8,1.2,Text_00020,Text_00024,Image_00011,,Text_00052
-Subtraction_3,Text_00017,0.8,1.2,Text_00021,Text_00025,Image_00012,,Text_00053

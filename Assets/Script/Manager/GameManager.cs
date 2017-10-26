@@ -291,9 +291,13 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl.SaveRecord(curSaveFileInstance, fileName);
     }
     
-    public List<SaveFileInstance> ReadRecord()
+    public List<SaveFileInstance> ReadAllRecord()
     {
         return c_RecordCtrl.ReadAllRecord();
+    }
+    public SaveFileInstance ReadRecord(string fileName)
+    {
+        return c_RecordCtrl.ReadRecord(fileName);
     }
     public void ResetSaveFile()
     {
@@ -320,24 +324,35 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Delete File Fail!");
         }
     }
+    public void DeleteAchievement(string achievementName, string fileName)
+    {
+        if (!PlayerPrefs.HasKey(achievementName))
+        {
+            MyDebug.LogYellow("Wrong AchievementName!");
+            return;
+        } 
+        PlayerPrefs.DeleteKey(achievementName);
+        if (c_RecordCtrl.DeleteRecord(fileName))
+        {
+            if (m_CurAction != null) m_CurAction();
+            else MyDebug.LogYellow("UnRegister Function!");
+        }
+        else
+        {
+            MyDebug.LogYellow("Delete File Fail!");
+        }
+    }
     public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {
         return c_AchievementCtrl.GetAchievementList(symbolID);
     }
-    public Dictionary<SymbolID, List<AchievementInstance>> GetAchievementDict()
+    public AchievementInstance GetAchievement(string achievementName)
     {
-        return c_AchievementCtrl.GetAchievementDict();
+        return c_AchievementCtrl.GetAchievement(achievementName);
     }
     public void ResetAchievement()
     {
-        Dictionary<SymbolID, List<AchievementInstance>> instanceDict = c_AchievementCtrl.GetAchievementDict();
-        foreach (KeyValuePair<SymbolID, List<AchievementInstance>> pair in instanceDict)
-        {
-            for (int i = 0; i < pair.Value.Count; i++)
-            {
-                PlayerPrefs.DeleteKey(pair.Value[i].achievementName);
-            }
-        }
+        c_AchievementCtrl.ResetAchievement();
     }
     ///// <summary>
     ///// 激活GUI

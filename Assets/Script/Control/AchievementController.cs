@@ -9,7 +9,6 @@ public class AchievementController : Controller
     private AchievementController()
     {
         base.id = ControllerID.AchievementController;
-        achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>();
         InitAchievementData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -19,43 +18,36 @@ public class AchievementController : Controller
     }
     #endregion
 
-    private Dictionary<SymbolID, List<AchievementInstance>> achievementDict;
+    private List<AchievementInstance> achievementList;
 
     private void InitAchievementData()
     {
-        List<AchievementInstance> addition          = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/AdditionAchievement.ach", typeof(List<AchievementInstance>));
-        List<AchievementInstance> subtraction       = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/SubtractionAchievement.ach", typeof(List<AchievementInstance>));
-        List<AchievementInstance> multiplication    = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/MultiplicationAchievement.ach", typeof(List<AchievementInstance>));
-        List<AchievementInstance> division          = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/DivisionAchievement.ach", typeof(List<AchievementInstance>));
-        List<AchievementInstance> summary           = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/SummaryAchievement.ach", typeof(List<AchievementInstance>));
-        WriteFileName(addition);
-        WriteFileName(subtraction);
-        WriteFileName(multiplication);
-        WriteFileName(division);
-        achievementDict.Add(SymbolID.Addition, addition);
-        achievementDict.Add(SymbolID.Subtraction, subtraction);
-        achievementDict.Add(SymbolID.Multiplication, multiplication);
-        achievementDict.Add(SymbolID.Division, division);
-        achievementDict.Add(SymbolID.Summary, summary);
+        achievementList = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/Achievement.ach", typeof(List<AchievementInstance>));
+        WriteFileName(achievementList);
     }
     public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {
-        return achievementDict[symbolID];
+        int operatorTpye = (int)symbolID;
+        return achievementList.FindAll(x => x.operatorTpye == operatorTpye);
     }
-    public Dictionary<SymbolID, List<AchievementInstance>> GetAchievementDict()
+    public AchievementInstance GetAchievement(string achievementName)
     {
-        return achievementDict;
+        return achievementList.Find(x => x.achievementName == achievementName);
+    }
+    public void ResetAchievement()
+    {
+        for (int i = 0; i < achievementList.Count; i++)
+        {
+            PlayerPrefs.DeleteKey(achievementList[i].achievementName);
+        }
     }
     public List<string> GetAllFileNameWithAchievement()
     {
         List<string> fileNameList = new List<string>();
-        foreach (KeyValuePair<SymbolID, List<AchievementInstance>> pair in achievementDict)
+        for(int i = 0;i< achievementList.Count; i++)
         {
-            for (int i = 0; i < pair.Value.Count; i++)
-            {
-                string fileName = PlayerPrefs.GetString(pair.Value[i].achievementName, "");
-                if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
-            }
+            string fileName = PlayerPrefs.GetString(achievementList[i].achievementName, "");
+            if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
         }
         return fileNameList;
     }

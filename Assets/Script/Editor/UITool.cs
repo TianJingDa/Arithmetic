@@ -220,53 +220,38 @@ public class UITool : Editor
     [MenuItem("Custom Editor/生成成就")]
     public static void ExchangeAchievement()
     {
-        List<string> addressList = new List<string>
+        string addressList = Application.dataPath + "/Achievement.txt";
+        string targetList = Application.dataPath + "/Resources/Achievement/Achievement.ach";
+        StreamReader mutiLanguageAsset = new StreamReader(addressList);
+        if (mutiLanguageAsset == null)
         {
-            Application.dataPath + "/AdditionAchievement.txt",
-            Application.dataPath + "/SubtractionAchievement.txt",
-            Application.dataPath + "/MultiplicationAchievement.txt",
-            Application.dataPath + "/DivisionAchievement.txt",
-            Application.dataPath + "/SummaryAchievement.txt",
-        };
-        List<string> targetList = new List<string>
-        {
-            Application.dataPath + "/Resources/Achievement/AdditionAchievement.ach",
-            Application.dataPath + "/Resources/Achievement/SubtractionAchievement.ach",
-            Application.dataPath + "/Resources/Achievement/MultiplicationAchievement.ach",
-            Application.dataPath + "/Resources/Achievement/DivisionAchievement.ach",
-            Application.dataPath + "/Resources/Achievement/SummaryAchievement.ach",
-        };
-        for (int i = 0; i < addressList.Count; i++)
-        {
-            StreamReader mutiLanguageAsset = new StreamReader(addressList[i]);
-            if (mutiLanguageAsset == null)
-            {
-                MyDebug.LogYellow("Can not find: " + addressList[i]);
-                return;
-            }
-            char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
-            string asset = mutiLanguageAsset.ReadToEnd();
-            string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
-            string[] lineList;
-            List<AchievementInstance> achList = new List<AchievementInstance>();
-            for (int j = 1; j < lineArray.Length; j++)
-            {
-                AchievementInstance instance = new AchievementInstance();
-                lineList = lineArray[j].Split(',');
-                instance.achievementName = lineList[0];
-                instance.condition = lineList[1];
-                float.TryParse(lineList[2], out instance.accuracy);
-                float.TryParse(lineList[3], out instance.meanTime);
-                instance.mainTitleIndex = lineList[4];
-                instance.subTitleIndex = lineList[5];
-                instance.imageIndex = lineList[6];
-                instance.fileName = lineList[7];
-                instance.type = lineList[8];
-                achList.Add(instance);
-            }
-            if (File.Exists(targetList[i])) File.Delete(targetList[i]);
-            IOHelper.SetData(targetList[i], achList);
+            MyDebug.LogYellow("Can not find: " + addressList);
+            return;
         }
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string asset = mutiLanguageAsset.ReadToEnd();
+        string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] lineList;
+        List<AchievementInstance> achList = new List<AchievementInstance>();
+        for (int j = 1; j < lineArray.Length; j++)
+        {
+            AchievementInstance instance = new AchievementInstance();
+            lineList = lineArray[j].Split(',');
+            instance.achievementName = lineList[0];
+            instance.condition = lineList[1];
+            float.TryParse(lineList[2], out instance.accuracy);
+            float.TryParse(lineList[3], out instance.meanTime);
+            instance.mainTitleIndex = lineList[4];
+            instance.subTitleIndex = lineList[5];
+            instance.imageIndex = lineList[6];
+            instance.fileName = lineList[7];
+            instance.classType = lineList[8];
+            int.TryParse(lineList[9], out instance.operatorTpye);
+            achList.Add(instance);
+        }
+        if (File.Exists(targetList)) File.Delete(targetList);
+        IOHelper.SetData(targetList, achList);
+
     }
     [MenuItem("Custom Editor/生成多语言")]
     public static void MakeMutiLanguageJson()
