@@ -246,7 +246,18 @@ public class UITool : Editor
             instance.imageIndex = lineList[6];
             instance.fileName = lineList[7];
             instance.classType = lineList[8];
-            int.TryParse(lineList[9], out instance.operatorTpye);
+            int patternID = 0;
+            int amountID = 0;
+            int symbolID = 0;
+            int digitID = 0;
+            int operandID = 0;
+            int.TryParse(lineList[9], out patternID);
+            int.TryParse(lineList[10], out amountID);
+            int.TryParse(lineList[11], out symbolID);
+            int.TryParse(lineList[12], out digitID);
+            int.TryParse(lineList[13], out operandID);
+            CategoryInstance cInstance = new CategoryInstance(patternID, amountID, symbolID, digitID, operandID);
+            instance.cInstance = cInstance;
             achList.Add(instance);
         }
         if (File.Exists(targetList)) File.Delete(targetList);

@@ -27,8 +27,7 @@ public class AchievementController : Controller
     }
     public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
     {
-        int operatorTpye = (int)symbolID;
-        return achievementList.FindAll(x => x.operatorTpye == operatorTpye);
+        return achievementList.FindAll(x => x.cInstance.symbolID == symbolID);
     }
     public AchievementInstance GetAchievement(string achievementName)
     {

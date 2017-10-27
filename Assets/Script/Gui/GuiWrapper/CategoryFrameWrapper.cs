@@ -140,6 +140,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         OnDropdownClick(digitDropdown);
     }
 }
+[System.Serializable]
 public class CategoryInstance
 {
     public CategoryInstance(PatternID patternID, AmountID amountID, SymbolID symbolID, DigitID digitID, OperandID operandID)
@@ -149,6 +150,14 @@ public class CategoryInstance
         this.symbolID   = symbolID;
         this.digitID    = digitID;
         this.operandID  = operandID;
+    }
+    public CategoryInstance(int patternID, int amountID, int symbolID, int digitID, int operandID)
+    {
+        this.patternID = (PatternID)patternID;
+        this.amountID = (AmountID)amountID;
+        this.symbolID = (SymbolID)symbolID;
+        this.digitID = (DigitID)digitID;
+        this.operandID = (OperandID)operandID;
     }
     public PatternID patternID;
     public AmountID  amountID;

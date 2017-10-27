@@ -49,17 +49,20 @@ public enum HandednessID
 }
 public enum PatternID
 {
+    Any = -1,                  //任意
     Time,                      //限时
     Number                     //限数
 }
 public enum AmountID
 {
+    Any = -1,                  //任意
     Three,                     //3分钟或30道
     Five,                      //5分钟或50道
     Ten                        //10分钟或100道
 }
 public enum SymbolID
 {
+    Any = -1,                  //任意
     Addition,                  //加法
     Subtraction,               //减法
     Multiplication,            //乘法
@@ -69,6 +72,7 @@ public enum SymbolID
 }
 public enum DigitID
 {
+    Any = -1,                  //任意
     TwoDigits,                 //两位数
     ThreeDigits,               //三位数
     FourDigits,                //四位数
@@ -76,6 +80,7 @@ public enum DigitID
 }
 public enum OperandID
 {
+    Any = -1,                  //任意
     TwoNumbers,                //两个操作数
     ThreeNumbers               //三个操作数
 }

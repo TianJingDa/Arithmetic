@@ -13,16 +13,16 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected bool isLongPress;
     protected bool onlyWrong;
 
-    private AchievementInstance content;//详情
-    private List<QuentionInstance> onlyWrongList;
-    private List<QuentionInstance> allInstanceList;
-    private GameObject detailWin;
-    private GameObject deleteWin;
-    private GameObject achievementItem_WithoutAchievement;
-    private Text achievementName;
-    private Text achievementName_WithoutAchievement;
-    private Text achievementTpye;
-    private Text achievementCondition;
+    protected AchievementInstance content;//详情
+    protected List<QuentionInstance> onlyWrongList;
+    protected List<QuentionInstance> allInstanceList;
+    protected GameObject detailWin;
+    protected GameObject deleteWin;
+    protected GameObject achievementItem_WithoutAchievement;
+    protected Text achievementName;
+    protected Text achievementName_WithoutAchievement;
+    protected Text achievementTpye;
+    protected Text achievementCondition;
     protected Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -58,7 +58,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void OnShortPress()
     {
-        if (string.IsNullOrEmpty(content.fileName)) return;
+        if (content == null || string.IsNullOrEmpty(content.fileName)) return;
         detailWin.SetActive(true);
         Image achievementDetailImageInStatistics = CommonTool.GetComponentByName<Image>(detailWin, "AchievementDetailImageInStatistics");
         Text achievementDetailMainTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailMainTitleInStatistics");
@@ -130,7 +130,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void OnLongPress()
     {
-        if (string.IsNullOrEmpty(content.fileName)) return;
+        if (content == null || string.IsNullOrEmpty(content.fileName)) return;
         deleteWin.SetActive(true);
         GameObject deleteConfirmBtnInAchievement = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtnInAchievement");
         CommonTool.AddEventTriggerListener(deleteConfirmBtnInAchievement, EventTriggerType.PointerClick, OnLongPress);
@@ -190,6 +190,6 @@ public class AchievementInstance
     public string imageIndex;
     public string fileName;//存档名
     public string classType;
-    public int operatorTpye;
+    public CategoryInstance cInstance;
 }
 

@@ -9,8 +9,9 @@ using System;
 /// </summary>
 public class StatisticsFrameWrapper : GuiFrameWrapper
 {
-    private int curIndex;//当前所选存档类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
-    private int curCount;//存档总数量
+    private int curSaveFileIndex;//当前所选存档类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
+    private int curSaveFileCount;//存档总数量
+    private int curAchievementIndex;//当前所选成就类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
     private Text totelTimeImg_Text2;
     private Text totelGameImg_Text2;
     private Text additionSummary_Text;
@@ -23,18 +24,28 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject deleteSaveFileBg;
     private GameObject deleteAchievementBg;
     private GameObject saveFileSummary;
+    private GameObject achievementSummary;
     private GameObject saveFileDetailBgOfAchievement;
     private GameObject achievementDetailBgInSaveFile;
     private GameObject achievementDetailBgInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     private ToggleGroup saveFileToggleGroup;
+    private ToggleGroup achievementToggleGroup;
     private SummarySaveFileItem additionSaveFileItem;
     private SummarySaveFileItem subtractionSaveFileItem;
     private SummarySaveFileItem multiplicationSaveFileItem;
     private SummarySaveFileItem divisionSaveFileItem;
-    private Dictionary<SymbolID, string> rawStringDict;
+    private LastestAchievementItem lastestAchievementItem;
+    private SummaryAchievementItem additionAchievementItem;
+    private SummaryAchievementItem subtractionAchievementItem;
+    private SummaryAchievementItem multiplicationAchievementItem;
+    private SummaryAchievementItem divisionAchievementItem;
+    private HiddenAchievementItem hiddenAchievementItem;
+    private Dictionary<SymbolID, string> rawSaveFileStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
+    private Dictionary<SymbolID, List<AchievementInstance>> achievementDict;
+
     void Start () 
 	{
         id = GuiFrameID.StatisticsFrame;
@@ -43,7 +54,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
         totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
-        rawStringDict = new Dictionary<SymbolID, string>
+        rawSaveFileStringDict = new Dictionary<SymbolID, string>
         {
             {SymbolID.Addition, additionSummary_Text.text },
             {SymbolID.Subtraction, subtractionSummary_Text.text },
@@ -63,6 +74,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         deleteAchievementBg             = GameObjectDict["DeleteAchievementBg"];
         saveFileDetailBgOfAchievement   = GameObjectDict["SaveFileDetailBgOfAchievement"];
         saveFileSummary                 = GameObjectDict["SaveFileSummary"];
+        achievementSummary              = GameObjectDict["AchievementSummary"];
         totelTimeImg_Text2              = GameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
         totelGameImg_Text2              = GameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
         additionSummary_Text            = GameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
@@ -75,7 +87,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         subtractionSaveFileItem         = GameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         multiplicationSaveFileItem      = GameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
         divisionSaveFileItem            = GameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        lastestAchievementItem          = GameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
+        additionAchievementItem         = GameObjectDict["AdditionAchievementItem"].GetComponent<SummaryAchievementItem>();
+        subtractionAchievementItem      = GameObjectDict["SubtractionAchievementItem"].GetComponent<SummaryAchievementItem>();
+        multiplicationAchievementItem   = GameObjectDict["MultiplicationAchievementItem"].GetComponent<SummaryAchievementItem>();
+        divisionAchievementItem         = GameObjectDict["DivisionAchievementItem"].GetComponent<SummaryAchievementItem>();
+        hiddenAchievementItem           = GameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
         saveFileToggleGroup             = GameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
+        achievementToggleGroup          = GameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -93,7 +112,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 break;
             case "AchievementBtn":
                 achievementWin.SetActive(true);
-                InitAchievementList();
+                RefreshAchievementWin();
                 break;
             case "AchievementDetailBgInStatistics":
                 achievementDetailBgInStatistics.SetActive(false);
@@ -136,22 +155,57 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         base.OnToggleClick(tgl);
         if (!tgl.isOn) return;
-        if (tgl.index < 0)
+        if (tgl.name.Contains("SaveFileToggle_"))
         {
-            RefreshSummaryPage();
+            if (tgl.index < 0)
+            {
+                RefreshSummarySaveFilePage();
+            }
+            else
+            {
+                curSaveFileIndex = tgl.index;
+                RefreshSaveFileList();
+            }
         }
-        else
+        else if (tgl.name.Contains("AchievementToggle_"))
         {
-            curIndex = tgl.index;
-            RefreshSaveFileList();
+            if (tgl.index < 0)
+            {
+                RefreshSummaryAchievementPage();
+            }
+            else
+            {
+                curAchievementIndex = tgl.index;
+                RefreshAchievementList();
+            }
         }
     }
+    #region 成就
+    private void RefreshAchievementWin()
+    {
+        achievementWin.SetActive(true);
+        //List<AchievementItem> achievementList = GameManager.Instance.GetAchievementList()
+    }
+    private void RefreshSummaryAchievementPage()
+    {
+        achievementSummary.SetActive(true);
+    }
+    private void RefreshSummaryAchievement(SummaryAchievementItem item, SymbolID symbol)
+    {
 
+    }
+    private void RefreshAchievementList()
+    {
+
+    }
+    #endregion
+
+    #region 存档
     private void RefreshSaveFileWin()
     {
         saveFileWin.SetActive(true);
         List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecord();
-        curCount = saveFileList.Count;
+        curSaveFileCount = saveFileList.Count;
         saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
                 {
                     {SymbolID.Addition, saveFileList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
@@ -163,7 +217,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileToggleGroup.toggles[0].isOn = true;
         GameManager.Instance.CurAction = RefreshSaveFileDict;
     }
-    private void RefreshSummaryPage()
+    private void RefreshSummarySaveFilePage()
     {
         saveFileSummary.SetActive(true);
 
@@ -185,25 +239,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         {
             item.gameObject.SetActive(false);
         }
-        summary.text = string.Format(rawStringDict[symbolID], instanceList.Count, curCount);
+        summary.text = string.Format(rawSaveFileStringDict[symbolID], instanceList.Count, curSaveFileCount);
     }
-
-    private void InitAchievementList()
-    {
-        ArrayList dataList = new ArrayList();
-        for(int i = 0; i < 8; i++)
-        {
-            AchievementInstance instance = new AchievementInstance();
-            instance.achievementName = i.ToString();
-            dataList.Add(instance);
-        }
-        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics);
-    }
-
     private void RefreshSaveFileList()
     {
         saveFileSummary.SetActive(false);
-        SymbolID symbolID = (SymbolID)curIndex;
+        SymbolID symbolID = (SymbolID)curSaveFileIndex;
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
         saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
     }
@@ -213,11 +254,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     /// </summary>
     private void RefreshSaveFileDict()
     {
-        SymbolID symbolID = (SymbolID)curIndex;
+        SymbolID symbolID = (SymbolID)curSaveFileIndex;
         List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecord();
-        curCount = saveFileList.Count;
+        curSaveFileCount = saveFileList.Count;
         saveFileDict[symbolID] = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
         saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
     }
+    #endregion
 }
