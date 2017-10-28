@@ -25,9 +25,9 @@ public class AchievementController : Controller
         achievementList = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/Achievement.ach", typeof(List<AchievementInstance>));
         WriteFileName(achievementList);
     }
-    public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
+    public List<AchievementInstance> GetAllAchievements()
     {
-        return achievementList.FindAll(x => x.cInstance.symbolID == symbolID);
+        return achievementList;
     }
     public AchievementInstance GetAchievement(string achievementName)
     {

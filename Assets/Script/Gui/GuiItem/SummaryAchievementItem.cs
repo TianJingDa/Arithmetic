@@ -32,7 +32,7 @@ public class SummaryAchievementItem : AchievementItem
     }
     private int GetAchievementCountBySymbol(SymbolID symbol, out int countWithAchievement)
     {
-        List<AchievementInstance> instanceList = GameManager.Instance.GetAchievementList(symbol);
+        List<AchievementInstance> instanceList = GameManager.Instance.GetAllAchievements().FindAll(x => x.cInstance.symbolID == symbol);
         countWithAchievement = 0;
         for (int i = 0; i < instanceList.Count; i++)
         {

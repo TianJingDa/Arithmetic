@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
             float totalTime = PlayerPrefs.GetFloat("TotalTime", 0);
             return totalTime;
         }
-        set
+        private set
         {
             float totalTime = value;
             PlayerPrefs.SetFloat("TotalTime", totalTime);
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
             int totalGame = PlayerPrefs.GetInt("TotalGame", 0);
             return totalGame;
         }
-        set
+        private set
         {
             int totalGame = value;
             PlayerPrefs.SetInt("TotalGame", totalGame);
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
             int newAchievement = PlayerPrefs.GetInt("NewAchievement", 0);
             return newAchievement != 0;
         }
-        set
+        private set
         {
             int newAchievement = value ? 1 : 0;
             PlayerPrefs.SetInt("NewAchievement", newAchievement);
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour
             int newSaveFile = PlayerPrefs.GetInt("NewSaveFile", 0);
             return newSaveFile != 0;
         }
-        set
+        private set
         {
             int newSaveFile = value ? 1 : 0;
             PlayerPrefs.SetInt("NewSaveFile", newSaveFile);
@@ -180,6 +180,22 @@ public class GameManager : MonoBehaviour
     public int[] AmountArray_Number
     {
         get { return m_AmountArray_Number; }
+    }
+    private string LastestAchievement
+    {
+        get
+        {
+            string lastestAchievementString = PlayerPrefs.GetString("LastestAchievement", "");
+            if (string.IsNullOrEmpty(lastestAchievementString)) return "";
+            char[] charSeparators = new char[] { ',' };
+            string[] lastestAchievementArray = lastestAchievementString.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+            return lastestAchievementArray[lastestAchievementArray.Length - 1];
+        }
+        set
+        {
+            string lastestAchievementString = PlayerPrefs.GetString("LastestAchievement", "") + value + ',';
+            PlayerPrefs.SetString("LastestAchievement", lastestAchievementString);
+        }
     }
 
     public static GameManager Instance//单例
@@ -289,11 +305,14 @@ public class GameManager : MonoBehaviour
 
         m_SaveFileInstance = curSaveFileInstance;
         c_RecordCtrl.SaveRecord(curSaveFileInstance, fileName);
+
+        TotalGame++;
+        TotalTime += timeCost;
     }
     
-    public List<SaveFileInstance> ReadAllRecord()
+    public List<SaveFileInstance> ReadAllRecords()
     {
-        return c_RecordCtrl.ReadAllRecord();
+        return c_RecordCtrl.ReadAllRecords();
     }
     public SaveFileInstance ReadRecord(string fileName)
     {
@@ -341,14 +360,20 @@ public class GameManager : MonoBehaviour
         {
             MyDebug.LogYellow("Delete File Fail!");
         }
+        if (achievementName.Equals(LastestAchievement)) PlayerPrefs.DeleteKey("LastestAchievement");
     }
-    public List<AchievementInstance> GetAchievementList(SymbolID symbolID)
+    public List<AchievementInstance> GetAllAchievements()
     {
-        return c_AchievementCtrl.GetAchievementList(symbolID);
+        return c_AchievementCtrl.GetAllAchievements();
     }
     public AchievementInstance GetAchievement(string achievementName)
     {
         return c_AchievementCtrl.GetAchievement(achievementName);
+    }
+    public AchievementInstance GetLastestAchievement()
+    {
+        if (string.IsNullOrEmpty(LastestAchievement)) return null;
+        return c_AchievementCtrl.GetAchievement(LastestAchievement);
     }
     public void ResetAchievement()
     {
@@ -455,7 +480,11 @@ public class GameManager : MonoBehaviour
     {
         string achievementName = "";
         bool hasAchievement = PlayerPrefs.HasKey(achievementName);
-        if (!hasAchievement) PlayerPrefs.SetString(achievementName, fileName);
+        if (!hasAchievement)
+        {
+            PlayerPrefs.SetString(achievementName, fileName);
+            LastestAchievement = achievementName;
+        } 
         return achievementName;
     }
     #endregion

@@ -39,7 +39,7 @@ public sealed class RecordController : Controller
         IOHelper.SetData(fullName, obj);
     }
 
-    public List<SaveFileInstance> ReadAllRecord()
+    public List<SaveFileInstance> ReadAllRecords()
     {
         List<SaveFileInstance> recordList = new List<SaveFileInstance>();
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
