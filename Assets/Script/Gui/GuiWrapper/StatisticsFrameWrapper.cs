@@ -37,10 +37,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private SummarySaveFileItem multiplicationSaveFileItem;
     private SummarySaveFileItem divisionSaveFileItem;
     private LastestAchievementItem lastestAchievementItem;
-    private SummaryAchievementItem additionAchievementItem;
-    private SummaryAchievementItem subtractionAchievementItem;
-    private SummaryAchievementItem multiplicationAchievementItem;
-    private SummaryAchievementItem divisionAchievementItem;
+    private SummaryAchievementItem[] summaryAchievementArray;
     private HiddenAchievementItem hiddenAchievementItem;
     private Dictionary<SymbolID, string> rawSaveFileStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
@@ -88,10 +85,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         multiplicationSaveFileItem      = GameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
         divisionSaveFileItem            = GameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         lastestAchievementItem          = GameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
-        additionAchievementItem         = GameObjectDict["AdditionAchievementItem"].GetComponent<SummaryAchievementItem>();
-        subtractionAchievementItem      = GameObjectDict["SubtractionAchievementItem"].GetComponent<SummaryAchievementItem>();
-        multiplicationAchievementItem   = GameObjectDict["MultiplicationAchievementItem"].GetComponent<SummaryAchievementItem>();
-        divisionAchievementItem         = GameObjectDict["DivisionAchievementItem"].GetComponent<SummaryAchievementItem>();
         hiddenAchievementItem           = GameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
         saveFileToggleGroup             = GameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
         achievementToggleGroup          = GameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
@@ -185,13 +178,16 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshAchievementWin()
     {
         achievementWin.SetActive(true);
+        if (summaryAchievementArray == null) summaryAchievementArray = achievementSummary.GetComponentsInChildren<SummaryAchievementItem>(true);
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>
                 {
                     {SymbolID.Addition, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
                     {SymbolID.Subtraction, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
                     {SymbolID.Multiplication, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
-                    {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)}
+                    {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)},
+                    {SymbolID.Summary, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Summary)},
+                    {SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
                 };
         achievementToggleGroup.SetAllTogglesOff();
         achievementToggleGroup.toggles[0].isOn = true;
@@ -201,7 +197,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementSummary.SetActive(true);
         RefreshLastestAchievement();
-
+        RefreshSummaryAchievement();
     }
     private void RefreshLastestAchievement()
     {
@@ -209,10 +205,15 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         lastestAchievementItem.SendMessage("InitPrefabItem", lastestAchievement);
         lastestAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
     }
-    private void RefreshSummaryAchievement(SummaryAchievementItem item, SymbolID symbol)
+    private void RefreshSummaryAchievement()
     {
-
+        for(int i = 0; i < summaryAchievementArray.Length; i++)
+        {
+            summaryAchievementArray[i].SendMessage("InitPrefabItem", achievementDict[SymbolID.Summary][i]);
+            summaryAchievementArray[i].SendMessage("InitDetailWin", achievementDetailBgInStatistics);
+        }
     }
+
     private void RefreshAchievementList()
     {
 

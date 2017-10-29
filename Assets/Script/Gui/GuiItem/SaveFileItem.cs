@@ -12,6 +12,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected float durationThreshold = 1.0f;
     protected bool isLongPress;
     protected bool onlyWrong;
+    protected bool hasAchievement;
 
     protected SaveFileInstance content;//详情
     protected List<QuentionInstance> onlyWrongList;
@@ -74,8 +75,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     {
         Init();
         content = data as SaveFileInstance;
+        hasAchievement = !string.IsNullOrEmpty(content.achievementName);
         saveFileName.text = content.fileName;
-        saveFileAchievement_No.SetActive(string.IsNullOrEmpty(content.achievementName));
+        saveFileAchievement_No.SetActive(!hasAchievement);
         int digit = (int)content.cInstance.digitID + 2;
         int operand = (int)content.cInstance.operandID + 2;
         if (content.cInstance.patternID == PatternID.Time)
@@ -106,7 +108,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         CommonTool.AddEventTriggerListener(shareBtnInSaveFile, EventTriggerType.PointerClick, OnShareBtn);
         CommonTool.AddEventTriggerListener(onlyWrongBtnInSaveFile, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-        CommonTool.AddEventTriggerListener(curAchievementBtnInSaveFile, EventTriggerType.PointerClick, OnAchievementBtn);
+        curAchievementBtnInSaveFile.SetActive(hasAchievement);
+        if (hasAchievement) CommonTool.AddEventTriggerListener(curAchievementBtnInSaveFile, EventTriggerType.PointerClick, OnAchievementBtn);
         onlyWrong = false;
         RefreshSettlementGrid();
     }

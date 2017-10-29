@@ -102,7 +102,7 @@ public static class CommonTool
         }
         return result;
     }
-    public static List<GameObject> GetGameObjectsByName(GameObject root, string name)
+    public static List<GameObject> GetGameObjectsContainsName(GameObject root, string name)
     {
         List<GameObject> result = new List<GameObject>();
         Transform[] objArray = root.GetComponentsInChildren<Transform>(true);
@@ -220,5 +220,4 @@ public static class CommonTool
         entry.callback.AddListener(callback);
         trigger.triggers.Add(entry);
     }
-
 }

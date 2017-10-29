@@ -62,12 +62,13 @@ public enum AmountID
 }
 public enum SymbolID
 {
-    Any = -1,                  //任意
+    Hidden          = -3,      //这项并非是某种法则，而是用于成就系统中初始化数据
+    Summary         = -2,      //这项并非是某种法则，而是用于成就系统中初始化数据
+    Any             = -1,      //任意
     Addition,                  //加法
     Subtraction,               //减法
     Multiplication,            //乘法
     Division,                  //除法
-    Summary,                   //这项并非是某种法则，而是用于成就系统中初始化数据
     Random                     //随机
 }
 public enum DigitID

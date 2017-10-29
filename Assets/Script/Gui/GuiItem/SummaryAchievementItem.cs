@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SummaryAchievementItem : AchievementItem 
 {
@@ -10,25 +11,49 @@ public class SummaryAchievementItem : AchievementItem
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");
         achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
+        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "achievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
     }
     protected override void InitPrefabItem(object data)
     {
         Init();
         content = data as AchievementInstance;
-        bool notHasAchievement = string.IsNullOrEmpty(content.fileName);
-        achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        achievementCondition.text = content.condition;
         int countWithAchievement = 0;
         int countOfSymbol = GetAchievementCountBySymbol(content.cInstance.symbolID, out countWithAchievement);
+        bool hasFinish = countWithAchievement == countOfSymbol;
+        achievementItem_WithoutAchievement.SetActive(!hasFinish);
+        achievementCondition.text = content.condition;
         achievementTpye.text = string.Format(achievementTpye.text, countWithAchievement, countOfSymbol);
-        achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-        if (notHasAchievement)
+        achievementName.gameObject.SetActive(hasFinish);
+        achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
+        if (!hasFinish)
         {
-            achievementName.color = Color.gray;
             achievementTpye.color = Color.gray;
             achievementCondition.color = Color.gray;
+            achievementName_WithoutAchievement.color = Color.gray;
         }
+        else
+        {
+            content.fileName = "HasFinish";
+            achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+        }
+    }
+    protected new void OnShortPress()
+    {
+        if (content == null || string.IsNullOrEmpty(content.fileName)) return;
+        detailWin.SetActive(true);
+        Image achievementDetailImageInStatistics = CommonTool.GetComponentByName<Image>(detailWin, "AchievementDetailImageInStatistics");
+        Text achievementDetailMainTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailMainTitleInStatistics");
+        Text achievementDetailSubTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailSubTitleInStatistics");
+        Text achievementDetailFinishTimeInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailFinishTimeInStatistics");
+        GameObject achievementDetailShareBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailShareBtnInStatistics");
+        GameObject achievementDetailSaveFileBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailSaveFileBtnInStatistics");
+        achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+        achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
+        achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.fileName);
+        CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
+        if (achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(false);
     }
     private int GetAchievementCountBySymbol(SymbolID symbol, out int countWithAchievement)
     {
@@ -36,10 +61,8 @@ public class SummaryAchievementItem : AchievementItem
         countWithAchievement = 0;
         for (int i = 0; i < instanceList.Count; i++)
         {
-            if (string.IsNullOrEmpty(instanceList[i].fileName))
-            {
-                countWithAchievement++;
-            }
+            if (string.IsNullOrEmpty(instanceList[i].fileName)) continue;
+            countWithAchievement++;
         }
         return instanceList.Count;
     }

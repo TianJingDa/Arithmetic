@@ -71,8 +71,8 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.fileName);
         CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
+        if (!achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(true);
         CommonTool.AddEventTriggerListener(achievementDetailSaveFileBtnInStatistics, EventTriggerType.PointerClick, OnSaveFileBtn);
-
     }
     protected void OnShareBtn(BaseEventData data)
     {

@@ -45,7 +45,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         question    = new StringBuilder();
         resultList  = new List<List<int>>();
         countdownBg.SetActive(true);
-        countdownNumsList = CommonTool.GetGameObjectsByName(countdownBg, "Countdown_");
+        countdownNumsList = CommonTool.GetGameObjectsContainsName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetList();
         ClearAllText();
