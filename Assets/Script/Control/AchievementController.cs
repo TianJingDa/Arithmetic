@@ -23,7 +23,7 @@ public class AchievementController : Controller
     private void InitAchievementData()
     {
         achievementList = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/Achievement.ach", typeof(List<AchievementInstance>));
-        WriteFileName(achievementList);
+        WriteAllFileName(achievementList);
     }
     public List<AchievementInstance> GetAllAchievements()
     {
@@ -33,12 +33,19 @@ public class AchievementController : Controller
     {
         return achievementList.Find(x => x.achievementName == achievementName);
     }
-    public void ResetAchievement()
+    public void ResetAllAchievement()
     {
         for (int i = 0; i < achievementList.Count; i++)
         {
             PlayerPrefs.DeleteKey(achievementList[i].achievementName);
+            achievementList[i].fileName = "";
         }
+    }
+    public void ResetAchievement(string achievementName)
+    {
+        PlayerPrefs.DeleteKey(achievementName);
+        AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
+        if (instance != null) instance.fileName = "";
     }
     public List<string> GetAllFileNameWithAchievement()
     {
@@ -50,8 +57,12 @@ public class AchievementController : Controller
         }
         return fileNameList;
     }
-
-    private void WriteFileName(List<AchievementInstance> instanceList)
+    public void WriteFileName(string achievementName, string fileName)
+    {
+        AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
+        if (instance != null) instance.fileName = fileName;
+    }
+    private void WriteAllFileName(List<AchievementInstance> instanceList)
     {
         for(int i = 0; i < instanceList.Count; i++)
         {

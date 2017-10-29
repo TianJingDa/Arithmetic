@@ -328,8 +328,22 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         }
         else if (tgl.name.Contains("ResetToggle"))
         {
-            if (tgl.isOn) resetTogglesIndexList.Add(tgl.index);
-            else resetTogglesIndexList.Remove(tgl.index);
+            if (tgl.isOn)
+            {
+                if(tgl.index == 2 || tgl.index == 3)
+                {
+                    ShowTip(tgl);
+                    return;
+                }
+                else
+                {
+                    resetTogglesIndexList.Add(tgl.index);
+                }
+            }
+            else
+            {
+                resetTogglesIndexList.Remove(tgl.index);
+            }
             resetApplyBtn.interactable = resetTogglesIndexList.Count != 0;
         }
     }
@@ -342,7 +356,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             tempID = tgl.index;
         }
     }
-
+    private void ShowTip(Toggle tgl)
+    {
+        MyDebug.LogYellow("重置成就和存档的提示信息");
+    }
     protected override void OnDropdownClick(Dropdown dpd)
     {
         base.OnDropdownClick(dpd);

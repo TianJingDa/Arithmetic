@@ -160,6 +160,11 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     {
         Init();
         content = data as AchievementInstance;
+        if (content == null)
+        {
+            MyDebug.LogYellow("AchievementInstance is null!!");
+            return;
+        }
         bool notHasAchievement = string.IsNullOrEmpty(content.fileName);
         achievementName.gameObject.SetActive(!notHasAchievement);
         achievementName_WithoutAchievement.gameObject.SetActive(notHasAchievement);

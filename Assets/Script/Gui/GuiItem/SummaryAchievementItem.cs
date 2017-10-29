@@ -18,24 +18,42 @@ public class SummaryAchievementItem : AchievementItem
     {
         Init();
         content = data as AchievementInstance;
-        int countWithAchievement = 0;
-        int countOfSymbol = GetAchievementCountBySymbol(content.cInstance.symbolID, out countWithAchievement);
-        bool hasFinish = countWithAchievement == countOfSymbol;
-        achievementItem_WithoutAchievement.SetActive(!hasFinish);
-        achievementCondition.text = content.condition;
-        achievementTpye.text = string.Format(achievementTpye.text, countWithAchievement, countOfSymbol);
-        achievementName.gameObject.SetActive(hasFinish);
-        achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
-        if (!hasFinish)
+        if (content == null)
         {
-            achievementTpye.color = Color.gray;
-            achievementCondition.color = Color.gray;
-            achievementName_WithoutAchievement.color = Color.gray;
+            MyDebug.LogYellow("SummaryAchievementInstance is null!!");
+            return;
         }
-        else
+        try
         {
-            content.fileName = "HasFinish";
-            achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+            SymbolID symbol = (SymbolID)System.Enum.Parse(typeof(SymbolID), content.achievementName);
+            if (!System.Enum.IsDefined(typeof(SymbolID), symbol))
+            {
+                MyDebug.LogYellow("Symbol is not Defined!!");
+                return;
+            }
+            int countWithAchievement = 0;
+            int countOfSymbol = GetAchievementCountBySymbol(symbol, out countWithAchievement);
+            bool hasFinish = countWithAchievement == countOfSymbol;
+            achievementItem_WithoutAchievement.SetActive(!hasFinish);
+            achievementCondition.text = content.condition;
+            achievementTpye.text = string.Format(achievementTpye.text, countWithAchievement, countOfSymbol);
+            achievementName.gameObject.SetActive(hasFinish);
+            achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
+            if (!hasFinish)
+            {
+                achievementTpye.color = Color.gray;
+                achievementCondition.color = Color.gray;
+                achievementName_WithoutAchievement.color = Color.gray;
+            }
+            else
+            {
+                content.fileName = "HasFinish";
+                achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+            }
+        }
+        catch
+        {
+            MyDebug.LogYellow("Can not get Symbol!!");
         }
     }
     protected new void OnShortPress()

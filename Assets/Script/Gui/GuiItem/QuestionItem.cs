@@ -28,6 +28,11 @@ public class QuestionItem : Item
     {
         Init();
         content = data as QuentionInstance;
+        if (content == null)
+        {
+            MyDebug.LogYellow("QuentionInstance is null!!");
+            return;
+        }
         questionIndex.text = content.index;
         count = content.instance.Count;
         StringBuilder question = new StringBuilder();

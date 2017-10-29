@@ -14,7 +14,6 @@ public class StartFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.StartFrame;
         Init();
-        SymbolID symbol = (SymbolID)Enum.Parse(typeof(SymbolID), "Addition");
         //string path = Application.dataPath + "/Resources/Layout/Vertical/Default.txt";
         //Dictionary<string, MyRectTransform> dataList = (Dictionary<string, MyRectTransform>)IOHelper.GetData(path,typeof(Dictionary<string, MyRectTransform>));//(Dictionary<string, RectTransform>)IOHelper.GetData(path, typeof(Dictionary<string, RectTransform>));
     }

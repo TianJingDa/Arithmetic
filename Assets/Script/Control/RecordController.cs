@@ -71,11 +71,21 @@ public sealed class RecordController : Controller
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
         {
-            if (fileNameList.Contains(fileNames[i])) continue;
+            string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
+            if (fileNameList.Contains(fileName)) continue;
             File.Delete(fileNames[i]);
         }
-
     }
+    public void DeleteRecordWithAchievement(List<string> fileNameList)
+    {
+        string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
+        for (int i = 0; i < fileNames.Length; i++)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
+            if (fileNameList.Contains(fileNames[i])) File.Delete(fileNames[i]);
+        }
+    }
+
 
     public bool DeleteRecord(string fileName)
     {

@@ -159,6 +159,7 @@ public class CategoryInstance
         this.digitID = (DigitID)digitID;
         this.operandID = (OperandID)operandID;
     }
+    public CategoryInstance() { }
     public PatternID patternID;
     public AmountID  amountID;
     public SymbolID  symbolID;

@@ -193,7 +193,7 @@ public class GameManager : MonoBehaviour
         }
         set
         {
-            string lastestAchievementString = PlayerPrefs.GetString("LastestAchievement", "") + value + ',';
+            string lastestAchievementString = PlayerPrefs.GetString("LastestAchievement", "") + value + ",";
             PlayerPrefs.SetString("LastestAchievement", lastestAchievementString);
         }
     }
@@ -321,6 +321,7 @@ public class GameManager : MonoBehaviour
     public void ResetSaveFile()
     {
         c_RecordCtrl.DeleteAllRecord();
+        c_AchievementCtrl.ResetAllAchievement();
     }
     public void ResetSaveFileWithoutAchievement()
     {
@@ -349,8 +350,8 @@ public class GameManager : MonoBehaviour
         {
             MyDebug.LogYellow("Wrong AchievementName!");
             return;
-        } 
-        PlayerPrefs.DeleteKey(achievementName);
+        }
+        c_AchievementCtrl.ResetAchievement(achievementName);
         if (c_RecordCtrl.DeleteRecord(fileName))
         {
             if (m_CurAction != null) m_CurAction();
@@ -360,7 +361,12 @@ public class GameManager : MonoBehaviour
         {
             MyDebug.LogYellow("Delete File Fail!");
         }
-        if (achievementName.Equals(LastestAchievement)) PlayerPrefs.DeleteKey("LastestAchievement");
+        string lastestAchievement = PlayerPrefs.GetString("LastestAchievement", "");
+        if (lastestAchievement.Contains(achievementName))
+        {
+            lastestAchievement = lastestAchievement.Replace(achievementName + ",", "");
+            PlayerPrefs.SetString("LastestAchievement", lastestAchievement);
+        }
     }
     public List<AchievementInstance> GetAllAchievements()
     {
@@ -377,7 +383,9 @@ public class GameManager : MonoBehaviour
     }
     public void ResetAchievement()
     {
-        c_AchievementCtrl.ResetAchievement();
+        List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
+        c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
+        c_AchievementCtrl.ResetAllAchievement();
     }
     ///// <summary>
     ///// 激活GUI
@@ -479,10 +487,12 @@ public class GameManager : MonoBehaviour
     private string CheckAchievement(float timeCost, int instanceCount, float accuracy, string fileName)
     {
         string achievementName = "";
+        //如果满足成就条件
         bool hasAchievement = PlayerPrefs.HasKey(achievementName);
         if (!hasAchievement)
         {
             PlayerPrefs.SetString(achievementName, fileName);
+            c_AchievementCtrl.WriteFileName(achievementName, fileName);
             LastestAchievement = achievementName;
         } 
         return achievementName;

@@ -75,6 +75,11 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     {
         Init();
         content = data as SaveFileInstance;
+        if (content == null)
+        {
+            MyDebug.LogYellow("SaveFileInstance is null!!");
+            return;
+        }
         hasAchievement = !string.IsNullOrEmpty(content.achievementName);
         saveFileName.text = content.fileName;
         saveFileAchievement_No.SetActive(!hasAchievement);

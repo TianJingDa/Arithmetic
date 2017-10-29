@@ -198,6 +198,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementSummary.SetActive(true);
         RefreshLastestAchievement();
         RefreshSummaryAchievement();
+        RefreshHiddenAchievement();
     }
     private void RefreshLastestAchievement()
     {
@@ -213,14 +214,40 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             summaryAchievementArray[i].SendMessage("InitDetailWin", achievementDetailBgInStatistics);
         }
     }
-
+    private void RefreshHiddenAchievement()
+    {
+        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements().FindAll(x => x.cInstance.symbolID >= 0);
+        bool finishAllAchievement = true;
+        for(int i = 0; i < achievementList.Count; i++)
+        {
+            if (string.IsNullOrEmpty(achievementList[i].fileName))
+            {
+                finishAllAchievement = false;
+                break;
+            }
+        }
+        hiddenAchievementItem.gameObject.SetActive(finishAllAchievement);
+        if (finishAllAchievement)
+        {
+            AchievementInstance hiddenAchievement = GameManager.Instance.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+            hiddenAchievementItem.SendMessage("InitPrefabItem", hiddenAchievement);
+            hiddenAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
+        }
+    }
     private void RefreshAchievementList()
     {
-
+        achievementSummary.SetActive(false);
+        SymbolID symbolID = (SymbolID)curAchievementIndex;
+        ArrayList dataList = new ArrayList(achievementDict[symbolID]);
+        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
     private void RefreshAchievementDict()
     {
-
+        SymbolID symbolID = (SymbolID)curAchievementIndex;
+        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
+        achievementDict[symbolID] = achievementList.FindAll(x => x.cInstance.symbolID == symbolID);
+        ArrayList dataList = new ArrayList(achievementDict[symbolID]);
+        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
 
     #endregion
