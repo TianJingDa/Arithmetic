@@ -103,6 +103,11 @@ Text_20028,否,TJD
 Text_20029,是，删除,TJD
 Text_20030,最近获得,TJD
 Text_20031,隐藏成就,TJD
+Text_20032,综合,TJD
+Text_20033,加法,TJD
+Text_20034,减法,TJD
+Text_20035,乘法,TJD
+Text_20036,除法,TJD
 Text_30000,选项,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD

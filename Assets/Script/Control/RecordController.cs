@@ -82,7 +82,7 @@ public sealed class RecordController : Controller
         for (int i = 0; i < fileNames.Length; i++)
         {
             string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
-            if (fileNameList.Contains(fileNames[i])) File.Delete(fileNames[i]);
+            if (fileNameList.Contains(fileName)) File.Delete(fileNames[i]);
         }
     }
 
