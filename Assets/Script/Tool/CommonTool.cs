@@ -220,4 +220,9 @@ public static class CommonTool
         entry.callback.AddListener(callback);
         trigger.triggers.Add(entry);
     }
+    public static void FixNewLine(GameObject obj)
+    {
+        Text text = obj.GetComponent<Text>();
+        if (text) text.text = text.text.Replace("\\n", "\n");
+    }
 }

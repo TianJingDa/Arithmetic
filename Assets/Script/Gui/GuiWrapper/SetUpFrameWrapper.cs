@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -27,15 +26,20 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject thankDevelopersWin;
     private GameObject resetConfirmBg;
     private GameObject resetToggleGroup;
+    private GameObject resetTipBg;
+    private GameObject resetTipCancelBtn;
+    private GameObject resetTipPageTitle_Text_Achievement;
+    private GameObject resetTipPageTitle_Text_SaveFile;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
     private Button resetApplyBtn;
+    private Toggle resetTempTgl;
     private ToggleGroup languageToggleGroup;
     private ToggleGroup skinToggleGroup;
-
     private Dropdown layoutDropdown;
     private Dropdown handednessDropdown;
+
     void Start () 
 	{
         id = GuiFrameID.SetUpFrame;
@@ -43,29 +47,32 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
-
     }
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        skinWin             = GameObjectDict["SkinWin"];
-        resetWin            = GameObjectDict["ResetWin"];
-        layoutWin           = GameObjectDict["LayoutWin"];
-        aboutUsWin          = GameObjectDict["AboutUsWin"];
-        feedbackWin         = GameObjectDict["FeedbackWin"];
-        languageWin         = GameObjectDict["LanguageWin"];
-        strategyWin         = GameObjectDict["StrategyWin"];
-        resetConfirmBg      = GameObjectDict["ResetConfirmBg"];
-        resetToggleGroup    = GameObjectDict["ResetToggleGroup"];
-        thankDevelopersWin  = GameObjectDict["ThankDevelopersWin"];
-        skinToggleGroup     = GameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
-        languageToggleGroup = GameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
-        skinApplyBtn        = GameObjectDict["SkinApplyBtn"].GetComponent<Button>();
-        resetApplyBtn       = GameObjectDict["ResetApplyBtn"].GetComponent<Button>();
-        layoutApplyBtn      = GameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
-        languageApplyBtn    = GameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
-        layoutDropdown      = GameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
-        handednessDropdown  = GameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
+        skinWin                                 = GameObjectDict["SkinWin"];
+        resetWin                                = GameObjectDict["ResetWin"];
+        resetTipBg                              = GameObjectDict["ResetTipBg"];
+        layoutWin                               = GameObjectDict["LayoutWin"];
+        aboutUsWin                              = GameObjectDict["AboutUsWin"];
+        feedbackWin                             = GameObjectDict["FeedbackWin"];
+        languageWin                             = GameObjectDict["LanguageWin"];
+        strategyWin                             = GameObjectDict["StrategyWin"];
+        resetConfirmBg                          = GameObjectDict["ResetConfirmBg"];
+        resetTipCancelBtn                       = GameObjectDict["ResetTipCancelBtn"];
+        resetToggleGroup                        = GameObjectDict["ResetToggleGroup"];
+        thankDevelopersWin                      = GameObjectDict["ThankDevelopersWin"];
+        resetTipPageTitle_Text_Achievement      = GameObjectDict["ResetTipPageTitle_Text_Achievement"];
+        resetTipPageTitle_Text_SaveFile         = GameObjectDict["ResetTipPageTitle_Text_SaveFile"];
+        skinToggleGroup                         = GameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
+        languageToggleGroup                     = GameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
+        skinApplyBtn                            = GameObjectDict["SkinApplyBtn"].GetComponent<Button>();
+        resetApplyBtn                           = GameObjectDict["ResetApplyBtn"].GetComponent<Button>();
+        layoutApplyBtn                          = GameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
+        languageApplyBtn                        = GameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
+        layoutDropdown                          = GameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
+        handednessDropdown                      = GameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
     }
 
 
@@ -286,6 +293,14 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 }
                 RefreshResetWin();
                 break;
+            case "ResetTipCancelBtn":
+                resetTipBg.SetActive(false);
+                resetTempTgl.isOn = false;
+                break;
+            case "ResetTipConfirmBtn":
+                resetTipBg.SetActive(false);
+                resetApplyBtn.interactable = resetTogglesIndexList.Count != 0;
+                break;
             case "SkinBtn":
                 tempSkinID = -1;
                 skinWin.SetActive(true);
@@ -330,14 +345,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         {
             if (tgl.isOn)
             {
-                if(tgl.index == 2 || tgl.index == 3)
+                resetTogglesIndexList.Add(tgl.index);
+                if (tgl.index == 2 || tgl.index == 3)
                 {
-                    ShowTip(tgl);
+                    resetTempTgl = tgl;
+                    ShowTip();
                     return;
-                }
-                else
-                {
-                    resetTogglesIndexList.Add(tgl.index);
                 }
             }
             else
@@ -356,9 +369,13 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             tempID = tgl.index;
         }
     }
-    private void ShowTip(Toggle tgl)
+    private void ShowTip()
     {
-        MyDebug.LogYellow("重置成就和存档的提示信息");
+        resetTipBg.SetActive(true);
+        resetTipPageTitle_Text_Achievement.SetActive(resetTempTgl.index == 2);
+        resetTipPageTitle_Text_SaveFile.SetActive(resetTempTgl.index == 3);
+        CommonTool.FixNewLine(resetTipPageTitle_Text_Achievement);
+        CommonTool.FixNewLine(resetTipPageTitle_Text_SaveFile);
     }
     protected override void OnDropdownClick(Dropdown dpd)
     {
