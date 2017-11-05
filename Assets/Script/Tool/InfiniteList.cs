@@ -118,6 +118,7 @@ public class InfiniteList : MonoBehaviour
         {
             StartCoroutine(RefreshChildrenAnchoredPostion());
         }
+        StartCoroutine(EnableGrid());
         //if(itemAmount <= childrenAnchoredPostion.Count)
         //{
         //    for(int index = 0; index < itemAmount; index++)
@@ -357,5 +358,14 @@ public class InfiniteList : MonoBehaviour
         {
             children[index].anchoredPosition = childrenAnchoredPostion[index];
         }
+    }
+    /// <summary>
+    /// 添加PrefabItem时会改变grid的位置，从而触发了ScrollCallback，而此时grid还未对PrefabItem进行布局
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator EnableGrid()
+    {
+        yield return new WaitForEndOfFrame();
+        gridLayoutGroup.enabled = true;
     }
 }

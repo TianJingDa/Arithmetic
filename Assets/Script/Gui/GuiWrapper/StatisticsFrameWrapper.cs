@@ -216,20 +216,11 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private void RefreshHiddenAchievement()
     {
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements().FindAll(x => x.cInstance.symbolID >= 0);
-        bool finishAllAchievement = true;
-        for(int i = 0; i < achievementList.Count; i++)
-        {
-            if (string.IsNullOrEmpty(achievementList[i].fileName))
-            {
-                finishAllAchievement = false;
-                break;
-            }
-        }
+        bool finishAllAchievement = GameManager.Instance.FinishAllAchievement;
         hiddenAchievementItem.gameObject.SetActive(finishAllAchievement);
         if (finishAllAchievement)
         {
-            AchievementInstance hiddenAchievement = GameManager.Instance.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+            AchievementInstance hiddenAchievement = achievementDict[SymbolID.Hidden][0];
             hiddenAchievementItem.SendMessage("InitPrefabItem", hiddenAchievement);
             hiddenAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
         }

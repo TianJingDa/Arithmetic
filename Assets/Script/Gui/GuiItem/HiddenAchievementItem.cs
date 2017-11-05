@@ -12,19 +12,8 @@ public class HiddenAchievementItem : AchievementItem
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");
         achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
-        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "achievementName_WithoutAchievement");
+        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
-    }
-    protected override void InitPrefabItem(object data)
-    {
-        Init();
-        content = data as AchievementInstance;
-        if (content == null)
-        {
-            MyDebug.LogYellow("SummaryAchievementInstance is null!!");
-            return;
-        }
-        content.fileName = "HasFinish";
     }
     protected new void OnShortPress()
     {

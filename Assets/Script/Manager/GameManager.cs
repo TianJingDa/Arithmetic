@@ -181,6 +181,15 @@ public class GameManager : MonoBehaviour
     {
         get { return m_AmountArray_Number; }
     }
+    public bool FinishAllAchievement
+    {
+        get
+        {
+            AchievementInstance achievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID >= 0
+                                                                                            && string.IsNullOrEmpty(x.fileName));
+            return achievement == null;
+        }
+    }
     private string LastestAchievement
     {
         get
@@ -189,6 +198,7 @@ public class GameManager : MonoBehaviour
             if (string.IsNullOrEmpty(lastestAchievementString)) return "";
             char[] charSeparators = new char[] { ',' };
             string[] lastestAchievementArray = lastestAchievementString.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+            if (lastestAchievementArray.Length == 0) return null;
             return lastestAchievementArray[lastestAchievementArray.Length - 1];
         }
         set
@@ -351,7 +361,12 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Wrong AchievementName!");
             return;
         }
-        c_AchievementCtrl.ResetAchievement(achievementName);
+        c_AchievementCtrl.DeleteAchievement(achievementName);
+        AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+        if (PlayerPrefs.HasKey(hiddenAchievement.achievementName))
+        {
+            c_AchievementCtrl.DeleteAchievement(hiddenAchievement.achievementName);
+        }
         if (c_RecordCtrl.DeleteRecord(fileName))
         {
             if (m_CurAction != null) m_CurAction();
@@ -378,7 +393,7 @@ public class GameManager : MonoBehaviour
     }
     public AchievementInstance GetLastestAchievement()
     {
-        if (string.IsNullOrEmpty(LastestAchievement)) return null;
+        if (string.IsNullOrEmpty(LastestAchievement)) return new AchievementInstance();
         return c_AchievementCtrl.GetAchievement(LastestAchievement);
     }
     public void ResetAchievement()
@@ -487,14 +502,14 @@ public class GameManager : MonoBehaviour
     private string CheckAchievement(float timeCost, int instanceCount, float accuracy, string fileName)
     {
         string achievementName = "";
-        //如果满足成就条件
+        //如果满足成就条件        if (FinishAllAchievement)
         bool hasAchievement = PlayerPrefs.HasKey(achievementName);
         if (!hasAchievement)
         {
             PlayerPrefs.SetString(achievementName, fileName);
             c_AchievementCtrl.WriteFileName(achievementName, fileName);
             LastestAchievement = achievementName;
-        } 
+        }
         return achievementName;
     }
     #endregion

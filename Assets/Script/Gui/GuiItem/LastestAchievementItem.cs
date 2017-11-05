@@ -17,14 +17,15 @@ public class LastestAchievementItem : AchievementItem
     {
         Init();
         content = data as AchievementInstance;
-        bool hasLastestAchievement = content != null;
+        bool hasLastestAchievement = !string.IsNullOrEmpty(content.achievementName);
         achievementName.gameObject.SetActive(hasLastestAchievement);
         achievementName_WithoutAchievement.gameObject.SetActive(!hasLastestAchievement);
         achievementItem_WithoutAchievement.SetActive(!hasLastestAchievement);
         achievementCondition.gameObject.SetActive(hasLastestAchievement);
         if (hasLastestAchievement)
         {
-            achievementCondition.text = string.Format(achievementCondition.text, content.accuracy, content.meanTime);
+            string condition = GameManager.Instance.GetMutiLanguage(content.condition);
+            achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
             achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         }
     }

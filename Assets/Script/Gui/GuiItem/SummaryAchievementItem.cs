@@ -11,7 +11,7 @@ public class SummaryAchievementItem : AchievementItem
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");
         achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
-        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "achievementName_WithoutAchievement");
+        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
     }
     protected override void InitPrefabItem(object data)
@@ -35,7 +35,7 @@ public class SummaryAchievementItem : AchievementItem
             int countOfSymbol = GetAchievementCountBySymbol(symbol, out countWithAchievement);
             bool hasFinish = countWithAchievement == countOfSymbol;
             achievementItem_WithoutAchievement.SetActive(!hasFinish);
-            achievementCondition.text = content.condition;
+            achievementCondition.text = GameManager.Instance.GetMutiLanguage(content.condition);
             achievementTpye.text = string.Format(achievementTpye.text, countWithAchievement, countOfSymbol);
             achievementName.gameObject.SetActive(hasFinish);
             achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);

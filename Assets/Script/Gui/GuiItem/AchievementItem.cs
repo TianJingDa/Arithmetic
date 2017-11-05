@@ -152,7 +152,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     {
         achievementName                     = GameObjectDict["AchievementName"].GetComponent<Text>();
         achievementTpye                     = GameObjectDict["AchievementTpye"].GetComponent<Text>();
-        achievementCondition                = GameObjectDict["AchievementConditiond"].GetComponent<Text>();
+        achievementCondition                = GameObjectDict["AchievementCondition"].GetComponent<Text>();
         achievementName_WithoutAchievement  = GameObjectDict["AchievementName_WithoutAchievement"].GetComponent<Text>();
         achievementItem_WithoutAchievement  = GameObjectDict["AchievementItem_WithoutAchievement"];
     }
@@ -169,7 +169,8 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementName.gameObject.SetActive(!notHasAchievement);
         achievementName_WithoutAchievement.gameObject.SetActive(notHasAchievement);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        achievementCondition.text = string.Format(achievementCondition.text, content.accuracy, content.meanTime);
+        string condition = GameManager.Instance.GetMutiLanguage(content.condition);
+        achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
         achievementTpye.text = GameManager.Instance.GetMutiLanguage(content.classType);
         if (notHasAchievement)
         {

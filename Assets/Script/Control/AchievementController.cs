@@ -41,11 +41,10 @@ public class AchievementController : Controller
             achievementList[i].fileName = "";
         }
     }
-    public void ResetAchievement(string achievementName)
+    public void DeleteAchievement(string achievementName)
     {
         PlayerPrefs.DeleteKey(achievementName);
-        AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
-        if (instance != null) instance.fileName = "";
+        WriteFileName(achievementName);
     }
     public List<string> GetAllFileNameWithAchievement()
     {
@@ -57,7 +56,7 @@ public class AchievementController : Controller
         }
         return fileNameList;
     }
-    public void WriteFileName(string achievementName, string fileName)
+    public void WriteFileName(string achievementName, string fileName = "")
     {
         AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
         if (instance != null) instance.fileName = fileName;

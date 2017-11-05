@@ -19,4 +19,4 @@ Addition,Text_00055,0,0,Text_00059,Text_00063,Image_00021,,Text_00054,-1,-1,-2,-
 Subtraction,Text_00056,0,0,Text_00060,Text_00064,Image_00022,,Text_00054,-1,-1,-2,-1,-1
 Multiplication,Text_00057,0,0,Text_00061,Text_00065,Image_00023,,Text_00054,-1,-1,-2,-1,-1
 Division,Text_00058,0,0,Text_00062,Text_00066,Image_00024,,Text_00054,-1,-1,-2,-1,-1
-Hidden_0,Text_00068,0,0,Text_00069,Text_00070,Image_00026,,Text_00071,-1,-1,-3,-1,-1
+Hidden,Text_00068,0,0,Text_00069,Text_00070,Image_00026,,Text_00071,-1,-1,-3,-1,-1
