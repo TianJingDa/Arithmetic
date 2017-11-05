@@ -14,6 +14,8 @@ public sealed class RecordController : Controller
     private RecordController()
     {
         base.id = ControllerID.RecordController;
+        saveDir = Application.persistentDataPath + "/Save";
+        fileFullName = saveDir + "/{0}.sav";
         InitRecordData();
         Debug.Log("Loading Controller:" + id.ToString());
     }
@@ -23,13 +25,12 @@ public sealed class RecordController : Controller
     }
     #endregion
 
-    private string saveDir;
-    private string fileFullName;
+    private readonly string saveDir;
+    private readonly string fileFullName;
 
     private void InitRecordData()
     {
-        saveDir = Application.persistentDataPath + "/Save";
-        fileFullName = saveDir + "/{0}.sav";
+
     }
 
     public void SaveRecord(object obj, string fileName)

@@ -237,6 +237,10 @@ public class GameManager : MonoBehaviour
         m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
+#if UNITY_EDITOR
+        gameObject.AddComponent<Camera>();
+#endif
+
         //ActiveGui(GuiFrameID.StartFrame);
         Debug.Log(GetMutiLanguage("Text_00000"));
         Debug.Log(GetMutiLanguage("Text_00001"));
@@ -303,14 +307,15 @@ public class GameManager : MonoBehaviour
         string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         float accuracy = CalculateAccuracy(resultList);
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        string achievementKey = CheckAchievement(timeCost, resultList.Count, accuracy, fileName);
+        float meanTime = timeCost / resultList.Count;
+        string achievementName = CheckAchievement(meanTime, accuracy, fileName);
 
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
         curSaveFileInstance.timeCost = timeCost;
         curSaveFileInstance.fileName = fileName;
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
         curSaveFileInstance.qInstancList = qInstanceList;
-        curSaveFileInstance.achievementName = achievementKey;
+        curSaveFileInstance.achievementName = achievementName;
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;
@@ -499,16 +504,32 @@ public class GameManager : MonoBehaviour
         }
         return qInstanceList;
     }
-    private string CheckAchievement(float timeCost, int instanceCount, float accuracy, string fileName)
+    private string CheckAchievement(float meanTime, float accuracy, string fileName)
     {
         string achievementName = "";
-        //如果满足成就条件        if (FinishAllAchievement)
-        bool hasAchievement = PlayerPrefs.HasKey(achievementName);
-        if (!hasAchievement)
+        List<AchievementInstance> achievementList = c_AchievementCtrl.GetAchievementWithoutFileName();
+        for(int i = 0; i < achievementList.Count; i++)
+        {
+            if(achievementList[i].Equals(m_CurCategoryInstance)
+            && achievementList[i].accuracy <= accuracy
+            && achievementList[i].meanTime >= meanTime)
+            {
+                achievementName = achievementList[i].achievementName;
+                break;
+            }
+        }
+        if (!string.IsNullOrEmpty(achievementName))
         {
             PlayerPrefs.SetString(achievementName, fileName);
             c_AchievementCtrl.WriteFileName(achievementName, fileName);
             LastestAchievement = achievementName;
+        }
+        else if(FinishAllAchievement && accuracy <= 0)
+        {
+            AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+            PlayerPrefs.SetString(hiddenAchievement.achievementName, fileName);
+            c_AchievementCtrl.WriteFileName(hiddenAchievement.achievementName, fileName);
+            LastestAchievement = hiddenAchievement.achievementName;
         }
         return achievementName;
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 /// <summary>
 /// 速算类别选择界面
 /// </summary>
@@ -141,7 +142,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     }
 }
 [System.Serializable]
-public class CategoryInstance
+public class CategoryInstance : IEquatable<CategoryInstance>
 {
     public CategoryInstance(PatternID patternID, AmountID amountID, SymbolID symbolID, DigitID digitID, OperandID operandID)
     {
@@ -165,4 +166,20 @@ public class CategoryInstance
     public SymbolID  symbolID;
     public DigitID   digitID;
     public OperandID operandID;
+
+    bool IEquatable<CategoryInstance>.Equals(CategoryInstance other)
+    {
+        if((other.patternID == PatternID.Any || other.patternID == patternID)
+        && (other.amountID == AmountID.Any   || other.amountID == amountID)
+        && (other.symbolID == SymbolID.Any   || other.symbolID == symbolID)
+        && (other.digitID == DigitID.Any     || other.digitID == digitID)
+        && (other.operandID == OperandID.Any || other.operandID == operandID))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

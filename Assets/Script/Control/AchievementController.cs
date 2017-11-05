@@ -33,6 +33,10 @@ public class AchievementController : Controller
     {
         return achievementList.Find(x => x.achievementName == achievementName);
     }
+    public List<AchievementInstance> GetAchievementWithoutFileName()
+    {
+        return achievementList.FindAll(x => x.cInstance.symbolID >= 0 && string.IsNullOrEmpty(x.fileName));
+    }
     public void ResetAllAchievement()
     {
         for (int i = 0; i < achievementList.Count; i++)

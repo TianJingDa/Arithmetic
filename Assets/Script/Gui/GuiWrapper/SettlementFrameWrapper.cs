@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 /// <summary>
 /// 结算界面
 /// </summary>
@@ -12,6 +13,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private Text settlementTime;
     private Text settlementAmount;
     private Text settlementAccuracy;
+    private Text achievementDetailMainTitleInSettlement;
+    private Text achievementDetailSubTitleInSettlement;
+    private Text achievementDetailFinishTimeInSettlement;
+    private Image achievementDetailImageInSettlement;
     private GameObject achievementDetailBgInSettlement;
     private InfiniteList settlementGrid;
     private SaveFileInstance curSaveFileInstance;
@@ -28,11 +33,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        settlementGrid                  = GameObjectDict["SettlementGrid"].GetComponent<InfiniteList>();
-        settlementTime                  = GameObjectDict["SettlementTime"].GetComponent<Text>();
-        settlementAmount                = GameObjectDict["SettlementAmount"].GetComponent<Text>();
-        settlementAccuracy              = GameObjectDict["SettlementAccuracy"].GetComponent<Text>();
-        achievementDetailBgInSettlement = GameObjectDict["AchievementDetailBgInSettlement"];
+        settlementGrid                              = GameObjectDict["SettlementGrid"].GetComponent<InfiniteList>();
+        settlementTime                              = GameObjectDict["SettlementTime"].GetComponent<Text>();
+        settlementAmount                            = GameObjectDict["SettlementAmount"].GetComponent<Text>();
+        settlementAccuracy                          = GameObjectDict["SettlementAccuracy"].GetComponent<Text>();
+        achievementDetailMainTitleInSettlement      = GameObjectDict["AchievementDetailMainTitleInStatistics"].GetComponent<Text>();
+        achievementDetailSubTitleInSettlement       = GameObjectDict["AchievementDetailSubTitleInStatistics"].GetComponent<Text>();
+        achievementDetailFinishTimeInSettlement     = GameObjectDict["AchievementDetailFinishTimeInStatistics"].GetComponent<Text>();
+        achievementDetailBgInSettlement             = GameObjectDict["AchievementDetailBgInSettlement"];
+        achievementDetailImageInSettlement          = GameObjectDict["AchievementDetailImageInStatistics"].GetComponent<Image>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -42,10 +51,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         {
             case "AchievementDetailBgInSettlement"://容易误点
                 achievementDetailBgInSettlement.SetActive(false);
-                if (false)
-                {
-                    ShowAchievement();
-                }
+                break;
+            case "AchievementDetailShareBtnInSettlement":
+                OnShareBtn();
                 break;
             case "CurAchievementBtn":
                 ShowAchievement();
@@ -54,7 +62,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 onlyWrong = !onlyWrong;
                 RefreshSettlementGrid();
                 break;
-            case "ShareBtn":
+            case "ShareBtnInSettlement":
                 MyDebug.LogYellow("ShareBtn");
                 break;
             case "Settlement2CategoryFrameBtn":
@@ -102,6 +110,23 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void ShowAchievement()
     {
+        if (string.IsNullOrEmpty(curSaveFileInstance.achievementName)) return;
         achievementDetailBgInSettlement.SetActive(true);
+        AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
+        achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+        achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+        achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+        achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.fileName);
+    }
+    private string GetFinishTime(string time)
+    {
+        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
+        newTime.Insert(4, ".");
+        newTime.Insert(7, ".");
+        return newTime.ToString();
+    }
+    private void OnShareBtn()
+    {
+        MyDebug.LogYellow("ShareBtn");
     }
 }
