@@ -242,15 +242,6 @@ public class GameManager : MonoBehaviour
 #endif
 
         //ActiveGui(GuiFrameID.StartFrame);
-        Debug.Log(GetMutiLanguage("Text_00000"));
-        Debug.Log(GetMutiLanguage("Text_00001"));
-        Debug.Log(GetMutiLanguage("Text_00002"));
-        Debug.Log(GetMutiLanguage("Text_00003"));
-        Debug.Log(GetMutiLanguage("Text_00004"));
-        Debug.Log(GetMutiLanguage("Text_00005"));
-        Debug.Log(GetMutiLanguage("Text_00006"));
-        Debug.Log(GetMutiLanguage("Text_00007"));
-
     }
 
     #region 公共方法

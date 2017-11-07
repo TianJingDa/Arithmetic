@@ -22,10 +22,10 @@ public class LayoutController : Controller
     private Dictionary<LayoutID, List<Dictionary<string, MyRectTransform>>> layoutAssetDict;
     private void InitLayoutData()
     {
-        Dictionary<string, MyRectTransform> vertical_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetData(Application.dataPath + "/Resources/Layout/Vertical/Right.txt", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> vertical_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetData(Application.dataPath + "/Resources/Layout/Vertical/Left.txt", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> horizontal_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetData(Application.dataPath + "/Resources/Layout/Horizontal/Right.txt", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> horizontal_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetData(Application.dataPath + "/Resources/Layout/Horizontal/Left.txt", typeof(Dictionary<string, MyRectTransform>));
+        Dictionary<string, MyRectTransform> vertical_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Vertical/Right", typeof(Dictionary<string, MyRectTransform>));
+        Dictionary<string, MyRectTransform> vertical_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Vertical/Left", typeof(Dictionary<string, MyRectTransform>));
+        Dictionary<string, MyRectTransform> horizontal_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Horizontal/Right", typeof(Dictionary<string, MyRectTransform>));
+        Dictionary<string, MyRectTransform> horizontal_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Horizontal/Left", typeof(Dictionary<string, MyRectTransform>));
         layoutAssetDict.Add(LayoutID.Vertical, new List<Dictionary<string, MyRectTransform>> { vertical_Right, vertical_Left });
         layoutAssetDict.Add(LayoutID.Horizontal, new List<Dictionary<string, MyRectTransform>> { horizontal_Right, horizontal_Left });
     }

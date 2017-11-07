@@ -22,7 +22,7 @@ public class AchievementController : Controller
 
     private void InitAchievementData()
     {
-        achievementList = (List<AchievementInstance>)IOHelper.GetData(Application.dataPath + "/Resources/Achievement/Achievement.ach", typeof(List<AchievementInstance>));
+        achievementList = (List<AchievementInstance>)IOHelper.GetDataFromResources("Achievement/Achievement", typeof(List<AchievementInstance>));
         WriteAllFileName(achievementList);
     }
     public List<AchievementInstance> GetAllAchievements()

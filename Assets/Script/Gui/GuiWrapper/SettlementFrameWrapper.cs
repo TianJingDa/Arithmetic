@@ -37,11 +37,11 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         settlementTime                              = GameObjectDict["SettlementTime"].GetComponent<Text>();
         settlementAmount                            = GameObjectDict["SettlementAmount"].GetComponent<Text>();
         settlementAccuracy                          = GameObjectDict["SettlementAccuracy"].GetComponent<Text>();
-        achievementDetailMainTitleInSettlement      = GameObjectDict["AchievementDetailMainTitleInStatistics"].GetComponent<Text>();
-        achievementDetailSubTitleInSettlement       = GameObjectDict["AchievementDetailSubTitleInStatistics"].GetComponent<Text>();
-        achievementDetailFinishTimeInSettlement     = GameObjectDict["AchievementDetailFinishTimeInStatistics"].GetComponent<Text>();
+        achievementDetailMainTitleInSettlement      = GameObjectDict["AchievementDetailMainTitleInSettlement"].GetComponent<Text>();
+        achievementDetailSubTitleInSettlement       = GameObjectDict["AchievementDetailSubTitleInSettlement"].GetComponent<Text>();
+        achievementDetailFinishTimeInSettlement     = GameObjectDict["AchievementDetailFinishTimeInSettlement"].GetComponent<Text>();
         achievementDetailBgInSettlement             = GameObjectDict["AchievementDetailBgInSettlement"];
-        achievementDetailImageInSettlement          = GameObjectDict["AchievementDetailImageInStatistics"].GetComponent<Image>();
+        achievementDetailImageInSettlement          = GameObjectDict["AchievementDetailImageInSettlement"].GetComponent<Image>();
     }
 
     protected override void OnButtonClick(Button btn)

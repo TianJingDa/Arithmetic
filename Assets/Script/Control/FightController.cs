@@ -27,10 +27,10 @@ public sealed class FightController : Controller
 
     private void InitFightData()
     {
-        DivisionDataBase d_3_2List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_3_2List.data", typeof(DivisionDataBase));
-        DivisionDataBase d_3_3List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_3_3List.data", typeof(DivisionDataBase));
-        DivisionDataBase d_4_2List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_4_2List.data", typeof(DivisionDataBase));
-        DivisionDataBase d_4_3List = (DivisionDataBase)IOHelper.GetData(Application.dataPath + "/Resources/FightData/d_4_3List.data", typeof(DivisionDataBase));
+        DivisionDataBase d_3_2List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_3_2List", typeof(DivisionDataBase));
+        DivisionDataBase d_3_3List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_3_3List", typeof(DivisionDataBase));
+        DivisionDataBase d_4_2List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_4_2List", typeof(DivisionDataBase));
+        DivisionDataBase d_4_3List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_4_3List", typeof(DivisionDataBase));
         dataBase.Add(d_3_2List);
         dataBase.Add(d_3_3List);
         dataBase.Add(d_4_2List);

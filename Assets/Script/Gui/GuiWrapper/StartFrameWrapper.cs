@@ -15,7 +15,7 @@ public class StartFrameWrapper : GuiFrameWrapper
         id = GuiFrameID.StartFrame;
         Init();
         //string path = Application.dataPath + "/Resources/Layout/Vertical/Default.txt";
-        //Dictionary<string, MyRectTransform> dataList = (Dictionary<string, MyRectTransform>)IOHelper.GetData(path,typeof(Dictionary<string, MyRectTransform>));//(Dictionary<string, RectTransform>)IOHelper.GetData(path, typeof(Dictionary<string, RectTransform>));
+        //Dictionary<string, MyRectTransform> dataList = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources(path,typeof(Dictionary<string, MyRectTransform>));//(Dictionary<string, RectTransform>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, RectTransform>));
     }
 
     protected override void OnButtonClick(Button btn)

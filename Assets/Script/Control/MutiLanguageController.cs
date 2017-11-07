@@ -25,8 +25,8 @@ public sealed class MutiLanguageController: Controller
     /// </summary>
     private void InitLanguageData()
     {
-        string path = Application.dataPath + "/Resources/Language/MutiLanguage.lang";
-        mutiLanguageDict = (Dictionary<string, string[]>)IOHelper.GetData(path, typeof(Dictionary<string, string[]>));
+        string path = "Language/MutiLanguage";
+        mutiLanguageDict = (Dictionary<string, string[]>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, string[]>));
     }
     /// <summary>
     /// 获取多语言

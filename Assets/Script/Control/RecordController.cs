@@ -15,6 +15,7 @@ public sealed class RecordController : Controller
     {
         base.id = ControllerID.RecordController;
         saveDir = Application.persistentDataPath + "/Save";
+        if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
         fileFullName = saveDir + "/{0}.sav";
         InitRecordData();
         Debug.Log("Loading Controller:" + id.ToString());
@@ -46,7 +47,7 @@ public sealed class RecordController : Controller
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
         {
-            SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetData(fileNames[i], typeof(SaveFileInstance));
+            SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetDataFromDataPath(fileNames[i], typeof(SaveFileInstance));
             recordList.Add(saveFileInstance);
         }
         return recordList;
@@ -55,7 +56,7 @@ public sealed class RecordController : Controller
     public SaveFileInstance ReadRecord(string fileName)
     {
         string fullName = string.Format(fileFullName, fileName);
-        SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetData(fullName, typeof(SaveFileInstance));
+        SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetDataFromDataPath(fullName, typeof(SaveFileInstance));
         return saveFileInstance;
     }
 

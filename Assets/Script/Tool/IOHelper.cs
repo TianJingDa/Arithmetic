@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public static class IOHelper 
 {
@@ -28,12 +29,25 @@ public static class IOHelper
     }
 
     /// <summary>
-    /// 读取数据
+    /// 从Resource读取数据
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="pType"></param>
     /// <returns></returns>
-    public static object GetData(string fileName, Type pType)
+    public static object GetDataFromResources(string path, Type pType)
+    {
+        string data = ((TextAsset)Resources.Load(path)).text;
+        //对数据进行解密，32位解密密钥
+        data = RijndaelDecrypt(data, "19861011198610121956121919570908");
+        return DeserializeObject(data, pType);
+    }
+    /// <summary>
+    /// 从persistentDataPath读取数据
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <param name="pType"></param>
+    /// <returns></returns>
+    public static object GetDataFromDataPath(string fileName, Type pType)
     {
         if (!File.Exists(fileName))
         {
@@ -47,6 +61,7 @@ public static class IOHelper
         streamReader.Close();
         return DeserializeObject(data, pType);
     }
+
 
     /// <summary>
     /// Rijndael加密算法

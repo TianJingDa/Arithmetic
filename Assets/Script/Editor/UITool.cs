@@ -214,14 +214,14 @@ public class UITool : Editor
         data.digitID = DigitID.FourDigits;
         data.operandID = OperandID.TwoNumbers;
         data.questionList = questionList;
-        string path = Application.dataPath + "/Resources/FightData/d_4_2List.data";
+        string path = Application.dataPath + "/Resources/FightData/d_4_2List.txt";
         IOHelper.SetData(path, data);
     }
     [MenuItem("Custom Editor/生成成就")]
     public static void ExchangeAchievement()
     {
         string addressList = Application.dataPath + "/Achievement.txt";
-        string targetList = Application.dataPath + "/Resources/Achievement/Achievement.ach";
+        string targetList = Application.dataPath + "/Resources/Achievement/Achievement.txt";
         StreamReader mutiLanguageAsset = new StreamReader(addressList);
         if (mutiLanguageAsset == null)
         {
@@ -283,7 +283,7 @@ public class UITool : Editor
             lineList = new List<string>(lineArray[i].Split(','));
             mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
         }
-        string path = Application.dataPath + "/Resources/Language/MutiLanguage.lang";
+        string path = Application.dataPath + "/Resources/Language/MutiLanguage.txt";
         if (File.Exists(path)) File.Delete(path);
         IOHelper.SetData(path, mutiLanguageDict);
     }

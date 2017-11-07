@@ -191,8 +191,14 @@ public static class CommonTool
         Transform[] gameObjectArray = root.GetComponentsInChildren<Transform>(true);
         for (int i = 0; i < gameObjectArray.Length; i++)
         {
-            //MyDebug.LogYellow(gameObjectArray[i].name);
-            gameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+            try
+            {
+                gameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+            }
+            catch
+            {
+                MyDebug.LogYellow(gameObjectArray[i].name);
+            }
         }
         return gameObjectDict;
     }
