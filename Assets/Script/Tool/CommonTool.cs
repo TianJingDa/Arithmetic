@@ -157,7 +157,9 @@ public static class CommonTool
             //textArray[i].font = curFont;
             //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
             if (textArray[i].index == "") continue;
-            textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
+            string text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
+            if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
+            textArray[i].text = text;
         }
     }
     public static void InitImage(GameObject root)
@@ -225,10 +227,5 @@ public static class CommonTool
         entry.eventID = eventID;
         entry.callback.AddListener(callback);
         trigger.triggers.Add(entry);
-    }
-    public static void FixNewLine(GameObject obj)
-    {
-        Text text = obj.GetComponent<Text>();
-        if (text) text.text = text.text.Replace("\\n", "\n");
     }
 }

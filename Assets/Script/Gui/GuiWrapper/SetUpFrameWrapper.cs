@@ -20,6 +20,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject languageWin;
     private GameObject skinWin;
     private GameObject layoutWin;
+    private GameObject layoutTipBg;
     private GameObject resetWin;
     private GameObject feedbackWin;
     private GameObject aboutUsWin;
@@ -55,6 +56,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetWin                                = GameObjectDict["ResetWin"];
         resetTipBg                              = GameObjectDict["ResetTipBg"];
         layoutWin                               = GameObjectDict["LayoutWin"];
+        layoutTipBg                             = GameObjectDict["LayoutTipBg"];
         aboutUsWin                              = GameObjectDict["AboutUsWin"];
         feedbackWin                             = GameObjectDict["FeedbackWin"];
         languageWin                             = GameObjectDict["LanguageWin"];
@@ -251,6 +253,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshDropdown(handednessDropdown, tempHandednessID);
                 layoutApplyBtn.interactable = false;
                 break;
+            case "LayoutTipConfirmBtn":
+                layoutTipBg.SetActive(false);
+                break;
             case "Layout2SetUpFrameBtn":
                 layoutWin.SetActive(false);
                 break;
@@ -374,8 +379,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetTipBg.SetActive(true);
         resetTipPageTitle_Text_Achievement.SetActive(resetTempTgl.index == 2);
         resetTipPageTitle_Text_SaveFile.SetActive(resetTempTgl.index == 3);
-        CommonTool.FixNewLine(resetTipPageTitle_Text_Achievement);
-        CommonTool.FixNewLine(resetTipPageTitle_Text_SaveFile);
     }
     protected override void OnDropdownClick(Dropdown dpd)
     {
@@ -384,6 +387,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         {
             case "LayoutDropdown":
                 tempLayoutID = dpd.value;
+                layoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal);
                 break;
             case "HandednessDropdown":
                 tempHandednessID = dpd.value;
