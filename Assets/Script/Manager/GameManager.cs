@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using cn.sharesdk.unity3d;
+
 /// <summary>
 /// 游戏控制层
 /// </summary>
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
     private System.Action                                       m_CurAction;                        //用于刷新SaveFile和Achievement列表
+    private ShareSDK                                            m_shareSDK;                         //用于分享成就和成绩
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
@@ -237,6 +240,11 @@ public class GameManager : MonoBehaviour
         m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
+        m_shareSDK = GetComponent<ShareSDK>();
+        m_shareSDK.authHandler = OnAuthResultHandler;
+        m_shareSDK.shareHandler = OnShareResultHandler;
+        m_shareSDK.showUserHandler = OnGetUserInfoResultHandler;
+
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
 #endif
@@ -398,6 +406,14 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
         c_AchievementCtrl.ResetAllAchievement();
     }
+    public void ShareAchievement()
+    {
+
+    }
+    public void ShareSaveFile()
+    {
+
+    }
     ///// <summary>
     ///// 激活GUI
     ///// </summary>
@@ -524,6 +540,77 @@ public class GameManager : MonoBehaviour
         }
         return achievementName;
     }
+    void OnAuthResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    {
+        if (state == ResponseState.Success)
+        {
+            if (result != null && result.Count > 0)
+            {
+                print("authorize success !" + "Platform :" + type + "result:" + MiniJSON.jsonEncode(result));
+            }
+            else
+            {
+                print("authorize success !" + "Platform :" + type);
+            }
+        }
+        else if (state == ResponseState.Fail)
+        {
+#if UNITY_ANDROID
+            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
+#elif UNITY_IPHONE
+			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
+#endif
+        }
+        else if (state == ResponseState.Cancel)
+        {
+            print("cancel !");
+        }
+    }
+
+    void OnGetUserInfoResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    {
+        if (state == ResponseState.Success)
+        {
+            print("get user info result :");
+            print(MiniJSON.jsonEncode(result));
+            print("AuthInfo:" + MiniJSON.jsonEncode(m_shareSDK.GetAuthInfo(PlatformType.QQ)));
+            print("Get userInfo success !Platform :" + type);
+        }
+        else if (state == ResponseState.Fail)
+        {
+#if UNITY_ANDROID
+            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
+#elif UNITY_IPHONE
+			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
+#endif
+        }
+        else if (state == ResponseState.Cancel)
+        {
+            print("cancel !");
+        }
+    }
+
+    void OnShareResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    {
+        if (state == ResponseState.Success)
+        {
+            print("share successfully - share result :");
+            print(MiniJSON.jsonEncode(result));
+        }
+        else if (state == ResponseState.Fail)
+        {
+#if UNITY_ANDROID
+            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
+#elif UNITY_IPHONE
+			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
+#endif
+        }
+        else if (state == ResponseState.Cancel)
+        {
+            print("cancel !");
+        }
+    }
+
     #endregion
 
 }
