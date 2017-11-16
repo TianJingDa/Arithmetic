@@ -13,7 +13,7 @@ public sealed class FightController : Controller
         checkList = new List<List<int>>();
         dataBase = new List<DivisionDataBase>();
         InitFightData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static FightController Instance
     {

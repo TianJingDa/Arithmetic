@@ -13,7 +13,7 @@ public sealed class ResourceController : Controller
         resourceDict = new Dictionary<GuiFrameID, Object>();
         prefabItemDict = new Dictionary<string, string>();
         InitReourceData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static ResourceController Instance
     {

@@ -10,7 +10,7 @@ public class SkinController : Controller
     {
         base.id = ControllerID.SkinController;
         spriteDict = new Dictionary<string, Object>();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static SkinController Instance
     {

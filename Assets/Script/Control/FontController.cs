@@ -11,7 +11,7 @@ public class FontController : Controller
         base.id = ControllerID.FontController;
         fontAssetDict = new Dictionary<SkinID, string[]>();
         InitFontData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static FontController Instance
     {

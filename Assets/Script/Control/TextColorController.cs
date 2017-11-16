@@ -14,7 +14,7 @@ public class TextColorController : Controller
         pinkColorDict = new Dictionary<string, string[]>();
         blueColorDict = new Dictionary<string, string[]>();
         InitColorData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static TextColorController Instance
     {

@@ -11,7 +11,7 @@ public sealed class MutiLanguageController: Controller
     {
         base.id = ControllerID.MutiLanguageController;
         InitLanguageData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static MutiLanguageController Instance
     {

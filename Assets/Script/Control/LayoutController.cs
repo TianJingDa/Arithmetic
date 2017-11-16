@@ -12,7 +12,7 @@ public class LayoutController : Controller
         base.id = ControllerID.LayoutController;
         layoutAssetDict = new Dictionary<LayoutID, List<Dictionary<string, MyRectTransform>>>();
         InitLayoutData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static LayoutController Instance
     {

@@ -10,7 +10,7 @@ public class AchievementController : Controller
     {
         base.id = ControllerID.AchievementController;
         InitAchievementData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static AchievementController Instance
     {

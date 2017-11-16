@@ -18,7 +18,7 @@ public sealed class RecordController : Controller
         if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
         fileFullName = saveDir + "/{0}.sav";
         InitRecordData();
-        Debug.Log("Loading Controller:" + id.ToString());
+        MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static RecordController Instance
     {

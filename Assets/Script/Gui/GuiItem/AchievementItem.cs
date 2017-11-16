@@ -110,6 +110,8 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void RefreshSettlementGrid()
     {
+        GameObject onlyWrongImageOfAchievement = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongImageOfAchievement");
+        onlyWrongImageOfAchievement.SetActive(onlyWrong);
         ArrayList dataList;
         if (onlyWrong)
         {
