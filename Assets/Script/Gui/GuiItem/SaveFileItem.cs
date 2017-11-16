@@ -151,6 +151,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected void RefreshSettlementGrid()
     {
+        GameObject onlyWrongImageInSaveFile = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongImageInSaveFile");
+        onlyWrongImageInSaveFile.SetActive(onlyWrong);
         ArrayList dataList;
         if (onlyWrong)
         {

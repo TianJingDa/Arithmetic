@@ -17,6 +17,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private Text achievementDetailSubTitleInSettlement;
     private Text achievementDetailFinishTimeInSettlement;
     private Image achievementDetailImageInSettlement;
+    private GameObject curAchievementBtn;
+    private GameObject onlyWrongImage;
     private GameObject achievementDetailBgInSettlement;
     private InfiniteList settlementGrid;
     private SaveFileInstance curSaveFileInstance;
@@ -42,6 +44,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementDetailFinishTimeInSettlement     = GameObjectDict["AchievementDetailFinishTimeInSettlement"].GetComponent<Text>();
         achievementDetailBgInSettlement             = GameObjectDict["AchievementDetailBgInSettlement"];
         achievementDetailImageInSettlement          = GameObjectDict["AchievementDetailImageInSettlement"].GetComponent<Image>();
+        curAchievementBtn                           = GameObjectDict["CurAchievementBtn"];
+        onlyWrongImage                              = GameObjectDict["OnlyWrongImage"];
     }
 
     protected override void OnButtonClick(Button btn)
@@ -97,6 +101,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void RefreshSettlementGrid()
     {
+        onlyWrongImage.SetActive(onlyWrong);
         ArrayList dataList;
         if (onlyWrong)
         {
@@ -110,7 +115,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void ShowAchievement()
     {
-        if (string.IsNullOrEmpty(curSaveFileInstance.achievementName)) return;
+        if (string.IsNullOrEmpty(curSaveFileInstance.achievementName))
+        {
+            curAchievementBtn.SetActive(false);
+            return;
+        }
+        else
+        {
+            curAchievementBtn.SetActive(true);
+        }
         achievementDetailBgInSettlement.SetActive(true);
         AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
         achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
