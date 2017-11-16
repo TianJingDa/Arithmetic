@@ -408,7 +408,8 @@ public class GameManager : MonoBehaviour
     }
     public void ShareAchievement()
     {
-
+        string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
+        string filePath = Application.persistentDataPath + "/ScreenShot" + fileName + ".png";
     }
     public void ShareSaveFile()
     {
@@ -540,7 +541,32 @@ public class GameManager : MonoBehaviour
         }
         return achievementName;
     }
-    void OnAuthResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    private IEnumerator CaptureScreenShotByRect(Rect mRect, string filePath)
+    {
+        //等待渲染线程结束
+        yield return new WaitForEndOfFrame();
+        //初始化Texture2D
+        Texture2D mTexture = new Texture2D((int)mRect.width, (int)mRect.height, TextureFormat.RGB24, false);
+        //读取屏幕像素信息并存储为纹理数据
+        mTexture.ReadPixels(mRect, 0, 0);
+        //应用
+        mTexture.Apply();
+        //将图片信息编码为字节信息
+        byte[] bytes = mTexture.EncodeToPNG();
+        //保存
+        System.IO.File.WriteAllBytes(filePath, bytes);
+    }
+
+    private void ShareContent(string text, string filePath, string title)
+    {
+        ShareContent content = new ShareContent();
+        content.SetText(text);
+        content.SetImagePath(filePath);
+        content.SetTitle(title);
+        content.SetShareType(ContentType.Image);
+        m_shareSDK.ShareContent(PlatformType.WeChatMoments, content);
+    }
+    private void OnAuthResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
     {
         if (state == ResponseState.Success)
         {
@@ -567,7 +593,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnGetUserInfoResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    private void OnGetUserInfoResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
     {
         if (state == ResponseState.Success)
         {
@@ -590,7 +616,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnShareResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    private void OnShareResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
     {
         if (state == ResponseState.Success)
         {
