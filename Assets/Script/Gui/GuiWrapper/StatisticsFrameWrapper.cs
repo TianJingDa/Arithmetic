@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using cn.sharesdk.unity3d;
 
 /// <summary>
 /// 统计数据界面
@@ -156,58 +157,40 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "WeChatBtnOfSaveFileInStatistics":
                 if (GameManager.Instance.UserNameOfWeChat == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat);
                 }
                 break;
             case "WeChatMomentsBtnOfSaveFileInStatistics":
                 if (GameManager.Instance.UserNameOfWeChat == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments);
                 }
                 break;
             case "SinaWeiboBtnOfSaveFileInStatistics":
                 if (GameManager.Instance.UserNameOfSinaWeibo == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.SinaWeibo, () =>
+                    GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo);
                 }
                 break;
             case "WeChatBtnOfAchievementInStatistics":
@@ -215,56 +198,38 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat,() =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat);
                 }
                 break;
             case "WeChatMomentsBtnOfAchievementInStatistics":
                 if (GameManager.Instance.UserNameOfWeChat == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments);
                 }
                 break;
             case "SinaWeiboBtnOfAchievementInStatistics":
                 if (GameManager.Instance.UserNameOfSinaWeibo == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.SinaWeibo, () =>
+                    GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
-                        //1、找到名称Text
-                        //2、用userInfo赋值
-                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo);
                     });
                 }
                 else
                 {
-                    //1、找到名称Text
-                    //2、用userInfo赋值
-                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
-                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo);
                 }
                 break;
             default:
@@ -301,6 +266,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 RefreshAchievementList();
             }
         }
+    }
+    private void ShareImage(GameObject target, PlatformType type)
+    {
+        //1、找到名称Text
+        //2、用userInfo赋值
+        RectTransform shotTarget = target.transform as RectTransform;
+        Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
+        GameManager.Instance.ShareImage(shotRect, type);
     }
     #region 成就
     private void RefreshAchievementWin()

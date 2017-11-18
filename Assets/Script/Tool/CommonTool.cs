@@ -228,4 +228,14 @@ public static class CommonTool
         entry.callback.AddListener(callback);
         trigger.triggers.Add(entry);
     }
+    public static Rect GetShotTargetRect(RectTransform targetRect)
+    {
+        float maxWidth = Screen.width;
+        float maxHeight = Screen.height;
+        float width = targetRect.rect.width;
+        float height = targetRect.rect.height;
+        float startX = (maxWidth - width) * 0.5f + targetRect.localPosition.x;
+        float startY = (maxHeight - height) * 0.5f + targetRect.localPosition.y;
+        return new Rect(startX, startY, width, height);
+    }
 }

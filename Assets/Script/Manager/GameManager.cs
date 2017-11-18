@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using cn.sharesdk.unity3d;
 
 /// <summary>
@@ -437,8 +438,10 @@ public class GameManager : MonoBehaviour
 
     public void ShareImage(Rect mRect, PlatformType type)
     {
+        string directoryPath = Application.persistentDataPath + "/ScreenShot";
+        if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
         string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-        string filePath = Application.persistentDataPath + "/ScreenShot" + fileName + ".png";
+        string filePath = directoryPath + "/" + fileName + ".png";
         StartCoroutine(CaptureScreenShotByRect(mRect, filePath, type));
     }
 
@@ -593,13 +596,13 @@ public class GameManager : MonoBehaviour
         //初始化Texture2D
         Texture2D mTexture = new Texture2D((int)mRect.width, (int)mRect.height, TextureFormat.RGB24, false);
         //读取屏幕像素信息并存储为纹理数据
-        mTexture.ReadPixels(mRect, 0, 0);
+        mTexture.ReadPixels(mRect, 0, 0,false);
         //应用
-        mTexture.Apply();
+        mTexture.Apply(false);
         //将图片信息编码为字节信息
         byte[] bytes = mTexture.EncodeToPNG();
         //保存
-        System.IO.File.WriteAllBytes(filePath, bytes);
+        File.WriteAllBytes(filePath, bytes);
 
         ShareImage(filePath, type);
     }
