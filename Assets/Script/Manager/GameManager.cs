@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
     private System.Action                                       m_CurAction;                        //用于刷新SaveFile和Achievement列表
+    private System.Action                                       m_ShareAction;                      //用于分享时初始化用户名称
     private ShareSDK                                            m_shareSDK;                         //用于分享成就和成绩
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
@@ -193,6 +194,28 @@ public class GameManager : MonoBehaviour
             return achievement == null;
         }
     }
+    public string UserNameOfWeChat
+    {
+        get
+        {
+            return PlayerPrefs.GetString("UserNameOfWeChat", null);
+        }
+        private set
+        {
+            PlayerPrefs.SetString("UserNameOfWeChat", value);
+        }
+    }
+    public string UserNameOfSinaWeibo
+    {
+        get
+        {
+            return PlayerPrefs.GetString("UserNameOfSinaWeibo", null);
+        }
+        private set
+        {
+            PlayerPrefs.SetString("UserNameOfSinaWeibo", value);
+        }
+    }
     private string LastestAchievement
     {
         get
@@ -241,7 +264,6 @@ public class GameManager : MonoBehaviour
         m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         m_shareSDK = GetComponent<ShareSDK>();
-        m_shareSDK.authHandler = OnAuthResultHandler;
         m_shareSDK.shareHandler = OnShareResultHandler;
         m_shareSDK.showUserHandler = OnGetUserInfoResultHandler;
 
@@ -406,15 +428,38 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
         c_AchievementCtrl.ResetAllAchievement();
     }
-    public void ShareAchievement()
+
+    public void InitShareInfo(PlatformType type, System.Action action)
+    {
+        m_ShareAction = action;
+        m_shareSDK.GetUserInfo(type);
+    }    
+
+    public void ShareImage(Rect mRect, PlatformType type)
     {
         string fileName = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         string filePath = Application.persistentDataPath + "/ScreenShot" + fileName + ".png";
+        StartCoroutine(CaptureScreenShotByRect(mRect, filePath, type));
     }
-    public void ShareSaveFile()
-    {
 
+    public void ShareUrl(PlatformType type)
+    {
+        ShareContent content = new ShareContent();
+        if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
+        {
+            content.SetImagePath("");
+            content.SetTitle("test title");//多语言
+            content.SetUrl("");
+            content.SetShareType(ContentType.Webpage);
+        }
+        else if(type == PlatformType.SinaWeibo)
+        {
+            //content.SetText(text);//text是Url
+            //content.SetImagePath(filePath);
+        }
+        m_shareSDK.ShareContent(type, content);
     }
+
     ///// <summary>
     ///// 激活GUI
     ///// </summary>
@@ -541,7 +586,7 @@ public class GameManager : MonoBehaviour
         }
         return achievementName;
     }
-    private IEnumerator CaptureScreenShotByRect(Rect mRect, string filePath)
+    private IEnumerator CaptureScreenShotByRect(Rect mRect, string filePath, PlatformType type)
     {
         //等待渲染线程结束
         yield return new WaitForEndOfFrame();
@@ -555,60 +600,41 @@ public class GameManager : MonoBehaviour
         byte[] bytes = mTexture.EncodeToPNG();
         //保存
         System.IO.File.WriteAllBytes(filePath, bytes);
+
+        ShareImage(filePath, type);
     }
 
-    private void ShareContent(string text, string filePath, string title)
+    private void ShareImage(string filePath, PlatformType type)
     {
         ShareContent content = new ShareContent();
-        content.SetText(text);
-        content.SetImagePath(filePath);
-        content.SetTitle(title);
-        content.SetShareType(ContentType.Image);
-        m_shareSDK.ShareContent(PlatformType.WeChatMoments, content);
-    }
-    private void OnAuthResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
-    {
-        if (state == ResponseState.Success)
+        if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
         {
-            if (result != null && result.Count > 0)
-            {
-                print("authorize success !" + "Platform :" + type + "result:" + MiniJSON.jsonEncode(result));
-            }
-            else
-            {
-                print("authorize success !" + "Platform :" + type);
-            }
+            content.SetImagePath(filePath);
+            content.SetShareType(ContentType.Image);
         }
-        else if (state == ResponseState.Fail)
+        else if(type == PlatformType.SinaWeibo)
         {
-#if UNITY_ANDROID
-            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
-#elif UNITY_IPHONE
-			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
-#endif
+            //content.SetText(text);
+            //content.SetImagePath(filePath);
         }
-        else if (state == ResponseState.Cancel)
-        {
-            print("cancel !");
-        }
+        m_shareSDK.ShareContent(type, content);
     }
 
     private void OnGetUserInfoResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
     {
         if (state == ResponseState.Success)
         {
-            print("get user info result :");
-            print(MiniJSON.jsonEncode(result));
-            print("AuthInfo:" + MiniJSON.jsonEncode(m_shareSDK.GetAuthInfo(PlatformType.QQ)));
-            print("Get userInfo success !Platform :" + type);
+            if (type == PlatformType.WeChat) UserNameOfWeChat = (string)result["nickname"];
+            else if(type == PlatformType.SinaWeibo) UserNameOfSinaWeibo = (string)result["nickname"];//微博里面的昵称字段需要验证
+            m_ShareAction();
         }
         else if (state == ResponseState.Fail)
         {
-#if UNITY_ANDROID
+            #if UNITY_ANDROID
             print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
-#elif UNITY_IPHONE
+            #elif UNITY_IPHONE
 			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
-#endif
+            #endif
         }
         else if (state == ResponseState.Cancel)
         {
@@ -620,16 +646,17 @@ public class GameManager : MonoBehaviour
     {
         if (state == ResponseState.Success)
         {
-            print("share successfully - share result :");
-            print(MiniJSON.jsonEncode(result));
+            //print("share successfully - share result :");
+            //print(MiniJSON.jsonEncode(result));
+            //Hide Share Panel!
         }
         else if (state == ResponseState.Fail)
         {
-#if UNITY_ANDROID
+            #if UNITY_ANDROID
             print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
-#elif UNITY_IPHONE
+            #elif UNITY_IPHONE
 			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
-#endif
+            #endif
         }
         else if (state == ResponseState.Cancel)
         {

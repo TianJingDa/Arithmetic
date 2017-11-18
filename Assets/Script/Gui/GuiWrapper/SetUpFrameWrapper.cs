@@ -10,6 +10,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private int tempSkinID;
     private int tempLayoutID;
     private int tempHandednessID;
+    private bool firstInLayout;//用于标识进入布局设置界面
 
     private List<int> resetTogglesIndexList;
     private List<Vector2> languageTogglesAnchoredPositonList;
@@ -246,6 +247,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshGui();
                 break;
             case "LayoutBtn":
+                firstInLayout = true;
                 tempLayoutID = (int)GameManager.Instance.CurLayoutID;
                 tempHandednessID = (int)GameManager.Instance.CurHandednessID;
                 layoutWin.SetActive(true);
@@ -387,7 +389,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         {
             case "LayoutDropdown":
                 tempLayoutID = dpd.value;
-                layoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal);
+                layoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal && !firstInLayout);
+                firstInLayout = false;
                 break;
             case "HandednessDropdown":
                 tempHandednessID = dpd.value;

@@ -120,7 +120,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected void OnShareBtn(BaseEventData data)
     {
-
+        GameObject saveFileShareWinInStatistics = CommonTool.GetGameObjectByName(detailWin, "SaveFileShareWinInStatistics");
+        saveFileShareWinInStatistics.SetActive(true);
+        //初始化分享界面
     }
     protected void OnAchievementBtn(BaseEventData data)
     {

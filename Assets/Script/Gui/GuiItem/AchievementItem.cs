@@ -76,8 +76,11 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void OnShareBtn(BaseEventData data)
     {
-
+        GameObject achievementShareWinInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementShareWinInStatistics");
+        achievementShareWinInStatistics.SetActive(true);
+        //初始化分享界面
     }
+
     protected void OnSaveFileBtn(BaseEventData data)
     {
         GameObject saveFileDetailBgOfAchievement = CommonTool.GetGameObjectByName(detailWin, "SaveFileDetailBgOfAchievement");

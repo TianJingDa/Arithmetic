@@ -26,8 +26,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject saveFileSummary;
     private GameObject achievementSummary;
     private GameObject saveFileDetailBgOfAchievement;
+    private GameObject saveFileShareWinInStatistics;
+    private GameObject saveFileSharePageInStatistics;
     private GameObject achievementDetailBgInSaveFile;
     private GameObject achievementDetailBgInStatistics;
+    private GameObject achievementShareWinInStatistics;
+    private GameObject achievementShareDetailBgInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     private ToggleGroup saveFileToggleGroup;
@@ -62,32 +66,36 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
     {
-        achievementWin                  = GameObjectDict["AchievementWin"];
-        saveFileWin                     = GameObjectDict["SaveFileWin"];
-        saveFileGrid                    = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
-        achievementGrid                 = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
-        saveFileDetailBg                = GameObjectDict["SaveFileDetailBg"];
-        deleteSaveFileBg                = GameObjectDict["DeleteSaveFileBg"];
-        deleteAchievementBg             = GameObjectDict["DeleteAchievementBg"];
-        saveFileDetailBgOfAchievement   = GameObjectDict["SaveFileDetailBgOfAchievement"];
-        saveFileSummary                 = GameObjectDict["SaveFileSummary"];
-        achievementSummary              = GameObjectDict["AchievementSummary"];
-        totelTimeImg_Text2              = GameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
-        totelGameImg_Text2              = GameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
-        additionSummary_Text            = GameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
-        subtractionSummary_Text         = GameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
-        multiplicationSummary_Text      = GameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
-        divisionSummary_Text            = GameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
-        achievementDetailBgInSaveFile   = GameObjectDict["AchievementDetailBgInSaveFile"];
-        achievementDetailBgInStatistics = GameObjectDict["AchievementDetailBgInStatistics"];
-        additionSaveFileItem            = GameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        subtractionSaveFileItem         = GameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        multiplicationSaveFileItem      = GameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        divisionSaveFileItem            = GameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        lastestAchievementItem          = GameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
-        hiddenAchievementItem           = GameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
-        saveFileToggleGroup             = GameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
-        achievementToggleGroup          = GameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
+        achievementWin                          = GameObjectDict["AchievementWin"];
+        saveFileWin                             = GameObjectDict["SaveFileWin"];
+        saveFileGrid                            = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
+        achievementGrid                         = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
+        saveFileDetailBg                        = GameObjectDict["SaveFileDetailBg"];
+        deleteSaveFileBg                        = GameObjectDict["DeleteSaveFileBg"];
+        deleteAchievementBg                     = GameObjectDict["DeleteAchievementBg"];
+        saveFileDetailBgOfAchievement           = GameObjectDict["SaveFileDetailBgOfAchievement"];
+        saveFileSummary                         = GameObjectDict["SaveFileSummary"];
+        achievementSummary                      = GameObjectDict["AchievementSummary"];
+        totelTimeImg_Text2                      = GameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
+        totelGameImg_Text2                      = GameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
+        additionSummary_Text                    = GameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
+        subtractionSummary_Text                 = GameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
+        multiplicationSummary_Text              = GameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
+        divisionSummary_Text                    = GameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
+        achievementDetailBgInSaveFile           = GameObjectDict["AchievementDetailBgInSaveFile"];
+        achievementDetailBgInStatistics         = GameObjectDict["AchievementDetailBgInStatistics"];
+        achievementShareWinInStatistics         = GameObjectDict["AchievementShareWinInStatistics"];
+        achievementShareDetailBgInStatistics    = GameObjectDict["AchievementShareDetailBgInStatistics"];
+        saveFileShareWinInStatistics            = GameObjectDict["SaveFileShareWinInStatistics"];
+        saveFileSharePageInStatistics           = GameObjectDict["SaveFileSharePageInStatistics"];
+        additionSaveFileItem                    = GameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        subtractionSaveFileItem                 = GameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        multiplicationSaveFileItem              = GameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        divisionSaveFileItem                    = GameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        lastestAchievementItem                  = GameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
+        hiddenAchievementItem                   = GameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
+        saveFileToggleGroup                     = GameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
+        achievementToggleGroup                  = GameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -114,6 +122,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "AchievementDetailBgInSaveFile":
                 achievementDetailBgInSaveFile.SetActive(false);
                 break;
+            case "AchievementShareDetailBgInStatistics":
+                achievementShareWinInStatistics.SetActive(false);
+                break;
             case "DeleteSaveFileBg":
             case "DeleteCancelBtnInSaveFile":
                 deleteSaveFileBg.SetActive(false);
@@ -138,6 +149,123 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurAction = null;
                 saveFileDetailBg.SetActive(false);
                 saveFileWin.SetActive(false);
+                break;
+            case "SaveFileSharePageInStatistics":
+                saveFileShareWinInStatistics.SetActive(false);
+                break;
+            case "WeChatBtnOfSaveFileInStatistics":
+                if (GameManager.Instance.UserNameOfWeChat == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                }
+                break;
+            case "WeChatMomentsBtnOfSaveFileInStatistics":
+                if (GameManager.Instance.UserNameOfWeChat == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                }
+                break;
+            case "SinaWeiboBtnOfSaveFileInStatistics":
+                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.SinaWeibo, () =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = saveFileSharePageInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                }
+                break;
+            case "WeChatBtnOfAchievementInStatistics":
+                if(GameManager.Instance.UserNameOfWeChat == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat,() =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChat);
+                }
+                break;
+            case "WeChatMomentsBtnOfAchievementInStatistics":
+                if (GameManager.Instance.UserNameOfWeChat == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat, () =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.WeChatMoments);
+                }
+                break;
+            case "SinaWeiboBtnOfAchievementInStatistics":
+                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                {
+                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.SinaWeibo, () =>
+                    {
+                        //1、找到名称Text
+                        //2、用userInfo赋值
+                        RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                        GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                    });
+                }
+                else
+                {
+                    //1、找到名称Text
+                    //2、用userInfo赋值
+                    RectTransform shotTarget = achievementShareDetailBgInStatistics.transform as RectTransform;
+                    GameManager.Instance.ShareImage(shotTarget.rect, cn.sharesdk.unity3d.PlatformType.SinaWeibo);
+                }
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button:" + btn.name);
