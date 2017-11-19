@@ -19,6 +19,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private Text subtractionSummary_Text;
     private Text multiplicationSummary_Text;
     private Text divisionSummary_Text;
+    private Text saveFileShareTitleInStatistics;
+    private Text achievementShareTitleInStatistics;
     private GameObject saveFileWin;
     private GameObject achievementWin;
     private GameObject saveFileDetailBg;
@@ -159,12 +161,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat, true);
                     });
                 }
                 else
                 {
-                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat, true);
                 }
                 break;
             case "WeChatMomentsBtnOfSaveFileInStatistics":
@@ -172,12 +174,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments, true);
                     });
                 }
                 else
                 {
-                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments, true);
                 }
                 break;
             case "SinaWeiboBtnOfSaveFileInStatistics":
@@ -185,25 +187,25 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
-                        ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo);
+                        ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo, true);
                     });
                 }
                 else
                 {
-                    ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo);
+                    ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo, true);
                 }
                 break;
             case "WeChatBtnOfAchievementInStatistics":
                 if(GameManager.Instance.UserNameOfWeChat == null)
                 {
-                    GameManager.Instance.InitShareInfo(cn.sharesdk.unity3d.PlatformType.WeChat,() =>
+                    GameManager.Instance.InitShareInfo(PlatformType.WeChat,() =>
                     {
-                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat, false);
                     });
                 }
                 else
                 {
-                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChat, false);
                 }
                 break;
             case "WeChatMomentsBtnOfAchievementInStatistics":
@@ -211,12 +213,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
-                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments, false);
                     });
                 }
                 else
                 {
-                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.WeChatMoments, false);
                 }
                 break;
             case "SinaWeiboBtnOfAchievementInStatistics":
@@ -224,12 +226,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
-                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo);
+                        ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo, false);
                     });
                 }
                 else
                 {
-                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo);
+                    ShareImage(achievementShareDetailBgInStatistics, PlatformType.SinaWeibo, false);
                 }
                 break;
             default:
@@ -267,10 +269,24 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             }
         }
     }
-    private void ShareImage(GameObject target, PlatformType type)
+    private void ShareImage(GameObject target, PlatformType type, bool isSaveFile)
     {
-        //1、找到名称Text
-        //2、用userInfo赋值
+        if (isSaveFile)
+        {
+            saveFileShareTitleInStatistics.enabled = true;
+            if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
+                saveFileShareTitleInStatistics.text = string.Format(saveFileShareTitleInStatistics.text, GameManager.Instance.UserNameOfWeChat);
+            else
+                saveFileShareTitleInStatistics.text = string.Format(saveFileShareTitleInStatistics.text, GameManager.Instance.UserNameOfSinaWeibo);
+        }
+        else
+        {
+            achievementShareTitleInStatistics.enabled = true;
+            if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
+                achievementShareTitleInStatistics.text = string.Format(achievementShareTitleInStatistics.text, GameManager.Instance.UserNameOfWeChat);
+            else
+                achievementShareTitleInStatistics.text = string.Format(achievementShareTitleInStatistics.text, GameManager.Instance.UserNameOfSinaWeibo);
+        }
         RectTransform shotTarget = target.transform as RectTransform;
         Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
         GameManager.Instance.ShareImage(shotRect, type);
