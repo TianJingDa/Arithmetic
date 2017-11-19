@@ -168,7 +168,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.StartFrame);
                 break;
             case "WeChatBtnOfSaveFileInSettlement":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -181,7 +181,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatMomentsBtnOfSaveFileInSettlement":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -194,7 +194,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "SinaWeiboBtnOfSaveFileInSettlement":
-                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
@@ -207,7 +207,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatBtnOfAchievementInSettlement":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -220,7 +220,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatMomentsBtnOfAchievementInSettlement":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -233,7 +233,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "SinaWeiboBtnOfAchievementInSettlement":
-                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {

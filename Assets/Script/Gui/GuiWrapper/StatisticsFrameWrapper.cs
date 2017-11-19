@@ -157,7 +157,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 saveFileShareWinInStatistics.SetActive(false);
                 break;
             case "WeChatBtnOfSaveFileInStatistics":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -170,7 +170,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatMomentsBtnOfSaveFileInStatistics":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -183,7 +183,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "SinaWeiboBtnOfSaveFileInStatistics":
-                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
@@ -196,7 +196,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatBtnOfAchievementInStatistics":
-                if(GameManager.Instance.UserNameOfWeChat == null)
+                if(string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat,() =>
                     {
@@ -209,7 +209,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "WeChatMomentsBtnOfAchievementInStatistics":
-                if (GameManager.Instance.UserNameOfWeChat == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
                     {
@@ -222,7 +222,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 }
                 break;
             case "SinaWeiboBtnOfAchievementInStatistics":
-                if (GameManager.Instance.UserNameOfSinaWeibo == null)
+                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
                 {
                     GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
                     {
