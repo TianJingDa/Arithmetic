@@ -16,12 +16,12 @@ public class QuestionItem : Item
     private Text questionContent;
     private Text questionRightAnswerPage_Text;
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        questionRightAnswerBg           = GameObjectDict["QuestionRightAnswerBg"];
-        questionIndex                   = GameObjectDict["QuestionIndex"].GetComponent<Text>();
-        questionContent                 = GameObjectDict["QuestionContent"].GetComponent<Text>();
-        questionRightAnswerPage_Text    = GameObjectDict["QuestionRightAnswerPage_Text"].GetComponent<Text>();
+        questionRightAnswerBg           = gameObjectDict["QuestionRightAnswerBg"];
+        questionIndex                   = gameObjectDict["QuestionIndex"].GetComponent<Text>();
+        questionContent                 = gameObjectDict["QuestionContent"].GetComponent<Text>();
+        questionRightAnswerPage_Text    = gameObjectDict["QuestionRightAnswerPage_Text"].GetComponent<Text>();
     }
 
     protected override void InitPrefabItem(object data)

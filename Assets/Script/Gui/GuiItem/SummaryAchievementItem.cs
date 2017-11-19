@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class SummaryAchievementItem : AchievementItem 
 {
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");

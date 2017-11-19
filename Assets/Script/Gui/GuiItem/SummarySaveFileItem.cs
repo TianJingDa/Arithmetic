@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class SummarySaveFileItem : SaveFileItem 
 {
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         saveFileName = CommonTool.GetComponentContainsName<Text>(gameObject, "SaveFileName");
         saveFileType_Time = CommonTool.GetComponentContainsName<Text>(gameObject, "SaveFileType_Time");

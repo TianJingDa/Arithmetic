@@ -65,38 +65,38 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         };
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        achievementWin                          = GameObjectDict["AchievementWin"];
-        saveFileWin                             = GameObjectDict["SaveFileWin"];
-        saveFileGrid                            = GameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
-        achievementGrid                         = GameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
-        saveFileDetailBg                        = GameObjectDict["SaveFileDetailBg"];
-        deleteSaveFileBg                        = GameObjectDict["DeleteSaveFileBg"];
-        deleteAchievementBg                     = GameObjectDict["DeleteAchievementBg"];
-        saveFileDetailBgOfAchievement           = GameObjectDict["SaveFileDetailBgOfAchievement"];
-        saveFileSummary                         = GameObjectDict["SaveFileSummary"];
-        achievementSummary                      = GameObjectDict["AchievementSummary"];
-        totelTimeImg_Text2                      = GameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
-        totelGameImg_Text2                      = GameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
-        additionSummary_Text                    = GameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
-        subtractionSummary_Text                 = GameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
-        multiplicationSummary_Text              = GameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
-        divisionSummary_Text                    = GameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
-        achievementDetailBgInSaveFile           = GameObjectDict["AchievementDetailBgInSaveFile"];
-        achievementDetailBgInStatistics         = GameObjectDict["AchievementDetailBgInStatistics"];
-        achievementShareWinInStatistics         = GameObjectDict["AchievementShareWinInStatistics"];
-        achievementShareDetailBgInStatistics    = GameObjectDict["AchievementShareDetailBgInStatistics"];
-        saveFileShareWinInStatistics            = GameObjectDict["SaveFileShareWinInStatistics"];
-        saveFileSharePageInStatistics           = GameObjectDict["SaveFileSharePageInStatistics"];
-        additionSaveFileItem                    = GameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        subtractionSaveFileItem                 = GameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        multiplicationSaveFileItem              = GameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        divisionSaveFileItem                    = GameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
-        lastestAchievementItem                  = GameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
-        hiddenAchievementItem                   = GameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
-        saveFileToggleGroup                     = GameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
-        achievementToggleGroup                  = GameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
+        achievementWin                          = gameObjectDict["AchievementWin"];
+        saveFileWin                             = gameObjectDict["SaveFileWin"];
+        saveFileGrid                            = gameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
+        achievementGrid                         = gameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
+        saveFileDetailBg                        = gameObjectDict["SaveFileDetailBg"];
+        deleteSaveFileBg                        = gameObjectDict["DeleteSaveFileBg"];
+        deleteAchievementBg                     = gameObjectDict["DeleteAchievementBg"];
+        saveFileDetailBgOfAchievement           = gameObjectDict["SaveFileDetailBgOfAchievement"];
+        saveFileSummary                         = gameObjectDict["SaveFileSummary"];
+        achievementSummary                      = gameObjectDict["AchievementSummary"];
+        totelTimeImg_Text2                      = gameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
+        totelGameImg_Text2                      = gameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
+        additionSummary_Text                    = gameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
+        subtractionSummary_Text                 = gameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
+        multiplicationSummary_Text              = gameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
+        divisionSummary_Text                    = gameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
+        achievementDetailBgInSaveFile           = gameObjectDict["AchievementDetailBgInSaveFile"];
+        achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
+        achievementShareWinInStatistics         = gameObjectDict["AchievementShareWinInStatistics"];
+        achievementShareDetailBgInStatistics    = gameObjectDict["AchievementShareDetailBgInStatistics"];
+        saveFileShareWinInStatistics            = gameObjectDict["SaveFileShareWinInStatistics"];
+        saveFileSharePageInStatistics           = gameObjectDict["SaveFileSharePageInStatistics"];
+        additionSaveFileItem                    = gameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        subtractionSaveFileItem                 = gameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        multiplicationSaveFileItem              = gameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        divisionSaveFileItem                    = gameObjectDict["DivisionSaveFileItem"].GetComponent<SummarySaveFileItem>();
+        lastestAchievementItem                  = gameObjectDict["LastestAchievementItem"].GetComponent<LastestAchievementItem>();
+        hiddenAchievementItem                   = gameObjectDict["HiddenAchievementItem"].GetComponent<HiddenAchievementItem>();
+        saveFileToggleGroup                     = gameObjectDict["SaveFileToggleGroup"].GetComponent<ToggleGroup>();
+        achievementToggleGroup                  = gameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
     }
 
     protected override void OnButtonClick(Button btn)

@@ -51,31 +51,31 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        skinWin                                 = GameObjectDict["SkinWin"];
-        resetWin                                = GameObjectDict["ResetWin"];
-        resetTipBg                              = GameObjectDict["ResetTipBg"];
-        layoutWin                               = GameObjectDict["LayoutWin"];
-        layoutTipBg                             = GameObjectDict["LayoutTipBg"];
-        aboutUsWin                              = GameObjectDict["AboutUsWin"];
-        feedbackWin                             = GameObjectDict["FeedbackWin"];
-        languageWin                             = GameObjectDict["LanguageWin"];
-        strategyWin                             = GameObjectDict["StrategyWin"];
-        resetConfirmBg                          = GameObjectDict["ResetConfirmBg"];
-        resetTipCancelBtn                       = GameObjectDict["ResetTipCancelBtn"];
-        resetToggleGroup                        = GameObjectDict["ResetToggleGroup"];
-        thankDevelopersWin                      = GameObjectDict["ThankDevelopersWin"];
-        resetTipPageTitle_Text_Achievement      = GameObjectDict["ResetTipPageTitle_Text_Achievement"];
-        resetTipPageTitle_Text_SaveFile         = GameObjectDict["ResetTipPageTitle_Text_SaveFile"];
-        skinToggleGroup                         = GameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
-        languageToggleGroup                     = GameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
-        skinApplyBtn                            = GameObjectDict["SkinApplyBtn"].GetComponent<Button>();
-        resetApplyBtn                           = GameObjectDict["ResetApplyBtn"].GetComponent<Button>();
-        layoutApplyBtn                          = GameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
-        languageApplyBtn                        = GameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
-        layoutDropdown                          = GameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
-        handednessDropdown                      = GameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
+        skinWin                                 = gameObjectDict["SkinWin"];
+        resetWin                                = gameObjectDict["ResetWin"];
+        resetTipBg                              = gameObjectDict["ResetTipBg"];
+        layoutWin                               = gameObjectDict["LayoutWin"];
+        layoutTipBg                             = gameObjectDict["LayoutTipBg"];
+        aboutUsWin                              = gameObjectDict["AboutUsWin"];
+        feedbackWin                             = gameObjectDict["FeedbackWin"];
+        languageWin                             = gameObjectDict["LanguageWin"];
+        strategyWin                             = gameObjectDict["StrategyWin"];
+        resetConfirmBg                          = gameObjectDict["ResetConfirmBg"];
+        resetTipCancelBtn                       = gameObjectDict["ResetTipCancelBtn"];
+        resetToggleGroup                        = gameObjectDict["ResetToggleGroup"];
+        thankDevelopersWin                      = gameObjectDict["ThankDevelopersWin"];
+        resetTipPageTitle_Text_Achievement      = gameObjectDict["ResetTipPageTitle_Text_Achievement"];
+        resetTipPageTitle_Text_SaveFile         = gameObjectDict["ResetTipPageTitle_Text_SaveFile"];
+        skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
+        languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
+        skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
+        resetApplyBtn                           = gameObjectDict["ResetApplyBtn"].GetComponent<Button>();
+        layoutApplyBtn                          = gameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
+        languageApplyBtn                        = gameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
+        layoutDropdown                          = gameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
+        handednessDropdown                      = gameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
     }
 
 

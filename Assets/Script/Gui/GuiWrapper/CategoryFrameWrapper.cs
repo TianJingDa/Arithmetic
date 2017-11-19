@@ -34,11 +34,11 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         RefreshAllDropdown();
     }
 
-    protected override void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        categoryTipBg   = GameObjectDict["CategoryTipBg"];
-        digitDropdown   = GameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
-        amountDropdown  = GameObjectDict["AmountDropdown"].GetComponent<Dropdown>();
+        categoryTipBg   = gameObjectDict["CategoryTipBg"];
+        digitDropdown   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
+        amountDropdown  = gameObjectDict["AmountDropdown"].GetComponent<Dropdown>();
     }
 
     protected override void OnButtonClick(Button btn)

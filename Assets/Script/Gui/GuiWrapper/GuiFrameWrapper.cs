@@ -63,7 +63,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
     }
 
-    protected virtual void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected virtual void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
 
     }

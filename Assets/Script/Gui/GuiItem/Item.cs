@@ -8,10 +8,10 @@ public abstract class Item : MonoBehaviour
     {
         CommonTool.InitText(gameObject);//对于SummarySaveFileItem走了两次这个
         CommonTool.InitImage(gameObject);//对于SummarySaveFileItem走了两次这个
-        Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
-        GetComponent<Item>().OnStart(GameObjectDict);
+        Dictionary<string, GameObject> gameObjectDict = CommonTool.InitGameObjectDict(gameObject);
+        GetComponent<Item>().OnStart(gameObjectDict);
     }
-    protected virtual void OnStart(Dictionary<string, GameObject> GameObjectDict)
+    protected virtual void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
 
     }

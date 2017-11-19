@@ -217,6 +217,13 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetString("UserNameOfSinaWeibo", value);
         }
     }
+    public string[] SymbolArray
+    {
+        get
+        {
+            return m_SymbolArray;
+        }
+    }
     private string LastestAchievement
     {
         get
@@ -261,7 +268,7 @@ public class GameManager : MonoBehaviour
     {
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
-        m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
+        m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         m_shareSDK = GetComponent<ShareSDK>();
