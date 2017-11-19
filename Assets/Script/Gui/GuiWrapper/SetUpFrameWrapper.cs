@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using cn.sharesdk.unity3d;
 /// <summary>
 /// 设置界面
 /// </summary>
@@ -21,10 +22,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject languageWin;
     private GameObject skinWin;
     private GameObject layoutWin;
-    private GameObject layoutTipBg;
+    private GameObject horizontalLayoutTipBg;
     private GameObject resetWin;
     private GameObject feedbackWin;
     private GameObject aboutUsWin;
+    private GameObject shareUsWin;
     private GameObject thankDevelopersWin;
     private GameObject resetConfirmBg;
     private GameObject resetToggleGroup;
@@ -57,8 +59,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetWin                                = gameObjectDict["ResetWin"];
         resetTipBg                              = gameObjectDict["ResetTipBg"];
         layoutWin                               = gameObjectDict["LayoutWin"];
-        layoutTipBg                             = gameObjectDict["LayoutTipBg"];
+        horizontalLayoutTipBg                   = gameObjectDict["HorizontalLayoutTipBg"];
         aboutUsWin                              = gameObjectDict["AboutUsWin"];
+        shareUsWin                              = gameObjectDict["ShareUsWin"];
         feedbackWin                             = gameObjectDict["FeedbackWin"];
         languageWin                             = gameObjectDict["LanguageWin"];
         strategyWin                             = gameObjectDict["StrategyWin"];
@@ -256,7 +259,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 layoutApplyBtn.interactable = false;
                 break;
             case "LayoutTipConfirmBtn":
-                layoutTipBg.SetActive(false);
+                horizontalLayoutTipBg.SetActive(false);
                 break;
             case "Layout2SetUpFrameBtn":
                 layoutWin.SetActive(false);
@@ -274,6 +277,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "Skin2StartFrameBtn":
             case "Strategy2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, GuiFrameID.StartFrame);
+                break;
+            case "ShareUsBtn":
+                shareUsWin.SetActive(true);
+                break;
+            case "ShareUsWin":
+                shareUsWin.SetActive(false);
                 break;
             case "ResetBtn":
                 resetWin.SetActive(true);
@@ -330,6 +339,15 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "ThankDevelopersBtn":
             case "ThankDevelopersWin":
                 thankDevelopersWin.SetActive(!thankDevelopersWin.activeSelf);
+                break;
+            case "WeChatBtnInSetUp":
+                GameManager.Instance.ShareUrl(PlatformType.WeChat);
+                break;
+            case "WeChatMomentsInSetUp":
+                GameManager.Instance.ShareUrl(PlatformType.WeChatMoments);
+                break;
+            case "SinaWeiboBtnInSetUp":
+                GameManager.Instance.ShareUrl(PlatformType.SinaWeibo);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -389,7 +407,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         {
             case "LayoutDropdown":
                 tempLayoutID = dpd.value;
-                layoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal && !firstInLayout);
+                horizontalLayoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal && !firstInLayout);
                 firstInLayout = false;
                 break;
             case "HandednessDropdown":
