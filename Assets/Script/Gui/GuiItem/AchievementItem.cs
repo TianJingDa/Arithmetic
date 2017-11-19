@@ -98,7 +98,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         Text achievementShareOperandInStatistics = detailWinDict["AchievementShareOperandInStatistics"].GetComponent<Text>();
         Text achievementShareAccuracyInStatistics = detailWinDict["AchievementShareAccuracyInStatistics"].GetComponent<Text>();
         Text achievementShareMeanTimeInStatistics = detailWinDict["AchievementShareMeanTimeInStatistics"].GetComponent<Text>();
-        achievementShareTitleInStatistics.SetActive(false);
+        achievementShareTitleInStatistics.GetComponent<Text>().enabled = false;
         achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementShareMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementShareSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
@@ -109,7 +109,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
         SaveFileInstance saveFile = GameManager.Instance.ReadRecord(content.fileName);
         achievementShareAmountInStatistics.text = string.Format(achievementShareAmountInStatistics.text, saveFile.qInstancList.Count);
-        achievementShareTimeInStatistics.text = string.Format(achievementShareTimeInStatistics.text, saveFile.timeCost);
+        achievementShareTimeInStatistics.text = string.Format(achievementShareTimeInStatistics.text, saveFile.timeCost.ToString("f1"));
         achievementShareSymbolInStatistics.text = string.Format(achievementShareSymbolInStatistics.text, GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID]);
         achievementShareDigitInStatistics.text = string.Format(achievementShareDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
         achievementShareOperandInStatistics.text = string.Format(achievementShareOperandInStatistics.text, (int)(content.cInstance.operandID + 2));

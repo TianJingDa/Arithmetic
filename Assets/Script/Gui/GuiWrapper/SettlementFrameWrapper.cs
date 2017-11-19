@@ -312,7 +312,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
         if (isSaveFile)
         {
-            saveFileShareTitleInSettlement.gameObject.SetActive(true);
+            saveFileShareTitleInSettlement.enabled = true;
             if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
                 saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
             else
@@ -320,7 +320,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         }
         else
         {
-            achievementShareTitleInSettlement.gameObject.SetActive(true);
+            achievementShareTitleInSettlement.enabled = true;
             if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
                 achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
             else
@@ -332,11 +332,11 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitSaveFileShareWin()
     {
-        saveFileShareTitleInSettlement.gameObject.SetActive(false);
+        saveFileShareTitleInSettlement.enabled = false;
         saveFileSharePatternInSettlement_Time.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Time);
         saveFileSharePatternInSettlement_Number.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Number);
         saveFileShareAmountInSettlement.text = string.Format(saveFileShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
-        saveFileShareTimeInSettlement.text = string.Format(saveFileShareTimeInSettlement.text, curSaveFileInstance.timeCost);
+        saveFileShareTimeInSettlement.text = string.Format(saveFileShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
         saveFileShareSymbolInSettlement.text = string.Format(saveFileShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
         saveFileShareDigitInSettlement.text = string.Format(saveFileShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
         saveFileShareOperandInSettlement.text = string.Format(saveFileShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
@@ -361,7 +361,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
         if (string.IsNullOrEmpty(curSaveFileInstance.achievementName)) return;
         AchievementInstance content = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
-        achievementShareTitleInSettlement.gameObject.SetActive(false);
+        achievementShareTitleInSettlement.enabled = false;
         achievementShareImageInSettlement.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
@@ -371,7 +371,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementSharePatternInSettlement_Time.SetActive(content.cInstance.patternID == PatternID.Time);
         achievementSharePatternInSettlement_Number.SetActive(content.cInstance.patternID == PatternID.Number);
         achievementShareAmountInSettlement.text = string.Format(achievementShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
-        achievementShareTimeInSettlement.text = string.Format(achievementShareTimeInSettlement.text, curSaveFileInstance.timeCost);
+        achievementShareTimeInSettlement.text = string.Format(achievementShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
         achievementShareSymbolInSettlement.text = string.Format(achievementShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
         achievementShareDigitInSettlement.text = string.Format(achievementShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
         achievementShareOperandInSettlement.text = string.Format(achievementShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
