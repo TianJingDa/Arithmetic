@@ -9,8 +9,7 @@ public class FontController : Controller
     private FontController()
     {
         base.id = ControllerID.FontController;
-        fontAssetDict = new Dictionary<SkinID, string[]>();
-        InitFontData();
+        path = "Font/{0}/{1}";
         MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static FontController Instance
@@ -18,19 +17,13 @@ public class FontController : Controller
         get { return instance ?? (instance = new FontController()); }
     }
     #endregion
-    private Dictionary<SkinID, string[]> fontAssetDict;//key：SkinID，value：资源路径
 
-    private void InitFontData()
+    private string path;
+
+    public Font GetFontResource(SkinID sID,LanguageID lID)
     {
-        fontAssetDict.Add(SkinID.Default, new string[] { "Default/Chinese", "Default/English" });
-        fontAssetDict.Add(SkinID.FreshGreen, new string[] { "FreshGreen/Chinese", "FreshGreen/English" });
-        fontAssetDict.Add(SkinID.RosePink, new string[] { "RosePink/Chinese", "RosePink/English" });
-        fontAssetDict.Add(SkinID.SkyBlue, new string[] { "SkyBlue/Chinese", "SkyBlue/English" });
-    }
-    public Object GetFontResource(SkinID sID,LanguageID lID)
-    {
-        Object resouce = Resources.Load(fontAssetDict[sID][(int)lID]);
-        return resouce;
+        GameObject resouce = Resources.Load<GameObject>(string.Format(path, sID, lID));
+        return resouce.GetComponent<GUIText>().font;
     }
 
 }

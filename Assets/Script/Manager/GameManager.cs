@@ -289,13 +289,11 @@ public class GameManager : MonoBehaviour
     }
     public Font GetFont()
     {
-        Object font = c_FontCtrl.GetFontResource(CurSkinID,CurLanguageID);
-        return Instantiate(font) as Font;
+        return c_FontCtrl.GetFontResource(CurSkinID, CurLanguageID);
     }
     public Sprite GetSprite(string index)
     {
-        Object sprite = c_SkinCtrl.GetSpriteResource(CurSkinID, index);
-        return Instantiate(sprite) as Sprite;
+        return c_SkinCtrl.GetSpriteResource(CurSkinID, index);
     }
     public Color GetColor(string index)
     {
