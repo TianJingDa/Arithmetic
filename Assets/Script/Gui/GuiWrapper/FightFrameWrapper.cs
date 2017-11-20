@@ -170,6 +170,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         if (order) result.Append(num);
         else result.Insert(0, num);
         if (long.Parse(result.ToString()) > int.MaxValue) result = lastResult;
+        if (result.Length > int.MaxValue.ToString().Length) result = lastResult;
         resultImg_Text.text = result.ToString();
     }
 
