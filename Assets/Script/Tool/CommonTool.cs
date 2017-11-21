@@ -156,7 +156,7 @@ public static class CommonTool
         {
             //textArray[i].font = curFont;
             //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
-            if (textArray[i].index == "") continue;
+            if (string.IsNullOrEmpty(textArray[i].index)) continue;
             string text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
             if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
             textArray[i].text = text;
@@ -172,7 +172,7 @@ public static class CommonTool
         }
         for (int i = 0; i < imageArray.Length; i++)
         {
-            if (imageArray[i].index == "")
+            if (string.IsNullOrEmpty(imageArray[i].index))
             {
                 continue;
             }

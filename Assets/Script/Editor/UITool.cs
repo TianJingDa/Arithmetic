@@ -287,17 +287,17 @@ public class UITool : Editor
         if (File.Exists(path)) File.Delete(path);
         IOHelper.SetData(path, mutiLanguageDict);
     }
-    [MenuItem("Custom Editor/将image转换成prefab")]
-    public static void ChangeToPrefab()
+    [MenuItem("Custom Editor/转换prefab/Default")]
+    public static void DefaultPrefab()
     {
-        string spriteDir = Application.dataPath + "/Resources/Sprite";
+        string spriteDir = Application.dataPath + "/Resources/Skin/Default";
 
         if (!Directory.Exists(spriteDir))
         {
             Directory.CreateDirectory(spriteDir);
         }
 
-        DirectoryInfo rootDirInfo = new DirectoryInfo(Application.dataPath + "/Atlas");
+        DirectoryInfo rootDirInfo = new DirectoryInfo(Application.dataPath + "/Image/Default");
         foreach (DirectoryInfo dirInfo in rootDirInfo.GetDirectories())
         {
             foreach (FileInfo pngFile in dirInfo.GetFiles("*.png", SearchOption.AllDirectories))
@@ -310,7 +310,7 @@ public class UITool : Editor
                 allPath = spriteDir + "/" + sprite.name + ".prefab";
                 string prefabPath = allPath.Substring(allPath.IndexOf("Assets"));
                 PrefabUtility.CreatePrefab(prefabPath, go);
-                GameObject.DestroyImmediate(go);
+                DestroyImmediate(go);
             }
         }
     }
