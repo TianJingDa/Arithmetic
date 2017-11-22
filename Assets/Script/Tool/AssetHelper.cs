@@ -21,7 +21,7 @@ public static class AssetHelper
     /// <param name="fileName"></param>  
     public static IEnumerator CopyImage(string fileName)
     {
-        string src = GetStreamingPathForWWW() + "/Image/" +fileName;
+        string src = GetStreamingPathForWWW() + "Image/" +fileName;
         string des = Application.persistentDataPath + "/Image";
         if (!Directory.Exists(des)) Directory.CreateDirectory(des);
         des = des + "/" + fileName;
