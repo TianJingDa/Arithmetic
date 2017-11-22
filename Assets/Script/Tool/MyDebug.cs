@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class MyDebug 
 {
     private static void Log(object message)
     {
 #if UNITY_EDITOR
-        Debug.Log(message);
+        Debug.Log("@TJD@" + message);
 #endif
     }
 
@@ -23,6 +21,4 @@ public static class MyDebug
     {
         Log("<color=yellow>" + message + "</color>");
     }
-
-
 }

@@ -85,6 +85,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         subtractionSummary_Text                 = gameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
         multiplicationSummary_Text              = gameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
         divisionSummary_Text                    = gameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
+        saveFileShareTitleInStatistics          = gameObjectDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
+        achievementShareTitleInStatistics       = gameObjectDict["AchievementShareTitleInStatistics"].GetComponent<Text>();
         achievementDetailBgInSaveFile           = gameObjectDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
         achievementShareWinInStatistics         = gameObjectDict["AchievementShareWinInStatistics"];

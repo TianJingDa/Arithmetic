@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -238,4 +237,5 @@ public static class CommonTool
         float startY = (maxHeight - height) * 0.5f + targetRect.localPosition.y;
         return new Rect(startX, startY, width, height);
     }
+
 }

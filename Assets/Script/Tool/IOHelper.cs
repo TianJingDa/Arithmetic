@@ -5,6 +5,9 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using UnityEngine;
 
+/// <summary>
+/// 用于存、读档
+/// </summary>
 public static class IOHelper 
 {
     /// <summary>

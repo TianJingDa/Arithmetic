@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using cn.sharesdk.unity3d;
 
@@ -274,6 +275,8 @@ public class GameManager : MonoBehaviour
         m_shareSDK = GetComponent<ShareSDK>();
         m_shareSDK.shareHandler = OnShareResultHandler;
         m_shareSDK.showUserHandler = OnGetUserInfoResultHandler;
+        string path = Application.persistentDataPath + "/Image/ShareImageForUrl.png";
+        if (!File.Exists(path)) StartCoroutine(AssetHelper.CopyImage("ShareImageForUrl.png"));
 
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
@@ -594,6 +597,13 @@ public class GameManager : MonoBehaviour
         }
         return achievementName;
     }
+    /// <summary>
+    /// 截屏
+    /// </summary>
+    /// <param name="mRect"></param>
+    /// <param name="filePath"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     private IEnumerator CaptureScreenShotByRect(Rect mRect, string filePath, PlatformType type)
     {
         //等待渲染线程结束
@@ -649,7 +659,13 @@ public class GameManager : MonoBehaviour
             print("cancel !");
         }
     }
-
+    /// <summary>
+    /// ShareSDK分享回调
+    /// </summary>
+    /// <param name="reqID"></param>
+    /// <param name="state"></param>
+    /// <param name="type"></param>
+    /// <param name="result"></param>
     private void OnShareResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
     {
         if (state == ResponseState.Success)
@@ -672,6 +688,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>  
+    /// Load Image from Persistent folder  
+    /// </summary>  
+    /// <param name="path"></param>  
+    /// <param name="image"></param>  
+    private void LoadImageFromPersistent(string path, Image image)
+    {
+        path = AssetHelper.GetPersistentPathForWWW() + path;
+        StartCoroutine(AssetHelper.LoadImage(path, image));
+    }
+
+    /// <summary>  
+    /// Load Image from Streaming folder  
+    /// </summary>  
+    /// <param name="path"></param>  
+    /// <param name="image"></param>  
+    private void LoadImageFromStreaming(string path, Image image)
+    {
+        path = AssetHelper.GetStreamingPathForWWW() + path;
+        StartCoroutine(AssetHelper.LoadImage(path, image));
+    }
     #endregion
 
 }

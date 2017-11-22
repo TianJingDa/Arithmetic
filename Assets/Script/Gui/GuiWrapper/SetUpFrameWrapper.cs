@@ -31,7 +31,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject resetConfirmBg;
     private GameObject resetToggleGroup;
     private GameObject resetTipBg;
-    private GameObject resetTipCancelBtn;
     private GameObject resetTipPageTitle_Text_Achievement;
     private GameObject resetTipPageTitle_Text_SaveFile;
     private Button languageApplyBtn;
@@ -66,7 +65,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         languageWin                             = gameObjectDict["LanguageWin"];
         strategyWin                             = gameObjectDict["StrategyWin"];
         resetConfirmBg                          = gameObjectDict["ResetConfirmBg"];
-        resetTipCancelBtn                       = gameObjectDict["ResetTipCancelBtn"];
         resetToggleGroup                        = gameObjectDict["ResetToggleGroup"];
         thankDevelopersWin                      = gameObjectDict["ThankDevelopersWin"];
         resetTipPageTitle_Text_Achievement      = gameObjectDict["ResetTipPageTitle_Text_Achievement"];
