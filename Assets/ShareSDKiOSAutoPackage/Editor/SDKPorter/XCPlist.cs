@@ -14,8 +14,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 		{
             filePath = Path.Combine( fPath, "info.plist" );
             if( !System.IO.File.Exists( filePath ) ) {
+            #if SHOW_DEBUG
                 Debug.LogError( filePath +"路径下文件不存在" );
-			    return;
+            #endif
+                return;
 			}
 
             FileInfo projectFileInfo = new FileInfo( filePath );

@@ -56,8 +56,10 @@ public class ShareSDKConfigEditor : Editor {
 			}
 			catch (Exception e) 
 			{
-					Debug.Log ("save error:" + e);
-			}
+            #if SHOW_DEBUG
+                Debug.Log ("save error:" + e);
+            #endif
+            }
 		}
 	}
 }

@@ -31,8 +31,10 @@ namespace cn.sharesdk.unity3d
 			}
 			catch (Exception ex)
 			{
-				Debug.Log("UnZip Error");
-				throw ex;
+            #if SHOW_DEBUG
+                Debug.Log("UnZip Error");
+            #endif
+                throw ex;
 			}
 		}
 
@@ -85,8 +87,10 @@ namespace cn.sharesdk.unity3d
 			}
 			catch (Exception e)
 			{
-				Debug.Log("UnZip Error");
-				throw e;
+            #if SHOW_DEBUG
+                Debug.Log("UnZip Error");
+            #endif
+                throw e;
 			}
 		}
 			

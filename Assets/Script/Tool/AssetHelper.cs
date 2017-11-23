@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -21,10 +20,10 @@ public static class AssetHelper
     /// <param name="fileName"></param>  
     public static IEnumerator CopyImage(string fileName)
     {
-        string src = GetStreamingPathForWWW() + "Image/" +fileName;
-        string des = Application.persistentDataPath + "/Image";
-        if (!Directory.Exists(des)) Directory.CreateDirectory(des);
-        des = des + "/" + fileName;
+        string desDir = Application.persistentDataPath + "/Image/";
+        if (!Directory.Exists(desDir)) Directory.CreateDirectory(desDir);
+        string des = desDir + fileName;
+        string src = GetStreamingPathForWWW() + "/Image/" +fileName;
         WWW www = new WWW(src);
         yield return www;
         if (!string.IsNullOrEmpty(www.error))
@@ -64,13 +63,13 @@ public static class AssetHelper
     {
         string pre = "file://";
     #if UNITY_EDITOR
-        pre = "file://";  
+        pre = "file://";
     #elif UNITY_ANDROID
         pre = "";  
     #elif UNITY_IPHONE
         pre = "file://";  
     #endif
-        string path = pre + Application.streamingAssetsPath + "/";
+        string path = pre + Application.streamingAssetsPath;
         return path;
     }
     /// <summary>
@@ -81,13 +80,13 @@ public static class AssetHelper
     {
         string pre = "file://";
     #if UNITY_EDITOR || UNITY_STANDALONE_WIN
-        pre = "file:///";  
+        pre = "file:///";
     #elif UNITY_ANDROID
         pre = "file://";  
     #elif UNITY_IPHONE
         pre = "file://";  
     #endif
-        string path = pre + Application.persistentDataPath + "/";
+        string path = pre + Application.persistentDataPath;
         return path;
     }
 }

@@ -209,7 +209,7 @@ public class UITool : Editor
                 //}
             }
         }
-        Debug.Log(questionList.Count.ToString());
+        //Debug.Log(questionList.Count.ToString());
         DivisionDataBase data = new DivisionDataBase();
         data.digitID = DigitID.FourDigits;
         data.operandID = OperandID.TwoNumbers;

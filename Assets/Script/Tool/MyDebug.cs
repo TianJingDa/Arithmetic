@@ -4,7 +4,7 @@ public static class MyDebug
 {
     private static void Log(object message)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || SHOW_DEBUG
         Debug.Log("@TJD@" + message);
 #endif
     }

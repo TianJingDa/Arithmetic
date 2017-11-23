@@ -18,8 +18,10 @@ public static class ShareSDKPostProcessBuild
 
 		if (target != BuildTarget.iOS) 
 		{
-			Debug.LogWarning ("Target is not iPhone. XCodePostProcess will not run");
-			return;
+        #if SHOW_DEBUG
+            Debug.LogWarning ("Target is not iPhone. XCodePostProcess will not run");
+        #endif
+            return;
 		}
 
 		XCProject project = new XCProject (targetPath);

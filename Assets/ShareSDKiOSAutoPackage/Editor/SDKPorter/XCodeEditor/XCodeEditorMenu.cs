@@ -70,28 +70,30 @@ namespace cn.sharesdk.unity3d.sdkporter
 			
 			System.Uri fileURI = new System.Uri( path1 );
 			System.Uri rootURI = new System.Uri( path2 );
-			Debug.Log( fileURI.MakeRelativeUri( rootURI ).ToString() );
+        #if SHOW_DEBUG
+            Debug.Log( fileURI.MakeRelativeUri( rootURI ).ToString() );
 			Debug.Log( rootURI.MakeRelativeUri( fileURI ).ToString() );
-			
-//			string projectPath = Path.Combine( Directory.GetParent( Application.dataPath ).ToString(), "XCode" );
-			
-//			string[] files = System.IO.Directory.GetFiles( projectPath, "Info.plist" );
-//			string contents = System.IO.File.OpenText( files[0] ).ReadToEnd();
-			
-//			string[] projects = System.IO.Directory.GetDirectories( projectPath, "*.xcodeproj" );
-//			string projPath = System.IO.Path.Combine( projects[0], "project.pbxproj" );
-//			string contents = System.IO.File.OpenText( projPath ).ReadToEnd();
-//			Debug.Log( System.IO.File.OpenText( projPath ).ReadToEnd );
+        #endif
 
-//			PBXParser parser = new PBXParser();
-//			Hashtable test = (Hashtable)parser.Decode( contents );
-//			PBXDictionary test = parser.Decode( contents );
-//			Debug.Log( MiniJSON.jsonEncode( test ) );
-//			Debug.Log( test + " - " + test.Count );
-//			Debug.Log( parser.Encode( test ) );
-			
-			
-		}
+            //			string projectPath = Path.Combine( Directory.GetParent( Application.dataPath ).ToString(), "XCode" );
+
+            //			string[] files = System.IO.Directory.GetFiles( projectPath, "Info.plist" );
+            //			string contents = System.IO.File.OpenText( files[0] ).ReadToEnd();
+
+            //			string[] projects = System.IO.Directory.GetDirectories( projectPath, "*.xcodeproj" );
+            //			string projPath = System.IO.Path.Combine( projects[0], "project.pbxproj" );
+            //			string contents = System.IO.File.OpenText( projPath ).ReadToEnd();
+            //			Debug.Log( System.IO.File.OpenText( projPath ).ReadToEnd );
+
+            //			PBXParser parser = new PBXParser();
+            //			Hashtable test = (Hashtable)parser.Decode( contents );
+            //			PBXDictionary test = parser.Decode( contents );
+            //			Debug.Log( MiniJSON.jsonEncode( test ) );
+            //			Debug.Log( test + " - " + test.Count );
+            //			Debug.Log( parser.Encode( test ) );
+
+
+        }
 
 	}
 }

@@ -53,9 +53,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 //			Debug.Log( "constructor parent " + this.GetType().Name );
 			
 			if( !dictionary.ContainsKey( ISA_KEY ) || ((string)dictionary[ ISA_KEY ]).CompareTo( this.GetType().Name ) != 0 )
-				Debug.LogError( "PBXDictionary is not a valid ISA object" );
-			
-			foreach( KeyValuePair<string, object> item in dictionary ) {
+            #if SHOW_DEBUG
+                Debug.LogError( "PBXDictionary is not a valid ISA object" );
+            #endif
+            foreach( KeyValuePair<string, object> item in dictionary ) {
 				_data[ item.Key ] = item.Value;
 			}
 		}

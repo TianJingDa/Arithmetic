@@ -96,8 +96,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 			FileInfo projectFileInfo = new FileInfo( filename );
 			if( !projectFileInfo.Exists ) 
 			{
-				Debug.LogWarning( "File does not exist." );
-			}
+            #if SHOW_DEBUG
+                Debug.LogWarning( "File does not exist." );
+            #endif
+            }
 			
 			name = System.IO.Path.GetFileNameWithoutExtension( filename );
 			path = System.IO.Path.GetDirectoryName( filename );

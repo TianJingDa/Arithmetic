@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace cn.sharesdk.unity3d
 {
-	#if UNITY_IPHONE
+#if UNITY_IPHONE
 	public class iOSImpl : ShareSDKImpl
 	{
 		[DllImport("__Internal")]
@@ -61,7 +61,9 @@ namespace cn.sharesdk.unity3d
 		private string _appKey;
 		public iOSImpl (GameObject go) 
 		{
+        #if SHOW_DEBUG
 			Debug.Log("iOSUtils  ===>>>  iOSUtils" );
+        #endif
 			try{
 				_callbackObjectName = go.name;
 			} catch(Exception e) {
@@ -209,5 +211,5 @@ namespace cn.sharesdk.unity3d
 		
 		
 	}
-	#endif
+#endif
 }

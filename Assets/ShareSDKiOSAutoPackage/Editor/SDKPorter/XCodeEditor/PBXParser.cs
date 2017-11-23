@@ -41,8 +41,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 		{
 //			success = true;
 			if( !data.StartsWith( PBX_HEADER_TOKEN ) ) {
-				Debug.Log( "Wrong file format." );
-				return null;
+            #if SHOW_DEBUG
+                Debug.Log( "Wrong file format." );
+            #endif
+                return null;
 			}
 
 			data = data.Substring( 13 );
@@ -141,8 +143,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 		{
 			switch( NextToken() ) {
 				case END_OF_FILE:
-					Debug.Log( "End of file" );
-					return null;
+                #if SHOW_DEBUG
+                    Debug.Log( "End of file" );
+                #endif
+                    return null;
 				case DICTIONARY_BEGIN_TOKEN:
 					return ParseDictionary();
 				case ARRAY_BEGIN_TOKEN:
@@ -186,8 +190,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 			while( !complete ) {
 				switch( NextToken() ) {
 					case END_OF_FILE:
-						Debug.Log( "Error: reached end of file inside a dictionary: " + index );
-						complete = true;
+                    #if SHOW_DEBUG
+                        Debug.Log( "Error: reached end of file inside a dictionary: " + index );
+                    #endif
+                        complete = true;
 						break;
 
 					case DICTIONARY_ITEM_DELIMITER_TOKEN:
@@ -222,8 +228,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 			while( !complete ) {
 				switch( NextToken() ) {
 					case END_OF_FILE:
-						Debug.Log( "Error: Reached end of file inside a list: " + list );
-						complete = true;
+                    #if SHOW_DEBUG
+                        Debug.Log( "Error: Reached end of file inside a list: " + list );
+                    #endif
+                        complete = true;
 						break;
 					case ARRAY_END_TOKEN:
 						complete = true;
@@ -315,8 +323,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 //				builder.Append( "YES" );
 //			}
 			else {
-				Debug.LogWarning( "Error: unknown object of type " + value.GetType().Name );
-				return false;
+            #if SHOW_DEBUG
+                Debug.LogWarning( "Error: unknown object of type " + value.GetType().Name );
+            #endif
+                return false;
 			}
 	
 			return true;

@@ -55,9 +55,9 @@ public enum PatternID
 public enum AmountID
 {
     Any = -1,                  //任意
-    Three,                     //3分钟或30道
-    Five,                      //5分钟或50道
-    Ten                        //10分钟或100道
+    ClassA,                    //1分钟或30道
+    ClassB,                    //3分钟或50道
+    ClassC                     //5分钟或100道
 }
 public enum SymbolID
 {

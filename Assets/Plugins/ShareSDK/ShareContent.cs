@@ -406,8 +406,10 @@ namespace cn.sharesdk.unity3d
 				shareParams["customizeShareParams"] = customizeShareParams;
 			}
 			String jsonStr = MiniJSON.jsonEncode (shareParams);
-			Debug.Log("ParseShareParams  ===>>> " + jsonStr );
-			return jsonStr;
+            #if SHOW_DEBUG
+            Debug.Log("ParseShareParams  ===>>> " + jsonStr );
+            #endif
+            return jsonStr;
 		}
 
 		public Hashtable GetShareParams() {
@@ -415,8 +417,10 @@ namespace cn.sharesdk.unity3d
 				shareParams["customizeShareParams"] = customizeShareParams;
 			}
 			String jsonStr = MiniJSON.jsonEncode (shareParams);
-			Debug.Log("ParseShareParams  ===>>> " + jsonStr );
-			return shareParams;
+            #if SHOW_DEBUG
+            Debug.Log("ParseShareParams  ===>>> " + jsonStr );
+            #endif
+            return shareParams;
 		}
 	}
 

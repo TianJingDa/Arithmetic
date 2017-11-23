@@ -275,8 +275,7 @@ public class GameManager : MonoBehaviour
         m_shareSDK = GetComponent<ShareSDK>();
         m_shareSDK.shareHandler = OnShareResultHandler;
         m_shareSDK.showUserHandler = OnGetUserInfoResultHandler;
-        string path = Application.persistentDataPath + "/Image/ShareImageForUrl.png";
-        if (!File.Exists(path)) StartCoroutine(AssetHelper.CopyImage("ShareImageForUrl.png"));
+        InitShareIcon();
 
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
@@ -686,6 +685,12 @@ public class GameManager : MonoBehaviour
         {
             print("cancel !");
         }
+    }
+
+    private void InitShareIcon()
+    {
+        string path = Application.persistentDataPath + "/Image/ShareIcon.png";
+        if (!File.Exists(path)) StartCoroutine(AssetHelper.CopyImage("ShareIcon.png"));
     }
 
     /// <summary>  

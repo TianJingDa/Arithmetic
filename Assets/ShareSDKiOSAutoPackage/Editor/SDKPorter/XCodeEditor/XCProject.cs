@@ -62,8 +62,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 		public XCProject( string filePath ) : this()
 		{
 			if( !System.IO.Directory.Exists( filePath ) ) {
-				UnityEngine.Debug.LogWarning( "Path does not exists." );
-				return;
+            #if SHOW_DEBUG
+                UnityEngine.Debug.LogWarning( "Path does not exists." );
+            #endif
+                return;
 			}
 			
 			if( filePath.EndsWith( ".xcodeproj" ) ) {
@@ -74,8 +76,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 //				UnityEngine.Debug.Log( "Looking for xcodeproj files in " + filePath );
 				string[] projects = System.IO.Directory.GetDirectories( filePath, "*.xcodeproj" );
 				if( projects.Length == 0 ) {
-					UnityEngine.Debug.LogWarning( "Error: missing xcodeproj file" );
-					return;
+                #if SHOW_DEBUG
+                    UnityEngine.Debug.LogWarning( "Error: missing xcodeproj file" );
+                #endif
+                    return;
 				}
 				
 				this.projectRootPath = filePath;
@@ -97,8 +101,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 			}
 
 			if( !_datastore.ContainsKey( "objects" ) ) {
-				UnityEngine.Debug.Log( "Errore " + _datastore.Count );
-				return;
+            #if SHOW_DEBUG
+                UnityEngine.Debug.Log( "Errore " + _datastore.Count );
+            #endif
+                return;
 			}
 			
 			_objects = (PBXDictionary)_datastore["objects"];
@@ -112,8 +118,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 				_rootGroup = new PBXGroup( _rootObjectKey, (PBXDictionary)_objects[ _project.mainGroupID ] );
 			}
 			else {
-				UnityEngine.Debug.LogWarning( "error: project has no root object" );
-				_project = null;
+            #if SHOW_DEBUG
+                UnityEngine.Debug.LogWarning( "error: project has no root object" );
+            #endif
+                _project = null;
 				_rootGroup = null;
 			}
 
@@ -425,11 +433,15 @@ namespace cn.sharesdk.unity3d.sdkporter
 						}
 						break;
 					case null:
-						UnityEngine.Debug.LogWarning( "fase non supportata null" );
-						break;
+                    #if SHOW_DEBUG
+                        UnityEngine.Debug.LogWarning( "fase non supportata null" );
+                    #endif
+                        break;
 					default:
-						UnityEngine.Debug.LogWarning( "fase non supportata def" );
-						return null;
+                    #if SHOW_DEBUG
+                        UnityEngine.Debug.LogWarning( "fase non supportata def" );
+                    #endif
+                        return null;
 				}
 			}
 

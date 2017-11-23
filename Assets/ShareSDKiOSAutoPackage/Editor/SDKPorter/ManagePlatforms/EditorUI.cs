@@ -201,8 +201,10 @@ namespace cn.sharesdk.unity3d.sdkporter
 			}
 			catch (Exception e) 
 			{
-				Debug.Log ("save error:" + e);
-			}
+            #if SHOW_DEBUG
+                Debug.Log ("save error:" + e);
+            #endif
+            }
 		}
 	}
 }
