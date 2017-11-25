@@ -198,7 +198,8 @@ public static class CommonTool
             }
             catch
             {
-                MyDebug.LogYellow(gameObjectArray[i].name);
+                if(!gameObjectArray[i].name.Contains("Question"))
+                    MyDebug.LogYellow(gameObjectArray[i].name);
             }
         }
         return gameObjectDict;
