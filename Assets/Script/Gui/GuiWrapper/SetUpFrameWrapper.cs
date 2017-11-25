@@ -255,8 +255,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshDropdown(layoutDropdown, tempLayoutID);
                 RefreshDropdown(handednessDropdown, tempHandednessID);
                 layoutApplyBtn.interactable = false;
+                firstInLayout = false;
                 break;
-            case "LayoutTipConfirmBtn":
+            case "HorizontalLayoutTipConfirmBtn":
                 horizontalLayoutTipBg.SetActive(false);
                 break;
             case "Layout2SetUpFrameBtn":
@@ -406,7 +407,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "LayoutDropdown":
                 tempLayoutID = dpd.value;
                 horizontalLayoutTipBg.SetActive((LayoutID)tempLayoutID == LayoutID.Horizontal && !firstInLayout);
-                firstInLayout = false;
                 break;
             case "HandednessDropdown":
                 tempHandednessID = dpd.value;
