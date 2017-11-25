@@ -18,7 +18,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     private DigitID     curDigitID;
     private OperandID   curOperandID;
 
-    private GameObject  categoryTipBg;
+    //private GameObject  categoryTipBg;
     private Dropdown    amountDropdown;
     private Dropdown    digitDropdown;
 
@@ -36,7 +36,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        categoryTipBg   = gameObjectDict["CategoryTipBg"];
+        //categoryTipBg   = gameObjectDict["CategoryTipBg"];
         digitDropdown   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
         amountDropdown  = gameObjectDict["AmountDropdown"].GetComponent<Dropdown>();
     }
@@ -54,11 +54,11 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurCategoryInstance = curCategoryInstance;
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, GuiFrameID.FightFrame);
                 break;
-            case "CategoryTipBtn":
-            case "CategoryTipBg":
-            case "CategoryTipPage":
-                categoryTipBg.SetActive(!categoryTipBg.activeSelf);
-                break;
+            //case "CategoryTipBtn":
+            //case "CategoryTipBg":
+            //case "CategoryTipPage":
+            //    categoryTipBg.SetActive(!categoryTipBg.activeSelf);
+            //    break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
