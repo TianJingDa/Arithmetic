@@ -162,7 +162,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 saveFileShareWinInSettlement.SetActive(true);
                 break;
             case "Settlement2CategoryFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, MoveID.FromAndToRight,false);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, MoveID.RightOrUp,false);
                 break;
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame,false);

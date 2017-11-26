@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Text;
+
 /// <summary>
 /// 所有GUI显示层的基类，先用数据初始化再找物体
 /// </summary>
@@ -10,6 +9,8 @@ public abstract class GuiFrameWrapper : MonoBehaviour
 {
     [HideInInspector]
     public GuiFrameID id;
+
+    protected CanvasGroup canvasGroup;
 
     private delegate void ButtonDelegate(Button btn);
     private delegate void ToggleDelegate(Toggle tgl);
@@ -22,6 +23,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
         ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
         DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
+        canvasGroup = GetComponent<CanvasGroup>();
         InitButton(btnDelegate);
         InitToggle(tglDelegate);
         InitDropdown(dpdDelegate);
@@ -91,8 +93,5 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             return;
         }
     }
-
-    protected void GuiAppear() { }
-    protected void GuiDisappear() { }
 }
 

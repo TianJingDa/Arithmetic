@@ -123,6 +123,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         if (hasAchievement) CommonTool.AddEventTriggerListener(curAchievementBtnInSaveFile, EventTriggerType.PointerClick, OnAchievementBtn);
         onlyWrong = false;
         RefreshSettlementGrid();
+        CommonTool.GuiVerticalMove(detailWin, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
     }
     protected void OnShareBtn(BaseEventData data)
     {
@@ -174,6 +175,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     {
         GameObject achievementDetailBgInSaveFile = detailWinDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInSaveFile.SetActive(true);
+        CommonTool.GuiScale(achievementDetailBgInSaveFile, GameManager.Instance.CurCanvasGroup, true);
         Image achievementDetailImageInSaveFile = detailWinDict["AchievementDetailImageInSaveFile"].GetComponent<Image>();
         Text achievementDetailMainTitleInSaveFile = detailWinDict["AchievementDetailMainTitleInSaveFile"].GetComponent<Text>();
         Text achievementDetailSubTitleInSaveFile = detailWinDict["AchievementDetailSubTitleInSaveFile"].GetComponent<Text>();

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private int[]                                               m_AmountArray_Time;
     private int[]                                               m_AmountArray_Number;
     private string[]                                            m_SymbolArray;
+    private float                                               m_TweenDuration = 0.5f;             //Tween动画持续时间
     private SaveFileInstance                                    m_SaveFileInstance;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
@@ -217,6 +218,13 @@ public class GameManager : MonoBehaviour
         get
         {
             return m_SymbolArray;
+        }
+    }
+    public CanvasGroup CurCanvasGroup
+    {
+        get
+        {
+            return m_CurWrapper.GetComponent<CanvasGroup>();
         }
     }
     private string LastestAchievement
@@ -497,7 +505,7 @@ public class GameManager : MonoBehaviour
         GameObject targetWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         if (isIn)
         {
-            targetWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, 0.5f, true).
+            targetWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, m_TweenDuration, true).
                                     From().
                                     SetEase(Ease.OutQuint).
                                     OnComplete(() => TweenComplete(targetWrapper));
@@ -505,7 +513,7 @@ public class GameManager : MonoBehaviour
         else
         {
             targetWrapper.transform.SetAsFirstSibling();
-            m_CurWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, 0.5f, true).
+            m_CurWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, m_TweenDuration, true).
                                    SetEase(Ease.OutQuint).
                                    OnComplete(() => TweenComplete(targetWrapper));
         }
@@ -527,7 +535,7 @@ public class GameManager : MonoBehaviour
         GameObject targetWrapper = Instantiate(reource, m_Root.transform) as GameObject;
         if (isIn)
         {
-            targetWrapper.transform.DOScale(Vector3.zero, 0.5f).
+            targetWrapper.transform.DOScale(Vector3.zero, m_TweenDuration).
                                     From().
                                     SetEase(Ease.OutQuint).
                                     OnComplete(() => TweenComplete(targetWrapper));
@@ -535,7 +543,7 @@ public class GameManager : MonoBehaviour
         else
         {
             targetWrapper.transform.SetAsFirstSibling();
-            m_CurWrapper.transform.DOScale(Vector3.zero, 0.5f).
+            m_CurWrapper.transform.DOScale(Vector3.zero, m_TweenDuration).
                                    SetEase(Ease.OutQuint).
                                    OnComplete(() => TweenComplete(targetWrapper));
         }

@@ -3,9 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using DG.Tweening;
+
 
 public static class CommonTool 
 {
+    private static float tweenDuration = 0.5f;
+
     public static T GetComponentByName<T>(GameObject root, string name) where T : Component
     {
         T[] array = root.GetComponentsInChildren<T>(true);
@@ -237,6 +241,94 @@ public static class CommonTool
         float startX = (maxWidth - width) * 0.5f + targetRect.localPosition.x;
         float startY = (maxHeight - height) * 0.5f + targetRect.localPosition.y;
         return new Rect(startX, startY, width, height);
+    }
+    /// <summary>
+    /// Gui水平动画
+    /// </summary>
+    /// <param name="gui"></param>
+    /// <param name="endValue"></param>
+    /// <param name="mID"></param>
+    /// <param name="isIn"></param>
+    public static void GuiHorizontalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn)
+    {
+        if (isIn)
+        {
+            gui.transform.DOLocalMoveX(endValue * (int)mID, tweenDuration, true).
+                          From().
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() => canvasGroup.interactable = true);
+        }
+        else
+        {
+            gui.transform.DOLocalMoveX(endValue * (int)mID, tweenDuration, true).
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() =>
+                          {
+                              canvasGroup.interactable = true;
+                              gui.SetActive(false);
+                              gui.transform.localPosition = Vector3.zero;
+                          });
+        }
+    }
+    /// <summary>
+    /// Gui垂直动画
+    /// </summary>
+    /// <param name="gui"></param>
+    /// <param name="endValue"></param>
+    /// <param name="mID"></param>
+    /// <param name="isIn"></param>
+    public static void GuiVerticalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn)
+    {
+        if (isIn)
+        {
+            gui.transform.DOLocalMoveY(endValue * (int)mID, tweenDuration, true).
+                          From().
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() => canvasGroup.interactable = true);
+        }
+        else
+        {
+            gui.transform.DOLocalMoveY(endValue * (int)mID, tweenDuration, true).
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() =>
+                          {
+                              canvasGroup.interactable = true;
+                              gui.SetActive(false);
+                              gui.transform.localPosition = Vector3.zero;
+                          });
+        }
+    }
+    /// <summary>
+    /// Gui缩放动画
+    /// </summary>
+    /// <param name="gui"></param>
+    /// <param name="isIn"></param>
+    public static void GuiScale(GameObject gui, CanvasGroup canvasGroup, bool isIn)
+    {
+        if (isIn)
+        {
+            gui.transform.DOScale(Vector3.zero, tweenDuration).
+                          From().
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() => canvasGroup.interactable = true);
+        }
+        else
+        {
+            gui.transform.DOScale(Vector3.zero, tweenDuration).
+                          SetEase(Ease.OutQuint).
+                          OnStart(() => canvasGroup.interactable = false).
+                          OnComplete(() =>
+                          {
+                              canvasGroup.interactable = true;
+                              gui.SetActive(false);
+                              gui.transform.localScale = Vector3.one;
+                          });
+        }
     }
 
 }

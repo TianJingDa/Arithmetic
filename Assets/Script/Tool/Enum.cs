@@ -83,7 +83,7 @@ public enum OperandID
 }
 public enum MoveID
 {
-    FromAndToLeft   = -1,      //从左侧进入
-    FromAndToRight  = 1        //从右侧进入
+    LeftOrDown      = -1,      //从左侧或者下方播放动画
+    RightOrUp       = 1        //从右侧或者上方播放动画
 }
 

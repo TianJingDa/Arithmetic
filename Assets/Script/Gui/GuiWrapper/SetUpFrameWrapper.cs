@@ -275,7 +275,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "SetUp2StartFrameBtn":
             case "Skin2StartFrameBtn":
             case "Strategy2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.FromAndToRight, false);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.RightOrUp, false);
                 //GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, GuiFrameID.StartFrame);
                 break;
             case "ShareUsBtn":

@@ -61,6 +61,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     {
         if (content == null || string.IsNullOrEmpty(content.fileName)) return;
         detailWin.SetActive(true);
+        CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
         detailWinDict = CommonTool.InitGameObjectDict(detailWin);
         CommonTool.InitText(detailWin);
         CommonTool.InitImage(detailWin);
@@ -139,6 +140,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         CommonTool.AddEventTriggerListener(onlyWrongBtnOfAchievement, EventTriggerType.PointerClick, OnOnlyWrongBtn);
         onlyWrong = false;
         RefreshSettlementGrid();
+        CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
     }
     protected bool FindWrong(QuentionInstance questionInstance)
     {

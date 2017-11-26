@@ -111,22 +111,22 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "Achievement2StartFrameBtn":
             case "Save2StartFrameBtn":
             case "Statistics2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.FromAndToLeft, false);
-                //GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, GuiFrameID.StartFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.LeftOrDown, false);
                 break;
             case "Achievement2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
-                achievementWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "AchievementBtn":
                 achievementWin.SetActive(true);
                 RefreshAchievementWin();
+                CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "AchievementDetailBgInStatistics":
-                achievementDetailBgInStatistics.SetActive(false);
+                CommonTool.GuiScale(achievementDetailBgInStatistics, canvasGroup, false);
                 break;
             case "AchievementDetailBgInSaveFile":
-                achievementDetailBgInSaveFile.SetActive(false);
+                CommonTool.GuiScale(achievementDetailBgInSaveFile, canvasGroup, false);
                 break;
             case "AchievementShareDetailBgInStatistics":
                 achievementShareWinInStatistics.SetActive(false);
@@ -139,22 +139,24 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 deleteAchievementBg.SetActive(false);
                 break;
             case "SaveFileDetai2AchievementDetailBtn":
-                saveFileDetailBgOfAchievement.SetActive(false);
+                CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "Save2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
-                saveFileWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "SaveFileBtn":
+                saveFileDetailBg.SetActive(false);
+                saveFileWin.SetActive(true);
                 RefreshSaveFileWin();
+                CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
-                saveFileDetailBg.SetActive(false);
+                CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "SaveFileDetai2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
-                saveFileDetailBg.SetActive(false);
-                saveFileWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "SaveFileSharePageInStatistics":
                 saveFileShareWinInStatistics.SetActive(false);
@@ -366,7 +368,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     #region 存档
     private void RefreshSaveFileWin()
     {
-        saveFileWin.SetActive(true);
         List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
         curSaveFileCount = saveFileList.Count;
         saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
