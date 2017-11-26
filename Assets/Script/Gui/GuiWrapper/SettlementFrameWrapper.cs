@@ -162,10 +162,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 saveFileShareWinInSettlement.SetActive(true);
                 break;
             case "Settlement2CategoryFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.CategoryFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, MoveID.FromAndToRight,false);
                 break;
             case "Settlement2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame, GuiFrameID.StartFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame,false);
                 break;
             case "WeChatBtnOfSaveFileInSettlement":
                 if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))

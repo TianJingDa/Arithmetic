@@ -103,7 +103,7 @@ public class FightFrameWrapper : GuiFrameWrapper
             case "ConfirmBtn":
                 StopAllCoroutines();
                 CancelInvoke();
-                GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.CategoryFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame,MoveID.FromAndToRight,false);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -225,6 +225,6 @@ public class FightFrameWrapper : GuiFrameWrapper
     {
         CancelInvoke();
         GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame, GuiFrameID.SettlementFrame);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }

@@ -24,13 +24,15 @@ public class StartFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "StatisticsBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.StatisticsFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, MoveID.FromAndToLeft, true);
+                //GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.StatisticsFrame);
                 break;
             case "CategoryBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.CategoryFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, true);
                 break;
             case "SetUpBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.SetUpFrame);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, MoveID.FromAndToRight, true);
+                //GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, GuiFrameID.SetUpFrame);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

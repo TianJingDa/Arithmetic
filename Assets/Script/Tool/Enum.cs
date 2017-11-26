@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public enum LanguageID
 {
     Chinese,
@@ -9,7 +6,7 @@ public enum LanguageID
 }
 public enum GuiFrameID
 {
-    CategoryFrame,             //速算类别选择界面
+    CategoryFrame,             //类别选择界面
     FightFrame,                //答题界面
     StartFrame,                //开始界面
     StatisticsFrame,           //统计数据界面
@@ -83,5 +80,10 @@ public enum OperandID
     Any = -1,                  //任意
     TwoNumbers,                //两个操作数
     ThreeNumbers               //三个操作数
+}
+public enum MoveID
+{
+    FromAndToLeft   = -1,      //从左侧进入
+    FromAndToRight  = 1        //从右侧进入
 }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using cn.sharesdk.unity3d;
+using DG.Tweening;
 
 /// <summary>
 /// 游戏控制层
@@ -34,13 +35,6 @@ public class GameManager : MonoBehaviour
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
-    private GuiFrameWrapper M_CurrentWrapper
-    {
-        get
-        {
-            return m_CurWrapper.GetComponent<GuiFrameWrapper>();
-        }
-    }
 
     public LanguageID CurLanguageID
     {
@@ -470,65 +464,83 @@ public class GameManager : MonoBehaviour
         m_shareSDK.ShareContent(type, content);
     }
 
-    ///// <summary>
-    ///// 激活GUI
-    ///// </summary>
-    ///// <param name="id"></param>
-    //public void ActiveGui(GuiFrameID id)
-    //{
-    //    if (M_CurrentWrapper.id != id)
-    //    {
-    //        Object reource = c_ResourceCtrl.GetGuiResource(id);
-    //        if (reource == null)
-    //        {
-    //            Debug.Log("Can not load reousce:" + id.ToString());
-    //            return;
-    //        }
-    //        m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Active Again!!");
-    //    }
-    //}
-    ///// <summary>
-    ///// 销毁GUI
-    ///// </summary>
-    ///// <param name="id"></param>
-    //public void DeActiveGui(GuiFrameID id)
-    //{
-    //    if (M_CurrentWrapper.id == id)
-    //    {
-    //        GameObject tempWrapper = m_CurWrapper;
-    //        m_CurWrapper = null;
-    //        Destroy(tempWrapper);
-    //    }
-    //}
     /// <summary>
-    /// GuiWrapper切换
+    /// GuiWrapper切换，无动画
     /// </summary>
-    /// <param name="from_ID"></param>
-    /// <param name="to_ID"></param>
-    public void SwitchWrapper(GuiFrameID from_ID,GuiFrameID to_ID)
+    /// <param name="targetID"></param>
+    public void SwitchWrapper(GuiFrameID targetID)
     {
-        if (from_ID != to_ID && M_CurrentWrapper.id == from_ID)
+        Destroy(m_CurWrapper);
+        Object reource = c_ResourceCtrl.GetGuiResource(targetID);
+        if (reource == null)
         {
-            GameObject tempWrapper = m_CurWrapper;
-            m_CurWrapper = null;
-            Destroy(tempWrapper);
-            Object reource = c_ResourceCtrl.GetGuiResource(to_ID);
-            if (reource == null)
-            {
-                MyDebug.LogYellow("Can not load reousce:" + to_ID.ToString());
-                return;
-            }
-            m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+            MyDebug.LogYellow("Can not load reousce:" + targetID.ToString());
+            return;
+        }
+        m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+    }
+    /// <summary>
+    /// GuiWrapper切换，有移动动画
+    /// </summary>
+    /// <param name="targetID"></param>
+    /// <param name="mID"></param>
+    /// <param name="isIn"></param>
+    public void SwitchWrapper(GuiFrameID targetID, MoveID mID, bool isIn)
+    {
+        m_Root.GetComponent<GraphicRaycaster>().enabled = false;
+        Object reource = c_ResourceCtrl.GetGuiResource(targetID);
+        if (reource == null)
+        {
+            MyDebug.LogYellow("Can not load reousce: " + targetID.ToString());
+            return;
+        }
+        GameObject targetWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+        if (isIn)
+        {
+            targetWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, 0.5f, true).
+                                    From().
+                                    SetEase(Ease.OutQuint).
+                                    OnComplete(() => TweenComplete(targetWrapper));
         }
         else
         {
-            MyDebug.LogYellow("Can not switch " + from_ID.ToString() + " to " + to_ID.ToString() + " !!");
+            targetWrapper.transform.SetAsFirstSibling();
+            m_CurWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, 0.5f, true).
+                                   SetEase(Ease.OutQuint).
+                                   OnComplete(() => TweenComplete(targetWrapper));
         }
     }
+    /// <summary>
+    /// GuiWrapper切换，有缩放动画
+    /// </summary>
+    /// <param name="targetID"></param>
+    /// <param name="isIn"></param>
+    public void SwitchWrapper(GuiFrameID targetID, bool isIn)
+    {
+        m_Root.GetComponent<GraphicRaycaster>().enabled = false;
+        Object reource = c_ResourceCtrl.GetGuiResource(targetID);
+        if (reource == null)
+        {
+            MyDebug.LogYellow("Can not load reousce: " + targetID.ToString());
+            return;
+        }
+        GameObject targetWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+        if (isIn)
+        {
+            targetWrapper.transform.DOScale(Vector3.zero, 0.5f).
+                                    From().
+                                    SetEase(Ease.OutQuint).
+                                    OnComplete(() => TweenComplete(targetWrapper));
+        }
+        else
+        {
+            targetWrapper.transform.SetAsFirstSibling();
+            m_CurWrapper.transform.DOScale(Vector3.zero, 0.5f).
+                                   SetEase(Ease.OutQuint).
+                                   OnComplete(() => TweenComplete(targetWrapper));
+        }
+    }
+
     /// <summary>
     /// 获取PrefabItem
     /// </summary>
@@ -543,10 +555,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region 私有方法
-    private bool IsActive(GuiFrameID id)
-    {
-        return M_CurrentWrapper.id == id;
-    }
     private float CalculateAccuracy(List<List<int>> resultList)
     {
         List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
@@ -713,6 +721,13 @@ public class GameManager : MonoBehaviour
     {
         path = AssetHelper.GetStreamingPathForWWW() + path;
         StartCoroutine(AssetHelper.LoadImage(path, image));
+    }
+
+    private void TweenComplete(GameObject targetWrapper)
+    {
+        Destroy(m_CurWrapper);
+        m_CurWrapper = targetWrapper;
+        m_Root.GetComponent<GraphicRaycaster>().enabled = true;
     }
     #endregion
 
