@@ -225,8 +225,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "AboutUsBtn":
+                aboutUsWin.SetActive(true);
+                CommonTool.GuiHorizontalMove(aboutUsWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+                break;
             case "AboutUs2SetUpFrameBtn":
-                aboutUsWin.SetActive(!aboutUsWin.activeSelf);
+                CommonTool.GuiHorizontalMove(aboutUsWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "FeedbackBtn":
             case "FeedbackWin":
@@ -237,9 +240,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 languageWin.SetActive(true);
                 RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
+                CommonTool.GuiHorizontalMove(languageWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "Language2SetUpFrameBtn":
-                languageWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(languageWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "LanguageApplyBtn":
                 GameManager.Instance.CurLanguageID = (LanguageID)tempLanguageID;
@@ -256,12 +260,13 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshDropdown(handednessDropdown, tempHandednessID);
                 layoutApplyBtn.interactable = false;
                 firstInLayout = false;
+                CommonTool.GuiHorizontalMove(layoutWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "HorizontalLayoutTipConfirmBtn":
                 horizontalLayoutTipBg.SetActive(false);
                 break;
             case "Layout2SetUpFrameBtn":
-                layoutWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(layoutWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "LayoutApplyBtn":
                 GameManager.Instance.CurLayoutID = (LayoutID)tempLayoutID;
@@ -276,7 +281,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "Skin2StartFrameBtn":
             case "Strategy2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.RightOrUp, false);
-                //GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, GuiFrameID.StartFrame);
                 break;
             case "ShareUsBtn":
                 shareUsWin.SetActive(true);
@@ -287,9 +291,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "ResetBtn":
                 resetWin.SetActive(true);
                 RefreshResetWin();
+                CommonTool.GuiHorizontalMove(resetWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "Reset2SetUpFrameBtn":
-                resetWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(resetWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "ResetApplyBtn":
                 resetConfirmBg.SetActive(true);
@@ -322,9 +327,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 skinWin.SetActive(true);
                 RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
+                CommonTool.GuiHorizontalMove(skinWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "Skin2SetUpFrameBtn":
-                skinWin.SetActive(false);
+                CommonTool.GuiHorizontalMove(skinWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "SkinApplyBtn":
                 GameManager.Instance.CurSkinID = (SkinID)tempSkinID;
@@ -333,8 +339,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshGui();
                 break;
             case "StrategyBtn":
+                strategyWin.SetActive(true);
+                CommonTool.GuiHorizontalMove(strategyWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+                break;
             case "Strategy2SetUpFrameBtn":
-                strategyWin.SetActive(!strategyWin.activeSelf);
+                CommonTool.GuiHorizontalMove(strategyWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "ThankDevelopersBtn":
             case "ThankDevelopersWin":
