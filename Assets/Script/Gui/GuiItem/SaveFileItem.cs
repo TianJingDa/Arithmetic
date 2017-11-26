@@ -88,15 +88,17 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         int operand = (int)content.cInstance.operandID + 2;
         if (content.cInstance.patternID == PatternID.Time)
         {
+            saveFileType_Time.gameObject.SetActive(true);
+            saveFileType_Number.gameObject.SetActive(false);
             int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
             saveFileType_Time.text = string.Format(saveFileType_Time.text, amount / 60, digit, operand);
-            saveFileType_Number.gameObject.SetActive(false);
         }
         else
         {
+            saveFileType_Time.gameObject.SetActive(false);
+            saveFileType_Number.gameObject.SetActive(true);
             int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
             saveFileType_Number.text = string.Format(saveFileType_Number.text, amount, digit, operand);
-            saveFileType_Time.gameObject.SetActive(false);
         }
     }
     protected void OnShortPress()
