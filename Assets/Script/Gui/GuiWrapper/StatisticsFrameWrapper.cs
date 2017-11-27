@@ -15,12 +15,18 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private int curAchievementIndex;//当前所选成就类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
     private Text totelTimeImg_Text2;
     private Text totelGameImg_Text2;
+    private Text achievementBtn_Text2;
+    private Text saveFileBtn_Text2;
     private Text additionSummary_Text;
     private Text subtractionSummary_Text;
     private Text multiplicationSummary_Text;
     private Text divisionSummary_Text;
     private Text saveFileShareTitleInStatistics;
     private Text achievementShareTitleInStatistics;
+    private Text additionStatisticsItemData;
+    private Text subtractionStatisticsItemData;
+    private Text multiplicationStatisticsItemData;
+    private Text divisionStatisticsItemData;
     private GameObject saveFileWin;
     private GameObject achievementWin;
     private GameObject saveFileDetailBg;
@@ -44,8 +50,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private SummarySaveFileItem multiplicationSaveFileItem;
     private SummarySaveFileItem divisionSaveFileItem;
     private LastestAchievementItem lastestAchievementItem;
-    private SummaryAchievementItem[] summaryAchievementArray;
+    //private SummaryAchievementItem[] summaryAchievementArray;
     private HiddenAchievementItem hiddenAchievementItem;
+    private List<Text> rawAchievementTextList;
     private Dictionary<SymbolID, string> rawSaveFileStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
     private Dictionary<SymbolID, List<AchievementInstance>> achievementDict;
@@ -58,12 +65,20 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
         totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
+        RefreshStatisticsContent();
         rawSaveFileStringDict = new Dictionary<SymbolID, string>
         {
             {SymbolID.Addition, additionSummary_Text.text },
             {SymbolID.Subtraction, subtractionSummary_Text.text },
             {SymbolID.Multiplication, multiplicationSummary_Text.text },
             {SymbolID.Division, divisionSummary_Text.text }
+        };
+        rawAchievementTextList = new List<Text>
+        {
+            additionStatisticsItemData,
+            subtractionStatisticsItemData,
+            multiplicationStatisticsItemData,
+            divisionStatisticsItemData
         };
     }
 
@@ -87,6 +102,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         divisionSummary_Text                    = gameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
         saveFileShareTitleInStatistics          = gameObjectDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
         achievementShareTitleInStatistics       = gameObjectDict["AchievementShareTitleInStatistics"].GetComponent<Text>();
+        achievementBtn_Text2                    = gameObjectDict["AchievementBtn_Text2"].GetComponent<Text>();
+        saveFileBtn_Text2                       = gameObjectDict["SaveFileBtn_Text2"].GetComponent<Text>();
+        additionStatisticsItemData              = gameObjectDict["AdditionStatisticsItemData"].GetComponent<Text>();
+        subtractionStatisticsItemData           = gameObjectDict["SubtractionStatisticsItemData"].GetComponent<Text>();
+        multiplicationStatisticsItemData        = gameObjectDict["MultiplicationStatisticsItemData"].GetComponent<Text>();
+        divisionStatisticsItemData              = gameObjectDict["DivisionStatisticsItemData"].GetComponent<Text>();
         achievementDetailBgInSaveFile           = gameObjectDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
         achievementShareWinInStatistics         = gameObjectDict["AchievementShareWinInStatistics"];
@@ -115,6 +136,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 break;
             case "Achievement2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
+                RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "AchievementBtn":
@@ -143,6 +165,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 break;
             case "Save2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
+                RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "SaveFileBtn":
@@ -156,6 +179,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 break;
             case "SaveFileDetai2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
+                RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "SaveFileSharePageInStatistics":
@@ -296,11 +320,19 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
         GameManager.Instance.ShareImage(shotRect, type);
     }
+    private void RefreshStatisticsContent()
+    {
+        string achievementData = GameManager.Instance.GetMutiLanguage(achievementBtn_Text2.index);
+        achievementBtn_Text2.text = string.Format(achievementData, CalculateAllStar());
+        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
+        saveFileBtn_Text2.text = saveFileList.Count.ToString();
+    }
+
     #region 成就
     private void RefreshAchievementWin()
     {
         achievementWin.SetActive(true);
-        if (summaryAchievementArray == null) summaryAchievementArray = achievementSummary.GetComponentsInChildren<SummaryAchievementItem>(true);
+        //if (summaryAchievementArray == null) summaryAchievementArray = achievementSummary.GetComponentsInChildren<SummaryAchievementItem>(true);
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>
                 {
@@ -308,7 +340,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                     {SymbolID.Subtraction, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
                     {SymbolID.Multiplication, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
                     {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)},
-                    {SymbolID.Summary, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Summary)},
+                    //{SymbolID.Summary, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Summary)},
                     {SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
                 };
         achievementToggleGroup.SetAllTogglesOff();
@@ -319,9 +351,42 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementSummary.SetActive(true);
         RefreshLastestAchievement();
-        RefreshSummaryAchievement();
+        //RefreshSummaryAchievement();
+        RefreshAchievementStatistics();
         RefreshHiddenAchievement();
     }
+    private void RefreshAchievementStatistics()
+    {
+        for(int i = 0; i < rawAchievementTextList.Count; i++)
+        {
+            string data = GameManager.Instance.GetMutiLanguage(rawAchievementTextList[i].index);
+            rawAchievementTextList[i].text = string.Format(data, CalculateStar(i));
+        }
+    }
+    private int CalculateStar(int index)
+    {
+        int total = 0;
+        for(int i = 0; i < 3; i++)
+        {
+            total += achievementDict[(SymbolID)i][index].star;
+        }
+        return total;
+    }
+
+    private int CalculateAllStar()
+    {
+        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
+        int total = 0;
+        for(int i = 0; i < achievementList.Count; i++)
+        {
+            if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
+            {
+                total += achievementList[i].star;
+            }
+        }
+        return total;
+    }
+
     private void RefreshLastestAchievement()
     {
         AchievementInstance lastestAchievement = GameManager.Instance.GetLastestAchievement();
@@ -330,11 +395,11 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private void RefreshSummaryAchievement()
     {
-        for(int i = 0; i < summaryAchievementArray.Length; i++)
-        {
-            summaryAchievementArray[i].SendMessage("InitPrefabItem", achievementDict[SymbolID.Summary][i]);
-            summaryAchievementArray[i].SendMessage("InitDetailWin", achievementDetailBgInStatistics);
-        }
+        //for(int i = 0; i < summaryAchievementArray.Length; i++)
+        //{
+        //    summaryAchievementArray[i].SendMessage("InitPrefabItem", achievementDict[SymbolID.Summary][i]);
+        //    summaryAchievementArray[i].SendMessage("InitDetailWin", achievementDetailBgInStatistics);
+        //}
     }
     private void RefreshHiddenAchievement()
     {
@@ -350,16 +415,30 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshAchievementList()
     {
         achievementSummary.SetActive(false);
-        SymbolID symbolID = (SymbolID)curAchievementIndex;
-        ArrayList dataList = new ArrayList(achievementDict[symbolID]);
+        ArrayList dataList = new ArrayList();
+        dataList.Add(achievementDict[SymbolID.Addition][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Subtraction][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Multiplication][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Division][curAchievementIndex]);
         achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
     private void RefreshAchievementDict()
     {
-        SymbolID symbolID = (SymbolID)curAchievementIndex;
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        achievementDict[symbolID] = achievementList.FindAll(x => x.cInstance.symbolID == symbolID);
-        ArrayList dataList = new ArrayList(achievementDict[symbolID]);
+        achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>
+                {
+                    {SymbolID.Addition, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
+                    {SymbolID.Subtraction, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
+                    {SymbolID.Multiplication, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
+                    {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)},
+                    {SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
+                };
+
+        ArrayList dataList = new ArrayList();
+        dataList.Add(achievementDict[SymbolID.Addition][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Subtraction][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Multiplication][curAchievementIndex]);
+        dataList.Add(achievementDict[SymbolID.Division][curAchievementIndex]);
         achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
 

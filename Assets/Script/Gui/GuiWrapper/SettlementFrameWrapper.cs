@@ -299,7 +299,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
         achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
         achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-        achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.fileName);
+        achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
     }
     private string GetFinishTime(string time)
     {
@@ -352,7 +352,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             saveFileShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
             saveFileShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
             saveFileShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.classType);
-            saveFileShareFinishTimeInSettlement.text = GetFinishTime(instance.fileName);
+            saveFileShareFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
             saveFileShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.condition);
         }
     }
@@ -366,7 +366,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         achievementShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(content.classType);
-        achievementShareFinishTimeInSettlement.text = GetFinishTime(content.fileName);
+        achievementShareFinishTimeInSettlement.text = GetFinishTime(content.finishTime);
         achievementShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(content.condition);
         achievementSharePatternInSettlement_Time.SetActive(content.cInstance.patternID == PatternID.Time);
         achievementSharePatternInSettlement_Number.SetActive(content.cInstance.patternID == PatternID.Number);

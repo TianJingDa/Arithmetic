@@ -52,9 +52,24 @@ public static class CommonTool
         }
         return result;
     }
-    public static T[] GetComponentsByName<T>(string name) where T : Component
+    public static List<T> GetComponentsContainName<T>(GameObject root, string name) where T : Component
     {
-        T[] result = null;
+        List<T> result = new List<T>();
+        T[] array = root.GetComponentsInChildren<T>(true);
+        if (array != null)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i].name.Contains(name))
+                {
+                    result.Add(array[i]);
+                }
+            }
+        }
+        if (result.Count == 0)
+        {
+            MyDebug.LogYellow("Can not find :" + name);
+        }
         return result;
     }
     public static GameObject GetGameObjectByName(GameObject root, string name)

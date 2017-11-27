@@ -380,12 +380,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             if (tgl.isOn)
             {
                 resetTogglesIndexList.Add(tgl.index);
-                if (tgl.index == 2 || tgl.index == 3)
-                {
-                    resetTempTgl = tgl;
-                    ShowTip();
-                    return;
-                }
+                //if (tgl.index == 2 || tgl.index == 3)
+                //{
+                //    resetTempTgl = tgl;
+                //    ShowTip();
+                //    return;
+                //}
             }
             else
             {

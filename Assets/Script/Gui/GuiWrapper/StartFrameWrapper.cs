@@ -32,6 +32,9 @@ public class StartFrameWrapper : GuiFrameWrapper
             case "SetUpBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, MoveID.RightOrUp, true);
                 break;
+            case "ChapterBtn":
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ChapterFrame, true);
+                break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;

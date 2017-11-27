@@ -244,7 +244,7 @@ public class UITool : Editor
             instance.mainTitleIndex = lineList[4];
             instance.subTitleIndex = lineList[5];
             instance.imageIndex = lineList[6];
-            instance.fileName = lineList[7];
+            instance.finishTime = lineList[7];
             instance.classType = lineList[8];
             int patternID = 0;
             int amountID = 0;
@@ -258,6 +258,7 @@ public class UITool : Editor
             int.TryParse(lineList[13], out operandID);
             CategoryInstance cInstance = new CategoryInstance(patternID, amountID, symbolID, digitID, operandID);
             instance.cInstance = cInstance;
+            int.TryParse(lineList[14], out instance.star);
             achList.Add(instance);
         }
         if (File.Exists(targetList)) File.Delete(targetList);

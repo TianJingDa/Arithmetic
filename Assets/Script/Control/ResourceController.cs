@@ -34,6 +34,7 @@ public sealed class ResourceController : Controller
         guiAssetDict.Add(GuiFrameID.SetUpFrame, "GuiWrapper/SetUpFrame");
         guiAssetDict.Add(GuiFrameID.FightFrame, "GuiWrapper/FightFrame");
         guiAssetDict.Add(GuiFrameID.SettlementFrame, "GuiWrapper/SettlementFrame");
+        guiAssetDict.Add(GuiFrameID.ChapterFrame, "GuiWrapper/ChapterFrame");
 
         prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");
         prefabItemDict.Add("SaveFileItem", "GuiItem/SaveFileItem");

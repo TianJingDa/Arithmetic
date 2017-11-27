@@ -47,7 +47,7 @@ public class SummaryAchievementItem : AchievementItem
             }
             else
             {
-                content.fileName = "HasFinish";
+                content.finishTime = "HasFinish";
                 achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
             }
         }
@@ -58,7 +58,7 @@ public class SummaryAchievementItem : AchievementItem
     }
     protected new void OnShortPress()
     {
-        if (content == null || string.IsNullOrEmpty(content.fileName)) return;
+        if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
         detailWin.SetActive(true);
         Image achievementDetailImageInStatistics = CommonTool.GetComponentByName<Image>(detailWin, "AchievementDetailImageInStatistics");
         Text achievementDetailMainTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailMainTitleInStatistics");
@@ -69,7 +69,7 @@ public class SummaryAchievementItem : AchievementItem
         achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
-        achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.fileName);
+        achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
         CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
         if (achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(false);
     }
@@ -79,7 +79,7 @@ public class SummaryAchievementItem : AchievementItem
         countWithAchievement = 0;
         for (int i = 0; i < instanceList.Count; i++)
         {
-            if (string.IsNullOrEmpty(instanceList[i].fileName)) continue;
+            if (string.IsNullOrEmpty(instanceList[i].finishTime)) continue;
             countWithAchievement++;
         }
         return instanceList.Count;

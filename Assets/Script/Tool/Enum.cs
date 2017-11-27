@@ -12,6 +12,7 @@ public enum GuiFrameID
     StatisticsFrame,           //统计数据界面
     SetUpFrame,                //设置界面
     SettlementFrame,           //结算界面
+    ChapterFrame,              //关卡界面
 }
 public enum ControllerID
 {
@@ -58,8 +59,8 @@ public enum AmountID
 }
 public enum SymbolID
 {
-    Hidden          = -3,      //这项并非是某种法则，而是用于成就系统中初始化数据
-    Summary         = -2,      //这项并非是某种法则，而是用于成就系统中初始化数据
+    Hidden          = -2,      //这项并非是某种法则，而是用于成就系统中初始化数据
+    //Summary         = -2,      //这项并非是某种法则，而是用于成就系统中初始化数据
     Any             = -1,      //任意
     Addition,                  //加法
     Subtraction,               //减法
