@@ -50,10 +50,6 @@ Text_00047,除法成就2副标题,TJD
 Text_00048,除法成就3副标题,TJD
 Text_00049,除法成就4副标题,TJD
 Text_00050,{0}/3,TJD
-Text_00051,{0}/3,TJD
-Text_00052,{0}/3,TJD
-Text_00053,{0}/3,TJD
-Text_00054,{0}/{1},TJD
 Text_00067,？？？？,TJD
 Text_00068,隐藏成就1条件,TJD
 Text_00069,隐藏成就1主标题,TJD
@@ -92,10 +88,10 @@ Text_20029,是，删除,TJD
 Text_20030,最近获得,TJD
 Text_20031,隐藏成就,TJD
 Text_20032,综合,TJD
-Text_20033,加法,TJD
-Text_20034,减法,TJD
-Text_20035,乘法,TJD
-Text_20036,除法,TJD
+Text_20033,初级,TJD
+Text_20034,中级,TJD
+Text_20035,高级,TJD
+Text_20036,终极,TJD
 Text_20037,{0}的战绩,TJD
 Text_20038,模式：限时,TJD
 Text_20039,模式：限数,TJD
@@ -217,3 +213,4 @@ Text_60015,无相关成就,TJD
 Text_60016,{0}的成就,TJD
 Text_60017,相关战绩,TJD
 Text_70000,关卡挑战,TJD
+Text_70001,{0}/48,TJD

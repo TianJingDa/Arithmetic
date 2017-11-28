@@ -19,7 +19,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private Text achievementDetailSubTitleInSettlement;
     private Text achievementDetailFinishTimeInSettlement;
     private Image achievementDetailImageInSettlement;
-    private GameObject curAchievementBtn;
+    //private GameObject curAchievementBtn;
     private GameObject onlyWrongImage;
     private GameObject achievementDetailBgInSettlement;
     private GameObject achievementShareWinInSettlement;
@@ -74,8 +74,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         Init();
         InitSettlement();
         InitAchievement();
-        InitSaveFileShareWin();
-        InitAchievementShareWin();
+        //InitSaveFileShareWin();
+        //InitAchievementShareWin();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -89,7 +89,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementDetailFinishTimeInSettlement     = gameObjectDict["AchievementDetailFinishTimeInSettlement"].GetComponent<Text>();
         achievementDetailBgInSettlement             = gameObjectDict["AchievementDetailBgInSettlement"];
         achievementDetailImageInSettlement          = gameObjectDict["AchievementDetailImageInSettlement"].GetComponent<Image>();
-        curAchievementBtn                           = gameObjectDict["CurAchievementBtn"];
+        //curAchievementBtn                           = gameObjectDict["CurAchievementBtn"];
         onlyWrongImage                              = gameObjectDict["OnlyWrongImage"];
         saveFileShareWinInSettlement                = gameObjectDict["SaveFileShareWinInSettlement"];
         achievementShareWinInSettlement             = gameObjectDict["AchievementShareWinInSettlement"];
@@ -167,84 +167,84 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame,false);
                 break;
-            case "WeChatBtnOfSaveFileInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
-                    {
-                        ShareImage(saveFileSharePageInSettlement, PlatformType.WeChat, true);
-                    });
-                }
-                else
-                {
-                    ShareImage(saveFileSharePageInSettlement, PlatformType.WeChat, true);
-                }
-                break;
-            case "WeChatMomentsBtnOfSaveFileInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
-                    {
-                        ShareImage(saveFileSharePageInSettlement, PlatformType.WeChatMoments, true);
-                    });
-                }
-                else
-                {
-                    ShareImage(saveFileSharePageInSettlement, PlatformType.WeChatMoments, true);
-                }
-                break;
-            case "SinaWeiboBtnOfSaveFileInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
-                    {
-                        ShareImage(saveFileSharePageInSettlement, PlatformType.SinaWeibo, true);
-                    });
-                }
-                else
-                {
-                    ShareImage(saveFileSharePageInSettlement, PlatformType.SinaWeibo, true);
-                }
-                break;
-            case "WeChatBtnOfAchievementInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
-                    {
-                        ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChat, false);
-                    });
-                }
-                else
-                {
-                    ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChat, false);
-                }
-                break;
-            case "WeChatMomentsBtnOfAchievementInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
-                    {
-                        ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChatMoments,false);
-                    });
-                }
-                else
-                {
-                    ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChatMoments,false);
-                }
-                break;
-            case "SinaWeiboBtnOfAchievementInSettlement":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
-                {
-                    GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
-                    {
-                        ShareImage(achievementShareDetailBgInSettlement, PlatformType.SinaWeibo, false);
-                    });
-                }
-                else
-                {
-                    ShareImage(achievementShareDetailBgInSettlement, PlatformType.SinaWeibo, false);
-                }
-                break;
+            //case "WeChatBtnOfSaveFileInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
+            //        {
+            //            ShareImage(saveFileSharePageInSettlement, PlatformType.WeChat, true);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(saveFileSharePageInSettlement, PlatformType.WeChat, true);
+            //    }
+            //    break;
+            //case "WeChatMomentsBtnOfSaveFileInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
+            //        {
+            //            ShareImage(saveFileSharePageInSettlement, PlatformType.WeChatMoments, true);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(saveFileSharePageInSettlement, PlatformType.WeChatMoments, true);
+            //    }
+            //    break;
+            //case "SinaWeiboBtnOfSaveFileInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
+            //        {
+            //            ShareImage(saveFileSharePageInSettlement, PlatformType.SinaWeibo, true);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(saveFileSharePageInSettlement, PlatformType.SinaWeibo, true);
+            //    }
+            //    break;
+            //case "WeChatBtnOfAchievementInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
+            //        {
+            //            ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChat, false);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChat, false);
+            //    }
+            //    break;
+            //case "WeChatMomentsBtnOfAchievementInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
+            //        {
+            //            ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChatMoments,false);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(achievementShareDetailBgInSettlement, PlatformType.WeChatMoments,false);
+            //    }
+            //    break;
+            //case "SinaWeiboBtnOfAchievementInSettlement":
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfSinaWeibo))
+            //    {
+            //        GameManager.Instance.InitShareInfo(PlatformType.SinaWeibo, () =>
+            //        {
+            //            ShareImage(achievementShareDetailBgInSettlement, PlatformType.SinaWeibo, false);
+            //        });
+            //    }
+            //    else
+            //    {
+            //        ShareImage(achievementShareDetailBgInSettlement, PlatformType.SinaWeibo, false);
+            //    }
+            //    break;
 
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -288,12 +288,12 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
         if (string.IsNullOrEmpty(curSaveFileInstance.achievementName))
         {
-            curAchievementBtn.SetActive(false);
+            //curAchievementBtn.SetActive(false);
             return;
         }
         else
         {
-            curAchievementBtn.SetActive(true);
+            //curAchievementBtn.SetActive(true);
         }
         AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
         achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
@@ -308,75 +308,74 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         newTime.Insert(7, ".");
         return newTime.ToString();
     }
-    private void ShareImage(GameObject target, PlatformType type, bool isSaveFile)
-    {
-        if (isSaveFile)
-        {
-            saveFileShareTitleInSettlement.enabled = true;
-            if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
-                saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
-            else
-                saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
-        }
-        else
-        {
-            achievementShareTitleInSettlement.enabled = true;
-            if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
-                achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
-            else
-                achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
-        }
-        RectTransform shotTarget = target.transform as RectTransform;
-        Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
-        GameManager.Instance.ShareImage(shotRect, type);
-    }
-    private void InitSaveFileShareWin()
-    {
-        saveFileShareTitleInSettlement.enabled = false;
-        saveFileSharePatternInSettlement_Time.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Time);
-        saveFileSharePatternInSettlement_Number.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Number);
-        saveFileShareAmountInSettlement.text = string.Format(saveFileShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
-        saveFileShareTimeInSettlement.text = string.Format(saveFileShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
-        saveFileShareSymbolInSettlement.text = string.Format(saveFileShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
-        saveFileShareDigitInSettlement.text = string.Format(saveFileShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
-        saveFileShareOperandInSettlement.text = string.Format(saveFileShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
-        saveFileShareAccuracyInSettlement.text = string.Format(saveFileShareAccuracyInSettlement.text, curSaveFileInstance.accuracy);
-        string meanTime = (curSaveFileInstance.timeCost / curSaveFileInstance.qInstancList.Count).ToString("f2");
-        saveFileShareMeanTimeInSettlement.text = string.Format(saveFileShareMeanTimeInSettlement.text, meanTime);
-        saveFileShareAchievementInSettlement.SetActive(!string.IsNullOrEmpty(curSaveFileInstance.achievementName));
-        saveFileShareWithoutAchievementInSettlement.SetActive(string.IsNullOrEmpty(curSaveFileInstance.achievementName));
-        if (!string.IsNullOrEmpty(curSaveFileInstance.achievementName))
-        {
-            AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
-            saveFileShareImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-            saveFileShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-            saveFileShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-            saveFileShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.classType);
-            saveFileShareFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
-            saveFileShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.condition);
-        }
-    }
-
-    private void InitAchievementShareWin()
-    {
-        if (string.IsNullOrEmpty(curSaveFileInstance.achievementName)) return;
-        AchievementInstance content = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
-        achievementShareTitleInSettlement.enabled = false;
-        achievementShareImageInSettlement.sprite = GameManager.Instance.GetSprite(content.imageIndex);
-        achievementShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-        achievementShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
-        achievementShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(content.classType);
-        achievementShareFinishTimeInSettlement.text = GetFinishTime(content.finishTime);
-        achievementShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(content.condition);
-        achievementSharePatternInSettlement_Time.SetActive(content.cInstance.patternID == PatternID.Time);
-        achievementSharePatternInSettlement_Number.SetActive(content.cInstance.patternID == PatternID.Number);
-        achievementShareAmountInSettlement.text = string.Format(achievementShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
-        achievementShareTimeInSettlement.text = string.Format(achievementShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
-        achievementShareSymbolInSettlement.text = string.Format(achievementShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
-        achievementShareDigitInSettlement.text = string.Format(achievementShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
-        achievementShareOperandInSettlement.text = string.Format(achievementShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
-        achievementShareAccuracyInSettlement.text = string.Format(achievementShareAccuracyInSettlement.text, curSaveFileInstance.accuracy);
-        string meanTime = (curSaveFileInstance.timeCost / curSaveFileInstance.qInstancList.Count).ToString("f2");
-        achievementShareMeanTimeInSettlement.text = string.Format(achievementShareMeanTimeInSettlement.text, meanTime);
-    }
+    //private void ShareImage(GameObject target, PlatformType type, bool isSaveFile)
+    //{
+    //    if (isSaveFile)
+    //    {
+    //        saveFileShareTitleInSettlement.enabled = true;
+    //        if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
+    //            saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
+    //        else
+    //            saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
+    //    }
+    //    else
+    //    {
+    //        achievementShareTitleInSettlement.enabled = true;
+    //        if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
+    //            achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
+    //        else
+    //            achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
+    //    }
+    //    RectTransform shotTarget = target.transform as RectTransform;
+    //    Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
+    //    GameManager.Instance.ShareImage(shotRect, type);
+    //}
+    //private void InitSaveFileShareWin()
+    //{
+    //    //saveFileShareTitleInSettlement.enabled = false;
+    //    //saveFileSharePatternInSettlement_Time.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Time);
+    //    //saveFileSharePatternInSettlement_Number.SetActive(curSaveFileInstance.cInstance.patternID == PatternID.Number);
+    //    //saveFileShareAmountInSettlement.text = string.Format(saveFileShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
+    //    //saveFileShareTimeInSettlement.text = string.Format(saveFileShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
+    //    //saveFileShareSymbolInSettlement.text = string.Format(saveFileShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
+    //    //saveFileShareDigitInSettlement.text = string.Format(saveFileShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
+    //    //saveFileShareOperandInSettlement.text = string.Format(saveFileShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
+    //    //saveFileShareAccuracyInSettlement.text = string.Format(saveFileShareAccuracyInSettlement.text, curSaveFileInstance.accuracy);
+    //    //string meanTime = (curSaveFileInstance.timeCost / curSaveFileInstance.qInstancList.Count).ToString("f2");
+    //    //saveFileShareMeanTimeInSettlement.text = string.Format(saveFileShareMeanTimeInSettlement.text, meanTime);
+    //    //saveFileShareAchievementInSettlement.SetActive(!string.IsNullOrEmpty(curSaveFileInstance.achievementName));
+    //    //saveFileShareWithoutAchievementInSettlement.SetActive(string.IsNullOrEmpty(curSaveFileInstance.achievementName));
+    //    //if (!string.IsNullOrEmpty(curSaveFileInstance.achievementName))
+    //    //{
+    //    //    AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
+    //    //    saveFileShareImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+    //    //    saveFileShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+    //    //    saveFileShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+    //    //    saveFileShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.classType);
+    //    //    saveFileShareFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
+    //    //    saveFileShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.condition);
+    //    //}
+    //}
+    //private void InitAchievementShareWin()
+    //{
+    //    //if (string.IsNullOrEmpty(curSaveFileInstance.achievementName)) return;
+    //    //AchievementInstance content = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
+    //    //achievementShareTitleInSettlement.enabled = false;
+    //    //achievementShareImageInSettlement.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+    //    //achievementShareMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+    //    //achievementShareSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
+    //    //achievementShareTypeInSettlement.text = GameManager.Instance.GetMutiLanguage(content.classType);
+    //    //achievementShareFinishTimeInSettlement.text = GetFinishTime(content.finishTime);
+    //    //achievementShareConditionInSettlement.text = GameManager.Instance.GetMutiLanguage(content.condition);
+    //    //achievementSharePatternInSettlement_Time.SetActive(content.cInstance.patternID == PatternID.Time);
+    //    //achievementSharePatternInSettlement_Number.SetActive(content.cInstance.patternID == PatternID.Number);
+    //    //achievementShareAmountInSettlement.text = string.Format(achievementShareAmountInSettlement.text, curSaveFileInstance.qInstancList.Count);
+    //    //achievementShareTimeInSettlement.text = string.Format(achievementShareTimeInSettlement.text, curSaveFileInstance.timeCost.ToString("f1"));
+    //    //achievementShareSymbolInSettlement.text = string.Format(achievementShareSymbolInSettlement.text, GameManager.Instance.SymbolArray[(int)curSaveFileInstance.cInstance.symbolID]);
+    //    //achievementShareDigitInSettlement.text = string.Format(achievementShareDigitInSettlement.text, (int)(curSaveFileInstance.cInstance.digitID + 2));
+    //    //achievementShareOperandInSettlement.text = string.Format(achievementShareOperandInSettlement.text, (int)(curSaveFileInstance.cInstance.operandID + 2));
+    //    //achievementShareAccuracyInSettlement.text = string.Format(achievementShareAccuracyInSettlement.text, curSaveFileInstance.accuracy);
+    //    //string meanTime = (curSaveFileInstance.timeCost / curSaveFileInstance.qInstancList.Count).ToString("f2");
+    //    //achievementShareMeanTimeInSettlement.text = string.Format(achievementShareMeanTimeInSettlement.text, meanTime);
+    //}
 }

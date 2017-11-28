@@ -8,7 +8,7 @@ public class LastestAchievementItem : AchievementItem
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
-        achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");
+        //achievementType = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementType");
         achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
         achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");

@@ -9,7 +9,7 @@ public class SummaryAchievementItem : AchievementItem
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
-        achievementTpye = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementTpye");
+        //achievementType = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementType");
         achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
         achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
@@ -36,12 +36,12 @@ public class SummaryAchievementItem : AchievementItem
             bool hasFinish = countWithAchievement == countOfSymbol;
             achievementItem_WithoutAchievement.SetActive(!hasFinish);
             achievementCondition.text = GameManager.Instance.GetMutiLanguage(content.condition);
-            achievementTpye.text = string.Format(achievementTpye.text, countWithAchievement, countOfSymbol);
+            //achievementType.text = string.Format(achievementType.text, countWithAchievement, countOfSymbol);
             achievementName.gameObject.SetActive(hasFinish);
             achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
             if (!hasFinish)
             {
-                achievementTpye.color = Color.gray;
+                //achievementType.color = Color.gray;
                 achievementCondition.color = Color.gray;
                 achievementName_WithoutAchievement.color = Color.gray;
             }
@@ -65,13 +65,13 @@ public class SummaryAchievementItem : AchievementItem
         Text achievementDetailSubTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailSubTitleInStatistics");
         Text achievementDetailFinishTimeInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailFinishTimeInStatistics");
         GameObject achievementDetailShareBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailShareBtnInStatistics");
-        GameObject achievementDetailSaveFileBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailSaveFileBtnInStatistics");
+        //GameObject achievementDetailSaveFileBtnInStatistics = CommonTool.GetGameObjectByName(detailWin, "AchievementDetailSaveFileBtnInStatistics");
         achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
         CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
-        if (achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(false);
+        //if (achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(false);
     }
     private int GetAchievementCountBySymbol(SymbolID symbol, out int countWithAchievement)
     {

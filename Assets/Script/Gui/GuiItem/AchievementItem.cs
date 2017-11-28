@@ -22,7 +22,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected Dictionary<string, GameObject> detailWinDict;
     protected Text achievementName;
     protected Text achievementName_WithoutAchievement;
-    protected Text achievementTpye;
+    //protected Text achievementType;
     protected Text achievementCondition;
     protected Vector3 position;
 
@@ -197,7 +197,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName                     = gameObjectDict["AchievementName"].GetComponent<Text>();
-        achievementTpye                     = gameObjectDict["AchievementTpye"].GetComponent<Text>();
+        //achievementType                     = gameObjectDict["AchievementType"].GetComponent<Text>();
         achievementCondition                = gameObjectDict["AchievementCondition"].GetComponent<Text>();
         achievementName_WithoutAchievement  = gameObjectDict["AchievementName_WithoutAchievement"].GetComponent<Text>();
         achievementItem_WithoutAchievement  = gameObjectDict["AchievementItem_WithoutAchievement"];
@@ -217,16 +217,21 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
         string condition = GameManager.Instance.GetMutiLanguage(content.condition);
         achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
-        achievementTpye.text = GameManager.Instance.GetMutiLanguage(content.classType);
+        //achievementType.text = GameManager.Instance.GetMutiLanguage(content.classType);
         if (notHasAchievement)
         {
             achievementName_WithoutAchievement.color = Color.gray;
-            achievementTpye.color = Color.gray;
+            //achievementType.color = Color.gray;
             achievementCondition.color = Color.gray;
         }
         else
         {
             achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+        }
+        List<GameObject> stars = CommonTool.GetGameObjectsContainName(gameObject, "Star");
+        for(int i = 0; i < stars.Count; i++)
+        {
+            stars[i].SetActive((i + 1) <= content.star);
         }
     }
 }
@@ -241,7 +246,7 @@ public class AchievementInstance
     public string subTitleIndex;
     public string imageIndex;
     public string finishTime;//完成时间
-    public string classType;
+    //public string classType;
     public CategoryInstance cInstance;
     public int star;
 }

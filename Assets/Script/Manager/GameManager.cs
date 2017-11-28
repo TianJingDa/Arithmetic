@@ -369,11 +369,11 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl.DeleteAllRecord();
         //c_AchievementCtrl.ResetAllAchievement();
     }
-    public void ResetSaveFileWithoutAchievement()
-    {
-        List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
-        c_RecordCtrl.DeleteRecordWithoutAchievement(fileNameList);
-    }
+    //public void ResetSaveFileWithoutAchievement()
+    //{
+    //    List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
+    //    c_RecordCtrl.DeleteRecordWithoutAchievement(fileNameList);
+    //}
     public void DeleteRecord(string fileName)
     {
         if (c_RecordCtrl.DeleteRecord(fileName))
@@ -602,14 +602,14 @@ public class GameManager : MonoBehaviour
         if (!string.IsNullOrEmpty(achievementName))
         {
             PlayerPrefs.SetString(achievementName, fileName);
-            c_AchievementCtrl.WriteFinishTime(achievementName, fileName);
+            c_AchievementCtrl.WriteFinishTime(achievementName, fileName, 3);
             LastestAchievement = achievementName;
         }
         else if(FinishAllAchievement && accuracy <= 0)
         {
             AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
             PlayerPrefs.SetString(hiddenAchievement.achievementName, fileName);
-            c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, fileName);
+            c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, fileName, 3);
             LastestAchievement = hiddenAchievement.achievementName;
         }
         return achievementName;

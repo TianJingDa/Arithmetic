@@ -120,7 +120,7 @@ public static class CommonTool
         }
         return result;
     }
-    public static List<GameObject> GetGameObjectsContainsName(GameObject root, string name)
+    public static List<GameObject> GetGameObjectsContainName(GameObject root, string name)
     {
         List<GameObject> result = new List<GameObject>();
         Transform[] objArray = root.GetComponentsInChildren<Transform>(true);

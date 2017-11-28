@@ -164,11 +164,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         if (resetDelegateList == null)
         {
             resetDelegateList = new List<System.Action>();
-            resetDelegateList.Add(ResetTotalTime);
-            resetDelegateList.Add(ResetTotalGame);
+            //resetDelegateList.Add(ResetTotalTime);
+            //resetDelegateList.Add(ResetTotalGame);
             resetDelegateList.Add(ResetAchievement);
             resetDelegateList.Add(ResetSaveFile);
-            resetDelegateList.Add(ResetSaveFileWithoutAchievement);
+            //resetDelegateList.Add(ResetSaveFileWithoutAchievement);
             resetDelegateList.Add(ResetSetUp);
         }
     }
@@ -203,10 +203,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     /// <summary>
     /// 重置所有不带成就的游戏存档
     /// </summary>
-    private void ResetSaveFileWithoutAchievement()
-    {
-        GameManager.Instance.ResetSaveFileWithoutAchievement();
-    }
+    //private void ResetSaveFileWithoutAchievement()
+    //{
+    //    GameManager.Instance.ResetSaveFileWithoutAchievement();
+    //}
     /// <summary>
     /// 重置游戏设置
     /// </summary>

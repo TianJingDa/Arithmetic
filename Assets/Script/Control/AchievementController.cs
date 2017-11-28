@@ -42,6 +42,7 @@ public class AchievementController : Controller
         for (int i = 0; i < achievementList.Count; i++)
         {
             PlayerPrefs.DeleteKey(achievementList[i].achievementName);
+            PlayerPrefs.DeleteKey(achievementList[i].achievementName + "Star");
             achievementList[i].star = 0;
             achievementList[i].finishTime = "";
         }
@@ -49,28 +50,34 @@ public class AchievementController : Controller
     public void DeleteAchievement(string achievementName)
     {
         PlayerPrefs.DeleteKey(achievementName);
-        WriteFinishTime(achievementName);
+        PlayerPrefs.DeleteKey(achievementName + "Star");
+        WriteFinishTime(achievementName, "", 0);
     }
-    public List<string> GetAllFileNameWithAchievement()
-    {
-        List<string> fileNameList = new List<string>();
-        for(int i = 0;i< achievementList.Count; i++)
-        {
-            string fileName = PlayerPrefs.GetString(achievementList[i].achievementName, "");
-            if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
-        }
-        return fileNameList;
-    }
-    public void WriteFinishTime(string achievementName, string finishTime = "")
+    //public List<string> GetAllFileNameWithAchievement()
+    //{
+    //    List<string> fileNameList = new List<string>();
+    //    for(int i = 0;i< achievementList.Count; i++)
+    //    {
+    //        string fileName = PlayerPrefs.GetString(achievementList[i].achievementName, "");
+    //        if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
+    //    }
+    //    return fileNameList;
+    //}
+    public void WriteFinishTime(string achievementName, string finishTime, int star)
     {
         AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
-        if (instance != null) instance.finishTime = finishTime;
+        if (instance != null)
+        {
+            instance.finishTime = finishTime;
+            instance.star = star;
+        } 
     }
     private void WriteAllFinish(List<AchievementInstance> instanceList)
     {
         for(int i = 0; i < instanceList.Count; i++)
         {
             instanceList[i].finishTime = PlayerPrefs.GetString(instanceList[i].achievementName, "");
+            instanceList[i].star = PlayerPrefs.GetInt(instanceList[i].achievementName + "Star", 0);
         }
     }
 
