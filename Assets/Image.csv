@@ -23,7 +23,7 @@ Image_00020,Division_3,成就
 Image_00021,AchievementFirstStar,
 Image_00022,AchievementSecondStar,
 Image_00023,AchievementThirdStar,
-Image_00024,ChapterItem,
+Image_00024,,
 Image_00025,AchievementItem_WithoutAchievement,
 Image_00026,Hidden_0,成就
 Image_00027,ChapterFirstStar,
@@ -341,3 +341,4 @@ Image_70010,ChapterDetailWin,
 Image_70011,ChapterDetailPage,
 Image_70012,Chapter2FightFrameBtn,
 Image_70013,ChapterWin2ChapterFrameBtn,
+Image_70014,ChapterStartFrameStar,

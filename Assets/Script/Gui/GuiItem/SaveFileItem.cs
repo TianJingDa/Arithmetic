@@ -91,7 +91,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             saveFileType_Time.gameObject.SetActive(true);
             saveFileType_Number.gameObject.SetActive(false);
             int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
-            saveFileType_Time.text = string.Format(saveFileType_Time.text, amount / 60, digit, operand);
+            saveFileType_Time.text = string.Format(saveFileType_Time.text, amount, digit, operand);
         }
         else
         {
@@ -141,12 +141,12 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Text saveFileShareOperandInStatistics = detailWinDict["SaveFileShareOperandInStatistics"].GetComponent<Text>();
         Text saveFileShareAccuracyInStatistics = detailWinDict["SaveFileShareAccuracyInStatistics"].GetComponent<Text>();
         Text saveFileShareMeanTimeInStatistics = detailWinDict["SaveFileShareMeanTimeInStatistics"].GetComponent<Text>();
-        Image saveFileShareImageInStatistics = detailWinDict["SaveFileShareImageInStatistics"].GetComponent<Image>();
-        Text saveFileShareMainTitleInStatistics = detailWinDict["SaveFileShareMainTitleInStatistics"].GetComponent<Text>();
-        Text saveFileShareSubTitleInStatistics = detailWinDict["SaveFileShareSubTitleInStatistics"].GetComponent<Text>();
-        Text saveFileShareTypeInStatistics = detailWinDict["SaveFileShareTypeInStatistics"].GetComponent<Text>();
-        Text saveFileShareFinishTimeInStatistics = detailWinDict["SaveFileShareFinishTimeInStatistics"].GetComponent<Text>();
-        Text saveFileShareConditionInStatistics = detailWinDict["SaveFileShareConditionInStatistics"].GetComponent<Text>();
+        //Image saveFileShareImageInStatistics = detailWinDict["SaveFileShareImageInStatistics"].GetComponent<Image>();
+        //Text saveFileShareMainTitleInStatistics = detailWinDict["SaveFileShareMainTitleInStatistics"].GetComponent<Text>();
+        //Text saveFileShareSubTitleInStatistics = detailWinDict["SaveFileShareSubTitleInStatistics"].GetComponent<Text>();
+        //Text saveFileShareTypeInStatistics = detailWinDict["SaveFileShareTypeInStatistics"].GetComponent<Text>();
+        //Text saveFileShareFinishTimeInStatistics = detailWinDict["SaveFileShareFinishTimeInStatistics"].GetComponent<Text>();
+        //Text saveFileShareConditionInStatistics = detailWinDict["SaveFileShareConditionInStatistics"].GetComponent<Text>();
         saveFileShareTitleInStatistics.GetComponent<Text>().enabled = false;
         saveFileSharePatternInStatistics_Time.SetActive(content.cInstance.patternID == PatternID.Time);
         saveFileSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
@@ -156,7 +156,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileShareDigitInStatistics.text = string.Format(saveFileShareDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
         saveFileShareOperandInStatistics.text = string.Format(saveFileShareOperandInStatistics.text, (int)(content.cInstance.operandID + 2));
         saveFileShareAccuracyInStatistics.text = string.Format(saveFileShareAccuracyInStatistics.text, content.accuracy);
-        string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f2");
+        string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f1");
         saveFileShareMeanTimeInStatistics.text = string.Format(saveFileShareMeanTimeInStatistics.text, meanTime);
         saveFileShareAchievementInStatistics.SetActive(!string.IsNullOrEmpty(content.achievementName));
         saveFileShareWithoutAchievementInStatistics.SetActive(string.IsNullOrEmpty(content.achievementName));

@@ -55,7 +55,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private List<Text> rawAchievementTextList;
     private Dictionary<SymbolID, string> rawSaveFileStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
-    private Dictionary<SymbolID, List<AchievementInstance>> achievementDict;
+    private Dictionary<DifficultyID, List<AchievementInstance>> achievementDict;
 
     void Start () 
 	{
@@ -334,14 +334,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementWin.SetActive(true);
         //if (summaryAchievementArray == null) summaryAchievementArray = achievementSummary.GetComponentsInChildren<SummaryAchievementItem>(true);
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>
+        achievementDict = new Dictionary<DifficultyID, List<AchievementInstance>>
                 {
-                    {SymbolID.Addition, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
-                    {SymbolID.Subtraction, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
-                    {SymbolID.Multiplication, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
-                    {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)},
+                    {DifficultyID.Junior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Junior)},
+                    {DifficultyID.Medium, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Medium)},
+                    {DifficultyID.Senior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Senior)},
+                    {DifficultyID.Ultimate, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Ultimate)},
                     //{SymbolID.Summary, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Summary)},
-                    {SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
+                    //{SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
                 };
         achievementToggleGroup.SetAllTogglesOff();
         achievementToggleGroup.toggles[0].isOn = true;
@@ -365,10 +365,11 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private int CalculateStar(int index)
     {
+        List<AchievementInstance> instanceList = achievementDict[(DifficultyID)index];
         int total = 0;
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < instanceList.Count; i++)
         {
-            total += achievementDict[(SymbolID)i][index].star;
+            total += instanceList[i].star;
         }
         return total;
     }
@@ -407,7 +408,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         hiddenAchievementItem.gameObject.SetActive(finishAllAchievement);
         if (finishAllAchievement)
         {
-            AchievementInstance hiddenAchievement = achievementDict[SymbolID.Hidden][0];
+            AchievementInstance hiddenAchievement = GameManager.Instance.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
             hiddenAchievementItem.SendMessage("InitPrefabItem", hiddenAchievement);
             hiddenAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
         }
@@ -415,30 +416,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshAchievementList()
     {
         achievementSummary.SetActive(false);
-        ArrayList dataList = new ArrayList();
-        dataList.Add(achievementDict[SymbolID.Addition][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Subtraction][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Multiplication][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Division][curAchievementIndex]);
+        ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
         achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
     private void RefreshAchievementDict()
     {
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        achievementDict = new Dictionary<SymbolID, List<AchievementInstance>>
-                {
-                    {SymbolID.Addition, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Addition)},
-                    {SymbolID.Subtraction, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Subtraction)},
-                    {SymbolID.Multiplication, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Multiplication)},
-                    {SymbolID.Division, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Division)},
-                    {SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
-                };
-
-        ArrayList dataList = new ArrayList();
-        dataList.Add(achievementDict[SymbolID.Addition][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Subtraction][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Multiplication][curAchievementIndex]);
-        dataList.Add(achievementDict[SymbolID.Division][curAchievementIndex]);
+        achievementDict[(DifficultyID)curAchievementIndex] = achievementList.FindAll(x => x.difficulty == curAchievementIndex);
+        ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
         achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
     }
 

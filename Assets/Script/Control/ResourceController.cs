@@ -39,7 +39,6 @@ public sealed class ResourceController : Controller
         prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");
         prefabItemDict.Add("SaveFileItem", "GuiItem/SaveFileItem");
         prefabItemDict.Add("QuestionItem", "GuiItem/QuestionItem");
-        prefabItemDict.Add("ChapterItem", "GuiItem/ChapterItem");
     }
 
     /// <summary>

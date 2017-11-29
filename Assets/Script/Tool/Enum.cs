@@ -87,4 +87,11 @@ public enum MoveID
     LeftOrDown      = -1,      //从左侧或者下方播放动画
     RightOrUp       = 1        //从右侧或者上方播放动画
 }
+public enum DifficultyID
+{
+    Junior,                    //初级
+    Medium,                    //中级
+    Senior,                    //高级
+    Ultimate                   //终极
+}
 

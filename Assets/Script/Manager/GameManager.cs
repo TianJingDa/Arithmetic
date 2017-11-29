@@ -220,6 +220,11 @@ public class GameManager : MonoBehaviour
             return m_SymbolArray;
         }
     }
+    public bool IsFromCategory
+    {
+        get;
+        set;
+    }
     public CanvasGroup CurCanvasGroup
     {
         get
