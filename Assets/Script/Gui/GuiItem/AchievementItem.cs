@@ -71,7 +71,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         Text achievementDetailFinishTimeInStatistics = detailWinDict["AchievementDetailFinishTimeInStatistics"].GetComponent<Text>();
         GameObject achievementDetailShareBtnInStatistics = detailWinDict["AchievementDetailShareBtnInStatistics"];
         //GameObject achievementDetailSaveFileBtnInStatistics = detailWinDict["AchievementDetailSaveFileBtnInStatistics"];
-        achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        //achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
@@ -100,7 +100,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         //Text achievementShareAccuracyInStatistics = detailWinDict["AchievementShareAccuracyInStatistics"].GetComponent<Text>();
         //Text achievementShareMeanTimeInStatistics = detailWinDict["AchievementShareMeanTimeInStatistics"].GetComponent<Text>();
         achievementShareTitleInStatistics.GetComponent<Text>().enabled = false;
-        achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        //achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementShareMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementShareSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         //achievementShareTypeInStatistics.text = GameManager.Instance.GetMutiLanguage(content.classType);

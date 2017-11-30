@@ -23,7 +23,7 @@ public class AchievementController : Controller
     private void InitAchievementData()
     {
         achievementList = (List<AchievementInstance>)IOHelper.GetDataFromResources("Achievement/Achievement", typeof(List<AchievementInstance>));
-        WriteAllFinish(achievementList);
+        WriteAllFinishTime(achievementList);
     }
     public List<AchievementInstance> GetAllAchievements()
     {
@@ -72,7 +72,7 @@ public class AchievementController : Controller
             instance.star = star;
         } 
     }
-    private void WriteAllFinish(List<AchievementInstance> instanceList)
+    private void WriteAllFinishTime(List<AchievementInstance> instanceList)
     {
         for(int i = 0; i < instanceList.Count; i++)
         {

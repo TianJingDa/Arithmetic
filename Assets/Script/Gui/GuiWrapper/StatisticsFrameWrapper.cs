@@ -323,7 +323,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshStatisticsContent()
     {
         string achievementData = GameManager.Instance.GetMutiLanguage(achievementBtn_Text2.index);
-        achievementBtn_Text2.text = string.Format(achievementData, CalculateAllStar());
+        achievementBtn_Text2.text = string.Format(achievementData, CommonTool.CalculateAllStar());
         List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
         saveFileBtn_Text2.text = saveFileList.Count.ToString();
     }
@@ -360,32 +360,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         for(int i = 0; i < rawAchievementTextList.Count; i++)
         {
             string data = GameManager.Instance.GetMutiLanguage(rawAchievementTextList[i].index);
-            rawAchievementTextList[i].text = string.Format(data, CalculateStar(i));
+            rawAchievementTextList[i].text = string.Format(data, CommonTool.CalculateStar(achievementDict[(DifficultyID)i]));
         }
-    }
-    private int CalculateStar(int index)
-    {
-        List<AchievementInstance> instanceList = achievementDict[(DifficultyID)index];
-        int total = 0;
-        for(int i = 0; i < instanceList.Count; i++)
-        {
-            total += instanceList[i].star;
-        }
-        return total;
-    }
-
-    private int CalculateAllStar()
-    {
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        int total = 0;
-        for(int i = 0; i < achievementList.Count; i++)
-        {
-            if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
-            {
-                total += achievementList[i].star;
-            }
-        }
-        return total;
     }
 
     private void RefreshLastestAchievement()

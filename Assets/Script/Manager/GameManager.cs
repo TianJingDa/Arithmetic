@@ -191,6 +191,11 @@ public class GameManager : MonoBehaviour
             return achievement == null;
         }
     }
+    public bool IsFromCategory
+    {
+        get;
+        set;
+    }
     public string UserNameOfWeChat
     {
         get
@@ -213,17 +218,17 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetString("UserNameOfSinaWeibo", value);
         }
     }
+    public string CurAchievementName
+    {
+        get;
+        private set;
+    }
     public string[] SymbolArray
     {
         get
         {
             return m_SymbolArray;
         }
-    }
-    public bool IsFromCategory
-    {
-        get;
-        set;
     }
     public CanvasGroup CurCanvasGroup
     {
@@ -343,15 +348,15 @@ public class GameManager : MonoBehaviour
         string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         float accuracy = CalculateAccuracy(resultList);
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        float meanTime = timeCost / resultList.Count;
-        string achievementName = CheckAchievement(meanTime, accuracy, finishTime);
+        //float meanTime = timeCost / resultList.Count;
+        //string achievementName = CheckAchievement(meanTime, accuracy, finishTime);
 
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
         curSaveFileInstance.timeCost = timeCost;
         curSaveFileInstance.fileName = finishTime;
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
         curSaveFileInstance.qInstancList = qInstanceList;
-        curSaveFileInstance.achievementName = achievementName;
+        //curSaveFileInstance.achievementName = achievementName;
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;
@@ -360,7 +365,29 @@ public class GameManager : MonoBehaviour
         TotalGame++;
         TotalTime += timeCost;
     }
-    
+
+    public void SaveAchievement(List<List<int>> resultList, string symbol, float timeCost)
+    {
+        string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
+        float accuracy = CalculateAccuracy(resultList);
+        float meanTime = timeCost / resultList.Count;
+        CurAchievementName = CheckAchievement(meanTime, accuracy, finishTime);
+
+        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
+        SaveFileInstance curSaveFileInstance = new SaveFileInstance();
+        curSaveFileInstance.timeCost = timeCost;
+        curSaveFileInstance.fileName = finishTime;
+        curSaveFileInstance.accuracy = accuracy.ToString("f1");
+        curSaveFileInstance.qInstancList = qInstanceList;
+        //curSaveFileInstance.achievementName = achievementName;
+        curSaveFileInstance.cInstance = m_CurCategoryInstance;
+
+        m_SaveFileInstance = curSaveFileInstance;
+
+        TotalGame++;
+        TotalTime += timeCost;
+    }
+
     public List<SaveFileInstance> ReadAllRecords()
     {
         return c_RecordCtrl.ReadAllRecords();
@@ -590,13 +617,13 @@ public class GameManager : MonoBehaviour
         }
         return qInstanceList;
     }
-    private string CheckAchievement(float meanTime, float accuracy, string fileName)
+    private string CheckAchievement(float meanTime, float accuracy, string finishTime)
     {
         string achievementName = "";
         List<AchievementInstance> achievementList = c_AchievementCtrl.GetAchievementUnFinish();
         for(int i = 0; i < achievementList.Count; i++)
         {
-            if(achievementList[i].Equals(m_CurCategoryInstance)
+            if(achievementList[i].cInstance.Equals(m_CurCategoryInstance)
             && achievementList[i].accuracy <= accuracy
             && achievementList[i].meanTime >= meanTime)
             {
@@ -606,15 +633,17 @@ public class GameManager : MonoBehaviour
         }
         if (!string.IsNullOrEmpty(achievementName))
         {
-            PlayerPrefs.SetString(achievementName, fileName);
-            c_AchievementCtrl.WriteFinishTime(achievementName, fileName, 3);
+            PlayerPrefs.SetString(achievementName, finishTime);
+            PlayerPrefs.SetInt(achievementName + "Star", 3);
+            c_AchievementCtrl.WriteFinishTime(achievementName, finishTime, 3);
             LastestAchievement = achievementName;
         }
         else if(FinishAllAchievement && accuracy <= 0)
         {
             AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
-            PlayerPrefs.SetString(hiddenAchievement.achievementName, fileName);
-            c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, fileName, 3);
+            PlayerPrefs.SetString(hiddenAchievement.achievementName, finishTime);
+            PlayerPrefs.SetInt(hiddenAchievement.achievementName + "Star", 3);
+            c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, finishTime, 3);
             LastestAchievement = hiddenAchievement.achievementName;
         }
         return achievementName;

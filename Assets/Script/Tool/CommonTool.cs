@@ -301,17 +301,17 @@ public static class CommonTool
             gui.transform.DOLocalMoveY(endValue * (int)mID, tweenDuration, true).
                           From().
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
-                          OnComplete(() => canvasGroup.interactable = true);
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
+                          OnComplete(() => canvasGroup.blocksRaycasts = true);
         }
         else
         {
             gui.transform.DOLocalMoveY(endValue * (int)mID, tweenDuration, true).
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
-                              canvasGroup.interactable = true;
+                              canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
                               gui.transform.localPosition = Vector3.zero;
                           });
@@ -329,21 +329,50 @@ public static class CommonTool
             gui.transform.DOScale(Vector3.zero, tweenDuration).
                           From().
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
-                          OnComplete(() => canvasGroup.interactable = true);
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
+                          OnComplete(() =>
+                          {
+                              canvasGroup.blocksRaycasts = true;
+                              gui.transform.localScale = Vector3.one;
+                          });
         }
         else
         {
             gui.transform.DOScale(Vector3.zero, tweenDuration).
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
-                              canvasGroup.interactable = true;
+                              canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
                               gui.transform.localScale = Vector3.one;
                           });
         }
     }
+
+    public static int CalculateStar(List<AchievementInstance> instanceList)
+    {
+        int total = 0;
+        for (int i = 0; i < instanceList.Count; i++)
+        {
+            total += instanceList[i].star;
+        }
+        return total;
+    }
+
+    public static int CalculateAllStar()
+    {
+        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
+        int total = 0;
+        for (int i = 0; i < achievementList.Count; i++)
+        {
+            if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
+            {
+                total += achievementList[i].star;
+            }
+        }
+        return total;
+    }
+
 
 }

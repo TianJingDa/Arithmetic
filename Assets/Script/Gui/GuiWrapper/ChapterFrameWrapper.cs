@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class ChapterFrameWrapper : GuiFrameWrapper
 {
+    private Text chapterStarStatisticsImg_Text;
     private GameObject chapterWin;
+    private GameObject chapterTipBg;
     private GameObject chapterDetailWin;
     private ChapterItem[] chapterItemList;
     private Dictionary<DifficultyID, List<AchievementInstance>> achievementDict;
@@ -24,12 +26,22 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                     {DifficultyID.Senior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Senior)},
                     {DifficultyID.Ultimate, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Ultimate)},
                 };
+        chapterStarStatisticsImg_Text.text = string.Format(chapterStarStatisticsImg_Text.text, CommonTool.CalculateAllStar());
+        List<GameObject> lockList = CommonTool.GetGameObjectsContainName(gameObject, "Lock");
+        //lockList[0].SetActive(false);
+        for(int i = 1; i < lockList.Count; i++)
+        {
+            int star = CommonTool.CalculateStar(achievementDict[(DifficultyID)(i - 1)]);
+            lockList[i].SetActive(star < 8);
+        }
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        chapterWin = gameObjectDict["ChapterWin"];
-        chapterDetailWin = gameObjectDict["ChapterDetailWin"];
+        chapterWin                      = gameObjectDict["ChapterWin"];
+        chapterTipBg                    = gameObjectDict["ChapterTipBg"];
+        chapterDetailWin                = gameObjectDict["ChapterDetailWin"];
+        chapterStarStatisticsImg_Text   = gameObjectDict["ChapterStarStatisticsImg_Text"].GetComponent<Text>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -42,6 +54,15 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                 break;
             case "ChapterWin2ChapterFrameBtn":
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                break;
+            case "ChapterTipBg":
+            case "ChapterConfirmBtn":
+                chapterTipBg.SetActive(false);
+                break;
+            case "MediumClassLock":
+            case "SeniorClassLock":
+            case "UltimateClassLock":
+                chapterTipBg.SetActive(true);
                 break;
             case "ChapterDetailWin":
                 CommonTool.GuiScale(chapterDetailWin, canvasGroup, false);

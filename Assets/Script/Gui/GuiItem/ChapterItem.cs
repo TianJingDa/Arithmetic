@@ -29,6 +29,7 @@ public class ChapterItem: MonoBehaviour
     private void OnItemClick(BaseEventData data)
     {
         detailWin.SetActive(true);
+        CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
         Dictionary<string, GameObject> detailWinDict = CommonTool.InitGameObjectDict(detailWin);
         Text chapterDetailPattern_Time = detailWinDict["ChapterDetailPattern_Time"].GetComponent<Text>();
         Text chapterDetailPattern_Number = detailWinDict["ChapterDetailPattern_Number"].GetComponent<Text>();
@@ -60,16 +61,14 @@ public class ChapterItem: MonoBehaviour
         }
         string symbol = GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID];
         chapterDetailSymbol.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailSymbol.index), symbol);
-        chapterDetailDigit.text = string.Format(chapterDetailDigit.text, (int)(content.cInstance.digitID + 2));
-        chapterDetailOperand.text = string.Format(chapterDetailOperand.text, (int)(content.cInstance.operandID + 2));
+        chapterDetailDigit.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailDigit.index), (int)(content.cInstance.digitID + 2));
+        chapterDetailOperand.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailOperand.index), (int)(content.cInstance.operandID + 2));
 
         InitCondition(chapterDetailOneStarCondition, 1);
         InitCondition(chapterDetailTwoStarCondition, 2);
         InitCondition(chapterDetailThreeStarCondition, 3);
 
         CommonTool.AddEventTriggerListener(chapter2FightFrameBtn, EventTriggerType.PointerClick, OnFightClick);
-        CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
-
     }
     private void InitCondition(Text condition, int starCount)
     {

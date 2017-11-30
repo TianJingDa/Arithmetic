@@ -287,28 +287,32 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitAchievement()
     {
-        if (string.IsNullOrEmpty(curSaveFileInstance.achievementName))
+        if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName))
         {
-            //curAchievementBtn.SetActive(false);
-            return;
+            MyDebug.LogYellow("Show Achievement!");
         }
-        else
-        {
-            //curAchievementBtn.SetActive(true);
-        }
-        AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
-        achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-        achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-        achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-        achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
+        //if (string.IsNullOrEmpty(curSaveFileInstance.achievementName))
+        //{
+        //    //curAchievementBtn.SetActive(false);
+        //    return;
+        //}
+        //else
+        //{
+        //    //curAchievementBtn.SetActive(true);
+        //}
+        //AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
+        //achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+        //achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+        //achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+        //achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
     }
-    private string GetFinishTime(string time)
-    {
-        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
-        newTime.Insert(4, ".");
-        newTime.Insert(7, ".");
-        return newTime.ToString();
-    }
+    //private string GetFinishTime(string time)
+    //{
+    //    StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
+    //    newTime.Insert(4, ".");
+    //    newTime.Insert(7, ".");
+    //    return newTime.ToString();
+    //}
     //private void ShareImage(GameObject target, PlatformType type, bool isSaveFile)
     //{
     //    if (isSaveFile)

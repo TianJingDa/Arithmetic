@@ -132,8 +132,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         GameObject saveFileShareTitleInStatistics = detailWinDict["SaveFileShareTitleInStatistics"];
         GameObject saveFileSharePatternInStatistics_Time = detailWinDict["SaveFileSharePatternInStatistics_Time"];
         GameObject saveFileSharePatternInStatistics_Number = detailWinDict["SaveFileSharePatternInStatistics_Number"];
-        GameObject saveFileShareAchievementInStatistics = detailWinDict["SaveFileShareAchievementInStatistics"];
-        GameObject saveFileShareWithoutAchievementInStatistics = detailWinDict["SaveFileShareWithoutAchievementInStatistics"];
+        //GameObject saveFileShareAchievementInStatistics = detailWinDict["SaveFileShareAchievementInStatistics"];
+        //GameObject saveFileShareWithoutAchievementInStatistics = detailWinDict["SaveFileShareWithoutAchievementInStatistics"];
         Text saveFileShareAmountInStatistics = detailWinDict["SaveFileShareAmountInStatistics"].GetComponent<Text>();
         Text saveFileShareTimeInStatistics = detailWinDict["SaveFileShareTimeInStatistics"].GetComponent<Text>();
         Text saveFileShareSymbolInStatistics = detailWinDict["SaveFileShareSymbolInStatistics"].GetComponent<Text>();
@@ -158,8 +158,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileShareAccuracyInStatistics.text = string.Format(saveFileShareAccuracyInStatistics.text, content.accuracy);
         string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f1");
         saveFileShareMeanTimeInStatistics.text = string.Format(saveFileShareMeanTimeInStatistics.text, meanTime);
-        saveFileShareAchievementInStatistics.SetActive(!string.IsNullOrEmpty(content.achievementName));
-        saveFileShareWithoutAchievementInStatistics.SetActive(string.IsNullOrEmpty(content.achievementName));
+        //saveFileShareAchievementInStatistics.SetActive(!string.IsNullOrEmpty(content.achievementName));
+        //saveFileShareWithoutAchievementInStatistics.SetActive(string.IsNullOrEmpty(content.achievementName));
         //if (!string.IsNullOrEmpty(content.achievementName))
         //{
         //    AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
@@ -240,6 +240,6 @@ public class SaveFileInstance
     public string fileName;
     public string accuracy;
     public List<QuentionInstance> qInstancList;
-    public string achievementName;//所获成就
+    //public string achievementName;//所获成就
     public CategoryInstance cInstance;
 }
