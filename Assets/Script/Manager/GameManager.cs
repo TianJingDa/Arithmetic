@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
     private System.Action                                       m_CurAction;                        //用于刷新SaveFile和Achievement列表
     private System.Action                                       m_ShareAction;                      //用于分享时初始化用户名称
-    private ShareSDK                                            m_shareSDK;                         //用于分享成就和成绩
+    private ShareSDK                                            m_ShareSDK;                         //用于分享成就和成绩
 
     //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
     //private Dictionary<ControllerID, Controller> controllerDict;
@@ -196,26 +196,15 @@ public class GameManager : MonoBehaviour
         get;
         set;
     }
-    public string UserNameOfWeChat
+    public string UserName
     {
         get
         {
-            return PlayerPrefs.GetString("UserNameOfWeChat", null);
+            return PlayerPrefs.GetString("UserName", null);
         }
-        private set
+        set
         {
-            PlayerPrefs.SetString("UserNameOfWeChat", value);
-        }
-    }
-    public string UserNameOfSinaWeibo
-    {
-        get
-        {
-            return PlayerPrefs.GetString("UserNameOfSinaWeibo", null);
-        }
-        private set
-        {
-            PlayerPrefs.SetString("UserNameOfSinaWeibo", value);
+            PlayerPrefs.SetString("UserName", value);
         }
     }
     public string CurAchievementName
@@ -279,14 +268,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
         m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 30, 50, 100 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
-        m_shareSDK = GetComponent<ShareSDK>();
-        m_shareSDK.shareHandler = OnShareResultHandler;
-        m_shareSDK.showUserHandler = OnGetUserInfoResultHandler;
+        m_ShareSDK = GetComponent<ShareSDK>();
+        m_ShareSDK.shareHandler = OnShareResultHandler;
         InitShareIcon();
 
 #if UNITY_EDITOR
@@ -473,11 +462,11 @@ public class GameManager : MonoBehaviour
         c_AchievementCtrl.ResetAllAchievement();
     }
 
-    public void InitShareInfo(PlatformType type, System.Action action)
-    {
-        m_ShareAction = action;
-        m_shareSDK.GetUserInfo(type);
-    }    
+    //public void InitShareInfo(PlatformType type, System.Action action)
+    //{
+    //    m_ShareAction = action;
+    //    m_ShareSDK.GetUserInfo(type);
+    //}    
 
     public void ShareImage(Rect mRect, PlatformType type)
     {
@@ -503,7 +492,7 @@ public class GameManager : MonoBehaviour
             //content.SetText(text);//text是Url
             //content.SetImagePath(filePath);
         }
-        m_shareSDK.ShareContent(type, content);
+        m_ShareSDK.ShareContent(type, content);
     }
 
     /// <summary>
@@ -686,30 +675,9 @@ public class GameManager : MonoBehaviour
             //content.SetText(text);
             //content.SetImagePath(filePath);
         }
-        m_shareSDK.ShareContent(type, content);
+        m_ShareSDK.ShareContent(type, content);
     }
 
-    private void OnGetUserInfoResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
-    {
-        if (state == ResponseState.Success)
-        {
-            if (type == PlatformType.WeChat) UserNameOfWeChat = (string)result["nickname"];
-            else if(type == PlatformType.SinaWeibo) UserNameOfSinaWeibo = (string)result["nickname"];//微博里面的昵称字段需要验证
-            m_ShareAction();
-        }
-        else if (state == ResponseState.Fail)
-        {
-            #if UNITY_ANDROID
-            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
-            #elif UNITY_IPHONE
-			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
-            #endif
-        }
-        else if (state == ResponseState.Cancel)
-        {
-            print("cancel !");
-        }
-    }
     /// <summary>
     /// ShareSDK分享回调
     /// </summary>

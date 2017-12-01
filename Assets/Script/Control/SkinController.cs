@@ -22,6 +22,7 @@ public class SkinController : Controller
 
     public Sprite GetSpriteResource(SkinID id,string index)
     {
+        return null;
         GameObject resouce = Resources.Load<GameObject>(string.Format(path, id) + index);
         return resouce.GetComponent<Sprite>();
     }

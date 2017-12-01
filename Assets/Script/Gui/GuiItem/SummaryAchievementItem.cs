@@ -10,7 +10,7 @@ public class SummaryAchievementItem : AchievementItem
     {
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         //achievementType = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementType");
-        achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
+        //achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
         achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
     }
@@ -35,14 +35,14 @@ public class SummaryAchievementItem : AchievementItem
             int countOfSymbol = GetAchievementCountBySymbol(symbol, out countWithAchievement);
             bool hasFinish = countWithAchievement == countOfSymbol;
             achievementItem_WithoutAchievement.SetActive(!hasFinish);
-            achievementCondition.text = GameManager.Instance.GetMutiLanguage(content.condition);
+            //achievementCondition.text = GameManager.Instance.GetMutiLanguage(content.condition);
             //achievementType.text = string.Format(achievementType.text, countWithAchievement, countOfSymbol);
             achievementName.gameObject.SetActive(hasFinish);
             achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
             if (!hasFinish)
             {
                 //achievementType.color = Color.gray;
-                achievementCondition.color = Color.gray;
+                //achievementCondition.color = Color.gray;
                 achievementName_WithoutAchievement.color = Color.gray;
             }
             else

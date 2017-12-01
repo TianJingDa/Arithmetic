@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 public class HiddenAchievementItem : AchievementItem 
@@ -11,7 +10,7 @@ public class HiddenAchievementItem : AchievementItem
     {
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         //achievementType = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementType");
-        achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
+        //achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
         achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
     }

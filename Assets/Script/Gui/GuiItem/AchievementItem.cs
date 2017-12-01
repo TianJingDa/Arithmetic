@@ -12,6 +12,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected float durationThreshold = 1.0f;
     protected bool isLongPress;
     protected bool onlyWrong;
+    protected string userName;
 
     protected AchievementInstance content;//详情
     protected List<QuentionInstance> onlyWrongList;
@@ -23,7 +24,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected Text achievementName;
     protected Text achievementName_WithoutAchievement;
     //protected Text achievementType;
-    protected Text achievementCondition;
+    //protected Text achievementCondition;
     protected Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -81,9 +82,10 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void OnShareBtn(BaseEventData data)
     {
+        if (SetUserName()) return;
         GameObject achievementShareWinInStatistics = detailWinDict["AchievementShareWinInStatistics"];
         achievementShareWinInStatistics.SetActive(true);
-        GameObject achievementShareTitleInStatistics = detailWinDict["AchievementShareTitleInStatistics"];
+        Text achievementShareTitleInStatistics = detailWinDict["AchievementShareTitleInStatistics"].GetComponent<Text>();
         Image achievementShareImageInStatistics = detailWinDict["AchievementShareImageInStatistics"].GetComponent<Image>();
         Text achievementShareMainTitleInStatistics = detailWinDict["AchievementShareMainTitleInStatistics"].GetComponent<Text>();
         Text achievementShareSubTitleInStatistics = detailWinDict["AchievementShareSubTitleInStatistics"].GetComponent<Text>();
@@ -98,9 +100,9 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         //Text achievementShareDigitInStatistics = detailWinDict["AchievementShareDigitInStatistics"].GetComponent<Text>();
         //Text achievementShareOperandInStatistics = detailWinDict["AchievementShareOperandInStatistics"].GetComponent<Text>();
         //Text achievementShareAccuracyInStatistics = detailWinDict["AchievementShareAccuracyInStatistics"].GetComponent<Text>();
-        //Text achievementShareMeanTimeInStatistics = detailWinDict["AchievementShareMeanTimeInStatistics"].GetComponent<Text>();
-        achievementShareTitleInStatistics.GetComponent<Text>().enabled = false;
-        //achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        //Text achievementShareMeanTimeInStatistics = detailWinDict["AchievementShareMeanTimeInStatistics"].GetComponent<Text>()
+        achievementShareTitleInStatistics.text = string.Format(achievementShareTitleInStatistics.text, GameManager.Instance.UserName);
+        achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementShareMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementShareSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         //achievementShareTypeInStatistics.text = GameManager.Instance.GetMutiLanguage(content.classType);
@@ -118,30 +120,54 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         //string meanTime = (saveFile.timeCost / saveFile.qInstancList.Count).ToString("f2");
         //achievementShareMeanTimeInStatistics.text = string.Format(achievementShareMeanTimeInStatistics.text, meanTime);
     }
-
-    protected void OnSaveFileBtn(BaseEventData data)
+    protected bool SetUserName()
     {
-        //GameObject saveFileDetailBgOfAchievement = detailWinDict["SaveFileDetailBgOfAchievement"];
-        //saveFileDetailBgOfAchievement.SetActive(true);
-        //Text saveFileDetailTimeOfAchievement = detailWinDict["SaveFileDetailTimeOfAchievement"].GetComponent<Text>();
-        //Text saveFileDetailAmountOfAchievement = detailWinDict["SaveFileDetailAmountOfAchievement"].GetComponent<Text>();
-        //Text saveFileDetailAccuracyOfAchievement = detailWinDict["SaveFileDetailAccuracyOfAchievement"].GetComponent<Text>();
-        //GameObject onlyWrongBtnOfAchievement = detailWinDict["OnlyWrongBtnOfAchievement"];
-        //GameObject saveFileDetaiTitle_Time = detailWinDict["SaveFileDetaiTitle_Time"];
-        //GameObject saveFileDetaiTitle_Number = detailWinDict["SaveFileDetaiTitle_Number"];
-        //SaveFileInstance saveFile = GameManager.Instance.ReadRecord(content.fileName);
-        //onlyWrongList = saveFile.qInstancList.FindAll(FindWrong);
-        //allInstanceList = saveFile.qInstancList;
-        //saveFileDetaiTitle_Time.SetActive(saveFile.cInstance.patternID == PatternID.Time);
-        //saveFileDetaiTitle_Number.SetActive(saveFile.cInstance.patternID == PatternID.Number);
-        //saveFileDetailTimeOfAchievement.text = string.Format(saveFileDetailTimeOfAchievement.text, saveFile.timeCost.ToString("f1"));
-        //saveFileDetailAmountOfAchievement.text = string.Format(saveFileDetailAmountOfAchievement.text, saveFile.qInstancList.Count);
-        //saveFileDetailAccuracyOfAchievement.text = string.Format(saveFileDetailAccuracyOfAchievement.text, saveFile.accuracy);
-        //CommonTool.AddEventTriggerListener(onlyWrongBtnOfAchievement, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-        //onlyWrong = false;
-        //RefreshSettlementGrid();
-        //CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
+        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+        {
+            GameObject achievementNameBoard = detailWinDict["AchievementNameBoard"];
+            GameObject achievementInputFieldConfirmBtn = detailWinDict["AchievementInputFieldConfirmBtn"];
+            InputField achievementInputField = detailWinDict["AchievementInputField"].GetComponent<InputField>();
+            achievementNameBoard.SetActive(true);
+            achievementInputField.onEndEdit.AddListener(OnEndEdit);
+            CommonTool.AddEventTriggerListener(achievementInputFieldConfirmBtn, EventTriggerType.PointerClick, OnConfirmBtn);
+        }
+        return string.IsNullOrEmpty(GameManager.Instance.UserName);
     }
+
+    protected void OnConfirmBtn(BaseEventData data)
+    {
+        GameManager.Instance.UserName = userName;
+        detailWinDict["AchievementNameBoard"].SetActive(false);
+    }
+
+    protected void OnEndEdit(string text)
+    {
+        userName = text;
+    }
+
+    //protected void OnSaveFileBtn(BaseEventData data)
+    //{
+    //    //GameObject saveFileDetailBgOfAchievement = detailWinDict["SaveFileDetailBgOfAchievement"];
+    //    //saveFileDetailBgOfAchievement.SetActive(true);
+    //    //Text saveFileDetailTimeOfAchievement = detailWinDict["SaveFileDetailTimeOfAchievement"].GetComponent<Text>();
+    //    //Text saveFileDetailAmountOfAchievement = detailWinDict["SaveFileDetailAmountOfAchievement"].GetComponent<Text>();
+    //    //Text saveFileDetailAccuracyOfAchievement = detailWinDict["SaveFileDetailAccuracyOfAchievement"].GetComponent<Text>();
+    //    //GameObject onlyWrongBtnOfAchievement = detailWinDict["OnlyWrongBtnOfAchievement"];
+    //    //GameObject saveFileDetaiTitle_Time = detailWinDict["SaveFileDetaiTitle_Time"];
+    //    //GameObject saveFileDetaiTitle_Number = detailWinDict["SaveFileDetaiTitle_Number"];
+    //    //SaveFileInstance saveFile = GameManager.Instance.ReadRecord(content.fileName);
+    //    //onlyWrongList = saveFile.qInstancList.FindAll(FindWrong);
+    //    //allInstanceList = saveFile.qInstancList;
+    //    //saveFileDetaiTitle_Time.SetActive(saveFile.cInstance.patternID == PatternID.Time);
+    //    //saveFileDetaiTitle_Number.SetActive(saveFile.cInstance.patternID == PatternID.Number);
+    //    //saveFileDetailTimeOfAchievement.text = string.Format(saveFileDetailTimeOfAchievement.text, saveFile.timeCost.ToString("f1"));
+    //    //saveFileDetailAmountOfAchievement.text = string.Format(saveFileDetailAmountOfAchievement.text, saveFile.qInstancList.Count);
+    //    //saveFileDetailAccuracyOfAchievement.text = string.Format(saveFileDetailAccuracyOfAchievement.text, saveFile.accuracy);
+    //    //CommonTool.AddEventTriggerListener(onlyWrongBtnOfAchievement, EventTriggerType.PointerClick, OnOnlyWrongBtn);
+    //    //onlyWrong = false;
+    //    //RefreshSettlementGrid();
+    //    //CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
+    //}
     protected bool FindWrong(QuentionInstance questionInstance)
     {
         int count = questionInstance.instance.Count;
@@ -198,7 +224,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     {
         achievementName                     = gameObjectDict["AchievementName"].GetComponent<Text>();
         //achievementType                     = gameObjectDict["AchievementType"].GetComponent<Text>();
-        achievementCondition                = gameObjectDict["AchievementCondition"].GetComponent<Text>();
+        //achievementCondition                = gameObjectDict["AchievementCondition"].GetComponent<Text>();
         achievementName_WithoutAchievement  = gameObjectDict["AchievementName_WithoutAchievement"].GetComponent<Text>();
         achievementItem_WithoutAchievement  = gameObjectDict["AchievementItem_WithoutAchievement"];
     }
@@ -216,13 +242,13 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementName_WithoutAchievement.gameObject.SetActive(notHasAchievement);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
         string condition = GameManager.Instance.GetMutiLanguage(content.condition);
-        achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
+        //achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
         //achievementType.text = GameManager.Instance.GetMutiLanguage(content.classType);
         if (notHasAchievement)
         {
             achievementName_WithoutAchievement.color = Color.gray;
             //achievementType.color = Color.gray;
-            achievementCondition.color = Color.gray;
+            //achievementCondition.color = Color.gray;
         }
         else
         {

@@ -139,7 +139,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         base.OnButtonClick(btn);
         switch (btn.name)
         {
-            case "AchievementDetailBgInSettlement":
+            case "AchievementDetailPageInSettlement":
                 achievementDetailBgInSettlement.SetActive(false);
                 break;
             case "AchievementDetailShareBtnInSettlement":
@@ -148,9 +148,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             case "AchievementShareDetailBgInSettlement":
                 achievementShareWinInSettlement.SetActive(false);
                 break;
-            case "CurAchievementBtn":
-                achievementDetailBgInSettlement.SetActive(true);
-                break;
+            //case "CurAchievementBtn":
+            //    achievementDetailBgInSettlement.SetActive(true);
+            //    break;
             case "OnlyWrongBtn":
                 onlyWrong = !onlyWrong;
                 RefreshSettlementGrid();
@@ -169,7 +169,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame,false);
                 break;
             //case "WeChatBtnOfSaveFileInSettlement":
-            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserName))
             //    {
             //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
             //        {
@@ -182,7 +182,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             //    }
             //    break;
             //case "WeChatMomentsBtnOfSaveFileInSettlement":
-            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserName))
             //    {
             //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
             //        {
@@ -208,7 +208,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             //    }
             //    break;
             //case "WeChatBtnOfAchievementInSettlement":
-            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserName))
             //    {
             //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
             //        {
@@ -221,7 +221,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             //    }
             //    break;
             //case "WeChatMomentsBtnOfAchievementInSettlement":
-            //    if (string.IsNullOrEmpty(GameManager.Instance.UserNameOfWeChat))
+            //    if (string.IsNullOrEmpty(GameManager.Instance.UserName))
             //    {
             //        GameManager.Instance.InitShareInfo(PlatformType.WeChat, () =>
             //        {
@@ -289,37 +289,28 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
         if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName))
         {
-            MyDebug.LogYellow("Show Achievement!");
+            achievementDetailBgInSettlement.SetActive(true);
+            AchievementInstance instance = GameManager.Instance.GetAchievement(GameManager.Instance.CurAchievementName);
+            achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+            achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+            achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+            achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
         }
-        //if (string.IsNullOrEmpty(curSaveFileInstance.achievementName))
-        //{
-        //    //curAchievementBtn.SetActive(false);
-        //    return;
-        //}
-        //else
-        //{
-        //    //curAchievementBtn.SetActive(true);
-        //}
-        //AchievementInstance instance = GameManager.Instance.GetAchievement(curSaveFileInstance.achievementName);
-        //achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-        //achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-        //achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-        //achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
     }
-    //private string GetFinishTime(string time)
-    //{
-    //    StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
-    //    newTime.Insert(4, ".");
-    //    newTime.Insert(7, ".");
-    //    return newTime.ToString();
-    //}
+    private string GetFinishTime(string time)
+    {
+        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
+        newTime.Insert(4, ".");
+        newTime.Insert(7, ".");
+        return newTime.ToString();
+    }
     //private void ShareImage(GameObject target, PlatformType type, bool isSaveFile)
     //{
     //    if (isSaveFile)
     //    {
     //        saveFileShareTitleInSettlement.enabled = true;
     //        if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
-    //            saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
+    //            saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserName);
     //        else
     //            saveFileShareTitleInSettlement.text = string.Format(saveFileShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
     //    }
@@ -327,7 +318,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     //    {
     //        achievementShareTitleInSettlement.enabled = true;
     //        if (type == PlatformType.WeChat || type == PlatformType.WeChatMoments)
-    //            achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfWeChat);
+    //            achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserName);
     //        else
     //            achievementShareTitleInSettlement.text = string.Format(achievementShareTitleInSettlement.text, GameManager.Instance.UserNameOfSinaWeibo);
     //    }

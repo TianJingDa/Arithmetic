@@ -12,6 +12,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected float durationThreshold = 1.0f;
     protected bool isLongPress;
     protected bool onlyWrong;
+    protected string userName;
     //protected bool hasAchievement;
 
     protected SaveFileInstance content;//详情
@@ -127,13 +128,14 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected void OnShareBtn(BaseEventData data)
     {
+        if (SetUserName()) return;
         GameObject saveFileShareWinInStatistics = detailWinDict["SaveFileShareWinInStatistics"];
         saveFileShareWinInStatistics.SetActive(true);
-        GameObject saveFileShareTitleInStatistics = detailWinDict["SaveFileShareTitleInStatistics"];
         GameObject saveFileSharePatternInStatistics_Time = detailWinDict["SaveFileSharePatternInStatistics_Time"];
         GameObject saveFileSharePatternInStatistics_Number = detailWinDict["SaveFileSharePatternInStatistics_Number"];
         //GameObject saveFileShareAchievementInStatistics = detailWinDict["SaveFileShareAchievementInStatistics"];
         //GameObject saveFileShareWithoutAchievementInStatistics = detailWinDict["SaveFileShareWithoutAchievementInStatistics"];
+        Text saveFileShareTitleInStatistics = detailWinDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
         Text saveFileShareAmountInStatistics = detailWinDict["SaveFileShareAmountInStatistics"].GetComponent<Text>();
         Text saveFileShareTimeInStatistics = detailWinDict["SaveFileShareTimeInStatistics"].GetComponent<Text>();
         Text saveFileShareSymbolInStatistics = detailWinDict["SaveFileShareSymbolInStatistics"].GetComponent<Text>();
@@ -147,7 +149,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         //Text saveFileShareTypeInStatistics = detailWinDict["SaveFileShareTypeInStatistics"].GetComponent<Text>();
         //Text saveFileShareFinishTimeInStatistics = detailWinDict["SaveFileShareFinishTimeInStatistics"].GetComponent<Text>();
         //Text saveFileShareConditionInStatistics = detailWinDict["SaveFileShareConditionInStatistics"].GetComponent<Text>();
-        saveFileShareTitleInStatistics.GetComponent<Text>().enabled = false;
+        saveFileShareTitleInStatistics.text = string.Format(saveFileShareTitleInStatistics.text, GameManager.Instance.UserName);
         saveFileSharePatternInStatistics_Time.SetActive(content.cInstance.patternID == PatternID.Time);
         saveFileSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
         saveFileShareAmountInStatistics.text = string.Format(saveFileShareAmountInStatistics.text, content.qInstancList.Count);
@@ -171,22 +173,47 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         //    saveFileShareConditionInStatistics.text = GameManager.Instance.GetMutiLanguage(instance.condition);
         //}
     }
-    protected void OnAchievementBtn(BaseEventData data)
+    protected bool SetUserName()
     {
-        //GameObject achievementDetailBgInSaveFile = detailWinDict["AchievementDetailBgInSaveFile"];
-        //achievementDetailBgInSaveFile.SetActive(true);
-        //CommonTool.GuiScale(achievementDetailBgInSaveFile, GameManager.Instance.CurCanvasGroup, true);
-        //Image achievementDetailImageInSaveFile = detailWinDict["AchievementDetailImageInSaveFile"].GetComponent<Image>();
-        //Text achievementDetailMainTitleInSaveFile = detailWinDict["AchievementDetailMainTitleInSaveFile"].GetComponent<Text>();
-        //Text achievementDetailSubTitleInSaveFile = detailWinDict["AchievementDetailSubTitleInSaveFile"].GetComponent<Text>();
-        //Text achievementDetailFinishTimeInSaveFile = detailWinDict["AchievementDetailFinishTimeInSaveFile"].GetComponent<Text>();
-        //AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
-        //achievementDetailImageInSaveFile.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-        //achievementDetailMainTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-        //achievementDetailSubTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-        //achievementDetailFinishTimeInSaveFile.text = GetFinishTime(instance.fileName);
-
+        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+        {
+            GameObject saveFileNameBoard = detailWinDict["SaveFileNameBoard"];
+            GameObject saveFileInputFieldConfirmBtn = detailWinDict["SaveFileInputFieldConfirmBtn"];
+            InputField saveFileInputField = detailWinDict["SaveFileInputField"].GetComponent<InputField>();
+            saveFileNameBoard.SetActive(true);
+            saveFileInputField.onEndEdit.AddListener(OnEndEdit);
+            CommonTool.AddEventTriggerListener(saveFileInputFieldConfirmBtn, EventTriggerType.PointerClick, OnConfirmBtn);
+        }
+        return string.IsNullOrEmpty(GameManager.Instance.UserName);
     }
+
+    protected void OnConfirmBtn(BaseEventData data)
+    {
+        GameManager.Instance.UserName = userName;
+        detailWinDict["SaveFileNameBoard"].SetActive(false);
+    }
+
+    protected void OnEndEdit(string text)
+    {
+        userName = text;
+    }
+
+    //protected void OnAchievementBtn(BaseEventData data)
+    //{
+    //    //GameObject achievementDetailBgInSaveFile = detailWinDict["AchievementDetailBgInSaveFile"];
+    //    //achievementDetailBgInSaveFile.SetActive(true);
+    //    //CommonTool.GuiScale(achievementDetailBgInSaveFile, GameManager.Instance.CurCanvasGroup, true);
+    //    //Image achievementDetailImageInSaveFile = detailWinDict["AchievementDetailImageInSaveFile"].GetComponent<Image>();
+    //    //Text achievementDetailMainTitleInSaveFile = detailWinDict["AchievementDetailMainTitleInSaveFile"].GetComponent<Text>();
+    //    //Text achievementDetailSubTitleInSaveFile = detailWinDict["AchievementDetailSubTitleInSaveFile"].GetComponent<Text>();
+    //    //Text achievementDetailFinishTimeInSaveFile = detailWinDict["AchievementDetailFinishTimeInSaveFile"].GetComponent<Text>();
+    //    //AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
+    //    //achievementDetailImageInSaveFile.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
+    //    //achievementDetailMainTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
+    //    //achievementDetailSubTitleInSaveFile.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+    //    //achievementDetailFinishTimeInSaveFile.text = GetFinishTime(instance.fileName);
+
+    //}
     protected string GetFinishTime(string time)
     {
         StringBuilder newTime = new StringBuilder(time.Substring(0, 8));

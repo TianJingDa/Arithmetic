@@ -114,6 +114,10 @@ Text_20055,高级星星,TJD
 Text_20056,终极星星,TJD
 Text_20057,{0}/48,TJD
 Text_20058,{0}/12,TJD
+Text_20059,确定,TJD
+Text_20060,取消,TJD
+Text_20061,留下大名,TJD
+Text_20062,四个字符,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
