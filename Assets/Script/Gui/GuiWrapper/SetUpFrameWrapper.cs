@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using cn.sharesdk.unity3d;
+using DG.Tweening;
+
 /// <summary>
 /// 设置界面
 /// </summary>
@@ -50,6 +52,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
+
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -284,6 +287,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
             case "ShareUsBtn":
                 shareUsWin.SetActive(true);
+                ShowShareUsWin();
                 break;
             case "ShareUsWin":
                 shareUsWin.SetActive(false);
@@ -403,6 +407,17 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             tempID = tgl.index;
         }
     }
+    private void ShowShareUsWin()
+    {
+        Sequence shareUsSequence = DOTween.Sequence();
+        shareUsSequence.Append(shareUsWin.transform.DOLocalMoveX(Screen.width, 0.2f, true).From().SetEase(Ease.OutQuint));
+        RectTransform shareUsPage = CommonTool.GetComponentByName<RectTransform>(shareUsWin, "ShareUsPage");
+        shareUsSequence.Append(shareUsPage.DOMoveY(shareUsPage.rect.y, 0.2f, true).From());
+        shareUsSequence.OnStart(() => canvasGroup.blocksRaycasts = false).
+                        OnComplete(() => canvasGroup.blocksRaycasts = true);
+
+    }
+
     private void ShowTip()
     {
         resetTipBg.SetActive(true);

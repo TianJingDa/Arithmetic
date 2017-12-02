@@ -34,6 +34,12 @@ public class ChapterFrameWrapper : GuiFrameWrapper
             int star = CommonTool.CalculateStar(achievementDict[(DifficultyID)(i - 1)]);
             lockList[i].SetActive(star < 8);
         }
+        List<Text> classBtnTextList = CommonTool.GetComponentsContainName<Text>(gameObject, "ClassBtn_Text");
+        for(int i = 0; i < classBtnTextList.Count; i++)
+        {
+            int star = CommonTool.CalculateStar(achievementDict[(DifficultyID)i]);
+            classBtnTextList[i].text = string.Format(classBtnTextList[i].text, star);
+        }
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)

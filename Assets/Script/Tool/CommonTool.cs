@@ -271,17 +271,17 @@ public static class CommonTool
             gui.transform.DOLocalMoveX(endValue * (int)mID, tweenDuration, true).
                           From().
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
-                          OnComplete(() => canvasGroup.interactable = true);
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
+                          OnComplete(() => canvasGroup.blocksRaycasts = true);
         }
         else
         {
             gui.transform.DOLocalMoveX(endValue * (int)mID, tweenDuration, true).
                           SetEase(Ease.OutQuint).
-                          OnStart(() => canvasGroup.interactable = false).
+                          OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
-                              canvasGroup.interactable = true;
+                              canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
                               gui.transform.localPosition = Vector3.zero;
                           });

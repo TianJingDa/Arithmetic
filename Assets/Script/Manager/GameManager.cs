@@ -482,13 +482,14 @@ public class GameManager : MonoBehaviour
         ShareContent content = new ShareContent();
         if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
         {
-            content.SetImagePath("");
-            content.SetTitle("test title");//多语言
-            content.SetUrl("");
+            content.SetImagePath(Application.persistentDataPath + "/Image/ShareIcon.png");
+            content.SetTitle("四则速算");//多语言
+            content.SetUrl("http://www.baidu.com");
             content.SetShareType(ContentType.Webpage);
         }
         else if(type == PlatformType.SinaWeibo)
         {
+            return;
             //content.SetText(text);//text是Url
             //content.SetImagePath(filePath);
         }
