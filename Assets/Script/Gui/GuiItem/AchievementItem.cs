@@ -145,29 +145,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         userName = text;
     }
 
-    //protected void OnSaveFileBtn(BaseEventData data)
-    //{
-    //    //GameObject saveFileDetailBgOfAchievement = detailWinDict["SaveFileDetailBgOfAchievement"];
-    //    //saveFileDetailBgOfAchievement.SetActive(true);
-    //    //Text saveFileDetailTimeOfAchievement = detailWinDict["SaveFileDetailTimeOfAchievement"].GetComponent<Text>();
-    //    //Text saveFileDetailAmountOfAchievement = detailWinDict["SaveFileDetailAmountOfAchievement"].GetComponent<Text>();
-    //    //Text saveFileDetailAccuracyOfAchievement = detailWinDict["SaveFileDetailAccuracyOfAchievement"].GetComponent<Text>();
-    //    //GameObject onlyWrongBtnOfAchievement = detailWinDict["OnlyWrongBtnOfAchievement"];
-    //    //GameObject saveFileDetaiTitle_Time = detailWinDict["SaveFileDetaiTitle_Time"];
-    //    //GameObject saveFileDetaiTitle_Number = detailWinDict["SaveFileDetaiTitle_Number"];
-    //    //SaveFileInstance saveFile = GameManager.Instance.ReadRecord(content.fileName);
-    //    //onlyWrongList = saveFile.qInstancList.FindAll(FindWrong);
-    //    //allInstanceList = saveFile.qInstancList;
-    //    //saveFileDetaiTitle_Time.SetActive(saveFile.cInstance.patternID == PatternID.Time);
-    //    //saveFileDetaiTitle_Number.SetActive(saveFile.cInstance.patternID == PatternID.Number);
-    //    //saveFileDetailTimeOfAchievement.text = string.Format(saveFileDetailTimeOfAchievement.text, saveFile.timeCost.ToString("f1"));
-    //    //saveFileDetailAmountOfAchievement.text = string.Format(saveFileDetailAmountOfAchievement.text, saveFile.qInstancList.Count);
-    //    //saveFileDetailAccuracyOfAchievement.text = string.Format(saveFileDetailAccuracyOfAchievement.text, saveFile.accuracy);
-    //    //CommonTool.AddEventTriggerListener(onlyWrongBtnOfAchievement, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-    //    //onlyWrong = false;
-    //    //RefreshSettlementGrid();
-    //    //CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
-    //}
     protected bool FindWrong(QuentionInstance questionInstance)
     {
         int count = questionInstance.instance.Count;
@@ -223,8 +200,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName                     = gameObjectDict["AchievementName"].GetComponent<Text>();
-        //achievementType                     = gameObjectDict["AchievementType"].GetComponent<Text>();
-        //achievementCondition                = gameObjectDict["AchievementCondition"].GetComponent<Text>();
         achievementName_WithoutAchievement  = gameObjectDict["AchievementName_WithoutAchievement"].GetComponent<Text>();
         achievementItem_WithoutAchievement  = gameObjectDict["AchievementItem_WithoutAchievement"];
     }
@@ -241,14 +216,9 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementName.gameObject.SetActive(!notHasAchievement);
         achievementName_WithoutAchievement.gameObject.SetActive(notHasAchievement);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        string condition = GameManager.Instance.GetMutiLanguage(content.condition);
-        //achievementCondition.text = string.Format(condition, content.accuracy, content.meanTime);
-        //achievementType.text = GameManager.Instance.GetMutiLanguage(content.classType);
         if (notHasAchievement)
         {
             achievementName_WithoutAchievement.color = Color.gray;
-            //achievementType.color = Color.gray;
-            //achievementCondition.color = Color.gray;
         }
         else
         {
@@ -265,7 +235,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
 public class AchievementInstance
 {
     public string achievementName;
-    public string condition;
     public float accuracy;
     public float meanTime;
     public string mainTitleIndex;
