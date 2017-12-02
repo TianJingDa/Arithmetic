@@ -22,7 +22,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private Text multiplicationSummary_Text;
     private Text divisionSummary_Text;
     private Text saveFileShareTitleInStatistics;
-    private Text achievementShareTitleInStatistics;
     private Text additionStatisticsItemData;
     private Text subtractionStatisticsItemData;
     private Text multiplicationStatisticsItemData;
@@ -34,15 +33,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject deleteAchievementBg;
     private GameObject saveFileSummary;
     private GameObject achievementSummary;
-    private GameObject saveFileDetailBgOfAchievement;
     private GameObject saveFileShareWinInStatistics;
     private GameObject saveFileSharePageInStatistics;
     private GameObject saveFileNameBoard;
-    private GameObject achievementDetailBgInSaveFile;
     private GameObject achievementDetailBgInStatistics;
-    private GameObject achievementShareWinInStatistics;
-    private GameObject achievementShareDetailBgInStatistics;
     private GameObject achievementNameBoard;
+    private GameObject achievementDetailPageInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
     private ToggleGroup saveFileToggleGroup;
@@ -93,7 +89,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileDetailBg                        = gameObjectDict["SaveFileDetailBg"];
         deleteSaveFileBg                        = gameObjectDict["DeleteSaveFileBg"];
         deleteAchievementBg                     = gameObjectDict["DeleteAchievementBg"];
-        saveFileDetailBgOfAchievement           = gameObjectDict["SaveFileDetailBgOfAchievement"];
         saveFileSummary                         = gameObjectDict["SaveFileSummary"];
         achievementSummary                      = gameObjectDict["AchievementSummary"];
         totelTimeImg_Text2                      = gameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
@@ -103,18 +98,15 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         multiplicationSummary_Text              = gameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
         divisionSummary_Text                    = gameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
         saveFileShareTitleInStatistics          = gameObjectDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
-        achievementShareTitleInStatistics       = gameObjectDict["AchievementShareTitleInStatistics"].GetComponent<Text>();
         achievementBtn_Text2                    = gameObjectDict["AchievementBtn_Text2"].GetComponent<Text>();
         saveFileBtn_Text2                       = gameObjectDict["SaveFileBtn_Text2"].GetComponent<Text>();
         additionStatisticsItemData              = gameObjectDict["AdditionStatisticsItemData"].GetComponent<Text>();
         subtractionStatisticsItemData           = gameObjectDict["SubtractionStatisticsItemData"].GetComponent<Text>();
         multiplicationStatisticsItemData        = gameObjectDict["MultiplicationStatisticsItemData"].GetComponent<Text>();
         divisionStatisticsItemData              = gameObjectDict["DivisionStatisticsItemData"].GetComponent<Text>();
-        achievementDetailBgInSaveFile           = gameObjectDict["AchievementDetailBgInSaveFile"];
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
-        achievementShareWinInStatistics         = gameObjectDict["AchievementShareWinInStatistics"];
-        achievementShareDetailBgInStatistics    = gameObjectDict["AchievementShareDetailBgInStatistics"];
         achievementNameBoard                    = gameObjectDict["AchievementNameBoard"];
+        achievementDetailPageInStatistics       = gameObjectDict["AchievementDetailPageInStatistics"];
         saveFileShareWinInStatistics            = gameObjectDict["SaveFileShareWinInStatistics"];
         saveFileSharePageInStatistics           = gameObjectDict["SaveFileSharePageInStatistics"];
         saveFileNameBoard                       = gameObjectDict["SaveFileNameBoard"];
@@ -155,21 +147,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "AchievementDetailBgInStatistics":
                 CommonTool.GuiScale(achievementDetailBgInStatistics, canvasGroup, false);
                 break;
-            case "AchievementDetailBgInSaveFile":
-                CommonTool.GuiScale(achievementDetailBgInSaveFile, canvasGroup, false);
-                break;
-            case "AchievementShareDetailBgInStatistics":
-                achievementShareWinInStatistics.SetActive(false);
-                break;
             case "DeleteSaveFileBg":
             case "DeleteCancelBtnInSaveFile":
                 deleteSaveFileBg.SetActive(false);
                 break;
             case "DeleteCancelBtnInAchievement":
                 deleteAchievementBg.SetActive(false);
-                break;
-            case "SaveFileDetai2AchievementDetailBtn":
-                CommonTool.GuiVerticalMove(saveFileDetailBgOfAchievement, Screen.height, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "Save2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;
@@ -194,26 +177,26 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
-            case "SaveFileSharePageInStatistics":
-                saveFileShareWinInStatistics.SetActive(false);
+            case "SaveFileShareWinInStatistics":
+                CommonTool.GuiScale(saveFileShareWinInStatistics, canvasGroup, false);
                 break;
             case "WeChatBtnOfSaveFileInStatistics":
-                ShareImage(saveFileShareWinInStatistics, PlatformType.WeChat);
+                ShareImage(saveFileSharePageInStatistics, PlatformType.WeChat);
                 break;
             case "WeChatMomentsBtnOfSaveFileInStatistics":
-                ShareImage(saveFileShareWinInStatistics, PlatformType.WeChatMoments);
+                ShareImage(saveFileSharePageInStatistics, PlatformType.WeChatMoments);
                 break;
             case "SinaWeiboBtnOfSaveFileInStatistics":
-                ShareImage(saveFileShareWinInStatistics, PlatformType.SinaWeibo); 
+                ShareImage(saveFileSharePageInStatistics, PlatformType.SinaWeibo); 
                 break;
             case "WeChatBtnOfAchievementInStatistics":
-                ShareImage(achievementShareWinInStatistics, PlatformType.WeChat); 
+                ShareImage(achievementDetailPageInStatistics, PlatformType.WeChat); 
                 break;
             case "WeChatMomentsBtnOfAchievementInStatistics":
-                ShareImage(achievementShareWinInStatistics, PlatformType.WeChatMoments);
+                ShareImage(achievementDetailPageInStatistics, PlatformType.WeChatMoments);
                 break;
             case "SinaWeiboBtnOfAchievementInStatistics":
-                ShareImage(achievementShareWinInStatistics, PlatformType.SinaWeibo);
+                ShareImage(achievementDetailPageInStatistics, PlatformType.SinaWeibo);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button:" + btn.name);

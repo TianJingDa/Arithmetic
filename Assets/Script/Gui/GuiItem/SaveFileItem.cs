@@ -13,7 +13,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected bool isLongPress;
     protected bool onlyWrong;
     protected string userName;
-    //protected bool hasAchievement;
 
     protected SaveFileInstance content;//详情
     protected List<QuentionInstance> onlyWrongList;
@@ -113,15 +112,12 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Text saveFileDetailAccuracy = detailWinDict["SaveFileDetailAccuracy"].GetComponent<Text>();
         GameObject shareBtnInSaveFile = detailWinDict["ShareBtnInSaveFile"];
         GameObject onlyWrongBtnInSaveFile = detailWinDict["OnlyWrongBtnInSaveFile"];
-        //GameObject curAchievementBtnInSaveFile = detailWinDict["CurAchievementBtnInSaveFile"];
         saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
         saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         CommonTool.AddEventTriggerListener(shareBtnInSaveFile, EventTriggerType.PointerClick, OnShareBtn);
         CommonTool.AddEventTriggerListener(onlyWrongBtnInSaveFile, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-        //curAchievementBtnInSaveFile.SetActive(hasAchievement);
-        //if (hasAchievement) CommonTool.AddEventTriggerListener(curAchievementBtnInSaveFile, EventTriggerType.PointerClick, OnAchievementBtn);
         onlyWrong = false;
         RefreshSettlementGrid();
         CommonTool.GuiVerticalMove(detailWin, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
@@ -131,10 +127,9 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         if (SetUserName()) return;
         GameObject saveFileShareWinInStatistics = detailWinDict["SaveFileShareWinInStatistics"];
         saveFileShareWinInStatistics.SetActive(true);
+        CommonTool.GuiScale(saveFileShareWinInStatistics, GameManager.Instance.CurCanvasGroup, true);
         GameObject saveFileSharePatternInStatistics_Time = detailWinDict["SaveFileSharePatternInStatistics_Time"];
         GameObject saveFileSharePatternInStatistics_Number = detailWinDict["SaveFileSharePatternInStatistics_Number"];
-        //GameObject saveFileShareAchievementInStatistics = detailWinDict["SaveFileShareAchievementInStatistics"];
-        //GameObject saveFileShareWithoutAchievementInStatistics = detailWinDict["SaveFileShareWithoutAchievementInStatistics"];
         Text saveFileShareTitleInStatistics = detailWinDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
         Text saveFileShareAmountInStatistics = detailWinDict["SaveFileShareAmountInStatistics"].GetComponent<Text>();
         Text saveFileShareTimeInStatistics = detailWinDict["SaveFileShareTimeInStatistics"].GetComponent<Text>();
@@ -143,12 +138,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         Text saveFileShareOperandInStatistics = detailWinDict["SaveFileShareOperandInStatistics"].GetComponent<Text>();
         Text saveFileShareAccuracyInStatistics = detailWinDict["SaveFileShareAccuracyInStatistics"].GetComponent<Text>();
         Text saveFileShareMeanTimeInStatistics = detailWinDict["SaveFileShareMeanTimeInStatistics"].GetComponent<Text>();
-        //Image saveFileShareImageInStatistics = detailWinDict["SaveFileShareImageInStatistics"].GetComponent<Image>();
-        //Text saveFileShareMainTitleInStatistics = detailWinDict["SaveFileShareMainTitleInStatistics"].GetComponent<Text>();
-        //Text saveFileShareSubTitleInStatistics = detailWinDict["SaveFileShareSubTitleInStatistics"].GetComponent<Text>();
-        //Text saveFileShareTypeInStatistics = detailWinDict["SaveFileShareTypeInStatistics"].GetComponent<Text>();
-        //Text saveFileShareFinishTimeInStatistics = detailWinDict["SaveFileShareFinishTimeInStatistics"].GetComponent<Text>();
-        //Text saveFileShareConditionInStatistics = detailWinDict["SaveFileShareConditionInStatistics"].GetComponent<Text>();
         saveFileShareTitleInStatistics.text = string.Format(saveFileShareTitleInStatistics.text, GameManager.Instance.UserName);
         saveFileSharePatternInStatistics_Time.SetActive(content.cInstance.patternID == PatternID.Time);
         saveFileSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
@@ -160,18 +149,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileShareAccuracyInStatistics.text = string.Format(saveFileShareAccuracyInStatistics.text, content.accuracy);
         string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f1");
         saveFileShareMeanTimeInStatistics.text = string.Format(saveFileShareMeanTimeInStatistics.text, meanTime);
-        //saveFileShareAchievementInStatistics.SetActive(!string.IsNullOrEmpty(content.achievementName));
-        //saveFileShareWithoutAchievementInStatistics.SetActive(string.IsNullOrEmpty(content.achievementName));
-        //if (!string.IsNullOrEmpty(content.achievementName))
-        //{
-        //    AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
-        //    saveFileShareImageInStatistics.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-        //    saveFileShareMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-        //    saveFileShareSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-        //    saveFileShareTypeInStatistics.text = GameManager.Instance.GetMutiLanguage(instance.classType);
-        //    saveFileShareFinishTimeInStatistics.text = GetFinishTime(instance.fileName);
-        //    saveFileShareConditionInStatistics.text = GameManager.Instance.GetMutiLanguage(instance.condition);
-        //}
     }
     protected bool SetUserName()
     {

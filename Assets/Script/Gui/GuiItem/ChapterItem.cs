@@ -31,6 +31,8 @@ public class ChapterItem: MonoBehaviour
         detailWin.SetActive(true);
         CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
         Dictionary<string, GameObject> detailWinDict = CommonTool.InitGameObjectDict(detailWin);
+        CommonTool.InitText(detailWin);
+        CommonTool.InitImage(detailWin);
         Text chapterDetailPattern_Time = detailWinDict["ChapterDetailPattern_Time"].GetComponent<Text>();
         Text chapterDetailPattern_Number = detailWinDict["ChapterDetailPattern_Number"].GetComponent<Text>();
         Text chapterDetailTime = detailWinDict["ChapterDetailTime"].GetComponent<Text>();
@@ -49,20 +51,18 @@ public class ChapterItem: MonoBehaviour
         chapterDetailNumber.gameObject.SetActive(!isTimePattern);
         if (isTimePattern)
         {
-            chapterDetailPattern_Time.text = GameManager.Instance.GetMutiLanguage(chapterDetailPattern_Time.index);
             int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
-            chapterDetailTime.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailTime.index), amount);
+            chapterDetailTime.text = string.Format(chapterDetailTime.text, amount);
         }
         else
         {
-            chapterDetailPattern_Number.text = GameManager.Instance.GetMutiLanguage(chapterDetailPattern_Number.index);
             int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
-            chapterDetailNumber.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailNumber.index), amount);
+            chapterDetailNumber.text = string.Format(chapterDetailNumber.text, amount);
         }
         string symbol = GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID];
-        chapterDetailSymbol.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailSymbol.index), symbol);
-        chapterDetailDigit.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailDigit.index), (int)(content.cInstance.digitID + 2));
-        chapterDetailOperand.text = string.Format(GameManager.Instance.GetMutiLanguage(chapterDetailOperand.index), (int)(content.cInstance.operandID + 2));
+        chapterDetailSymbol.text = string.Format(chapterDetailSymbol.text, symbol);
+        chapterDetailDigit.text = string.Format(chapterDetailDigit.text, (int)(content.cInstance.digitID + 2));
+        chapterDetailOperand.text = string.Format(chapterDetailOperand.text, (int)(content.cInstance.operandID + 2));
 
         InitCondition(chapterDetailOneStarCondition, 1);
         InitCondition(chapterDetailTwoStarCondition, 2);

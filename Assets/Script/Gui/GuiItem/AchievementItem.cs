@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Text;
 using System;
+using DG.Tweening;
 
 
 public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, IPointerClickHandler
@@ -23,8 +24,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected Dictionary<string, GameObject> detailWinDict;
     protected Text achievementName;
     protected Text achievementName_WithoutAchievement;
-    //protected Text achievementType;
-    //protected Text achievementCondition;
     protected Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -66,59 +65,60 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         detailWinDict = CommonTool.InitGameObjectDict(detailWin);
         CommonTool.InitText(detailWin);
         CommonTool.InitImage(detailWin);
+        GameObject achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"];
         Image achievementDetailImageInStatistics = detailWinDict["AchievementDetailImageInStatistics"].GetComponent<Image>();
         Text achievementDetailMainTitleInStatistics = detailWinDict["AchievementDetailMainTitleInStatistics"].GetComponent<Text>();
         Text achievementDetailSubTitleInStatistics = detailWinDict["AchievementDetailSubTitleInStatistics"].GetComponent<Text>();
         Text achievementDetailFinishTimeInStatistics = detailWinDict["AchievementDetailFinishTimeInStatistics"].GetComponent<Text>();
+        GameObject achievementDetailPatternInStatistics_Time = detailWinDict["AchievementDetailPatternInStatistics_Time"];
+        GameObject achievementDetailPatternInStatistics_Number = detailWinDict["AchievementDetailPatternInStatistics_Number"];
+        Text achievementDetailTimeInStatistics = detailWinDict["AchievementDetailTimeInStatistics"].GetComponent<Text>();
+        Text achievementDetailAmountInStatistics = detailWinDict["AchievementDetailAmountInStatistics"].GetComponent<Text>();
+        Text achievementDetailSymbolInStatistics = detailWinDict["AchievementDetailSymbolInStatistics"].GetComponent<Text>();
+        Text achievementDetailDigitInStatistics = detailWinDict["AchievementDetailDigitInStatistics"].GetComponent<Text>();
+        Text achievementDetailOperandInStatistics = detailWinDict["AchievementDetailOperandInStatistics"].GetComponent<Text>();
+        Text achievementDetailConditionInStatistics = detailWinDict["AchievementDetailConditionInStatistics"].GetComponent<Text>();
         GameObject achievementDetailShareBtnInStatistics = detailWinDict["AchievementDetailShareBtnInStatistics"];
-        //GameObject achievementDetailSaveFileBtnInStatistics = detailWinDict["AchievementDetailSaveFileBtnInStatistics"];
-        //achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+
+        achievementDetailTitleInStatistics.SetActive(false);
+        achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
         achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
+        bool isTimePattern = content.cInstance.patternID == PatternID.Time;
+        achievementDetailPatternInStatistics_Time.SetActive(isTimePattern);
+        achievementDetailPatternInStatistics_Number.SetActive(!isTimePattern);
+        achievementDetailTimeInStatistics.gameObject.SetActive(isTimePattern);
+        achievementDetailAmountInStatistics.gameObject.SetActive(!isTimePattern);
+        if (isTimePattern)
+        {
+            int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
+            achievementDetailTimeInStatistics.text = string.Format(achievementDetailTimeInStatistics.text, amount);
+        }
+        else
+        {
+            int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
+            achievementDetailAmountInStatistics.text = string.Format(achievementDetailAmountInStatistics.text, amount);
+        }
+        string symbol = GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID];
+        achievementDetailSymbolInStatistics.text = string.Format(achievementDetailSymbolInStatistics.text, symbol);
+        achievementDetailDigitInStatistics.text = string.Format(achievementDetailDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
+        achievementDetailOperandInStatistics.text = string.Format(achievementDetailOperandInStatistics.text, (int)(content.cInstance.operandID + 2));
+        achievementDetailConditionInStatistics.text = string.Format(achievementDetailConditionInStatistics.text, content.accuracy, content.meanTime);
+        achievementDetailShareBtnInStatistics.SetActive(true);
         CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
-        //if (!achievementDetailSaveFileBtnInStatistics.activeSelf) achievementDetailSaveFileBtnInStatistics.SetActive(true);
-        //CommonTool.AddEventTriggerListener(achievementDetailSaveFileBtnInStatistics, EventTriggerType.PointerClick, OnSaveFileBtn);
+        detailWinDict["AchievementShareBtnsBgInStatistics"].SetActive(false);
     }
     protected void OnShareBtn(BaseEventData data)
     {
         if (SetUserName()) return;
-        GameObject achievementShareWinInStatistics = detailWinDict["AchievementShareWinInStatistics"];
-        achievementShareWinInStatistics.SetActive(true);
-        Text achievementShareTitleInStatistics = detailWinDict["AchievementShareTitleInStatistics"].GetComponent<Text>();
-        Image achievementShareImageInStatistics = detailWinDict["AchievementShareImageInStatistics"].GetComponent<Image>();
-        Text achievementShareMainTitleInStatistics = detailWinDict["AchievementShareMainTitleInStatistics"].GetComponent<Text>();
-        Text achievementShareSubTitleInStatistics = detailWinDict["AchievementShareSubTitleInStatistics"].GetComponent<Text>();
-        Text achievementShareTypeInStatistics = detailWinDict["AchievementShareTypeInStatistics"].GetComponent<Text>();
-        Text achievementShareFinishTimeInStatistics = detailWinDict["AchievementShareFinishTimeInStatistics"].GetComponent<Text>();
-        Text achievementShareConditionInStatistics = detailWinDict["AchievementShareConditionInStatistics"].GetComponent<Text>();
-        GameObject achievementSharePatternInStatistics_Time = detailWinDict["AchievementSharePatternInStatistics_Time"];
-        GameObject achievementSharePatternInStatistics_Number = detailWinDict["AchievementSharePatternInStatistics_Number"];
-        //Text achievementShareAmountInStatistics = detailWinDict["AchievementShareAmountInStatistics"].GetComponent<Text>();
-        //Text achievementShareTimeInStatistics = detailWinDict["AchievementShareTimeInStatistics"].GetComponent<Text>();
-        //Text achievementShareSymbolInStatistics = detailWinDict["AchievementShareSymbolInStatistics"].GetComponent<Text>();
-        //Text achievementShareDigitInStatistics = detailWinDict["AchievementShareDigitInStatistics"].GetComponent<Text>();
-        //Text achievementShareOperandInStatistics = detailWinDict["AchievementShareOperandInStatistics"].GetComponent<Text>();
-        //Text achievementShareAccuracyInStatistics = detailWinDict["AchievementShareAccuracyInStatistics"].GetComponent<Text>();
-        //Text achievementShareMeanTimeInStatistics = detailWinDict["AchievementShareMeanTimeInStatistics"].GetComponent<Text>()
-        achievementShareTitleInStatistics.text = string.Format(achievementShareTitleInStatistics.text, GameManager.Instance.UserName);
-        achievementShareImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
-        achievementShareMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-        achievementShareSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
-        //achievementShareTypeInStatistics.text = GameManager.Instance.GetMutiLanguage(content.classType);
-        achievementShareFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
-        achievementShareConditionInStatistics.text = GameManager.Instance.GetMutiLanguage(content.condition);
-        achievementSharePatternInStatistics_Time.SetActive(content.cInstance.patternID == PatternID.Time);
-        achievementSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
-        //SaveFileInstance saveFile = GameManager.Instance.ReadRecord(content.fileName);
-        //achievementShareAmountInStatistics.text = string.Format(achievementShareAmountInStatistics.text, saveFile.qInstancList.Count);
-        //achievementShareTimeInStatistics.text = string.Format(achievementShareTimeInStatistics.text, saveFile.timeCost.ToString("f1"));
-        //achievementShareSymbolInStatistics.text = string.Format(achievementShareSymbolInStatistics.text, GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID]);
-        //achievementShareDigitInStatistics.text = string.Format(achievementShareDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
-        //achievementShareOperandInStatistics.text = string.Format(achievementShareOperandInStatistics.text, (int)(content.cInstance.operandID + 2));
-        //achievementShareAccuracyInStatistics.text = string.Format(achievementShareAccuracyInStatistics.text, content.accuracy);
-        //string meanTime = (saveFile.timeCost / saveFile.qInstancList.Count).ToString("f2");
-        //achievementShareMeanTimeInStatistics.text = string.Format(achievementShareMeanTimeInStatistics.text, meanTime);
+        Text achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"].GetComponent<Text>();
+        achievementDetailTitleInStatistics.gameObject.SetActive(true);
+        achievementDetailTitleInStatistics.text = string.Format(achievementDetailTitleInStatistics.text, GameManager.Instance.UserName);
+        detailWinDict["AchievementDetailShareBtnInStatistics"].SetActive(false);
+        RectTransform achievementShareBtnsBgInStatistics = detailWinDict["AchievementShareBtnsBgInStatistics"].transform as RectTransform;
+        achievementShareBtnsBgInStatistics.gameObject.SetActive(true);
+        achievementShareBtnsBgInStatistics.DOMoveY(achievementShareBtnsBgInStatistics.rect.y, 0.3f, true).From();
     }
     protected bool SetUserName()
     {
