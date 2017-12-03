@@ -11,7 +11,7 @@ public class SummaryAchievementItem : AchievementItem
         achievementName = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName");
         //achievementType = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementType");
         //achievementCondition = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementCondition");
-        achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
+        //achievementName_WithoutAchievement = CommonTool.GetComponentContainsName<Text>(gameObject, "AchievementName_WithoutAchievement");
         achievementItem_WithoutAchievement = CommonTool.GetGameObjectContainsName(gameObject, "AchievementItem_WithoutAchievement");
     }
     protected override void InitPrefabItem(object data)
@@ -38,12 +38,12 @@ public class SummaryAchievementItem : AchievementItem
             //achievementCondition.text = GameManager.Instance.GetMutiLanguage(content.condition);
             //achievementType.text = string.Format(achievementType.text, countWithAchievement, countOfSymbol);
             achievementName.gameObject.SetActive(hasFinish);
-            achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
+            //achievementName_WithoutAchievement.gameObject.SetActive(!hasFinish);
             if (!hasFinish)
             {
                 //achievementType.color = Color.gray;
                 //achievementCondition.color = Color.gray;
-                achievementName_WithoutAchievement.color = Color.gray;
+                //achievementName_WithoutAchievement.color = Color.gray;
             }
             else
             {

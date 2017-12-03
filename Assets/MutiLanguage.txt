@@ -50,7 +50,7 @@ Text_00047,除法成就2副标题,TJD
 Text_00048,除法成就3副标题,TJD
 Text_00049,除法成就4副标题,TJD
 Text_00050,{0}/3,TJD
-Text_00067,？？？？,TJD
+Text_00067,,TJD
 Text_00068,隐藏成就1条件,TJD
 Text_00069,隐藏成就1主标题,TJD
 Text_00070,隐藏成就1副标题,TJD

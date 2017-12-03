@@ -23,7 +23,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected GameObject achievementItem_WithoutAchievement;
     protected Dictionary<string, GameObject> detailWinDict;
     protected Text achievementName;
-    protected Text achievementName_WithoutAchievement;
+    protected Image achievementImage;
     protected Vector3 position;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -200,7 +200,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName                     = gameObjectDict["AchievementName"].GetComponent<Text>();
-        achievementName_WithoutAchievement  = gameObjectDict["AchievementName_WithoutAchievement"].GetComponent<Text>();
+        achievementImage                    = gameObjectDict["AchievementImage"].GetComponent<Image>();
         achievementItem_WithoutAchievement  = gameObjectDict["AchievementItem_WithoutAchievement"];
     }
     protected override void InitPrefabItem(object data)
@@ -214,15 +214,11 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         }
         bool notHasAchievement = string.IsNullOrEmpty(content.finishTime);
         achievementName.gameObject.SetActive(!notHasAchievement);
-        achievementName_WithoutAchievement.gameObject.SetActive(notHasAchievement);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        if (notHasAchievement)
-        {
-            achievementName_WithoutAchievement.color = Color.gray;
-        }
-        else
+        if(!notHasAchievement)
         {
             achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+            achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         }
         List<GameObject> stars = CommonTool.GetGameObjectsContainName(gameObject, "Star");
         for(int i = 0; i < stars.Count; i++)

@@ -273,7 +273,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         RefreshLastestAchievement();
         //RefreshSummaryAchievement();
         RefreshAchievementStatistics();
-        RefreshHiddenAchievement();
+        //RefreshHiddenAchievement();
     }
     private void RefreshAchievementStatistics()
     {

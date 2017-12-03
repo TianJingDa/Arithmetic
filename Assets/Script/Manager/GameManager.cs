@@ -482,6 +482,7 @@ public class GameManager : MonoBehaviour
         ShareContent content = new ShareContent();
         if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
         {
+            content.SetText("蝉工作室出品");//多语言
             content.SetImagePath(Application.persistentDataPath + "/Image/ShareIcon.png");
             content.SetTitle("四则速算");//多语言
             content.SetUrl("http://www.baidu.com");
