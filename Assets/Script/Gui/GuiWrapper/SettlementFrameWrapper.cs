@@ -287,7 +287,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitAchievement()
     {
-        if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName))
+        if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && !GameManager.Instance.IsFromCategory)
         {
             achievementDetailBgInSettlement.SetActive(true);
             AchievementInstance instance = GameManager.Instance.GetAchievement(GameManager.Instance.CurAchievementName);
