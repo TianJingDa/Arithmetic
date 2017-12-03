@@ -21,6 +21,10 @@ public class UITool : Editor
             {
                 //Debug.Log("target.rect.min:" + target.rect.min.ToString());
                 //Debug.Log("target.rect.max:" + target.rect.max.ToString());
+                //Debug.Log("target.offsetMax:" + target.offsetMax.ToString());
+                //Debug.Log("target.offsetMin:" + target.offsetMin.ToString());
+                //Debug.Log("target.anchorMax:" + target.anchorMax.ToString());
+                //Debug.Log("target.anchorMin:" + target.anchorMin.ToString());
                 //Debug.Log("target.rect.x:" + target.rect.x.ToString());
                 //Debug.Log("target.rect.y:" + target.rect.y.ToString());
                 //Debug.Log("target.rect.xMin:" + target.rect.xMin.ToString());

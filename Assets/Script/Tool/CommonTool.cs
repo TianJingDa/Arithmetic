@@ -251,10 +251,10 @@ public static class CommonTool
     {
         float maxWidth = Screen.width;
         float maxHeight = Screen.height;
-        float width = targetRect.rect.width;
-        float height = targetRect.rect.height;
-        float startX = (maxWidth - width) * 0.5f + targetRect.localPosition.x;
-        float startY = (maxHeight - height) * 0.5f + targetRect.localPosition.y;
+        float startX = targetRect.anchorMin.x * maxWidth;
+        float startY = targetRect.anchorMin.y * maxHeight;
+        float width = targetRect.anchorMax.x * maxWidth - startX;
+        float height = targetRect.anchorMax.y * maxHeight - startY;
         return new Rect(startX, startY, width, height);
     }
     /// <summary>
