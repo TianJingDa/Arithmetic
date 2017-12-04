@@ -266,8 +266,9 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl            = RecordController.Instance;
     }
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(1);
         //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;

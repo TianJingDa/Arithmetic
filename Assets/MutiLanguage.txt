@@ -103,7 +103,7 @@ Text_20044,个数：{0},TJD
 Text_20045,正确率：{0}%,TJD
 Text_20046,平均时间：{0}秒,TJD
 Text_20047,达成条件：正确率>={0}，平均时间<={1}秒,TJD
-Text_20048,,TJD
+Text_20048,名称确定后将无法更改，是否继续？,TJD
 Text_20049,限时模式,TJD
 Text_20050,限数模式,TJD
 Text_20051,{0}的成就,TJD
@@ -118,6 +118,9 @@ Text_20059,确定,TJD
 Text_20060,取消,TJD
 Text_20061,留下大名,TJD
 Text_20062,四个字符,TJD
+Text_20063,“{0}”,TJD
+Text_20064,否,TJD
+Text_20065,是，继续,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD

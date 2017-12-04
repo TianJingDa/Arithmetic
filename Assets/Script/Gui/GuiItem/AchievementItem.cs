@@ -112,6 +112,10 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected void OnShareBtn(BaseEventData data)
     {
         if (SetUserName()) return;
+        ShowShareBtn();
+    }
+    protected void ShowShareBtn()
+    {
         Text achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"].GetComponent<Text>();
         achievementDetailTitleInStatistics.gameObject.SetActive(true);
         achievementDetailTitleInStatistics.text = string.Format(achievementDetailTitleInStatistics.text, GameManager.Instance.UserName);
@@ -129,16 +133,29 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
             InputField achievementInputField = detailWinDict["AchievementInputField"].GetComponent<InputField>();
             achievementNameBoard.SetActive(true);
             achievementInputField.onEndEdit.AddListener(OnEndEdit);
-            CommonTool.AddEventTriggerListener(achievementInputFieldConfirmBtn, EventTriggerType.PointerClick, OnConfirmBtn);
+            CommonTool.AddEventTriggerListener(achievementInputFieldConfirmBtn, EventTriggerType.PointerClick, OnNameConfirmBtn);
         }
         return string.IsNullOrEmpty(GameManager.Instance.UserName);
     }
 
-    protected void OnConfirmBtn(BaseEventData data)
+    protected void OnNameConfirmBtn(BaseEventData data)
+    {
+        if (string.IsNullOrEmpty(userName)) return;
+        detailWinDict["AchievementNameBoard"].SetActive(false);
+        detailWinDict["AchievementNameTipBoard"].SetActive(true);
+        Text achievementNameTipBoardContent = detailWinDict["AchievementNameTipBoardContent"].GetComponent<Text>();
+        string curName = GameManager.Instance.GetMutiLanguage(achievementNameTipBoardContent.index);
+        achievementNameTipBoardContent.text = string.Format(curName, userName);
+        CommonTool.AddEventTriggerListener(detailWinDict["AchievementNameTipBoardConfirmBtn"], EventTriggerType.PointerClick, OnTipConfirmBtn);
+    }
+    protected void OnTipConfirmBtn(BaseEventData data)
     {
         GameManager.Instance.UserName = userName;
+        detailWinDict["AchievementNameTipBoard"].SetActive(false);
         detailWinDict["AchievementNameBoard"].SetActive(false);
+        ShowShareBtn();
     }
+
 
     protected void OnEndEdit(string text)
     {

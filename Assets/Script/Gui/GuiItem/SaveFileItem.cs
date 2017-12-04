@@ -125,6 +125,23 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected void OnShareBtn(BaseEventData data)
     {
         if (SetUserName()) return;
+        ShowShareBtn();
+    }
+    protected bool SetUserName()
+    {
+        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+        {
+            GameObject saveFileNameBoard = detailWinDict["SaveFileNameBoard"];
+            GameObject saveFileInputFieldConfirmBtn = detailWinDict["SaveFileInputFieldConfirmBtn"];
+            InputField saveFileInputField = detailWinDict["SaveFileInputField"].GetComponent<InputField>();
+            saveFileNameBoard.SetActive(true);
+            saveFileInputField.onEndEdit.AddListener(OnEndEdit);
+            CommonTool.AddEventTriggerListener(saveFileInputFieldConfirmBtn, EventTriggerType.PointerClick, OnNameConfirmBtn);
+        }
+        return string.IsNullOrEmpty(GameManager.Instance.UserName);
+    }
+    protected void ShowShareBtn()
+    {
         GameObject saveFileShareWinInStatistics = detailWinDict["SaveFileShareWinInStatistics"];
         saveFileShareWinInStatistics.SetActive(true);
         CommonTool.GuiScale(saveFileShareWinInStatistics, GameManager.Instance.CurCanvasGroup, true);
@@ -150,24 +167,24 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f1");
         saveFileShareMeanTimeInStatistics.text = string.Format(saveFileShareMeanTimeInStatistics.text, meanTime);
     }
-    protected bool SetUserName()
+
+    protected void OnNameConfirmBtn(BaseEventData data)
     {
-        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-        {
-            GameObject saveFileNameBoard = detailWinDict["SaveFileNameBoard"];
-            GameObject saveFileInputFieldConfirmBtn = detailWinDict["SaveFileInputFieldConfirmBtn"];
-            InputField saveFileInputField = detailWinDict["SaveFileInputField"].GetComponent<InputField>();
-            saveFileNameBoard.SetActive(true);
-            saveFileInputField.onEndEdit.AddListener(OnEndEdit);
-            CommonTool.AddEventTriggerListener(saveFileInputFieldConfirmBtn, EventTriggerType.PointerClick, OnConfirmBtn);
-        }
-        return string.IsNullOrEmpty(GameManager.Instance.UserName);
+        if (string.IsNullOrEmpty(userName)) return;
+        detailWinDict["SaveFileNameBoard"].SetActive(false);
+        detailWinDict["SaveFileNameTipBoard"].SetActive(true);
+        Text saveFileNameTipBoardContent = detailWinDict["SaveFileNameTipBoardContent"].GetComponent<Text>();
+        string curName = GameManager.Instance.GetMutiLanguage(saveFileNameTipBoardContent.index);
+        saveFileNameTipBoardContent.text = string.Format(curName, userName);
+        CommonTool.AddEventTriggerListener(detailWinDict["SaveFileNameTipBoardConfirmBtn"], EventTriggerType.PointerClick, OnTipConfirmBtn);
     }
 
-    protected void OnConfirmBtn(BaseEventData data)
+    protected void OnTipConfirmBtn(BaseEventData data)
     {
         GameManager.Instance.UserName = userName;
         detailWinDict["SaveFileNameBoard"].SetActive(false);
+        detailWinDict["SaveFileNameTipBoard"].SetActive(false);
+        ShowShareBtn();
     }
 
     protected void OnEndEdit(string text)

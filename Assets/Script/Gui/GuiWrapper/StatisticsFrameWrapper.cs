@@ -36,8 +36,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject saveFileShareWinInStatistics;
     private GameObject saveFileSharePageInStatistics;
     private GameObject saveFileNameBoard;
+    private GameObject saveFileNameTipBoard;
     private GameObject achievementDetailBgInStatistics;
     private GameObject achievementNameBoard;
+    private GameObject achievementNameTipBoard;
     private GameObject achievementDetailPageInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
@@ -106,10 +108,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         divisionStatisticsItemData              = gameObjectDict["DivisionStatisticsItemData"].GetComponent<Text>();
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
         achievementNameBoard                    = gameObjectDict["AchievementNameBoard"];
+        achievementNameTipBoard                 = gameObjectDict["AchievementNameTipBoard"];
         achievementDetailPageInStatistics       = gameObjectDict["AchievementDetailPageInStatistics"];
         saveFileShareWinInStatistics            = gameObjectDict["SaveFileShareWinInStatistics"];
         saveFileSharePageInStatistics           = gameObjectDict["SaveFileSharePageInStatistics"];
         saveFileNameBoard                       = gameObjectDict["SaveFileNameBoard"];
+        saveFileNameTipBoard                    = gameObjectDict["SaveFileNameTipBoard"];
         additionSaveFileItem                    = gameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         subtractionSaveFileItem                 = gameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         multiplicationSaveFileItem              = gameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
@@ -144,6 +148,11 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "AchievementInputFieldCancelBtn":
                 achievementNameBoard.SetActive(false);
                 break;
+            case "AchievementNameTipBoard":
+            case "AchievementNameTipBoardCancelBtn":
+                achievementNameTipBoard.SetActive(false);
+                achievementNameBoard.SetActive(true);
+                break;
             case "AchievementDetailBgInStatistics":
                 CommonTool.GuiScale(achievementDetailBgInStatistics, canvasGroup, false);
                 break;
@@ -168,6 +177,11 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "SaveFileInputFieldCancelBtn":
             case "SaveFileNameBoard":
                 saveFileNameBoard.SetActive(false);
+                break;
+            case "SaveFileNameTipBoard":
+            case "SaveFileNameTipBoardCancelBtn":
+                saveFileNameTipBoard.SetActive(false);
+                saveFileNameBoard.SetActive(true);
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
                 CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false);
