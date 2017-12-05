@@ -73,7 +73,7 @@ public class ChapterItem: MonoBehaviour
     private void InitCondition(Text condition, int starCount)
     {
         string text = GameManager.Instance.GetMutiLanguage(condition.index);
-        condition.text = string.Format(text, content.accuracy, content.meanTime.ToString("f1"));
+        condition.text = string.Format(text, content.accuracy - (3 - starCount) * 5, content.meanTime.ToString("f1"));
     }
     private void OnFightClick(BaseEventData data)
     {

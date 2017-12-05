@@ -612,33 +612,53 @@ public class GameManager : MonoBehaviour
     private string CheckAchievement(float meanTime, float accuracy, string finishTime)
     {
         string achievementName = "";
+        int star = 0;
         List<AchievementInstance> achievementList = c_AchievementCtrl.GetAchievementUnFinish();
         for(int i = 0; i < achievementList.Count; i++)
         {
-            if(achievementList[i].cInstance.Equals(m_CurCategoryInstance)
-            && achievementList[i].accuracy <= accuracy
-            && achievementList[i].meanTime >= meanTime)
+            if(achievementList[i].cInstance.Equals(m_CurCategoryInstance))
             {
                 achievementName = achievementList[i].achievementName;
+                if (achievementList[i].accuracy <= accuracy && achievementList[i].meanTime >= meanTime)
+                {
+                    star = 3;
+                }
+                else if(achievementList[i].accuracy -5 <= accuracy && achievementList[i].meanTime >= meanTime)
+                {
+                    star = 2;
+                }
+                else if(achievementList[i].accuracy - 10 <= accuracy && achievementList[i].meanTime >= meanTime)
+                {
+                    star = 1;
+                }
                 break;
             }
         }
-        if (!string.IsNullOrEmpty(achievementName))
+        switch (star)
         {
-            PlayerPrefs.SetString(achievementName, finishTime);
-            PlayerPrefs.SetInt(achievementName + "Star", 3);
-            c_AchievementCtrl.WriteFinishTime(achievementName, finishTime, 3);
-            LastestAchievement = achievementName;
+            case 3:
+                PlayerPrefs.SetString(achievementName, finishTime);
+                PlayerPrefs.SetInt(achievementName + "Star", 3);
+                c_AchievementCtrl.WriteFinishTime(achievementName, finishTime, 3);
+                LastestAchievement = achievementName;
+                break;
+            case 2:
+            case 1:
+                PlayerPrefs.SetInt(achievementName + "Star", star);
+                break;
+            default:
+                break;
         }
-        else if(FinishAllAchievement && accuracy <= 0)
-        {
-            AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
-            PlayerPrefs.SetString(hiddenAchievement.achievementName, finishTime);
-            PlayerPrefs.SetInt(hiddenAchievement.achievementName + "Star", 3);
-            c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, finishTime, 3);
-            LastestAchievement = hiddenAchievement.achievementName;
-        }
-        return achievementName;
+
+        //else if(FinishAllAchievement && accuracy <= 0)
+        //{
+        //    AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+        //    PlayerPrefs.SetString(hiddenAchievement.achievementName, finishTime);
+        //    PlayerPrefs.SetInt(hiddenAchievement.achievementName + "Star", 3);
+        //    c_AchievementCtrl.WriteFinishTime(hiddenAchievement.achievementName, finishTime, 3);
+        //    LastestAchievement = hiddenAchievement.achievementName;
+        //}
+        return star == 3 ? achievementName : "";
     }
     /// <summary>
     /// 截屏
