@@ -461,6 +461,7 @@ public class GameManager : MonoBehaviour
         //List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
         //c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
         c_AchievementCtrl.ResetAllAchievement();
+        PlayerPrefs.DeleteKey("LastestAchievement");
     }
 
     //public void InitShareInfo(PlatformType type, System.Action action)
