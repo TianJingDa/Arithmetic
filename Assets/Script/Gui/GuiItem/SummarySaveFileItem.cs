@@ -9,6 +9,6 @@ public class SummarySaveFileItem : SaveFileItem
         saveFileName = CommonTool.GetComponentContainsName<Text>(gameObject, "SaveFileName");
         saveFileType_Time = CommonTool.GetComponentContainsName<Text>(gameObject, "SaveFileType_Time");
         saveFileType_Number = CommonTool.GetComponentContainsName<Text>(gameObject, "SaveFileType_Number");
-        saveFileAchievement_No = CommonTool.GetGameObjectContainsName(gameObject, "SaveFileAchievement_No");
+        //saveFileAchievement_No = CommonTool.GetGameObjectContainsName(gameObject, "SaveFileAchievement_No");
     }
 }

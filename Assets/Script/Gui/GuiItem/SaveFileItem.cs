@@ -18,7 +18,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected List<QuentionInstance> onlyWrongList;
     protected GameObject detailWin;
     protected GameObject deleteWin;
-    protected GameObject saveFileAchievement_No;
+    //protected GameObject saveFileAchievement_No;
     protected Dictionary<string, GameObject> detailWinDict;
     protected Text saveFileName;
     protected Text saveFileType_Time;
@@ -62,7 +62,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileName = gameObjectDict["SaveFileName"].GetComponent<Text>();
         saveFileType_Time = gameObjectDict["SaveFileType_Time"].GetComponent<Text>();
         saveFileType_Number = gameObjectDict["SaveFileType_Number"].GetComponent<Text>();
-        saveFileAchievement_No = gameObjectDict["SaveFileAchievement_No"];
+        //saveFileAchievement_No = gameObjectDict["SaveFileAchievement_No"];
     }
     protected override void InitDetailWin(GameObject detailWin)
     {

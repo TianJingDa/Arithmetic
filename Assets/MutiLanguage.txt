@@ -170,8 +170,8 @@ Text_40016,天空蓝,TJD
 Text_40017,垂直布局,TJD
 Text_40018,右手,TJD
 Text_40019,邮箱,TJD
-Text_40020,感谢(5?),TJD
-Text_40021,非常感谢(10?),TJD
+Text_40020,感谢您的支持和厚爱，我们将会推出更新、更好的版本！,TJD
+Text_40021,,TJD
 Text_40022,应用,TJD
 Text_40023,应用,TJD
 Text_40024,应用,TJD
@@ -182,11 +182,11 @@ Text_40028,垂直布局,TJD
 Text_40029,水平布局,TJD
 Text_40030,右手,TJD
 Text_40031,左手,TJD
-Text_40032,重置游戏时间,TJD
-Text_40033,重置游戏次数,TJD
-Text_40034,重置游戏成就,TJD
-Text_40035,重置游戏存档,TJD
-Text_40036,重置游戏设置,TJD
+Text_40032,重置时间,TJD
+Text_40033,重置次数,TJD
+Text_40034,重置成就,TJD
+Text_40035,重置记录,TJD
+Text_40036,重置设置,TJD
 Text_40037,重置,TJD
 Text_40038,是否重置,TJD
 Text_40039,否,TJD
