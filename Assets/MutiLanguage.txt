@@ -219,6 +219,7 @@ Text_60014,相关成就,TJD
 Text_60015,无相关成就,TJD
 Text_60016,{0}的成就,TJD
 Text_60017,相关战绩,TJD
+Text_60018,恭喜获得成就,TJD
 Text_70000,详情,TJD
 Text_70001,{0}/48,TJD
 Text_70002,模式：限时,TJD

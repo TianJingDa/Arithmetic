@@ -22,7 +22,7 @@ public class ChapterItem: MonoBehaviour
         {
             stars[i].SetActive((i + 1) <= content.star);
         }
-        //GetComponent<Image>().sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        GetComponent<Image>().sprite = GameManager.Instance.GetSprite(content.chapterImageIndex);
         CommonTool.AddEventTriggerListener(gameObject, EventTriggerType.PointerClick, OnItemClick);
     }
 

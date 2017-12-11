@@ -139,7 +139,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         base.OnButtonClick(btn);
         switch (btn.name)
         {
-            case "AchievementDetailPageInSettlement":
+            case "AchievementDetail2SettlementBtn":
                 achievementDetailBgInSettlement.SetActive(false);
                 break;
             case "AchievementDetailShareBtnInSettlement":

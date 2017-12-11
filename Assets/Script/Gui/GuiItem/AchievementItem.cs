@@ -253,6 +253,7 @@ public class AchievementInstance
     public string mainTitleIndex;
     public string subTitleIndex;
     public string imageIndex;
+    public string chapterImageIndex;
     public string finishTime;//完成时间
     //public string classType;
     public CategoryInstance cInstance;
