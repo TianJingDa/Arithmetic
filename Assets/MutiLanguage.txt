@@ -10,7 +10,7 @@ Text_00007,加法学士,TJD
 Text_00008,加法大师,TJD
 Text_00009,加法宗师,TJD
 Text_00010,在数学中，我们发现真理的主要工具是归纳和模拟。\n                             —— 拉普拉斯,TJD
-Text_00011,第一是数学，第二是数学，第三是数学。\n                                     —— 伦琴,TJD
+Text_00011,第一是数学，第二是数学，第三是数学。\n                                    —— 伦琴,TJD
 Text_00012,数学主要的目标是公众的利益和自然现象的解释。\n                                 ——傅里叶,TJD
 Text_00013,数学家本质上是个着迷者，不迷就没有数学。\n                              ——努瓦列斯,TJD
 Text_00014,,TJD
@@ -124,8 +124,8 @@ Text_20065,是，继续,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
-Text_30003,60秒,TJD
-Text_30004,60秒,TJD
+Text_30003,180秒,TJD
+Text_30004,180秒,TJD
 Text_30005,＋,TJD
 Text_30006,＋,TJD
 Text_30007,两位数,TJD
@@ -134,12 +134,12 @@ Text_30009,两个数,TJD
 Text_30010,两个数,TJD
 Text_30011,限时,TJD
 Text_30012,限数,TJD
-Text_30013,60秒,TJD
-Text_30014,180秒,TJD
-Text_30015,300秒,TJD
-Text_30016,30道,TJD
-Text_30017,50道,TJD
-Text_30018,100道,TJD
+Text_30013,180秒,TJD
+Text_30014,300秒,TJD
+Text_30015,600秒,TJD
+Text_30016,10道,TJD
+Text_30017,30道,TJD
+Text_30018,50道,TJD
 Text_30019,＋,TJD
 Text_30020,－,TJD
 Text_30021,×,TJD

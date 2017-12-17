@@ -272,8 +272,8 @@ public class GameManager : MonoBehaviour
         //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
         m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
-        m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
-        m_AmountArray_Number = new int[] { 30, 50, 100 };
+        m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
+        m_AmountArray_Number = new int[] { 10, 30, 50 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         m_ShareSDK = GetComponent<ShareSDK>();
         m_ShareSDK.shareHandler = OnShareResultHandler;
@@ -620,18 +620,22 @@ public class GameManager : MonoBehaviour
             if(achievementList[i].cInstance.Equals(m_CurCategoryInstance))
             {
                 achievementName = achievementList[i].achievementName;
+#if UNITY_EDITOR || SHOW_DEBUG
+                star = 3;
+#else
                 if (achievementList[i].accuracy <= accuracy && achievementList[i].meanTime >= meanTime)
                 {
                     star = 3;
                 }
-                else if(achievementList[i].accuracy -5 <= accuracy && achievementList[i].meanTime >= meanTime)
+                else if(achievementList[i].accuracy -5 <= accuracy && achievementList[i].meanTime >= meanTime * 1.1)
                 {
                     star = 2;
                 }
-                else if(achievementList[i].accuracy - 10 <= accuracy && achievementList[i].meanTime >= meanTime)
+                else if(achievementList[i].accuracy - 10 <= accuracy && achievementList[i].meanTime >= meanTime * 1.2)
                 {
                     star = 1;
                 }
+#endif
                 break;
             }
         }
@@ -719,11 +723,11 @@ public class GameManager : MonoBehaviour
         }
         else if (state == ResponseState.Fail)
         {
-            #if UNITY_ANDROID
+#if UNITY_ANDROID
             print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
-            #elif UNITY_IPHONE
+#elif UNITY_IPHONE
 			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
-            #endif
+#endif
         }
         else if (state == ResponseState.Cancel)
         {
@@ -765,6 +769,6 @@ public class GameManager : MonoBehaviour
         m_CurWrapper = targetWrapper;
         m_Root.GetComponent<GraphicRaycaster>().enabled = true;
     }
-    #endregion
+#endregion
 
 }
