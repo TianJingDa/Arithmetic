@@ -41,6 +41,11 @@ public sealed class MutiLanguageController: Controller
         {
             return index;
         }
-        return languageArray[(int)language];
+        else
+        {
+            string text = languageArray[(int)language];
+            if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
+            return text;
+        }
     }
 }

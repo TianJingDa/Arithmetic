@@ -180,9 +180,7 @@ public static class CommonTool
             }
             else
             {
-                string text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
-                if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
-                textArray[i].text = text;
+                textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
             }
         }
     }
