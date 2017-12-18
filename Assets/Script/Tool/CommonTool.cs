@@ -186,7 +186,6 @@ public static class CommonTool
     }
     public static void InitImage(GameObject root)
     {
-        return;
         Image[] imageArray = root.GetComponentsInChildren<Image>(true);
         if (imageArray.Length == 0)
         {
@@ -196,17 +195,19 @@ public static class CommonTool
         {
             if (string.IsNullOrEmpty(imageArray[i].index))
             {
+                imageArray[i].color = Color.white;
                 continue;
             }
             Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
             if (sprite != null)
             {
+                imageArray[i].color = Color.white;
                 imageArray[i].sprite = sprite;
             }
-            else
-            {
-                MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
-            }
+            //else
+            //{
+            //    MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
+            //}
         }
     }
     public static Dictionary<string, GameObject> InitGameObjectDict(GameObject root)

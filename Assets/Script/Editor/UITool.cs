@@ -313,6 +313,7 @@ public class UITool : Editor
                 GameObject go = new GameObject(sprite.name);
                 go.AddComponent<SpriteRenderer>().sprite = sprite;
                 allPath = spriteDir + "/" + sprite.name + ".prefab";
+                if (File.Exists(allPath)) File.Delete(allPath);
                 string prefabPath = allPath.Substring(allPath.IndexOf("Assets"));
                 PrefabUtility.CreatePrefab(prefabPath, go);
                 DestroyImmediate(go);
