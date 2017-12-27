@@ -481,20 +481,20 @@ public class GameManager : MonoBehaviour
 
     public void ShareUrl(PlatformType type)
     {
+        string title = GetMutiLanguage("Text_00072");
+        string description = GetMutiLanguage("Text_00073");
         ShareContent content = new ShareContent();
-        if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
+        content.SetImagePath(Application.persistentDataPath + "/Image/ShareIcon.png");
+        if (type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
         {
-            content.SetText("蝉工作室出品");//多语言
-            content.SetImagePath(Application.persistentDataPath + "/Image/ShareIcon.png");
-            content.SetTitle("四则速算");//多语言
+            content.SetText(description);
+            content.SetTitle(title);
             content.SetUrl("http://www.baidu.com");
             content.SetShareType(ContentType.Webpage);
         }
         else if(type == PlatformType.SinaWeibo)
         {
-            return;
-            //content.SetText(text);//text是Url
-            //content.SetImagePath(filePath);
+            content.SetText(title + "http://www.baidu.com");//text是Url
         }
         m_ShareSDK.ShareContent(type, content);
     }
@@ -693,15 +693,10 @@ public class GameManager : MonoBehaviour
     private void ShareImage(string filePath, PlatformType type)
     {
         ShareContent content = new ShareContent();
-        if(type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
+        content.SetImagePath(filePath);
+        if (type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
         {
-            content.SetImagePath(filePath);
             content.SetShareType(ContentType.Image);
-        }
-        else if(type == PlatformType.SinaWeibo)
-        {
-            //content.SetText(text);
-            //content.SetImagePath(filePath);
         }
         m_ShareSDK.ShareContent(type, content);
     }

@@ -45,6 +45,7 @@ public sealed class MutiLanguageController: Controller
         {
             string text = languageArray[(int)language];
             if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
+            if (text.Contains("\\u3000")) text = text.Replace("\\u3000", "\u3000");
             return text;
         }
     }
