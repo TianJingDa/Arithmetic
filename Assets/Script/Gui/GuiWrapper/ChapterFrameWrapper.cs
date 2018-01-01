@@ -56,6 +56,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Chapter2StartFrameBtn":
+            case "ChapterWin2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, false);
                 break;
             case "ChapterWin2ChapterFrameBtn":

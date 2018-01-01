@@ -22,10 +22,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private Text multiplicationSummary_Text;
     private Text divisionSummary_Text;
     private Text saveFileShareTitleInStatistics;
-    private Text additionStatisticsItemData;
-    private Text subtractionStatisticsItemData;
-    private Text multiplicationStatisticsItemData;
-    private Text divisionStatisticsItemData;
+    private Text juniorStatisticsItemData;
+    private Text mediumStatisticsItemData;
+    private Text seniorStatisticsItemData;
+    private Text ultimateStatisticsItemData;
     private GameObject saveFileWin;
     private GameObject achievementWin;
     private GameObject saveFileDetailBg;
@@ -75,10 +75,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         };
         rawAchievementTextList = new List<Text>
         {
-            additionStatisticsItemData,
-            subtractionStatisticsItemData,
-            multiplicationStatisticsItemData,
-            divisionStatisticsItemData
+            juniorStatisticsItemData,
+            mediumStatisticsItemData,
+            seniorStatisticsItemData,
+            ultimateStatisticsItemData
         };
     }
 
@@ -102,10 +102,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileShareTitleInStatistics          = gameObjectDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
         achievementBtn_Text2                    = gameObjectDict["AchievementBtn_Text2"].GetComponent<Text>();
         saveFileBtn_Text2                       = gameObjectDict["SaveFileBtn_Text2"].GetComponent<Text>();
-        additionStatisticsItemData              = gameObjectDict["AdditionStatisticsItemData"].GetComponent<Text>();
-        subtractionStatisticsItemData           = gameObjectDict["SubtractionStatisticsItemData"].GetComponent<Text>();
-        multiplicationStatisticsItemData        = gameObjectDict["MultiplicationStatisticsItemData"].GetComponent<Text>();
-        divisionStatisticsItemData              = gameObjectDict["DivisionStatisticsItemData"].GetComponent<Text>();
+        juniorStatisticsItemData                = gameObjectDict["JuniorStatisticsItemData"].GetComponent<Text>();
+        mediumStatisticsItemData                = gameObjectDict["MediumStatisticsItemData"].GetComponent<Text>();
+        seniorStatisticsItemData                = gameObjectDict["SeniorStatisticsItemData"].GetComponent<Text>();
+        ultimateStatisticsItemData              = gameObjectDict["UltimateStatisticsItemData"].GetComponent<Text>();
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
         achievementNameBoard                    = gameObjectDict["AchievementNameBoard"];
         achievementNameTipBoard                 = gameObjectDict["AchievementNameTipBoard"];

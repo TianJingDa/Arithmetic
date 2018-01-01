@@ -152,6 +152,7 @@ Text_30025,四位数,TJD
 Text_30026,五位数,TJD
 Text_30027,两个数,TJD
 Text_30028,三个数,TJD
+Text_30029,开始游戏,
 Text_40000,设置,TJD
 Text_40001,攻略,TJD
 Text_40002,语言,Language
@@ -160,7 +161,7 @@ Text_40004,布局,TJD
 Text_40005,反馈,TJD
 Text_40006,关于我们,TJD
 Text_40007,感谢开发人员,TJD
-Text_40008,版本,TJD
+Text_40008,版本：1.0,TJD
 Text_40009,简体中文,简体中文
 Text_40010,简体中文,Simplified Chinese
 Text_40011,English,English

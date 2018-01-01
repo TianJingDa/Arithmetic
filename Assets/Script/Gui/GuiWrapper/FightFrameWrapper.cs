@@ -20,6 +20,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     private StringBuilder       result;
     private StringBuilder       question;
 
+    private GameObject          equalImg;
     private GameObject          giveUpBg;
     private GameObject          countdownBg;
     private GameObject          reverseOrderImage;
@@ -44,6 +45,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         result      = new StringBuilder();
         question    = new StringBuilder();
         resultList  = new List<List<int>>();
+        equalImg.SetActive(false);
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
@@ -54,6 +56,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
+        equalImg            = gameObjectDict["EqualImg"];
         giveUpBg            = gameObjectDict["GiveUpBg"];
         countdownBg         = gameObjectDict["CountdownBg"];
         timeMaskImage       = gameObjectDict["TimeMaskImage"];
@@ -137,6 +140,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         }
         countdownBg.SetActive(false);
         ShowNextQuestion();
+        equalImg.SetActive(true);
         startTime = Time.realtimeSinceStartup;
         InvokeRepeating(pattern + "Pattern", 0f, 0.1f);
     }
