@@ -169,10 +169,10 @@ public static class CommonTool
         {
             return;
         }
-        //Font curFont = GameManager.Instance.GetFont();
+        Font curFont = GameManager.Instance.GetFont();
         for (int i = 0; i < textArray.Length; i++)
         {
-            //textArray[i].font = curFont;
+            textArray[i].font = curFont;
             //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
             if (string.IsNullOrEmpty(textArray[i].index))
             {
