@@ -17,10 +17,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private Text totelGameImg_Text2;
     private Text achievementBtn_Text2;
     private Text saveFileBtn_Text2;
-    private Text additionSummary_Text;
-    private Text subtractionSummary_Text;
-    private Text multiplicationSummary_Text;
-    private Text divisionSummary_Text;
+    private Text additionSaveFile_Text;
+    private Text subtractionSaveFile_Text;
+    private Text multiplicationSaveFile_Text;
+    private Text divisionSaveFile_Text;
     private Text saveFileShareTitleInStatistics;
     private Text juniorStatisticsItemData;
     private Text mediumStatisticsItemData;
@@ -53,7 +53,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     //private SummaryAchievementItem[] summaryAchievementArray;
     private HiddenAchievementItem hiddenAchievementItem;
     private List<Text> rawAchievementTextList;
-    private Dictionary<SymbolID, string> rawSaveFileStringDict;
     private Dictionary<SymbolID, List<SaveFileInstance>> saveFileDict;
     private Dictionary<DifficultyID, List<AchievementInstance>> achievementDict;
 
@@ -66,13 +65,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
         totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
         RefreshStatisticsContent();
-        rawSaveFileStringDict = new Dictionary<SymbolID, string>
-        {
-            {SymbolID.Addition, additionSummary_Text.text },
-            {SymbolID.Subtraction, subtractionSummary_Text.text },
-            {SymbolID.Multiplication, multiplicationSummary_Text.text },
-            {SymbolID.Division, divisionSummary_Text.text }
-        };
         rawAchievementTextList = new List<Text>
         {
             juniorStatisticsItemData,
@@ -95,10 +87,10 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementSummary                      = gameObjectDict["AchievementSummary"];
         totelTimeImg_Text2                      = gameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
         totelGameImg_Text2                      = gameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
-        additionSummary_Text                    = gameObjectDict["AdditionSummary_Text"].GetComponent<Text>();
-        subtractionSummary_Text                 = gameObjectDict["SubtractionSummary_Text"].GetComponent<Text>();
-        multiplicationSummary_Text              = gameObjectDict["MultiplicationSummary_Text"].GetComponent<Text>();
-        divisionSummary_Text                    = gameObjectDict["DivisionSummary_Text"].GetComponent<Text>();
+        additionSaveFile_Text                   = gameObjectDict["AdditionSaveFile_Text"].GetComponent<Text>();
+        subtractionSaveFile_Text                = gameObjectDict["SubtractionSaveFile_Text"].GetComponent<Text>();
+        multiplicationSaveFile_Text             = gameObjectDict["MultiplicationSaveFile_Text"].GetComponent<Text>();
+        divisionSaveFile_Text                   = gameObjectDict["DivisionSaveFile_Text"].GetComponent<Text>();
         saveFileShareTitleInStatistics          = gameObjectDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
         achievementBtn_Text2                    = gameObjectDict["AchievementBtn_Text2"].GetComponent<Text>();
         saveFileBtn_Text2                       = gameObjectDict["SaveFileBtn_Text2"].GetComponent<Text>();
@@ -359,25 +351,24 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         saveFileSummary.SetActive(true);
 
-        RefreshLatestSaveFile(additionSaveFileItem, SymbolID.Addition, additionSummary_Text);
-        RefreshLatestSaveFile(subtractionSaveFileItem, SymbolID.Subtraction, subtractionSummary_Text);
-        RefreshLatestSaveFile(multiplicationSaveFileItem, SymbolID.Multiplication, multiplicationSummary_Text);
-        RefreshLatestSaveFile(divisionSaveFileItem, SymbolID.Division, divisionSummary_Text);
+        RefreshLatestSaveFile(additionSaveFileItem, SymbolID.Addition, additionSaveFile_Text);
+        RefreshLatestSaveFile(subtractionSaveFileItem, SymbolID.Subtraction, subtractionSaveFile_Text);
+        RefreshLatestSaveFile(multiplicationSaveFileItem, SymbolID.Multiplication, multiplicationSaveFile_Text);
+        RefreshLatestSaveFile(divisionSaveFileItem, SymbolID.Division, divisionSaveFile_Text);
     }
     private void RefreshLatestSaveFile(SummarySaveFileItem item, SymbolID symbolID, Text summary)
     {
         List<SaveFileInstance> instanceList = saveFileDict[symbolID];
+        GameObject saveFileDefaultItem = CommonTool.GetGameObjectContainsName(item.gameObject, "SaveFileDefaultItem");
+        saveFileDefaultItem.SetActive(instanceList.Count <= 0);
         if (instanceList.Count > 0)
         {
             SaveFileInstance latestInstance = instanceList[instanceList.Count - 1];
             item.SendMessage("InitPrefabItem", latestInstance);
             item.SendMessage("InitDetailWin", saveFileDetailBg);
         }
-        else
-        {
-            item.gameObject.SetActive(false);
-        }
-        summary.text = string.Format(rawSaveFileStringDict[symbolID], instanceList.Count, curSaveFileCount);
+        string content = GameManager.Instance.GetMutiLanguage(summary.index);
+        summary.text = string.Format(content, instanceList.Count, curSaveFileCount);
     }
     private void RefreshSaveFileList()
     {
