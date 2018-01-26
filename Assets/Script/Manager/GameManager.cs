@@ -489,12 +489,12 @@ public class GameManager : MonoBehaviour
         {
             content.SetText(description);
             content.SetTitle(title);
-            content.SetUrl("http://www.baidu.com");
+            content.SetUrl("https://www.taptap.com/app/78306");
             content.SetShareType(ContentType.Webpage);
         }
         else if(type == PlatformType.SinaWeibo)
         {
-            content.SetText(title + "http://www.baidu.com");//text是Url
+            content.SetText(title + "https://www.taptap.com/app/78306");//text是Url
         }
         m_ShareSDK.ShareContent(type, content);
     }
