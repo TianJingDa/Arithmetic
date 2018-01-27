@@ -321,5 +321,32 @@ public class UITool : Editor
         }
     }
 
+    [MenuItem("Assets/转换prefab-Default")]
+    public static void AssetsDefaultPrefab()
+    {
+        string spriteDir = Application.dataPath + "/Resources/Skin/Default";
 
+        if (!Directory.Exists(spriteDir))
+        {
+            Directory.CreateDirectory(spriteDir);
+        }
+
+        for(int i = 0; i < Selection.objects.Length; i++)
+        {
+            string path = AssetDatabase.GetAssetPath(Selection.objects[i]);
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (!sprite)
+            {
+                MyDebug.LogYellow("Can not get SPRITE!");
+                return;
+            }
+            GameObject go = new GameObject(sprite.name);
+            go.AddComponent<SpriteRenderer>().sprite = sprite;
+            string allPath = spriteDir + "/" + sprite.name + ".prefab";
+            if (File.Exists(allPath)) File.Delete(allPath);
+            string prefabPath = allPath.Substring(allPath.IndexOf("Assets"));
+            PrefabUtility.CreatePrefab(prefabPath, go);
+            DestroyImmediate(go);
+        }
+    }
 }
