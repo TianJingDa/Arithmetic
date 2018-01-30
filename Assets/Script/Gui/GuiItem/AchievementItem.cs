@@ -230,13 +230,9 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
             return;
         }
         bool notHasAchievement = string.IsNullOrEmpty(content.finishTime);
-        achievementName.gameObject.SetActive(!notHasAchievement);
+        achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        if(!notHasAchievement)
-        {
-            achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-            achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
-        }
+        if (!notHasAchievement) achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         List<GameObject> stars = CommonTool.GetGameObjectsContainName(gameObject, "Star");
         for(int i = 0; i < stars.Count; i++)
         {

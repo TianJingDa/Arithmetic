@@ -134,7 +134,10 @@ public class FightFrameWrapper : GuiFrameWrapper
     {
         while (countdownTime > 0)
         {
-            countdownNumsList[3 - countdownTime].SetActive(true);
+            for(int i = 0; i < countdownNumsList.Count; i++)
+            {
+                countdownNumsList[i].SetActive(i == countdownTime - 1);
+            }
             yield return new WaitForSeconds(1f);
             countdownTime--;
         }

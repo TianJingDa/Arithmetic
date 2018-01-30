@@ -153,6 +153,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 deleteSaveFileBg.SetActive(false);
                 break;
             case "DeleteCancelBtnInAchievement":
+            case "DeleteAchievementBg":
                 deleteAchievementBg.SetActive(false);
                 break;
             case "Save2StatisticsFrameBtn":
@@ -306,14 +307,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private void RefreshHiddenAchievement()
     {
-        bool finishAllAchievement = GameManager.Instance.FinishAllAchievement;
-        hiddenAchievementItem.gameObject.SetActive(finishAllAchievement);
-        if (finishAllAchievement)
-        {
-            AchievementInstance hiddenAchievement = GameManager.Instance.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
-            hiddenAchievementItem.SendMessage("InitPrefabItem", hiddenAchievement);
-            hiddenAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
-        }
+        //bool finishAllAchievement = GameManager.Instance.FinishAllAchievement;
+        //hiddenAchievementItem.gameObject.SetActive(finishAllAchievement);
+        //if (finishAllAchievement)
+        //{
+        //    AchievementInstance hiddenAchievement = GameManager.Instance.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+        //    hiddenAchievementItem.SendMessage("InitPrefabItem", hiddenAchievement);
+        //    hiddenAchievementItem.SendMessage("InitDetailWin", achievementDetailBgInStatistics);
+        //}
     }
     private void RefreshAchievementList()
     {

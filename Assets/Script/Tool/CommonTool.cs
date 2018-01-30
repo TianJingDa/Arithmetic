@@ -371,10 +371,11 @@ public static class CommonTool
         int total = 0;
         for (int i = 0; i < achievementList.Count; i++)
         {
-            if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
-            {
-                total += achievementList[i].star;
-            }
+            //if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
+            //{
+            //    total += achievementList[i].star;
+            //}
+            total += achievementList[i].star;
         }
         return total;
     }

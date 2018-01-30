@@ -28,17 +28,19 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                 };
         chapterStarStatisticsImg_Text.text = string.Format(chapterStarStatisticsImg_Text.text, CommonTool.CalculateAllStar());
         List<GameObject> lockList = CommonTool.GetGameObjectsContainName(gameObject, "Lock");
+        List<Image> classList = CommonTool.GetComponentsContainName<Image>(gameObject, "ClassBtn");
         //lockList[0].SetActive(false);
-        for(int i = 1; i < lockList.Count; i++)
+        for (int i = 1; i < lockList.Count; i++)
         {
             int star = CommonTool.CalculateStar(achievementDict[(DifficultyID)(i - 1)]);
             lockList[i].SetActive(star < 8);
+            classList[i].color = star < 8 ? Color.clear : Color.white;
         }
-        List<Text> classBtnTextList = CommonTool.GetComponentsContainName<Text>(gameObject, "ClassBtn_Text");
-        for(int i = 0; i < classBtnTextList.Count; i++)
+        List<Text> starCountTextList = CommonTool.GetComponentsContainName<Text>(gameObject, "StarCount_Text");
+        for(int i = 0; i < starCountTextList.Count; i++)
         {
             int star = CommonTool.CalculateStar(achievementDict[(DifficultyID)i]);
-            classBtnTextList[i].text = string.Format(classBtnTextList[i].text, star);
+            starCountTextList[i].text = string.Format(starCountTextList[i].text, star);
         }
     }
 

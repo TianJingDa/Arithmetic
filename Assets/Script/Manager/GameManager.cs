@@ -420,11 +420,11 @@ public class GameManager : MonoBehaviour
             return;
         }
         c_AchievementCtrl.DeleteAchievement(achievementName);
-        AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
-        if (PlayerPrefs.HasKey(hiddenAchievement.achievementName))
-        {
-            c_AchievementCtrl.DeleteAchievement(hiddenAchievement.achievementName);
-        }
+        //AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
+        //if (PlayerPrefs.HasKey(hiddenAchievement.achievementName))
+        //{
+        //    c_AchievementCtrl.DeleteAchievement(hiddenAchievement.achievementName);
+        //}
         if (m_CurAction != null) m_CurAction();
         else MyDebug.LogYellow("UnRegister Function!");
         //if (c_RecordCtrl.DeleteRecord(fileName))
