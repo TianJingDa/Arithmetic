@@ -321,6 +321,35 @@ public class UITool : Editor
         }
     }
 
+    [MenuItem("Custom Editor/查找无用UISprite")]
+    public static void FindUISprite()
+    {
+        Transform[] objArray = Selection.gameObjects[0].GetComponentsInChildren<Transform>(true);
+        for(int i = 0; i < objArray.Length; i++)
+        {
+            Image image = objArray[i].GetComponent<Image>();
+            if (image && image.sprite && image.sprite.name == "UISprite" && image.color == Color.white)
+            {
+                string path = GetPath(objArray[i]);
+                MyDebug.LogYellow(path); 
+            } 
+
+        }
+    }
+
+    private static string GetPath(Transform tra)
+    {
+        string path = tra.name;
+        Transform parent = tra.parent;
+        while (parent)
+        {
+            path = parent.name + "/" + path;
+            parent = parent.parent;
+        }
+        return path;
+    }
+
+
     [MenuItem("Assets/转换prefab-Default")]
     public static void AssetsDefaultPrefab()
     {
