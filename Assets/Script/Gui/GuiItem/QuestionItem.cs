@@ -33,7 +33,7 @@ public class QuestionItem : Item
             MyDebug.LogYellow("QuentionInstance is null!!");
             return;
         }
-        questionIndex.text = content.index;
+        questionIndex.text = content.index + ".";
         count = content.instance.Count;
         StringBuilder question = new StringBuilder();
         question.Append(content.instance[0].ToString());
