@@ -161,7 +161,7 @@ Text_40004,布局,TJD
 Text_40005,反馈,TJD
 Text_40006,关于我们,TJD
 Text_40007,感谢开发人员,TJD
-Text_40008,版本：1.0,TJD
+Text_40008,版本：1.1,TJD
 Text_40009,简体中文,简体中文
 Text_40010,简体中文,Simplified Chinese
 Text_40011,English,English

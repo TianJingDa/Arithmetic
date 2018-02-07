@@ -627,11 +627,11 @@ public class GameManager : MonoBehaviour
                 {
                     star = 3;
                 }
-                else if(achievementList[i].accuracy -5 <= accuracy && achievementList[i].meanTime >= meanTime * 1.1)
+                else if(achievementList[i].accuracy -5 <= accuracy && achievementList[i].meanTime * 1.1 >= meanTime)
                 {
                     star = 2;
                 }
-                else if(achievementList[i].accuracy - 10 <= accuracy && achievementList[i].meanTime >= meanTime * 1.2)
+                else if(achievementList[i].accuracy - 10 <= accuracy && achievementList[i].meanTime * 1.2 >= meanTime)
                 {
                     star = 1;
                 }
@@ -650,6 +650,7 @@ public class GameManager : MonoBehaviour
             case 2:
             case 1:
                 PlayerPrefs.SetInt(achievementName + "Star", star);
+                c_AchievementCtrl.WriteFinishTime(achievementName, "", star);
                 break;
             default:
                 break;
