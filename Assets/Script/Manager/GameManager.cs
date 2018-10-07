@@ -33,8 +33,6 @@ public class GameManager : MonoBehaviour
     private System.Action                                       m_ShareAction;                      //用于分享时初始化用户名称
     private ShareSDK                                            m_ShareSDK;                         //用于分享成就和成绩
 
-    //private Dictionary<GuiFrameID, GameObject>                  m_GuiObjectDict;                    //用于在运行时存储UI对象
-    //private Dictionary<ControllerID, Controller> controllerDict;
     /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
     public LanguageID CurLanguageID
@@ -243,6 +241,14 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetString("LastestAchievement", lastestAchievementString);
         }
     }
+
+    public string ConnectedID { get; set; }
+
+    public string ServiceUUID { get { return "ArithmeticServiceID"; } }
+
+    public string ReadCharacteristicUUID { get { return "ArithmeticReadCharacteristicID"; } }
+
+    public string WriteCharacteristicUUID { get { return "ArithmeticWriteCharacteristicID"; } }
 
     public static GameManager Instance//单例
     {

@@ -13,6 +13,7 @@ public enum GuiFrameID
     SetUpFrame,                //设置界面
     SettlementFrame,           //结算界面
     ChapterFrame,              //关卡界面
+    BluetoothFrame,            //蓝牙选项界面
 }
 public enum ControllerID
 {

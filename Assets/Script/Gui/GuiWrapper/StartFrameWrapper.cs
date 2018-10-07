@@ -14,6 +14,7 @@ public class StartFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.StartFrame;
         Init();
+
         //string path = Application.dataPath + "/Resources/Layout/Vertical/Default.txt";
         //Dictionary<string, MyRectTransform> dataList = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources(path,typeof(Dictionary<string, MyRectTransform>));//(Dictionary<string, RectTransform>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, RectTransform>));
     }
@@ -34,6 +35,10 @@ public class StartFrameWrapper : GuiFrameWrapper
                 break;
             case "ChapterBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ChapterFrame, true);
+                break;
+            case "BluetoothBtn":
+                if (Application.isEditor) return;
+                GameManager.Instance.SwitchWrapper(GuiFrameID.BluetoothFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

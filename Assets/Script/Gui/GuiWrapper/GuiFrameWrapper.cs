@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// 所有GUI显示层的基类，先用数据初始化再找物体
@@ -11,24 +12,16 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     public GuiFrameID id;
 
     protected CanvasGroup canvasGroup;
-
-    private delegate void ButtonDelegate(Button btn);
-    private delegate void ToggleDelegate(Toggle tgl);
-    private delegate void DropdownDelegate(Dropdown dpd);
     
     protected void Init()
     {
         CommonTool.InitText(gameObject);
         CommonTool.InitImage(gameObject);
-        ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
-        ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
-        DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
         canvasGroup = GetComponent<CanvasGroup>();
-        InitButton(btnDelegate);
-        InitToggle(tglDelegate);
-        InitDropdown(dpdDelegate);
-        Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
-        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
+        InitButton(OnButtonClick);
+        InitToggle(OnToggleClick);
+        InitDropdown(OnDropdownClick);
+        OnStart(CommonTool.InitGameObjectDict(gameObject));
     }
 
     protected void RefreshGui()
@@ -37,7 +30,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         CommonTool.InitImage(gameObject);
     }
 
-    private void InitButton(ButtonDelegate btnDelegate)
+    private void InitButton(Action<Button> btnDelegate)
     {
         Button[] buttonArray = GetComponentsInChildren<Button>(true);
         for(int i = 0; i < buttonArray.Length; i++)
@@ -46,7 +39,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             curButton.onClick.AddListener(() => btnDelegate(curButton));
         }
     }
-    private void InitToggle(ToggleDelegate tglDelegate)
+    private void InitToggle(Action<Toggle> tglDelegate)
     {
         Toggle[] toggleArray = GetComponentsInChildren<Toggle>(true);
         for(int i = 0; i < toggleArray.Length; i++)
@@ -55,7 +48,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
             curToggle.onValueChanged.AddListener(value => tglDelegate(curToggle));
         }
     }
-    private void InitDropdown(DropdownDelegate dpdDelegate)
+    private void InitDropdown(Action<Dropdown> dpdDelegate)
     {
         Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
         for(int i = 0; i < dropdownArray.Length; i++)
