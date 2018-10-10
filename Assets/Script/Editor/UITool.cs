@@ -266,7 +266,9 @@ public class UITool : Editor
             achList.Add(instance);
         }
         if (File.Exists(targetList)) File.Delete(targetList);
-        IOHelper.SetData(targetList, achList);
+        AchievementWrapper wrapper = new AchievementWrapper();
+        wrapper.list = achList;
+        IOHelper.SetData(targetList, wrapper);
 
     }
     [MenuItem("Custom Editor/生成多语言")]
