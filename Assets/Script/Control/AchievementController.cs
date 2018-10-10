@@ -22,8 +22,8 @@ public class AchievementController : Controller
 
     private void InitAchievementData()
     {
-        AchievementWrapper wrapper = (AchievementWrapper)IOHelper.GetDataFromResources("Achievement/Achievement", typeof(AchievementWrapper));
-        achievementList = wrapper.list;
+        string data = ((TextAsset)Resources.Load("Achievement/Achievement")).text;
+        achievementList = JsonHelper.FromListJson<AchievementInstance>(data);
         WriteAllFinishTime(achievementList);
     }
     public List<AchievementInstance> GetAllAchievements()

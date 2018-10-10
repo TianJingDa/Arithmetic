@@ -256,14 +256,3 @@ public class AchievementInstance
     public int star;
     public int difficulty;
 }
-[Serializable]
-public class AchievementWrapper
-{
-    public List<AchievementInstance> list;
-
-    public AchievementWrapper()
-    {
-        list = new List<AchievementInstance>();
-    }
-}
-

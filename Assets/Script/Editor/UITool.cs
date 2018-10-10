@@ -266,9 +266,12 @@ public class UITool : Editor
             achList.Add(instance);
         }
         if (File.Exists(targetList)) File.Delete(targetList);
-        AchievementWrapper wrapper = new AchievementWrapper();
-        wrapper.list = achList;
-        IOHelper.SetData(targetList, wrapper);
+        string toSave = JsonHelper.ToListJson<AchievementInstance>(achList);
+        //IOHelper.SetData(targetList, wrapper);
+        StreamWriter streamWriter = File.CreateText(targetList);
+        streamWriter.Write(toSave);
+        streamWriter.Close();
+
 
     }
     [MenuItem("Custom Editor/生成多语言")]

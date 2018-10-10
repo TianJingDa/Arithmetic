@@ -1,24 +1,39 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+
 public static class JsonHelper
 {
-    public static T[] FromJson<T>(string json)
+    public static T[] FromArrayJson<T>(string json)
     {
-        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+        ArrayWrapper<T> wrapper = JsonUtility.FromJson<ArrayWrapper<T>>(json);
         return wrapper.Items;
     }
 
-    public static string ToJson<T>(T[] array)
+    public static List<T> FromListJson<T>(string json)
     {
-        Wrapper<T> wrapper = new Wrapper<T>();
+        ListWrapper<T> wrapper = JsonUtility.FromJson<ListWrapper<T>>(json);
+        return wrapper.Items;
+    }
+
+    public static string ToArrayJson<T>(T[] array)
+    {
+        ArrayWrapper<T> wrapper = new ArrayWrapper<T>();
         wrapper.Items = array;
         return JsonUtility.ToJson(wrapper);
     }
 
-    public static string ToJson<T>(T[] array, bool prettyPrint)
+    public static string ToArrayJson<T>(T[] array, bool prettyPrint)
     {
-        Wrapper<T> wrapper = new Wrapper<T>();
+        ArrayWrapper<T> wrapper = new ArrayWrapper<T>();
         wrapper.Items = array;
         return JsonUtility.ToJson(wrapper, prettyPrint);
+    }
+
+    public static string ToListJson<T>(List<T> list)
+    {
+        ListWrapper<T> wrapper = new ListWrapper<T>();
+        wrapper.Items = list;
+        return JsonUtility.ToJson(wrapper);
     }
 
     public static string FixJson(string value)
@@ -28,8 +43,14 @@ public static class JsonHelper
     }
 
     [System.Serializable]
-    private class Wrapper<T>
+    private class ArrayWrapper<T>
     {
         public T[] Items;
+    }
+
+    [System.Serializable]
+    private class ListWrapper<T>
+    {
+        public List<T> Items;
     }
 }
