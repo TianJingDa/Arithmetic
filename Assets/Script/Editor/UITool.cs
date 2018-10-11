@@ -217,7 +217,7 @@ public class UITool : Editor
         DivisionDataBase data = new DivisionDataBase();
         data.digitID = DigitID.FourDigits;
         data.operandID = OperandID.TwoNumbers;
-        data.questionList = questionList;
+        //data.questionList = questionList;
         string path = Application.dataPath + "/Resources/FightData/d_4_2List.txt";
         IOHelper.SetData(path, data);
     }
@@ -267,35 +267,8 @@ public class UITool : Editor
         }
         if (File.Exists(targetList)) File.Delete(targetList);
         string toSave = JsonHelper.ToListJson<AchievementInstance>(achList);
-        //IOHelper.SetData(targetList, wrapper);
-        StreamWriter streamWriter = File.CreateText(targetList);
-        streamWriter.Write(toSave);
-        streamWriter.Close();
+        CommonTool.SetData(targetList, toSave);
 
-
-    }
-    [MenuItem("Custom Editor/生成多语言")]
-    public static void MakeMutiLanguageJson()
-    {
-        StreamReader mutiLanguageAsset = new StreamReader(Application.dataPath + "/MutiLanguage.txt");
-        if (mutiLanguageAsset == null)
-        {
-            MyDebug.LogYellow("Can not find MutiLanguage.txt !!");
-            return;
-        }
-        Dictionary<string, string[]> mutiLanguageDict = new Dictionary<string, string[]>();
-        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
-        string asset = mutiLanguageAsset.ReadToEnd();
-        string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
-        List<string> lineList;
-        for (int i = 0; i < lineArray.Length; i++)
-        {
-            lineList = new List<string>(lineArray[i].Split(','));
-            mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
-        }
-        string path = Application.dataPath + "/Resources/Language/MutiLanguage.txt";
-        if (File.Exists(path)) File.Delete(path);
-        IOHelper.SetData(path, mutiLanguageDict);
     }
     [MenuItem("Custom Editor/转换prefab/Default")]
     public static void DefaultPrefab()

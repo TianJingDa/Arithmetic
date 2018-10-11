@@ -26,7 +26,21 @@ public sealed class MutiLanguageController: Controller
     private void InitLanguageData()
     {
         string path = "Language/MutiLanguage";
-        mutiLanguageDict = (Dictionary<string, string[]>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, string[]>));
+        mutiLanguageDict = new Dictionary<string, string[]>();
+        TextAsset mutiLanguageAsset = Resources.Load(path, typeof(TextAsset)) as TextAsset;
+        if (mutiLanguageAsset == null)
+        {
+            Debug.Log("Load File Error!");
+            return;
+        }
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string[] lineArray = mutiLanguageAsset.text.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        List<string> lineList;
+        for (int i = 0; i < lineArray.Length; i++)
+        {
+            lineList = new List<string>(lineArray[i].Split(','));
+            mutiLanguageDict.Add(lineList[0], lineList.GetRange(1, lineList.Count - 1).ToArray());
+        }
     }
     /// <summary>
     /// 获取多语言

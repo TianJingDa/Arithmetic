@@ -22,18 +22,57 @@ public class LayoutController : Controller
     private Dictionary<LayoutID, List<Dictionary<string, MyRectTransform>>> layoutAssetDict;
     private void InitLayoutData()
     {
-        Dictionary<string, MyRectTransform> vertical_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Vertical/Right", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> vertical_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Vertical/Left", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> horizontal_Right = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Horizontal/Right", typeof(Dictionary<string, MyRectTransform>));
-        Dictionary<string, MyRectTransform> horizontal_Left = (Dictionary<string, MyRectTransform>)IOHelper.GetDataFromResources("Layout/Horizontal/Left", typeof(Dictionary<string, MyRectTransform>));
+        string data = CommonTool.GetData("Layout/Vertical/Right");
+        LayoutDataWrapper wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
+        Dictionary<string, MyRectTransform> vertical_Right = ConvertToDict(wrapper);
+
+        data = CommonTool.GetData("Layout/Vertical/Left");
+        wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
+        Dictionary<string, MyRectTransform> vertical_Left = ConvertToDict(wrapper);
+
+        data = CommonTool.GetData("Layout/Horizontal/Right");
+        wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
+        Dictionary<string, MyRectTransform> horizontal_Right = ConvertToDict(wrapper);
+
+        data = CommonTool.GetData("Layout/Horizontal/Left");
+        wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
+        Dictionary<string, MyRectTransform> horizontal_Left = ConvertToDict(wrapper);
+
         layoutAssetDict.Add(LayoutID.Vertical, new List<Dictionary<string, MyRectTransform>> { vertical_Right, vertical_Left });
         layoutAssetDict.Add(LayoutID.Horizontal, new List<Dictionary<string, MyRectTransform>> { horizontal_Right, horizontal_Left });
     }
+
+    private Dictionary<string, MyRectTransform> ConvertToDict(LayoutDataWrapper wrapper)
+    {
+        Dictionary<string, MyRectTransform> dict = new Dictionary<string, MyRectTransform>();
+
+        for(int i = 0; i < Mathf.Min(wrapper.names.Count, wrapper.transforms.Count); i++)
+        {
+            dict[wrapper.names[i]] = wrapper.transforms[i];
+        }
+
+        return dict;
+    }
+
     public Dictionary<string, MyRectTransform> GetLayoutData(LayoutID curLayout, HandednessID curHandedness)
     {
         return layoutAssetDict[curLayout][(int)curHandedness];
     }
 }
+
+[Serializable]
+public class LayoutDataWrapper
+{
+    public List<string> names;
+    public List<MyRectTransform> transforms;
+
+    public LayoutDataWrapper()
+    {
+        names = new List<string>();
+        transforms = new List<MyRectTransform>();
+    }
+}
+
 [Serializable]
 public class MyRectTransform
 {

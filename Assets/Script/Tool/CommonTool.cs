@@ -4,11 +4,26 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using DG.Tweening;
+using System.IO;
+
 
 
 public static class CommonTool 
 {
     private static float tweenDuration = 0.5f;
+
+    public static void SetData(string path, string toSave)
+    {
+        StreamWriter streamWriter = File.CreateText(path);
+        streamWriter.Write(toSave);
+        streamWriter.Close();
+    }
+
+    public static string GetData(string path)
+    {
+        string data = ((TextAsset)Resources.Load(path)).text;
+        return data;
+    }
 
     public static T GetComponentByName<T>(GameObject root, string name) where T : Component
     {

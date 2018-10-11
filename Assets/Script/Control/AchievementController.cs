@@ -22,7 +22,7 @@ public class AchievementController : Controller
 
     private void InitAchievementData()
     {
-        string data = ((TextAsset)Resources.Load("Achievement/Achievement")).text;
+        string data = CommonTool.GetData("Achievement/Achievement");
         achievementList = JsonHelper.FromListJson<AchievementInstance>(data);
         WriteAllFinishTime(achievementList);
     }

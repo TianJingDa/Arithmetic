@@ -27,10 +27,15 @@ public sealed class FightController : Controller
 
     private void InitFightData()
     {
-        DivisionDataBase d_3_2List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_3_2List", typeof(DivisionDataBase));
-        DivisionDataBase d_3_3List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_3_3List", typeof(DivisionDataBase));
-        DivisionDataBase d_4_2List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_4_2List", typeof(DivisionDataBase));
-        DivisionDataBase d_4_3List = (DivisionDataBase)IOHelper.GetDataFromResources("FightData/d_4_3List", typeof(DivisionDataBase));
+        string data = CommonTool.GetData("FightData/d_3_2List");
+        DivisionDataBase d_3_2List = JsonUtility.FromJson<DivisionDataBase>(data);
+        data = CommonTool.GetData("FightData/d_3_3List");
+        DivisionDataBase d_3_3List = JsonUtility.FromJson<DivisionDataBase>(data);
+        data = CommonTool.GetData("FightData/d_4_2List");
+        DivisionDataBase d_4_2List = JsonUtility.FromJson<DivisionDataBase>(data);
+        data = CommonTool.GetData("FightData/d_4_3List");
+        DivisionDataBase d_4_3List = JsonUtility.FromJson<DivisionDataBase>(data);
+
         dataBase.Add(d_3_2List);
         dataBase.Add(d_3_3List);
         dataBase.Add(d_4_2List);
@@ -41,7 +46,12 @@ public sealed class FightController : Controller
     {
         if (symbolID == SymbolID.Division)
         {
-            workList = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID).questionList;
+            workList = new List<List<int>>();
+            List<DivisionQuestionList> qList = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID).questionList;
+            for (int i = 0; i < qList.Count; i++)
+            {
+                workList.Add(qList[i].questionList);
+            }
         }
         else
         {
@@ -356,5 +366,11 @@ public class DivisionDataBase
 {
     public DigitID digitID;
     public OperandID operandID;
-    public List<List<int>> questionList;
+    public List<DivisionQuestionList> questionList;
 }
+[System.Serializable]
+public class DivisionQuestionList
+{
+    public List<int> questionList;
+}
+
