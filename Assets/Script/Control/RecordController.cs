@@ -29,20 +29,23 @@ public sealed class RecordController : Controller
 
     }
 
-    public void SaveRecord(object obj, string fileName)
+    public void SaveRecord(string toSave, string fileName)
     {
         if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
         string fullName = string.Format(fileFullName, fileName);
-        IOHelper.SetData(fullName, obj);
+        CommonTool.SetData(fullName, toSave);
     }
 
     public List<SaveFileInstance> ReadAllRecords()
     {
         List<SaveFileInstance> recordList = new List<SaveFileInstance>();
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
+        string data;
         for (int i = 0; i < fileNames.Length; i++)
         {
-            SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetDataFromDataPath(fileNames[i], typeof(SaveFileInstance));
+            data = CommonTool.GetDataFromDataPath(fileNames[i]);
+            if (string.IsNullOrEmpty(data)) continue;
+            SaveFileInstance saveFileInstance = JsonUtility.FromJson<SaveFileInstance>(data);
             recordList.Add(saveFileInstance);
         }
         return recordList;
@@ -51,7 +54,8 @@ public sealed class RecordController : Controller
     public SaveFileInstance ReadRecord(string fileName)
     {
         string fullName = string.Format(fileFullName, fileName);
-        SaveFileInstance saveFileInstance = (SaveFileInstance)IOHelper.GetDataFromDataPath(fullName, typeof(SaveFileInstance));
+        string data = CommonTool.GetDataFromDataPath(fullName);
+        SaveFileInstance saveFileInstance = JsonUtility.FromJson<SaveFileInstance>(data);
         return saveFileInstance;
     }
 

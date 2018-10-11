@@ -356,7 +356,8 @@ public class GameManager : MonoBehaviour
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
         m_SaveFileInstance = curSaveFileInstance;
-        c_RecordCtrl.SaveRecord(curSaveFileInstance, finishTime);
+        string toSave = JsonUtility.ToJson(curSaveFileInstance);
+        c_RecordCtrl.SaveRecord(toSave, finishTime);
 
         TotalGame++;
         TotalTime += timeCost;

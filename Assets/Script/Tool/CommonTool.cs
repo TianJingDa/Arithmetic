@@ -19,10 +19,23 @@ public static class CommonTool
         streamWriter.Close();
     }
 
-    public static string GetData(string path)
+    public static string GetDataFromResources(string path)
     {
         string data = ((TextAsset)Resources.Load(path)).text;
         return data;
+    }
+
+    public static string GetDataFromDataPath(string path)
+    {
+        if (!File.Exists(path))
+        {
+            MyDebug.LogYellow("File does not exit:" + path);
+            return null;
+        }
+        StreamReader streamReader = File.OpenText(path);
+        string data = streamReader.ReadToEnd();
+        return data;
+
     }
 
     public static T GetComponentByName<T>(GameObject root, string name) where T : Component

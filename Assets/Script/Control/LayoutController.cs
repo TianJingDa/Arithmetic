@@ -22,19 +22,19 @@ public class LayoutController : Controller
     private Dictionary<LayoutID, List<Dictionary<string, MyRectTransform>>> layoutAssetDict;
     private void InitLayoutData()
     {
-        string data = CommonTool.GetData("Layout/Vertical/Right");
+        string data = CommonTool.GetDataFromResources("Layout/Vertical/Right");
         LayoutDataWrapper wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> vertical_Right = ConvertToDict(wrapper);
 
-        data = CommonTool.GetData("Layout/Vertical/Left");
+        data = CommonTool.GetDataFromResources("Layout/Vertical/Left");
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> vertical_Left = ConvertToDict(wrapper);
 
-        data = CommonTool.GetData("Layout/Horizontal/Right");
+        data = CommonTool.GetDataFromResources("Layout/Horizontal/Right");
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> horizontal_Right = ConvertToDict(wrapper);
 
-        data = CommonTool.GetData("Layout/Horizontal/Left");
+        data = CommonTool.GetDataFromResources("Layout/Horizontal/Left");
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> horizontal_Left = ConvertToDict(wrapper);
 

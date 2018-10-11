@@ -190,7 +190,7 @@ public class UITool : Editor
             rectTransformDict.Add(rectTransformArray[i].name, rect);
         }
         string path = Application.dataPath + "/Resources/Layout/Vertical/Right.txt";
-        IOHelper.SetData(path, rectTransformDict);
+        //IOHelper.SetData(path, rectTransformDict);
     }
     [MenuItem("Custom Editor/生成试题")]
     public static void ProduceQuestion()
@@ -219,7 +219,7 @@ public class UITool : Editor
         data.operandID = OperandID.TwoNumbers;
         //data.questionList = questionList;
         string path = Application.dataPath + "/Resources/FightData/d_4_2List.txt";
-        IOHelper.SetData(path, data);
+        //IOHelper.SetData(path, data);
     }
     [MenuItem("Custom Editor/生成成就")]
     public static void ExchangeAchievement()

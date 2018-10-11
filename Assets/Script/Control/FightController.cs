@@ -27,13 +27,13 @@ public sealed class FightController : Controller
 
     private void InitFightData()
     {
-        string data = CommonTool.GetData("FightData/d_3_2List");
+        string data = CommonTool.GetDataFromResources("FightData/d_3_2List");
         DivisionDataBase d_3_2List = JsonUtility.FromJson<DivisionDataBase>(data);
-        data = CommonTool.GetData("FightData/d_3_3List");
+        data = CommonTool.GetDataFromResources("FightData/d_3_3List");
         DivisionDataBase d_3_3List = JsonUtility.FromJson<DivisionDataBase>(data);
-        data = CommonTool.GetData("FightData/d_4_2List");
+        data = CommonTool.GetDataFromResources("FightData/d_4_2List");
         DivisionDataBase d_4_2List = JsonUtility.FromJson<DivisionDataBase>(data);
-        data = CommonTool.GetData("FightData/d_4_3List");
+        data = CommonTool.GetDataFromResources("FightData/d_4_3List");
         DivisionDataBase d_4_3List = JsonUtility.FromJson<DivisionDataBase>(data);
 
         dataBase.Add(d_3_2List);
