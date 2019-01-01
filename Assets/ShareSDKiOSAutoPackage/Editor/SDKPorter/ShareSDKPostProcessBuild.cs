@@ -76,10 +76,10 @@ public static class ShareSDKPostProcessBuild
 					<string>rm226427com.mob.demoShareSDK</string>
 					<string>pocketapp1234</string>
 					<string>QQ05FB8B52</string>
-					<string>wx4868b35061f87885</string>
+					<string>wx3bc7cbed831bf097</string>
 					<string>tencent100371282</string>
 					<string>fb107704292745179</string>
-					<string>wb568898243</string>
+					<string>wb1468951461</string>
 					</array>
 				</dict>
 			</array>";
