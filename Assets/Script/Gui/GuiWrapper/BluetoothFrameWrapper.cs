@@ -17,10 +17,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
         bluetoothRoleContent.SetActive(true);
         bluetoothCategoryContent.SetActive(false);
-#if UNITY_EDITOR
-        bluetoothReceiverBtn.SetActive(true);
-        bluetoothAndroidTip.SetActive(false);
-#elif UNITY_ANDROID
+#if UNITY_ANDROID
         bluetoothReceiverBtn.SetActive(false);
         bluetoothAndroidTip.SetActive(true);
 #elif UNITY_IOS
@@ -92,6 +89,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
     {
         if (string.IsNullOrEmpty(GameManager.Instance.UserName))
         {
+            //此处需要弹框
             MyDebug.LogYellow("Please Set Your Name!");
             return;
         }

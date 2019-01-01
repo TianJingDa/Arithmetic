@@ -245,6 +245,6 @@ Text_70016,高级难度,TJD
 Text_70017,终极难度,TJD
 Text_70018,开始游戏,TJD
 Text_80000,联机对战,TJD
-Text_80001,发起人,TJD
-Text_80002,接收人,TJD
-Text_80003,安卓平台仅支持作为发起人联机！,TJD
+Text_80001,发起挑战,TJD
+Text_80002,接受挑战,TJD
+Text_80003,安卓平台仅支持发起挑战！,TJD
