@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class ScannerTestScript : MonoBehaviour
 {
-	public float Timeout = 1f;
 	public GameObject ScannedItemPrefab;
 
 	private float _timeout;
+	private float _startScanTimeout = 10f;
+	private float _startScanDelay = 0.5f;
+	private bool _startScan = true;
 	private Dictionary<string, ScannedItemScript> _scannedItems;
 
 	// Use this for initialization
@@ -17,7 +19,7 @@ public class ScannerTestScript : MonoBehaviour
 
 		BluetoothLEHardwareInterface.Initialize (true, false, () => {
 
-			_timeout = Timeout;
+			_timeout = _startScanDelay;
 		}, 
 		(error) => {
 			
@@ -34,40 +36,49 @@ public class ScannerTestScript : MonoBehaviour
 		_timeout -= Time.deltaTime;
 		if (_timeout <= 0f)
 		{
-			_timeout = Timeout;
+			if (_startScan)
+			{
+				_startScan = false;
+				_timeout = _startScanTimeout;
 
-			BluetoothLEHardwareInterface.StopScan ();
-			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (null, null, (address, name, rssi, bytes) => {
+				BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (null, null, (address, name, rssi, bytes) => {
 
-				BluetoothLEHardwareInterface.Log ("item scanned: " + address);
-				if (_scannedItems.ContainsKey (address))
-				{
-					var scannedItem = _scannedItems[address];
-					scannedItem.TextRSSIValue.text = rssi.ToString ();
-					BluetoothLEHardwareInterface.Log ("already in list " + rssi.ToString ());
-				}
-				else
-				{
-					BluetoothLEHardwareInterface.Log ("item new: " + address);
-					var newItem = Instantiate (ScannedItemPrefab);
-					if (newItem != null)
+					BluetoothLEHardwareInterface.Log ("item scanned: " + address);
+					if (_scannedItems.ContainsKey (address))
 					{
-						BluetoothLEHardwareInterface.Log ("item created: " + address);
-						newItem.transform.parent = transform;
-
-						var scannedItem = newItem.GetComponent<ScannedItemScript> ();
-						if (scannedItem != null)
+						var scannedItem = _scannedItems[address];
+						scannedItem.TextRSSIValue.text = rssi.ToString ();
+						BluetoothLEHardwareInterface.Log ("already in list " + rssi.ToString ());
+					}
+					else
+					{
+						BluetoothLEHardwareInterface.Log ("item new: " + address);
+						var newItem = Instantiate (ScannedItemPrefab);
+						if (newItem != null)
 						{
-							BluetoothLEHardwareInterface.Log ("item set: " + address);
-							scannedItem.TextAddressValue.text = address;
-							scannedItem.TextNameValue.text = name;
-							scannedItem.TextRSSIValue.text = rssi.ToString ();
+							BluetoothLEHardwareInterface.Log ("item created: " + address);
+							newItem.transform.parent = transform;
 
-							_scannedItems[address] = scannedItem;
+							var scannedItem = newItem.GetComponent<ScannedItemScript> ();
+							if (scannedItem != null)
+							{
+								BluetoothLEHardwareInterface.Log ("item set: " + address);
+								scannedItem.TextAddressValue.text = address;
+								scannedItem.TextNameValue.text = name;
+								scannedItem.TextRSSIValue.text = rssi.ToString ();
+
+								_scannedItems[address] = scannedItem;
+							}
 						}
 					}
-				}
-			}, true);
+				}, true);
+			}
+			else
+			{
+				BluetoothLEHardwareInterface.StopScan ();
+				_startScan = true;
+				_timeout = _startScanDelay;
+			}
 		}
 	}
 }

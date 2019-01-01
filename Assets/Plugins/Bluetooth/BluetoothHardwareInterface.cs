@@ -19,6 +19,47 @@ public class BluetoothLEHardwareInterface
 		CBCharacteristicPropertyIndicateEncryptionRequired = 0x200,
 	};
 
+	public enum ScanMode
+	{
+		LowPower = 0,
+		Balanced = 1,
+		LowLatency = 2
+	}
+
+	public enum ConnectionPriority
+	{
+		LowPower = 0,
+		Balanced = 1,
+		High = 2,
+	}
+
+	public enum iOSProximity
+	{
+		Unknown = 0,
+		Immediate = 1,
+		Near = 2,
+		Far = 3,
+	}
+
+	public struct iBeaconData
+	{
+		public string UUID;
+		public int Major;
+		public int Minor;
+		public int RSSI;
+		public int AndroidSignalPower;
+		public iOSProximity iOSProximity;
+	}
+
+#if UNITY_ANDROID
+	public enum CBAttributePermissions
+	{
+		CBAttributePermissionsReadable = 0x01,
+		CBAttributePermissionsWriteable = 0x10,
+		CBAttributePermissionsReadEncryptionRequired = 0x02,
+		CBAttributePermissionsWriteEncryptionRequired = 0x20,
+	};
+#else
 	public  enum CBAttributePermissions
 	{
 		CBAttributePermissionsReadable = 0x01,
@@ -26,6 +67,7 @@ public class BluetoothLEHardwareInterface
 		CBAttributePermissionsReadEncryptionRequired = 0x04,
 		CBAttributePermissionsWriteEncryptionRequired = 0x08,
 	};
+#endif
 
 #if UNITY_IPHONE || UNITY_TVOS
 	[DllImport ("__Internal")]
@@ -42,13 +84,13 @@ public class BluetoothLEHardwareInterface
 	
 	[DllImport ("__Internal")]
 	private static extern void _iOSBluetoothLEScanForPeripheralsWithServices (string serviceUUIDsString, bool allowDuplicates, bool rssiOnly, bool clearPeripheralList);
-	
+
 	[DllImport ("__Internal")]
 	private static extern void _iOSBluetoothLERetrieveListOfPeripheralsWithServices (string serviceUUIDsString);
 
 	[DllImport ("__Internal")]
 	private static extern void _iOSBluetoothLEStopScan ();
-	
+
 	[DllImport ("__Internal")]
 	private static extern void _iOSBluetoothLEConnectToPeripheral (string name);
 	
@@ -71,6 +113,12 @@ public class BluetoothLEHardwareInterface
 	private static extern void _iOSBluetoothLEDisconnectAll ();
 
 #if !UNITY_TVOS
+	[DllImport ("__Internal")]
+	private static extern void _iOSBluetoothLEScanForBeacons (string proximityUUIDsString);
+
+	[DllImport ("__Internal")]
+	private static extern void _iOSBluetoothLEStopBeaconScan ();
+
 	[DllImport ("__Internal")]
 	private static extern void _iOSBluetoothLEPeripheralName (string newName);
 
@@ -104,6 +152,7 @@ public class BluetoothLEHardwareInterface
 #elif UNITY_ANDROID
 	static AndroidJavaObject _android = null;
 #endif
+
 
 	private static BluetoothDeviceScript bluetoothDeviceScript;
 
@@ -204,6 +253,30 @@ public class BluetoothLEHardwareInterface
 		}
 	}
 
+	public static void BluetoothScanMode (ScanMode scanMode)
+	{
+		if (!Application.isEditor)
+		{
+#if UNITY_IPHONE || UNITY_TVOS
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidBluetoothScanMode", (int)scanMode);
+#endif
+		}
+	}
+
+	public static void BluetoothConnectionPriority (ConnectionPriority connectionPriority)
+	{
+		if (!Application.isEditor)
+		{
+#if UNITY_IPHONE || UNITY_TVOS
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidBluetoothConnectionPriority", (int)connectionPriority);
+#endif
+		}
+	}
+
 	public static void PauseMessages (bool isPaused)
 	{
 		if (!Application.isEditor)
@@ -216,7 +289,39 @@ public class BluetoothLEHardwareInterface
 #endif
 		}
 	}
-	
+
+	// scanning for beacons requires that you know the Proximity UUID
+	public static void ScanForBeacons (string[] proximityUUIDs, Action<iBeaconData> actionBeaconResponse)
+	{
+		if (proximityUUIDs != null && proximityUUIDs.Length >= 0)
+		{
+			if (!Application.isEditor)
+			{
+				if (bluetoothDeviceScript != null)
+					bluetoothDeviceScript.DiscoveredBeaconAction = actionBeaconResponse;
+
+				string proximityUUIDsString = null;
+
+				if (proximityUUIDs != null && proximityUUIDs.Length > 0)
+				{
+					proximityUUIDsString = "";
+
+					foreach (string proximityUUID in proximityUUIDs)
+						proximityUUIDsString += proximityUUID + "|";
+
+					proximityUUIDsString = proximityUUIDsString.Substring (0, proximityUUIDsString.Length - 1);
+				}
+
+#if UNITY_IPHONE
+				_iOSBluetoothLEScanForBeacons (proximityUUIDsString);
+#elif UNITY_ANDROID
+				if (_android != null)
+					_android.Call ("androidBluetoothScanForBeacons", proximityUUIDsString);
+#endif
+			}
+		}
+	}
+
 	public static void ScanForPeripheralsWithServices (string[] serviceUUIDs, Action<string, string> action, Action<string, string, int, byte[]> actionAdvertisingInfo = null, bool rssiOnly = false, bool clearPeripheralList = true, int recordType = 0xFF)
 	{
 		if (!Application.isEditor)
@@ -294,6 +399,19 @@ public class BluetoothLEHardwareInterface
 #elif UNITY_ANDROID
 			if (_android != null)
 				_android.Call ("androidBluetoothStopScan");
+#endif
+		}
+	}
+
+	public static void StopBeaconScan ()
+	{
+		if (!Application.isEditor)
+		{
+#if UNITY_IPHONE
+			_iOSBluetoothLEStopBeaconScan ();
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidBluetoothStopBeaconScan");
 #endif
 		}
 	}
@@ -508,6 +626,9 @@ public class BluetoothLEHardwareInterface
 		{
 #if UNITY_IPHONE
 			_iOSBluetoothLEPeripheralName (newName);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidPeripheralName", newName);
 #endif
 		}
 	}
@@ -521,6 +642,9 @@ public class BluetoothLEHardwareInterface
 
 #if UNITY_IPHONE
 			_iOSBluetoothLECreateService (uuid, primary);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidCreateService", uuid, primary);
 #endif
 		}
 	}
@@ -531,6 +655,9 @@ public class BluetoothLEHardwareInterface
 		{
 #if UNITY_IPHONE
 			_iOSBluetoothLERemoveService (uuid);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidRemoveService", uuid);
 #endif
 		}
 	}
@@ -541,6 +668,9 @@ public class BluetoothLEHardwareInterface
 		{
 #if UNITY_IPHONE
 			_iOSBluetoothLERemoveServices ();
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidRemoveServices");
 #endif
 		}
 	}
@@ -554,6 +684,9 @@ public class BluetoothLEHardwareInterface
 
 #if UNITY_IPHONE
 			_iOSBluetoothLECreateCharacteristic (uuid, (int)properties, (int)permissions, data, length);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidCreateCharacteristic", uuid, (int)properties, (int)permissions, data, length);
 #endif
 		}
 	}
@@ -567,6 +700,9 @@ public class BluetoothLEHardwareInterface
 
 #if UNITY_IPHONE
 			_iOSBluetoothLERemoveCharacteristic (uuid);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidRemoveCharacteristic", uuid);
 #endif
 		}
 	}
@@ -577,6 +713,9 @@ public class BluetoothLEHardwareInterface
 		{
 #if UNITY_IPHONE
 			_iOSBluetoothLERemoveCharacteristics ();
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidRemoveCharacteristics");
 #endif
 		}
 	}
@@ -590,6 +729,9 @@ public class BluetoothLEHardwareInterface
 
 #if UNITY_IPHONE
 			_iOSBluetoothLEStartAdvertising ();
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidStartAdvertising");
 #endif
 		}
 	}
@@ -603,6 +745,9 @@ public class BluetoothLEHardwareInterface
 
 #if UNITY_IPHONE
 			_iOSBluetoothLEStopAdvertising ();
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidStopAdvertising");
 #endif
 		}
 	}
@@ -613,6 +758,9 @@ public class BluetoothLEHardwareInterface
 		{
 #if UNITY_IPHONE
 			_iOSBluetoothLEUpdateCharacteristicValue (uuid, data, length);
+#elif UNITY_ANDROID
+			if (_android != null)
+				_android.Call ("androidUpdateCharacteristicValue", uuid, data, length);
 #endif
 		}
 	}

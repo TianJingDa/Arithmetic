@@ -77,7 +77,7 @@ extern "C" {
             [_unityBluetoothLE scanForPeripheralsWithServices:actualUUIDs options:options clearPeripheralList:clearPeripheralList recordType:recordType];
         }
     }
-    
+
     void _iOSBluetoothLEStopScan () {
         
         if (_unityBluetoothLE != nil)
@@ -151,6 +151,58 @@ extern "C" {
     }
     
 #if !TARGET_OS_TV
+        void _iOSBluetoothLEScanForBeacons (char *proximityUUIDsStringRaw) {
+        
+        if (_unityBluetoothLE != nil)
+        {
+            NSMutableArray *actualUUIDs = nil;
+            
+            if (proximityUUIDsStringRaw != nil)
+            {
+                NSString *proximityUUIDsString = [NSString stringWithFormat:@"%s", proximityUUIDsStringRaw];
+                NSArray *proximityUUIDs = [proximityUUIDsString componentsSeparatedByString:@"|"];
+                
+                if (proximityUUIDs.count > 0)
+                {
+                    NSMutableArray<CLBeaconRegion *> *beaconRegions = [[NSMutableArray<CLBeaconRegion *> alloc] init];
+                    
+                    for (NSString* sUUID in proximityUUIDs)
+                    {
+                        NSArray *parts = [sUUID componentsSeparatedByString:@":"];
+                        if (parts.count == 2)
+                        {
+                            CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:parts[0]] identifier:parts[1]];
+                            [beaconRegions addObject:beaconRegion];
+                            
+                            [_unityBluetoothLE scanForBeacons:beaconRegions];
+                        }
+                        else
+                        {
+                            NSString *message = [NSString stringWithFormat:@"Error~iBeacon Scanning missing identifiers"];
+                            UnitySendMessage ("BluetoothLEReceiver", "OnBluetoothMessage", [message UTF8String] );
+                        }
+                    }
+                }
+                else
+                {
+                    NSString *message = [NSString stringWithFormat:@"Error~iBeacon Scanning requires proximity UUIDs"];
+                    UnitySendMessage ("BluetoothLEReceiver", "OnBluetoothMessage", [message UTF8String] );
+                }
+            }
+            else
+            {
+                NSString *message = [NSString stringWithFormat:@"Error~iBeacon Scanning requires proximity UUIDs"];
+                UnitySendMessage ("BluetoothLEReceiver", "OnBluetoothMessage", [message UTF8String] );
+            }
+        }
+    }
+    
+    void _iOSBluetoothLEStopBeaconScan () {
+        
+        if (_unityBluetoothLE != nil)
+            [_unityBluetoothLE stopBeaconScan];
+    }
+
     void _iOSBluetoothLEPeripheralName (char *newName) {
         
         if (_unityBluetoothLE != nil && newName != nil)
@@ -434,6 +486,48 @@ extern "C" {
             if (_peripheralManager != nil)
                 [_peripheralManager updateValue:value forCharacteristic:characteristic onSubscribedCentrals:nil];
         }
+    }
+}
+
+- (void)scanForBeacons:(NSArray<CLBeaconRegion *>*)beaconRegions
+{
+    if ([CLLocationManager isRangingAvailable])
+    {
+        _locationManager = [CLLocationManager new];
+        _locationManager.delegate = self;
+        
+        [_locationManager requestWhenInUseAuthorization];
+        
+        for (CLBeaconRegion *region in beaconRegions)
+            [_locationManager startRangingBeaconsInRegion:region];
+    }
+    else
+    {
+        NSString *message = [NSString stringWithFormat:@"Error~iBeacon Ranging is not available"];
+        UnitySendMessage ("BluetoothLEReceiver", "OnBluetoothMessage", [message UTF8String] );
+    }
+}
+
+- (void) stopBeaconScan
+{
+    if (_locationManager != nil)
+    {
+        for (CLBeaconRegion *region in _locationManager.rangedRegions)
+            [_locationManager stopRangingBeaconsInRegion:region];
+        
+        [_locationManager release];
+        _locationManager = nil;
+    }
+}
+
+// beacon delegate implementation
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region
+{
+    NSString *message;
+    for (CLBeacon *beacon in beacons)
+    {
+        message = [NSString stringWithFormat:@"DiscoveredBeacon~%@~%ld~%ld~%ld~%ld~%ld", [beacon.proximityUUID.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""], beacon.major.longValue, beacon.minor.longValue, (long)beacon.rssi, (long)0, (long)beacon.proximity];
+        UnitySendMessage ("BluetoothLEReceiver", "OnBluetoothMessage", [message UTF8String]);
     }
 }
 #endif

@@ -9,14 +9,22 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
+#if !TARGET_OS_TV
+#import <CoreLocation/CoreLocation.h>
+
+@interface UnityBluetoothLE : NSObject <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate, CLLocationManagerDelegate>
+#else
 @interface UnityBluetoothLE : NSObject <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
+#endif
 
 {
     CBCentralManager *_centralManager;
-    
+#if !TARGET_OS_TV
+    CLLocationManager *_locationManager;
+#endif
     NSMutableDictionary *_peripherals;
     
-#ifdef TARGET_OS_IOS
+#if !TARGET_OS_TV
     CBPeripheralManager *_peripheralManager;
     
     NSString *_peripheralName;
@@ -49,7 +57,10 @@
 - (void)subscribeCharacteristic:(NSString *)name service:(NSString *)serviceString characteristic:(NSString *)characteristicString;
 - (void)unsubscribeCharacteristic:(NSString *)name service:(NSString *)serviceString characteristic:(NSString *)characteristicString;
 
-#ifdef TARGET_OS_IOS
+#if !TARGET_OS_TV
+- (void)scanForBeacons:(NSArray<CLBeaconRegion *> *)beaconRegions;
+- (void)stopBeaconScan;
+
 - (void)peripheralName:(NSString *)newName;
 - (void)createService:(NSString *)uuid primary:(BOOL)primary;
 - (void)removeService:(NSString *)uuid;
