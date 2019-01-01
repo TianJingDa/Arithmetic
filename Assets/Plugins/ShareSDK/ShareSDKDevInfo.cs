@@ -73,21 +73,21 @@ namespace cn.sharesdk.unity3d
 		#if UNITY_ANDROID
 		public const int type = (int) PlatformType.SinaWeibo;
 		public string SortId = "4";
-		public string AppKey = "568898243";
-		public string AppSecret = "38a4f8204cc784f81f9f0daaf31e02e3";
-		public string RedirectUrl = "http://www.sharesdk.cn";
+		public string AppKey = "1468951461";
+		public string AppSecret = "b73fafc1185c1710ff68649b53fcb47b";
+		public string RedirectUrl = "https://www.taptap.com/app/78306";
 		public bool ShareByWebApi  = true;
-		public bool ShareByAppClient = false;
-		#elif UNITY_IPHONE
+		public bool ShareByAppClient = true;
+#elif UNITY_IPHONE
 		public const int type = (int) PlatformType.SinaWeibo;
-		public string app_key = "568898243";
-		public string app_secret = "38a4f8204cc784f81f9f0daaf31e02e3";
-		public string redirect_uri = "http://www.sharesdk.cn";
+		public string app_key = "1468951461";
+		public string app_secret = "b73fafc1185c1710ff68649b53fcb47b";
+		public string redirect_uri = "https://www.taptap.com/app/78306";
 		public string auth_type = "both";	//can pass "both","sso",or "web"  
-		#endif
-	}
+#endif
+    }
 
-	[Serializable]
+    [Serializable]
 	public class TencentWeiboDevInfo : DevInfo 
 	{
 		#if UNITY_ANDROID
@@ -146,35 +146,35 @@ namespace cn.sharesdk.unity3d
 		#if UNITY_ANDROID
 		public string SortId = "5";
 		public const int type = (int) PlatformType.WeChat;
-		public string AppId = "wx4868b35061f87885";
-		public string AppSecret = "64020361b8ec4c99936c0e3999a9f249";
-		public string userName = "gh_afb25ac019c9@app";
-		public string path = "/page/API/pages/share/share";
-		public bool BypassApproval = true;
-		#elif UNITY_IPHONE
+		public string AppId = "wx3bc7cbed831bf097";
+		public string AppSecret = "53a2a815a1ce8076df4124359cd202bf";
+		public string userName = "";
+		public string path = "";
+		public bool BypassApproval = false;
+#elif UNITY_IPHONE
 		public const int type = (int) PlatformType.WeChat;
-		public string app_id = "wx4868b35061f87885";
-		public string app_secret = "64020361b8ec4c99936c0e3999a9f249";
-		#endif
-	}
+		public string app_id = "wx3bc7cbed831bf097";
+		public string app_secret = "53a2a815a1ce8076df4124359cd202bf";
+#endif
+    }
 
-	[Serializable]
+    [Serializable]
 	public class WeChatMoments : DevInfo 
 	{
 		#if UNITY_ANDROID
 		public string SortId = "6";
 		public const int type = (int) PlatformType.WeChatMoments;
-		public string AppId = "wx4868b35061f87885";
-		public string AppSecret = "64020361b8ec4c99936c0e3999a9f249";
+		public string AppId = "wx3bc7cbed831bf097";
+		public string AppSecret = "53a2a815a1ce8076df4124359cd202bf";
 		public bool BypassApproval = false;
-		#elif UNITY_IPHONE
+#elif UNITY_IPHONE
 		public const int type = (int) PlatformType.WeChatMoments;
-		public string app_id = "wx4868b35061f87885";
-		public string app_secret = "64020361b8ec4c99936c0e3999a9f249";
-		#endif
-	}
+		public string app_id = "wx3bc7cbed831bf097";
+		public string app_secret = "53a2a815a1ce8076df4124359cd202bf";
+#endif
+    }
 
-	[Serializable]
+    [Serializable]
 	public class WeChatFavorites : DevInfo 
 	{
 		#if UNITY_ANDROID
