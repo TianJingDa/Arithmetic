@@ -38,6 +38,12 @@ public class StartFrameWrapper : GuiFrameWrapper
                 break;
             case "BluetoothBtn":
                 if (Application.isEditor) return;
+				if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+				{
+					//此处需要弹框，让玩家起名，弹框应该做成独立UI
+					MyDebug.LogYellow("Please Set Your Name!");
+					return;
+				}
                 GameManager.Instance.SwitchWrapper(GuiFrameID.BluetoothFrame, true);
                 break;
             default:
