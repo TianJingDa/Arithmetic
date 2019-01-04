@@ -25,6 +25,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     private GameObject          countdownBg;
     private GameObject          reverseOrderImage;
     private GameObject          timeMaskImage;
+	private GameObject 			fight2SettlementFrameBtn;
     private Text                timeBtn_Text;
     private Text                resultImg_Text;
     private Text                questionImg_Text;
@@ -47,6 +48,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         resultList  = new List<List<int>>();
         equalImg.SetActive(false);
         countdownBg.SetActive(true);
+		fight2SettlementFrameBtn.SetActive (GameManager.Instance.LastGUI != GuiFrameID.BluetoothFrame);
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetList();
@@ -56,14 +58,15 @@ public class FightFrameWrapper : GuiFrameWrapper
     
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        equalImg            = gameObjectDict["EqualImg"];
-        giveUpBg            = gameObjectDict["GiveUpBg"];
-        countdownBg         = gameObjectDict["CountdownBg"];
-        timeMaskImage       = gameObjectDict["TimeMaskImage"];
-        reverseOrderImage   = gameObjectDict["ReverseOrderImage"];
-        timeBtn_Text        = gameObjectDict["TimeBtn_Text"].GetComponent<Text>();
-        resultImg_Text      = gameObjectDict["ResultImg_Text"].GetComponent<Text>();
-        questionImg_Text    = gameObjectDict["QuestionImg_Text"].GetComponent<Text>();
+        equalImg            			= gameObjectDict["EqualImg"];
+        giveUpBg            			= gameObjectDict["GiveUpBg"];
+		fight2SettlementFrameBtn 		= gameObjectDict["Fight2SettlementFrameBtn"];
+        countdownBg         			= gameObjectDict["CountdownBg"];
+        timeMaskImage       			= gameObjectDict["TimeMaskImage"];
+        reverseOrderImage   			= gameObjectDict["ReverseOrderImage"];
+        timeBtn_Text        			= gameObjectDict["TimeBtn_Text"].GetComponent<Text>();
+        resultImg_Text      			= gameObjectDict["ResultImg_Text"].GetComponent<Text>();
+        questionImg_Text    			= gameObjectDict["QuestionImg_Text"].GetComponent<Text>();
     }
 
 
@@ -103,12 +106,11 @@ public class FightFrameWrapper : GuiFrameWrapper
             case "CancelBtn":
                 giveUpBg.SetActive(false);
                 break;
-            case "ConfirmBtn":
-                StopAllCoroutines();
-                CancelInvoke();
-                if(GameManager.Instance.IsFromCategory) GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame,MoveID.RightOrUp,false);
-                else GameManager.Instance.SwitchWrapper(GuiFrameID.ChapterFrame, MoveID.RightOrUp, false);
-                break;
+			case "ConfirmBtn":
+				StopAllCoroutines ();
+				CancelInvoke ();
+				GameManager.Instance.SwitchWrapper(GameManager.Instance.LastGUI,MoveID.RightOrUp,false);
+	            break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
@@ -232,8 +234,18 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-        if (GameManager.Instance.IsFromCategory) GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
-        else GameManager.Instance.SaveAchievement(resultList, symbol, timeCost);
+		switch (GameManager.Instance.LastGUI) 
+		{
+			case GuiFrameID.BluetoothFrame:
+				MyDebug.LogGreen ("Fight Over From Bluetooth!");
+				break;
+			case GuiFrameID.CategoryFrame:
+				GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
+				break;
+			case GuiFrameID.ChapterFrame:
+				GameManager.Instance.SaveAchievement(resultList, symbol, timeCost);
+				break;
+		}
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }

@@ -77,7 +77,7 @@ public class ChapterItem: MonoBehaviour
     }
     private void OnFightClick(BaseEventData data)
     {
-        GameManager.Instance.IsFromCategory = false;
+		GameManager.Instance.LastGUI = GuiFrameID.ChapterFrame;
         GameManager.Instance.CurCategoryInstance = content.cInstance;
         GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
     }

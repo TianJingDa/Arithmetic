@@ -5,18 +5,8 @@ using UnityEngine.UI;
 
 public class BluetoothFrameWrapper : GuiFrameWrapper
 {
-	private enum ContentType
-	{
-		Role,
-		Category,
-		ScanResult
-	}
-
-    private GameObject  bluetoothReceiverBtn;
-    private GameObject  bluetoothAndroidTip;
-    private GameObject  bluetoothRoleContent;
-    private GameObject  bluetoothCategoryContent;
-	private GameObject  bluetoothScanResultContent;
+	private bool   isCentral;
+	private Dictionary<string,string> peripheralDict;
 
 	private PatternID   curPatternID;
 	private AmountID    curAmountID;
@@ -24,32 +14,40 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	private DigitID     curDigitID;
 	private OperandID   curOperandID;
 
+	private GameObject  bluetoothPeripheralBtn;
+    private GameObject  bluetoothAndroidTip;
+    private GameObject  bluetoothRoleContent;
+    private GameObject  bluetoothCategoryContent;
+	private GameObject  bluetoothScanResultContent;
+	private GameObject	bluetoothPeripheralScanTip;
+	private GameObject 	bluetoothPeripheralScrollRect;
+
     void Start ()
     {
         id = GuiFrameID.BluetoothFrame;
         Init();
 		curPatternID = PatternID.Number;
 		curOperandID = OperandID.TwoNumbers;
+		peripheralDict = new Dictionary<string, string> ();
 
-        bluetoothRoleContent.SetActive(true);
-		bluetoothCategoryContent.SetActive(false);
-		bluetoothScanResultContent.SetActive(false);
 #if UNITY_ANDROID
-        bluetoothReceiverBtn.SetActive(false);
+		bluetoothPeripheralBtn.SetActive(false);
         bluetoothAndroidTip.SetActive(true);
 #elif UNITY_IOS
-        bluetoothReceiverBtn.SetActive(true);
+        bluetoothPeripheralBtn.SetActive(true);
         bluetoothAndroidTip.SetActive(false);
 #endif
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        bluetoothReceiverBtn        	= gameObjectDict["BluetoothAndroidTip"];
+        bluetoothPeripheralBtn        	= gameObjectDict["BluetoothAndroidTip"];
         bluetoothAndroidTip         	= gameObjectDict["BluetoothAndroidTip"];
         bluetoothRoleContent        	= gameObjectDict["BluetoothRoleContent"];
 		bluetoothCategoryContent    	= gameObjectDict["BluetoothCategoryContent"];
 		bluetoothScanResultContent    	= gameObjectDict["BluetoothScanResultContent"];
+		bluetoothPeripheralScanTip      = gameObjectDict["BluetoothPeripheralScanTip"];
+		bluetoothPeripheralScrollRect	= gameObjectDict["BluetoothPeripheralScrollRect"];
     }
 
     protected override void OnButtonClick(Button btn)
@@ -61,23 +59,26 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             case "Bluetooth2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, false);
                 break;
-			case "Bluetooth2FightFrameBtn":
-				GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
-				break;
-			case "BackFromContentBtn":
-				SwitchContent (ContentType.Role);
-				break;
-			case "BackFromScanResultBtn":
-				SwitchContent (ContentType.Category);
-				break;
-			case "BluetoothOrganizerBtn":
+			case "BluetoothCentralBtn":
 				InitializeBluetooth (true);
 				break;
-            case "BluetoothReceiverBtn":
+			case "BluetoothPeripheralBtn":
 				InitializeBluetooth (false);	
                 break;
+			case "BackFromContentBtn":
+				CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+				break;
+			case "BackFromScanResultBtn":
+				StopScan ();
+				break;
 			case "BluetoothScanBtn":
-				
+				StartScan ();
+				break;
+			case "Bluetooth2FightFrameBtn":
+				CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
+				GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
+				GameManager.Instance.CurCategoryInstance = curCategoryInstance;
+				GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
 				break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -90,6 +91,9 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		base.OnDropdownClick (dpd);
 		switch (dpd.name)
 		{
+			case "PatternDropdown":
+			case "OperandDropdown":
+				break;
 			case "AmountDropdown":
 				curAmountID = (AmountID)dpd.value;
 				break;
@@ -105,43 +109,128 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		}
 	}
 
-	private void SwitchContent(ContentType type)
+	/// <summary>
+	/// 刷新Dropdown的状态
+	/// </summary>
+	private void RefreshCategoryContent()
 	{
-		ShowRoleConetent (type == ContentType.Role);
-		ShowCategoryContent (type == ContentType.Category);
-		ShowScanResultContent (type == ContentType.ScanResult);
+		Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
+		for(int i = 0; i < dropdownArray.Length; i++)
+		{
+			for (int j = 0; j < dropdownArray[i].options.Count; j++)
+			{
+				dropdownArray[i].options[j].text = GameManager.Instance.GetMutiLanguage(dropdownArray[i].options[j].text);
+			}
+		}
 	}
 
-	private void ShowRoleConetent(bool isShow)
+	private void RefreshScanResultContent()
 	{
-		bluetoothRoleContent.SetActive (isShow);
+		bluetoothPeripheralScanTip.SetActive (!isCentral);
+		RemovePeripherals ();
 	}
 
-	private void ShowCategoryContent(bool isShow)
+	private void AddPeripheral (string address, string name)
 	{
-		bluetoothCategoryContent.SetActive (isShow);
+		if (!peripheralDict.ContainsKey (address))
+		{
+			GameObject peripheral = GameManager.Instance.GetPrefabItem("BluetoothItem");
+			peripheral.SendMessage ("InitPrefabItem", new BluetoothInstance (address, name));
+			peripheral.transform.SetParent (bluetoothPeripheralScrollRect.transform);
+			peripheral.transform.localScale = Vector3.one;
+
+			peripheralDict [address] = name;
+		}
 	}
 
-	private void ShowScanResultContent(bool isShow)
+	private void RemovePeripherals ()
 	{
-		bluetoothScanResultContent.SetActive (isShow);
-		//清理prefab，重置状态
+		for (int i = 0; i < bluetoothPeripheralScrollRect.transform.childCount; i++)
+		{
+			GameObject gameObject = bluetoothPeripheralScrollRect.transform.GetChild (i).gameObject;
+			Destroy (gameObject);
+		}
+
+		if (peripheralDict != null)	peripheralDict.Clear ();
 	}
 
-	private void InitializeBluetooth(bool isCentral)
+	private void StartScan()
+	{
+		GameManager.Instance.ServiceUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "0";
+		GameManager.Instance.ReadUUID    = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "1";
+		GameManager.Instance.WriteUUID   = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "2";
+
+		if (isCentral) 
+		{
+			MyDebug.LogGreen("Start Scaning!");
+			bluetoothScanResultContent.SetActive (true);
+			RefreshScanResultContent ();
+			CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{GameManager.Instance.ServiceUUID}, 
+				(address, name) => 
+				{
+					AddPeripheral (address, name);
+				});
+		} 
+		else 
+		{
+			BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
+
+			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadUUID, 
+				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyRead |
+				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyNotify,
+				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsReadable, null, 0, null);
+
+			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteUUID, 
+				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyWrite,
+				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsWriteable, null, 0, 
+				ReceiveCentralMessage);
+
+			BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
+				{
+					MyDebug.LogGreen("Create Service Success:"+message);
+					BluetoothLEHardwareInterface.StartAdvertising (() => 
+						{
+							MyDebug.LogGreen("Start Advertising!");
+							bluetoothScanResultContent.SetActive (true);
+							RefreshScanResultContent ();
+							CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+						});
+				});
+		}
+	}
+
+	private void StopScan()
 	{
 		if (isCentral)
-			AsOrganizer ();
+		{
+			BluetoothLEHardwareInterface.StopScan ();
+			CommonTool.GuiHorizontalMove(bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+		} 
 		else
-			AsReceiver ();
+		{
+			BluetoothLEHardwareInterface.StopAdvertising (() => 
+				{
+					CommonTool.GuiHorizontalMove(bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+				});
+		}
+	}
+
+
+	private void ReceiveCentralMessage(string UUID, byte[] bytes)
+	{
+		MyDebug.LogGreen("Receive Message!");
 	}
 		
-    private void AsOrganizer()
+	private void InitializeBluetooth(bool isCentral)
     {
-        BluetoothLEHardwareInterface.Initialize(true, false, () =>
+		this.isCentral = isCentral;
+		BluetoothLEHardwareInterface.Initialize(isCentral, !isCentral, () =>
         {
             MyDebug.LogGreen("Central Initialize Success");
-			SwitchContent (ContentType.Category);
+			bluetoothCategoryContent.SetActive(true);
+			RefreshCategoryContent();
+			CommonTool.GuiHorizontalMove(bluetoothCategoryContent,Screen.width,MoveID.RightOrUp,canvasGroup,true);
         },
         (error) =>
         {
@@ -166,62 +255,5 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 MyDebug.LogYellow("Central Initialize Fail: " + error);
             }
         });
-    }
-
-    private void AsReceiver()
-    {
-        BluetoothLEHardwareInterface.Initialize(false, true, () => 
-        {
-			SwitchContent (ContentType.Category);
-
-            BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
-
-            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadCharacteristicUUID, 
-                                                               BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyRead |
-                                                               BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyNotify,
-                                                               BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsReadable, null, 0,
-            (characteristicUUID, bytes) =>
-            {
-
-            });
-
-            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteCharacteristicUUID, 
-                                                               BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyWrite,
-                                                               BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsWriteable, null, 0,
-            (characteristicUUID, bytes) => 
-            {
-
-            });
-
-            BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (serviceUUID) => 
-            {
-
-            });
-
-        }, 
-        (error) => 
-        {
-			if (error.Contains("Not Supported"))
-			{
-				MyDebug.LogYellow("Not Supported");
-			}
-			else if (error.Contains("Not Authorized"))
-			{
-				MyDebug.LogYellow("Not Authorized");
-			}
-			else if (error.Contains("Powered Off"))
-			{
-				MyDebug.LogYellow("Powered Off");
-			}
-			else if (error.Contains("Not Enabled"))
-			{
-				MyDebug.LogYellow("Not Enabled");
-			}
-			else
-			{
-				MyDebug.LogYellow("Peripheral Initialize Fail: " + error);
-			}
-        });
-
     }
 }

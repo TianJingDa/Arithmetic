@@ -40,6 +40,7 @@ public sealed class ResourceController : Controller
         prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");
         prefabItemDict.Add("SaveFileItem", "GuiItem/SaveFileItem");
         prefabItemDict.Add("QuestionItem", "GuiItem/QuestionItem");
+		prefabItemDict.Add("BluetoothItem", "GuiItem/BluetoothItem");
     }
 
     /// <summary>
@@ -50,11 +51,7 @@ public sealed class ResourceController : Controller
     public Object GetGuiResource(GuiFrameID id)
     {
         Object resouce = null;
-        if (resourceDict.ContainsKey(id))
-        {
-            resouce = resourceDict[id];
-        }
-        else
+		if(!resourceDict.TryGetValue(id, out resouce))
         {
             resouce = Resources.Load(guiAssetDict[id]);
             resourceDict.Add(id, resouce);
@@ -65,11 +62,10 @@ public sealed class ResourceController : Controller
     {
         Object resouce = null;
         string address;
-        prefabItemDict.TryGetValue(name, out address);
-        if (address != null)
-        {
-            resouce = Resources.Load(address);
-        }
+		if(prefabItemDict.TryGetValue(name, out address))
+		{
+			resouce = Resources.Load(address);
+		}
         return resouce;
     }
 }

@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
             return achievement == null;
         }
     }
-    public bool IsFromCategory
+	public GuiFrameID LastGUI
     {
         get;
         set;
@@ -242,13 +242,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public string ConnectedID { get; set; }
+	public string ServiceUUID{ get; set;}
 
-    public string ServiceUUID { get { return "ArithmeticServiceID"; } }
+	public string ReadUUID{ get; set;}
 
-    public string ReadCharacteristicUUID { get { return "ArithmeticReadCharacteristicID"; } }
-
-    public string WriteCharacteristicUUID { get { return "ArithmeticWriteCharacteristicID"; } }
+	public string WriteUUID{ get; set;}
 
     public static GameManager Instance//单例
     {

@@ -162,8 +162,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 saveFileShareWinInSettlement.SetActive(true);
                 break;
             case "Settlement2CategoryFrameBtn":
-                if (GameManager.Instance.IsFromCategory) GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, MoveID.RightOrUp, false);
-                else GameManager.Instance.SwitchWrapper(GuiFrameID.ChapterFrame, MoveID.RightOrUp, false);
+				GameManager.Instance.SwitchWrapper(GameManager.Instance.LastGUI,MoveID.RightOrUp,false);
                 break;
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame,false);
@@ -287,7 +286,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitAchievement()
     {
-        if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && !GameManager.Instance.IsFromCategory)
+		if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && GameManager.Instance.LastGUI == GuiFrameID.ChapterFrame)
         {
             achievementDetailBgInSettlement.SetActive(true);
             AchievementInstance instance = GameManager.Instance.GetAchievement(GameManager.Instance.CurAchievementName);

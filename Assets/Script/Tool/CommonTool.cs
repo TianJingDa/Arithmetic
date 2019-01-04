@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using DG.Tweening;
 using System.IO;
-
+using System.Text;
 
 
 public static class CommonTool 
@@ -407,6 +407,19 @@ public static class CommonTool
         }
         return total;
     }
+	//TODO：不要每次都new一个stringbuilder
+	public static string BytesToString (byte[] bytes)
+	{
+		StringBuilder sOutput = new StringBuilder(bytes.Length);
+		for (int i = 0; i < bytes.Length; i++)
+		{
+			sOutput.Append(bytes[i].ToString("X2"));  
+		}
+		return sOutput.ToString();
+	}
 
-
+	public static byte[] StringToBytes(string message)
+	{
+		return null;
+	}
 }
