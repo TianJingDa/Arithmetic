@@ -60,10 +60,15 @@ public class BluetoothItem : Item, IPointerClickHandler
 
 	private void ConnectToPeripheral(BaseEventData evenData)
 	{
+		GameManager.Instance.CurBluetoothInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
-		BluetoothLEHardwareInterface.ConnectToPeripheral (content.address, 
-			(address) => {},
+		BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
+			(address) => 
+				{
+					GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
+					GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
+				},
 			(address, serviceUUID) => {},
 			(address, serviceUUID, characteristicUUID) => 
 				{
@@ -71,7 +76,9 @@ public class BluetoothItem : Item, IPointerClickHandler
 					{				
 						if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
 						{
-							BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (content.address, GameManager.Instance.ServiceUUID, GameManager.Instance.ReadUUID,
+							BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (GameManager.Instance.CurBluetoothInstance.address, 
+									   															   GameManager.Instance.ServiceUUID, 
+																								   GameManager.Instance.ReadUUID,
 								(deviceAddress, notification) => {}, 
 								(deviceAddress, characteristic, data) => {});
 						}
@@ -100,6 +107,7 @@ public class BluetoothItem : Item, IPointerClickHandler
 		BluetoothLEHardwareInterface.DisconnectPeripheral (content.address, (message)=>
 			{
 				MyDebug.LogYellow("Disconnect Peripheral Because Time Out!");
+				detailWin.SetActive(false);
 			});
 
 

@@ -89,12 +89,6 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			case "BluetoothReScanBtn":
 				ReScan();
 				break;
-			case "Bluetooth2FightFrameBtn":
-				CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-				GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
-				GameManager.Instance.CurCategoryInstance = curCategoryInstance;
-				GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
-				break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
@@ -190,6 +184,12 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 	private void StartScan()
 	{
+		BluetoothLEHardwareInterface.RemoveCharacteristics();
+		BluetoothLEHardwareInterface.RemoveServices();
+
+		CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
+		GameManager.Instance.CurCategoryInstance = curCategoryInstance;
+
 		GameManager.Instance.ServiceUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "0";
 		GameManager.Instance.ReadUUID    = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "1";
 		GameManager.Instance.WriteUUID   = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "2";
