@@ -15,9 +15,6 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	private DigitID     curDigitID;
 	private OperandID   curOperandID;
 
-	private GameObject  bluetoothPeripheralBtn;
-    private GameObject  bluetoothAndroidTip;
-    private GameObject  bluetoothRoleContent;
     private GameObject  bluetoothCategoryContent;
 	private GameObject  bluetoothScanResultContent;
 	private GameObject 	bluetoothPeripheralScrollRect;
@@ -34,21 +31,10 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		curPatternID = PatternID.Number;
 		curOperandID = OperandID.TwoNumbers;
 		peripheralDict = new Dictionary<string, string> ();
-
-#if UNITY_ANDROID
-		bluetoothPeripheralBtn.SetActive(false);
-        bluetoothAndroidTip.SetActive(true);
-#elif UNITY_IOS
-        bluetoothPeripheralBtn.SetActive(true);
-        bluetoothAndroidTip.SetActive(false);
-#endif
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        bluetoothPeripheralBtn        	= gameObjectDict["BluetoothAndroidTip"];
-        bluetoothAndroidTip         	= gameObjectDict["BluetoothAndroidTip"];
-        bluetoothRoleContent        	= gameObjectDict["BluetoothRoleContent"];
 		bluetoothCategoryContent    	= gameObjectDict["BluetoothCategoryContent"];
 		bluetoothScanResultContent    	= gameObjectDict["BluetoothScanResultContent"];
 		bluetoothPeripheralScrollRect	= gameObjectDict["BluetoothPeripheralScrollRect"];
