@@ -422,4 +422,17 @@ public static class CommonTool
 	{
 		return null;
 	}
+
+	public static string FullUUID (string uuid)
+	{
+		return "0000" + uuid + "-0000-1000-8000-00805f9b34fb";
+	}
+
+	public static bool IsEqualUUID(string uuid1, string uuid2)
+	{
+		if(uuid1.Length == 4) uuid1 = FullUUID(uuid1);
+		if(uuid2.Length == 4) uuid2 = FullUUID(uuid2);
+
+		return (uuid1.ToUpper().CompareTo(uuid2.ToUpper()) == 0);
+	}
 }

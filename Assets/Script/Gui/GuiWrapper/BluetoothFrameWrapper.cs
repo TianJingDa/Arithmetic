@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class BluetoothFrameWrapper : GuiFrameWrapper
 {
-	private bool   isCentral;
-	private Dictionary<string,string> peripheralDict;
+	private const float 				advertisingTime = 10;
+	private bool   						isCentral;
+	private Dictionary<string,string> 	peripheralDict;
 
 	private PatternID   curPatternID;
 	private AmountID    curAmountID;
@@ -19,8 +20,12 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
     private GameObject  bluetoothRoleContent;
     private GameObject  bluetoothCategoryContent;
 	private GameObject  bluetoothScanResultContent;
-	private GameObject	bluetoothPeripheralScanTip;
 	private GameObject 	bluetoothPeripheralScrollRect;
+	private GameObject  bluetoothPeripheralDetailBg;
+	private GameObject  bluetoothAdvertisingStopBtn;
+	private GameObject  bluetoothConnectWaiting;
+	private Text  		bluetoothConnectTime;
+
 
     void Start ()
     {
@@ -46,8 +51,11 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         bluetoothRoleContent        	= gameObjectDict["BluetoothRoleContent"];
 		bluetoothCategoryContent    	= gameObjectDict["BluetoothCategoryContent"];
 		bluetoothScanResultContent    	= gameObjectDict["BluetoothScanResultContent"];
-		bluetoothPeripheralScanTip      = gameObjectDict["BluetoothPeripheralScanTip"];
 		bluetoothPeripheralScrollRect	= gameObjectDict["BluetoothPeripheralScrollRect"];
+		bluetoothPeripheralDetailBg     = gameObjectDict["BluetoothPeripheralDetailBg"];
+		bluetoothAdvertisingStopBtn 	= gameObjectDict["bluetoothAdvertisingStopBtn"];
+		bluetoothConnectWaiting 		= gameObjectDict["BluetoothConnectWaiting"];
+		bluetoothConnectTime 			= gameObjectDict["BluetoothConnectTime"].GetComponent<Text>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -69,10 +77,17 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 				CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
 				break;
 			case "BackFromScanResultBtn":
-				StopScan ();
+			case "BluetoothAdvertisingStopBtn":
+				StopScan();
 				break;
 			case "BluetoothScanBtn":
-				StartScan ();
+				StartScan();
+				break;
+			case "BluetoothConnectCancelBtn":
+				bluetoothPeripheralDetailBg.SetActive(false);
+				break;
+			case "BluetoothReScanBtn":
+				ReScan();
 				break;
 			case "Bluetooth2FightFrameBtn":
 				CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
@@ -86,10 +101,10 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         }
     }
 
-	protected override void OnDropdownClick (Dropdown dpd)
+	protected override void OnDropdownClick(Dropdown dpd)
 	{
-		base.OnDropdownClick (dpd);
-		switch (dpd.name)
+		base.OnDropdownClick(dpd);
+		switch(dpd.name)
 		{
 			case "PatternDropdown":
 			case "OperandDropdown":
@@ -124,34 +139,53 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		}
 	}
 
+	private void ReScan()
+	{
+		if(isCentral)
+		{
+			BluetoothLEHardwareInterface.StopScan();
+			RemovePeripherals();
+			MyDebug.LogGreen("Start ReScaning!");
+			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{GameManager.Instance.ServiceUUID}, 
+				(address, name) => 
+				{
+					AddPeripheral (address, name);
+				});
+		}
+	}
+
 	private void RefreshScanResultContent()
 	{
-		bluetoothPeripheralScanTip.SetActive (!isCentral);
 		RemovePeripherals ();
+		bluetoothPeripheralDetailBg.SetActive(!isCentral);
+		bluetoothConnectWaiting.SetActive(!isCentral);
+		bluetoothAdvertisingStopBtn.SetActive(!isCentral);
 	}
 
-	private void AddPeripheral (string address, string name)
+	private void AddPeripheral(string address, string name)
 	{
-		if (!peripheralDict.ContainsKey (address))
+		if(!peripheralDict.ContainsKey(address))
 		{
 			GameObject peripheral = GameManager.Instance.GetPrefabItem("BluetoothItem");
-			peripheral.SendMessage ("InitPrefabItem", new BluetoothInstance (address, name));
-			peripheral.transform.SetParent (bluetoothPeripheralScrollRect.transform);
+			peripheral.name = "BluetoothItem" + peripheralDict.Count;
+			peripheral.SendMessage("InitPrefabItem", new BluetoothInstance(address, name));
+			peripheral.SendMessage("InitDeleteWin", bluetoothPeripheralDetailBg	);
+			peripheral.transform.SetParent(bluetoothPeripheralScrollRect.transform);
 			peripheral.transform.localScale = Vector3.one;
 
-			peripheralDict [address] = name;
+			peripheralDict[address] = name;
 		}
 	}
 
-	private void RemovePeripherals ()
+	private void RemovePeripherals()
 	{
-		for (int i = 0; i < bluetoothPeripheralScrollRect.transform.childCount; i++)
+		for(int i = 0; i < bluetoothPeripheralScrollRect.transform.childCount; i++)
 		{
-			GameObject gameObject = bluetoothPeripheralScrollRect.transform.GetChild (i).gameObject;
-			Destroy (gameObject);
+			GameObject gameObject = bluetoothPeripheralScrollRect.transform.GetChild(i).gameObject;
+			Destroy(gameObject);
 		}
 
-		if (peripheralDict != null)	peripheralDict.Clear ();
+		if(peripheralDict != null) peripheralDict.Clear();
 	}
 
 	private void StartScan()
@@ -194,10 +228,23 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 							MyDebug.LogGreen("Start Advertising!");
 							bluetoothScanResultContent.SetActive (true);
 							RefreshScanResultContent ();
+							StartCoroutine(AdvertisingCountDown());
 							CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
 						});
 				});
 		}
+	}
+
+	private IEnumerator AdvertisingCountDown()
+	{
+		float time = advertisingTime;
+		while(time > 0)
+		{
+			time -= Time.deltaTime;
+			bluetoothConnectTime.text = Mathf.CeilToInt(time).ToString();
+			yield return null;
+		}
+		StopScan();
 	}
 
 	private void StopScan()
@@ -209,6 +256,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		} 
 		else
 		{
+			StopAllCoroutines();
 			BluetoothLEHardwareInterface.StopAdvertising (() => 
 				{
 					CommonTool.GuiHorizontalMove(bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
