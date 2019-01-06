@@ -14,7 +14,17 @@ public enum GuiFrameID
     SettlementFrame,           //结算界面
     ChapterFrame,              //关卡界面
     BluetoothFrame,            //蓝牙选项界面
+    NameBoardFrame,            //起名界面
+    CommonTipFrame             //提示信息界面
 }
+public enum GuiItemID
+{
+    AchievementItem,           //成就
+    SaveFileItem,              //存档
+    QuestionItem,              //问题
+    PeripheralItem             //外部设备
+}
+
 public enum ControllerID
 {
     MutiLanguageController,    //多语言控制器

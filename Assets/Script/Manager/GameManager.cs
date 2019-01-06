@@ -588,9 +588,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="name">Item名字</param>
     /// <returns></returns>
-    public GameObject GetPrefabItem(string name)
+    public GameObject GetPrefabItem(GuiItemID id)
     {
-        Object resource = c_ResourceCtrl.GetItemResource(name);
+        Object resource = c_ResourceCtrl.GetItemResource(id);
         return Instantiate(resource) as GameObject;
         //return c_ResourceCtrl.GetItemResource(name); ;
     }

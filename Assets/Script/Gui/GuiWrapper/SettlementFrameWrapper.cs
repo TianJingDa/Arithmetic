@@ -282,7 +282,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         {
             dataList = new ArrayList(allInstanceList);
         }
-        settlementGrid.InitList(dataList, "QuestionItem");
+        settlementGrid.InitList(dataList, GuiItemID.QuestionItem);
     }
     private void InitAchievement()
     {

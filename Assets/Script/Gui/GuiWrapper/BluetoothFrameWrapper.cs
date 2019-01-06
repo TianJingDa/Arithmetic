@@ -153,7 +153,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	{
 		if(!peripheralDict.ContainsKey(address))
 		{
-			GameObject peripheral = GameManager.Instance.GetPrefabItem("BluetoothItem");
+			GameObject peripheral = GameManager.Instance.GetPrefabItem(GuiItemID.PeripheralItem);
 			peripheral.name = "BluetoothItem" + peripheralDict.Count;
 			peripheral.SendMessage("InitPrefabItem", new BluetoothInstance(address, name));
             peripheral.SendMessage("InitDeleteWin", bluetoothPeripheralDetailBg);

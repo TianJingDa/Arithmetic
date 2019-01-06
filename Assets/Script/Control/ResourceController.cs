@@ -9,9 +9,10 @@ public sealed class ResourceController : Controller
     private ResourceController()
     {
         base.id = ControllerID.ResourceController;
-        guiAssetDict = new Dictionary<GuiFrameID, string>();
-        resourceDict = new Dictionary<GuiFrameID, Object>();
-        prefabItemDict = new Dictionary<string, string>();
+        frameAddressDict = new Dictionary<GuiFrameID, string>();
+        frameDict = new Dictionary<GuiFrameID, Object>();
+        itemAddressDict = new Dictionary<GuiItemID, string>();
+        itemDict = new Dictionary<GuiItemID, Object>();
         InitReourceData();
         MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
@@ -20,27 +21,31 @@ public sealed class ResourceController : Controller
         get { return instance ?? (instance = new ResourceController()); }
     }
     #endregion
-    private Dictionary<GuiFrameID, string> guiAssetDict;//key：GuiFrameID，value：资源路径
-    private Dictionary<GuiFrameID, Object> resourceDict;//key：GuiFrameID，value：资源
-    private Dictionary<string, string> prefabItemDict;//key：Item名称，value：资源路径
+    private Dictionary<GuiFrameID, string> frameAddressDict;//key：GuiFrameID，value：资源路径
+    private Dictionary<GuiFrameID, Object> frameDict;//key：GuiFrameID，value：资源
+    private Dictionary<GuiItemID, string> itemAddressDict;//key：Item名称，value：资源路径
+    private Dictionary<GuiItemID, Object> itemDict;//key：GuiFrameID，value：资源
+
     /// <summary>
     /// 注册所有资源地址
     /// </summary>
     private void InitReourceData()
     {
-        guiAssetDict.Add(GuiFrameID.StartFrame, "GuiWrapper/StartFrame");
-        guiAssetDict.Add(GuiFrameID.StatisticsFrame, "GuiWrapper/StatisticsFrame");
-        guiAssetDict.Add(GuiFrameID.CategoryFrame, "GuiWrapper/CategoryFrame");
-        guiAssetDict.Add(GuiFrameID.SetUpFrame, "GuiWrapper/SetUpFrame");
-        guiAssetDict.Add(GuiFrameID.FightFrame, "GuiWrapper/FightFrame");
-        guiAssetDict.Add(GuiFrameID.SettlementFrame, "GuiWrapper/SettlementFrame");
-        guiAssetDict.Add(GuiFrameID.ChapterFrame, "GuiWrapper/ChapterFrame");
-        guiAssetDict.Add(GuiFrameID.BluetoothFrame, "GuiWrapper/BluetoothFrame");
+        frameAddressDict.Add(GuiFrameID.StartFrame, "GuiWrapper/StartFrame");
+        frameAddressDict.Add(GuiFrameID.StatisticsFrame, "GuiWrapper/StatisticsFrame");
+        frameAddressDict.Add(GuiFrameID.CategoryFrame, "GuiWrapper/CategoryFrame");
+        frameAddressDict.Add(GuiFrameID.SetUpFrame, "GuiWrapper/SetUpFrame");
+        frameAddressDict.Add(GuiFrameID.FightFrame, "GuiWrapper/FightFrame");
+        frameAddressDict.Add(GuiFrameID.SettlementFrame, "GuiWrapper/SettlementFrame");
+        frameAddressDict.Add(GuiFrameID.ChapterFrame, "GuiWrapper/ChapterFrame");
+        frameAddressDict.Add(GuiFrameID.BluetoothFrame, "GuiWrapper/BluetoothFrame");
+        frameAddressDict.Add(GuiFrameID.NameBoardFrame, "GuiWrapper/NameBoardFrame");
+        frameAddressDict.Add(GuiFrameID.CommonTipFrame, "GuiWrapper/CommonTipFrame");
 
-        prefabItemDict.Add("AchievementItem", "GuiItem/AchievementItem");
-        prefabItemDict.Add("SaveFileItem", "GuiItem/SaveFileItem");
-        prefabItemDict.Add("QuestionItem", "GuiItem/QuestionItem");
-		prefabItemDict.Add("BluetoothItem", "GuiItem/BluetoothItem");
+        itemAddressDict.Add(GuiItemID.AchievementItem, "GuiItem/AchievementItem");
+        itemAddressDict.Add(GuiItemID.SaveFileItem, "GuiItem/SaveFileItem");
+        itemAddressDict.Add(GuiItemID.QuestionItem, "GuiItem/QuestionItem");
+		itemAddressDict.Add(GuiItemID.PeripheralItem, "GuiItem/PeripheralItem");
     }
 
     /// <summary>
@@ -51,20 +56,20 @@ public sealed class ResourceController : Controller
     public Object GetGuiResource(GuiFrameID id)
     {
         Object resouce = null;
-		if(!resourceDict.TryGetValue(id, out resouce))
+		if(!frameDict.TryGetValue(id, out resouce))
         {
-            resouce = Resources.Load(guiAssetDict[id]);
-            resourceDict.Add(id, resouce);
+            resouce = Resources.Load(frameAddressDict[id]);
+            frameDict.Add(id, resouce);
         }
         return resouce;
     }
-    public Object GetItemResource(string name)
+    public Object GetItemResource(GuiItemID id)
     {
         Object resouce = null;
-        string address;
-		if(prefabItemDict.TryGetValue(name, out address))
+		if(!itemDict.TryGetValue(id, out resouce))
 		{
-			resouce = Resources.Load(address);
+			resouce = Resources.Load(itemAddressDict[id]);
+            itemDict.Add(id, resouce);
 		}
         return resouce;
     }

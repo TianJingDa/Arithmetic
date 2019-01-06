@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114457837151705032}
   - component: {fileID: 114945520695105298}
   m_Layer: 0
-  m_Name: BluetoothItem
+  m_Name: PeripheralItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

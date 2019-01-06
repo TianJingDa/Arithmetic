@@ -233,7 +233,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         {
             dataList = new ArrayList(content.qInstancList);
         }
-        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
+        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, GuiItemID.QuestionItem);
     }
     protected bool FindWrong(QuentionInstance questionInstance)
     {

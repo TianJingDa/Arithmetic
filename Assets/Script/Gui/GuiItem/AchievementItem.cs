@@ -185,7 +185,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         {
             dataList = new ArrayList(allInstanceList);
         }
-        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, "QuestionItem");
+        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, GuiItemID.QuestionItem);
     }
     protected string GetFinishTime(string time)
     {

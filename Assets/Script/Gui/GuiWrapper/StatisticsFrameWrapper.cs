@@ -35,11 +35,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject achievementSummary;
     private GameObject saveFileShareWinInStatistics;
     private GameObject saveFileSharePageInStatistics;
-    private GameObject saveFileNameBoard;
-    private GameObject saveFileNameTipBoard;
     private GameObject achievementDetailBgInStatistics;
-    private GameObject achievementNameBoard;
-    private GameObject achievementNameTipBoard;
     private GameObject achievementDetailPageInStatistics;
     private InfiniteList achievementGrid;
     private InfiniteList saveFileGrid;
@@ -99,13 +95,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         seniorStatisticsItemData                = gameObjectDict["SeniorStatisticsItemData"].GetComponent<Text>();
         ultimateStatisticsItemData              = gameObjectDict["UltimateStatisticsItemData"].GetComponent<Text>();
         achievementDetailBgInStatistics         = gameObjectDict["AchievementDetailBgInStatistics"];
-        achievementNameBoard                    = gameObjectDict["AchievementNameBoard"];
-        achievementNameTipBoard                 = gameObjectDict["AchievementNameTipBoard"];
         achievementDetailPageInStatistics       = gameObjectDict["AchievementDetailPageInStatistics"];
         saveFileShareWinInStatistics            = gameObjectDict["SaveFileShareWinInStatistics"];
         saveFileSharePageInStatistics           = gameObjectDict["SaveFileSharePageInStatistics"];
-        saveFileNameBoard                       = gameObjectDict["SaveFileNameBoard"];
-        saveFileNameTipBoard                    = gameObjectDict["SaveFileNameTipBoard"];
         additionSaveFileItem                    = gameObjectDict["AdditionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         subtractionSaveFileItem                 = gameObjectDict["SubtractionSaveFileItem"].GetComponent<SummarySaveFileItem>();
         multiplicationSaveFileItem              = gameObjectDict["MultiplicationSaveFileItem"].GetComponent<SummarySaveFileItem>();
@@ -136,15 +128,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 RefreshAchievementWin();
                 CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
-            case "AchievementNameBoard":
-            case "AchievementInputFieldCancelBtn":
-                achievementNameBoard.SetActive(false);
-                break;
-            case "AchievementNameTipBoard":
-            case "AchievementNameTipBoardCancelBtn":
-                achievementNameTipBoard.SetActive(false);
-                achievementNameBoard.SetActive(true);
-                break;
             case "AchievementDetailBgInStatistics":
                 CommonTool.GuiScale(achievementDetailBgInStatistics, canvasGroup, false);
                 break;
@@ -166,15 +149,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 saveFileWin.SetActive(true);
                 RefreshSaveFileWin();
                 CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
-                break;
-            case "SaveFileInputFieldCancelBtn":
-            case "SaveFileNameBoard":
-                saveFileNameBoard.SetActive(false);
-                break;
-            case "SaveFileNameTipBoard":
-            case "SaveFileNameTipBoardCancelBtn":
-                saveFileNameTipBoard.SetActive(false);
-                saveFileNameBoard.SetActive(true);
                 break;
             case "SaveFileDetai2SaveFileWinBtn":
                 CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false);
@@ -320,14 +294,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementSummary.SetActive(false);
         ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
-        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
+        achievementGrid.InitList(dataList, GuiItemID.AchievementItem, achievementDetailBgInStatistics, deleteAchievementBg);
     }
     private void RefreshAchievementDict()
     {
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict[(DifficultyID)curAchievementIndex] = achievementList.FindAll(x => x.difficulty == curAchievementIndex);
         ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
-        achievementGrid.InitList(dataList, "AchievementItem", achievementDetailBgInStatistics, deleteAchievementBg);
+        achievementGrid.InitList(dataList, GuiItemID.AchievementItem, achievementDetailBgInStatistics, deleteAchievementBg);
     }
 
     #endregion
@@ -376,7 +350,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileSummary.SetActive(false);
         SymbolID symbolID = (SymbolID)curSaveFileIndex;
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
-        saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
+        saveFileGrid.InitList(dataList, GuiItemID.SaveFileItem, saveFileDetailBg, deleteSaveFileBg);
     }
     /// <summary>
     /// 用于删除存档时对saveFileDict进行更新，并更新显示
@@ -389,7 +363,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         curSaveFileCount = saveFileList.Count;
         saveFileDict[symbolID] = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
-        saveFileGrid.InitList(dataList, "SaveFileItem", saveFileDetailBg, deleteSaveFileBg);
+        saveFileGrid.InitList(dataList, GuiItemID.SaveFileItem, saveFileDetailBg, deleteSaveFileBg);
     }
     #endregion
 }
