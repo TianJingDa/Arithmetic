@@ -7,7 +7,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 {
 	private const float 				advertisingTime = 10;
 	private bool   						isCentral;
-	private Dictionary<string,string> 	peripheralDict;
+    private Dictionary<string, string>  peripheralDict;
 
 	private PatternID   curPatternID;
 	private AmountID    curAmountID;
@@ -17,11 +17,12 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
     private GameObject  bluetoothCategoryContent;
 	private GameObject  bluetoothScanResultContent;
-	private GameObject 	bluetoothPeripheralScrollRect;
 	private GameObject  bluetoothPeripheralDetailBg;
 	private GameObject  bluetoothAdvertisingStopBtn;
 	private GameObject  bluetoothConnectWaiting;
-	private Text  		bluetoothConnectTime;
+    private GameObject  bluetoothReScanBtn;
+    private Transform   bluetoothScrollContent;
+    private Text  		bluetoothConnectTime;
 
 
     void Start ()
@@ -37,11 +38,12 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
     {
 		bluetoothCategoryContent    	= gameObjectDict["BluetoothCategoryContent"];
 		bluetoothScanResultContent    	= gameObjectDict["BluetoothScanResultContent"];
-		bluetoothPeripheralScrollRect	= gameObjectDict["BluetoothPeripheralScrollRect"];
 		bluetoothPeripheralDetailBg     = gameObjectDict["BluetoothPeripheralDetailBg"];
-		bluetoothAdvertisingStopBtn 	= gameObjectDict["bluetoothAdvertisingStopBtn"];
 		bluetoothConnectWaiting 		= gameObjectDict["BluetoothConnectWaiting"];
-		bluetoothConnectTime 			= gameObjectDict["BluetoothConnectTime"].GetComponent<Text>();
+        bluetoothAdvertisingStopBtn     = gameObjectDict["BluetoothAdvertisingStopBtn"];
+        bluetoothReScanBtn              = gameObjectDict["BluetoothReScanBtn"];
+        bluetoothConnectTime            = gameObjectDict["BluetoothConnectTime"].GetComponent<Text>();
+        bluetoothScrollContent          = gameObjectDict["BluetoothScrollContent"].GetComponent<Transform>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -60,7 +62,11 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 				InitializeBluetooth (false);	
                 break;
 			case "BackFromContentBtn":
-				CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                BluetoothLEHardwareInterface.DeInitialize(() =>
+                {
+                    MyDebug.LogGreen("DeInitialize Success!");
+                    CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                });
 				break;
 			case "BackFromScanResultBtn":
 			case "BluetoothAdvertisingStopBtn":
@@ -69,7 +75,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			case "BluetoothScanBtn":
 				StartScan();
 				break;
-			case "BluetoothConnectCancelBtn":
+			case "ConnectCancelBtn":
 				bluetoothPeripheralDetailBg.SetActive(false);
 				break;
 			case "BluetoothReScanBtn":
@@ -137,7 +143,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	private void RefreshScanResultContent()
 	{
 		RemovePeripherals ();
-		bluetoothPeripheralDetailBg.SetActive(!isCentral);
+        bluetoothReScanBtn.SetActive(isCentral);
+        bluetoothPeripheralDetailBg.SetActive(!isCentral);
 		bluetoothConnectWaiting.SetActive(!isCentral);
 		bluetoothAdvertisingStopBtn.SetActive(!isCentral);
 	}
@@ -149,8 +156,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			GameObject peripheral = GameManager.Instance.GetPrefabItem("BluetoothItem");
 			peripheral.name = "BluetoothItem" + peripheralDict.Count;
 			peripheral.SendMessage("InitPrefabItem", new BluetoothInstance(address, name));
-			peripheral.SendMessage("InitDeleteWin", bluetoothPeripheralDetailBg	);
-			peripheral.transform.SetParent(bluetoothPeripheralScrollRect.transform);
+            peripheral.SendMessage("InitDeleteWin", bluetoothPeripheralDetailBg);
+			peripheral.transform.SetParent(bluetoothScrollContent);
 			peripheral.transform.localScale = Vector3.one;
 
 			peripheralDict[address] = name;
@@ -159,13 +166,13 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 	private void RemovePeripherals()
 	{
-		for(int i = 0; i < bluetoothPeripheralScrollRect.transform.childCount; i++)
+		for(int i = 0; i < bluetoothScrollContent.childCount; i++)
 		{
-			GameObject gameObject = bluetoothPeripheralScrollRect.transform.GetChild(i).gameObject;
+			GameObject gameObject = bluetoothScrollContent.GetChild(i).gameObject;
 			Destroy(gameObject);
 		}
 
-		if(peripheralDict != null) peripheralDict.Clear();
+        if (peripheralDict != null) peripheralDict.Clear();
 	}
 
 	private void StartScan()
@@ -208,7 +215,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 			BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
 				{
-					MyDebug.LogGreen("Create Service Success:"+message);
+                    MyDebug.LogGreen("Create Service Success:" + message);
 					BluetoothLEHardwareInterface.StartAdvertising (() => 
 						{
 							MyDebug.LogGreen("Start Advertising!");
@@ -258,36 +265,38 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		
 	private void InitializeBluetooth(bool isCentral)
     {
-		this.isCentral = isCentral;
-		BluetoothLEHardwareInterface.Initialize(isCentral, !isCentral, () =>
-        {
-            MyDebug.LogGreen("Central Initialize Success");
-			bluetoothCategoryContent.SetActive(true);
-			RefreshCategoryContent();
-			CommonTool.GuiHorizontalMove(bluetoothCategoryContent,Screen.width,MoveID.RightOrUp,canvasGroup,true);
-        },
-        (error) =>
-        {
-            if (error.Contains("Not Supported"))
+        this.isCentral = isCentral;
+        BluetoothLEHardwareInterface.Initialize(isCentral, !isCentral,
+            () =>
             {
-                MyDebug.LogYellow("Not Supported");
-            }
-            else if (error.Contains("Not Authorized"))
+                MyDebug.LogGreen("Initialize Success: " + isCentral);
+                bluetoothCategoryContent.SetActive(true);
+                RefreshCategoryContent();
+                CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+            },
+            (error) =>
             {
-                MyDebug.LogYellow("Not Authorized");
-            }
-            else if (error.Contains("Powered Off"))
-            {
-                MyDebug.LogYellow("Powered Off");
-            }
-            else if (error.Contains("Not Enabled"))
-            {
-                MyDebug.LogYellow("Not Enabled");
-            }
-            else
-            {
-                MyDebug.LogYellow("Central Initialize Fail: " + error);
-            }
-        });
+                if (error.Contains("Not Supported"))
+                {
+                    MyDebug.LogYellow("Not Supported");
+                }
+                else if (error.Contains("Not Authorized"))
+                {
+                    MyDebug.LogYellow("Not Authorized");
+                }
+                else if (error.Contains("Powered Off"))
+                {
+                    MyDebug.LogYellow("Powered Off");
+                }
+                else if (error.Contains("Not Enabled"))
+                {
+                    MyDebug.LogYellow("Not Enabled");
+                }
+                else
+                {
+                    MyDebug.LogYellow("Central Initialize Fail: " + error);
+                }
+            });
+
     }
 }

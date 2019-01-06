@@ -14,7 +14,7 @@ public class BluetoothItem : Item, IPointerClickHandler
 	private GameObject bluetoothConnectWaiting;
 	private Text periphralName;
 	private Text periphralAddress;
-	private Text bluetoothConnectTimeText;
+	private Text bluetoothConnectTime;
 
 	protected override void InitPrefabItem(object data)
 	{
@@ -48,12 +48,12 @@ public class BluetoothItem : Item, IPointerClickHandler
 			Dictionary<string, GameObject> detailWinDict = CommonTool.InitGameObjectDict(detailWin);
 			bluetoothConnectWaiting = detailWinDict["BluetoothConnectWaiting"];
 			GameObject connectConfirmBtn = detailWinDict["ConnectConfirmBtn"];
-			bluetoothConnectTimeText = detailWinDict["BluetoothConnectTimeText"].GetComponent<Text>();
-			Text peripheralConnectTip = detailWinDict["PeripheralConnectTip"].GetComponent<Text>();
+			bluetoothConnectTime = detailWinDict["BluetoothConnectTime"].GetComponent<Text>();
+			Text bluetoothPeripheralDetailTitle_Text = detailWinDict["BluetoothPeripheralDetailTitle_Text"].GetComponent<Text>();
 
 			bluetoothConnectWaiting.SetActive(false);
-			string tip = GameManager.Instance.GetMutiLanguage(peripheralConnectTip.index);
-			peripheralConnectTip.text = string.Format(tip, content.name);
+			string tip = GameManager.Instance.GetMutiLanguage(bluetoothPeripheralDetailTitle_Text.index);
+            bluetoothPeripheralDetailTitle_Text.text = string.Format(tip, content.name);
 			CommonTool.AddEventTriggerListener(connectConfirmBtn, EventTriggerType.PointerClick, ConnectToPeripheral);
 		}
 	}
@@ -90,7 +90,7 @@ public class BluetoothItem : Item, IPointerClickHandler
 					// be aware that this will also get called when the disconnect
 					// is called above. both methods get call for the same action
 					// this is for backwards compatibility
-					MyDebug.LogWhite("Peripheral Disconnect Actively!");
+					MyDebug.LogWhite("Peripheral Disconnect!");
 				});
 	}
 
@@ -100,18 +100,12 @@ public class BluetoothItem : Item, IPointerClickHandler
 		while(time > 0)
 		{
 			time -= Time.deltaTime;
-			bluetoothConnectTimeText.text = Mathf.CeilToInt(time).ToString();
+			bluetoothConnectTime.text = Mathf.CeilToInt(time).ToString();
 			yield return null;
 		}
-		//TODO:待验证
-		BluetoothLEHardwareInterface.DisconnectPeripheral (content.address, (message)=>
-			{
-				MyDebug.LogYellow("Disconnect Peripheral Because Time Out!");
-				detailWin.SetActive(false);
-			});
-
-
-	}
+        BluetoothLEHardwareInterface.DisconnectPeripheral(content.address, null);
+        detailWin.SetActive(false);
+    }
 }
 
 [Serializable]

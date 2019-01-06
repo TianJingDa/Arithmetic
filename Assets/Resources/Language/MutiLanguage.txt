@@ -247,4 +247,9 @@ Text_70018,开始游戏,TJD
 Text_80000,联机对战,TJD
 Text_80001,发起挑战,TJD
 Text_80002,接受挑战,TJD
-Text_80003,安卓平台仅支持发起挑战！,TJD
+Text_80003,开始搜索,TJD
+Text_80004,是否要连接到“{0}”,TJD
+Text_80005,否,TJD
+Text_80006,是，连接,TJD
+Text_80007,取消连接,TJD
+Text_80008,连接中，请稍后... ...,TJD
