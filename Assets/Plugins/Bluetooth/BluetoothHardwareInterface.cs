@@ -158,18 +158,20 @@ public class BluetoothLEHardwareInterface
 
 	public static void Log (string message)
 	{
-		if (!Application.isEditor)
-		{
-#if UNITY_IPHONE || UNITY_TVOS
-			_iOSBluetoothLELog (message);
-#elif UNITY_ANDROID
-			if (_android != null)
-				_android.Call ("androidBluetoothLog", message);
+#if UNITY_EDITOR
+        message = "@TJD@" + message;
+        Debug.Log(message);
+#elif (UNITY_IPHONE || UNITY_TVOS) && SHOW_DEBUG
+        message = "@TJD@" + message;
+		_iOSBluetoothLELog (message);
+#elif UNITY_ANDROID && SHOW_DEBUG
+        message = "@TJD@" + message;
+		if (_android != null)
+			_android.Call ("androidBluetoothLog", message);
 #endif
-		}
-	}
+    }
 
-	public static BluetoothDeviceScript Initialize (bool asCentral, bool asPeripheral, Action action, Action<string> errorAction)
+    public static BluetoothDeviceScript Initialize (bool asCentral, bool asPeripheral, Action action, Action<string> errorAction)
 	{
 		bluetoothDeviceScript = null;
 

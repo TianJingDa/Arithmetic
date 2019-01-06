@@ -38,11 +38,6 @@ public class BluetoothDeviceScript : MonoBehaviour
 		DidUpdateCharacteristicValueWithDeviceAddressAction = new Dictionary<string, Dictionary<string, Action<string, string, byte[]>>> ();
 	}
 
-	// Update is called once per frame
-	void Update ()
-	{
-	}
-
 	const string deviceInitializedString = "Initialized";
 	const string deviceDeInitializedString = "DeInitialized";
 	const string deviceErrorString = "Error";
