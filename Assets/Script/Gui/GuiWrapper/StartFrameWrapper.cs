@@ -25,16 +25,16 @@ public class StartFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "StatisticsBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StatisticsFrame, MoveID.LeftOrDown, true);
+                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.StatisticsFrame, MoveID.LeftOrDown, true);
                 break;
             case "CategoryBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CategoryFrame, true);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.CategoryFrame, true);
                 break;
             case "SetUpBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.SetUpFrame, MoveID.RightOrUp, true);
+                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.SetUpFrame, MoveID.RightOrUp, true);
                 break;
             case "ChapterBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ChapterFrame, true);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.ChapterFrame, true);
                 break;
             case "BluetoothBtn":
                 //if (Application.isEditor) return;
@@ -44,7 +44,7 @@ public class StartFrameWrapper : GuiFrameWrapper
 				//	MyDebug.LogYellow("Please Set Your Name!");
 				//	return;
 				//}
-                GameManager.Instance.SwitchWrapper(GuiFrameID.BluetoothFrame, true);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.BluetoothFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

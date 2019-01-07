@@ -59,7 +59,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
         {
             case "Chapter2StartFrameBtn":
             case "ChapterWin2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, false);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
             case "ChapterWin2ChapterFrameBtn":
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);

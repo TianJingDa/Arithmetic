@@ -116,7 +116,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "Achievement2StartFrameBtn":
             case "Save2StartFrameBtn":
             case "Statistics2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, MoveID.LeftOrDown, false);
+                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.StartFrame, MoveID.LeftOrDown, false);
                 break;
             case "Achievement2StatisticsFrameBtn":
                 GameManager.Instance.CurAction = null;

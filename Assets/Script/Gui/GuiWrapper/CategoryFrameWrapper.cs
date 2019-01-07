@@ -47,7 +47,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Category2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, false);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
             case "Category2FightFrameBtn":
                 CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);

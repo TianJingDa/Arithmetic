@@ -53,7 +53,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Bluetooth2StartFrameBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame, false);
+                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
 			case "BluetoothCentralBtn":
 				InitializeBluetooth (true);

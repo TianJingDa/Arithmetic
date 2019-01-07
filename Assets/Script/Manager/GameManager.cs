@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private float                                               m_TweenDuration = 0.5f;             //Tween动画持续时间
     private SaveFileInstance                                    m_SaveFileInstance;
     private GameObject                                          m_Root;                             //UI对象的根对象
-    private GameObject                                          m_CurWrapper;                       //当前激活的GuiWrapper
+    private Stack<GuiFrameWrapper>                              m_GuiFrameStack;                    //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
     private System.Action                                       m_CurAction;                        //用于刷新SaveFile和Achievement列表
     private System.Action                                       m_ShareAction;                      //用于分享时初始化用户名称
@@ -221,7 +221,13 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            return m_CurWrapper.GetComponent<CanvasGroup>();
+            CanvasGroup canvas = null;
+            if (m_GuiFrameStack.Count > 0)
+            {
+                GuiFrameWrapper gui = m_GuiFrameStack.Peek();
+                canvas = gui.GetComponent<CanvasGroup>();
+            }
+            return canvas;
         }
     }
     private string LastestAchievement
@@ -277,7 +283,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
-        m_CurWrapper = Instantiate(c_ResourceCtrl.GetGuiResource(GuiFrameID.StartFrame), m_Root.transform) as GameObject;
+        m_GuiFrameStack = new Stack<GuiFrameWrapper>();
+        SwitchWrapper(GuiFrameID.StartFrame, true);
         m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 10, 30, 50 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
@@ -510,16 +517,33 @@ public class GameManager : MonoBehaviour
     /// GuiWrapper切换，无动画
     /// </summary>
     /// <param name="targetID"></param>
-    public void SwitchWrapper(GuiFrameID targetID)
+    public void SwitchWrapper(GuiFrameID targetID, bool isAdd = false)
     {
-        Destroy(m_CurWrapper);
-        Object reource = c_ResourceCtrl.GetGuiResource(targetID);
-        if (reource == null)
+        if (!isAdd)
         {
-            MyDebug.LogYellow("Can not load reousce:" + targetID.ToString());
-            return;
+            if (m_GuiFrameStack.Count > 0)
+            {
+                GuiFrameWrapper oldGui = m_GuiFrameStack.Pop();
+                if (oldGui) Destroy(oldGui.gameObject);
+            }
         }
-        m_CurWrapper = Instantiate(reource, m_Root.transform) as GameObject;
+        GuiFrameWrapper topGui = null;
+        if(m_GuiFrameStack.Count > 0)
+        {
+            topGui = m_GuiFrameStack.Peek();
+        }
+        if (topGui && topGui.id == targetID) { }
+        else
+        {
+            Object reource = c_ResourceCtrl.GetGuiResource(targetID);
+            if (reource == null)
+            {
+                MyDebug.LogYellow("Can not load reousce:" + targetID.ToString());
+                return;
+            }
+            GameObject newGui = Instantiate(reource, m_Root.transform) as GameObject;
+            m_GuiFrameStack.Push(newGui.GetComponent<GuiFrameWrapper>());
+        }
     }
     /// <summary>
     /// GuiWrapper切换，有移动动画
@@ -527,7 +551,7 @@ public class GameManager : MonoBehaviour
     /// <param name="targetID"></param>
     /// <param name="mID"></param>
     /// <param name="isIn"></param>
-    public void SwitchWrapper(GuiFrameID targetID, MoveID mID, bool isIn)
+    public void SwitchWrapperWithMove(GuiFrameID targetID, MoveID mID, bool isIn)
     {
         m_Root.GetComponent<GraphicRaycaster>().enabled = false;
         Object reource = c_ResourceCtrl.GetGuiResource(targetID);
@@ -547,7 +571,9 @@ public class GameManager : MonoBehaviour
         else
         {
             targetWrapper.transform.SetAsFirstSibling();
-            m_CurWrapper.transform.DOLocalMoveX(Screen.width * (int)mID, m_TweenDuration, true).
+            GuiFrameWrapper topGui = null;
+            if (m_GuiFrameStack.Count > 0) topGui = m_GuiFrameStack.Peek();
+            if(topGui) topGui.transform.DOLocalMoveX(Screen.width * (int)mID, m_TweenDuration, true).
                                    SetEase(Ease.OutQuint).
                                    OnComplete(() => TweenComplete(targetWrapper));
         }
@@ -557,7 +583,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="targetID"></param>
     /// <param name="isIn"></param>
-    public void SwitchWrapper(GuiFrameID targetID, bool isIn)
+    public void SwitchWrapperWithScale(GuiFrameID targetID, bool isIn)
     {
         m_Root.GetComponent<GraphicRaycaster>().enabled = false;
         Object reource = c_ResourceCtrl.GetGuiResource(targetID);
@@ -577,7 +603,9 @@ public class GameManager : MonoBehaviour
         else
         {
             targetWrapper.transform.SetAsFirstSibling();
-            m_CurWrapper.transform.DOScale(Vector3.zero, m_TweenDuration).
+            GuiFrameWrapper topGui = null;
+            if (m_GuiFrameStack.Count > 0) topGui = m_GuiFrameStack.Peek();
+            if (topGui) topGui.transform.DOScale(Vector3.zero, m_TweenDuration).
                                    SetEase(Ease.OutQuint).
                                    OnComplete(() => TweenComplete(targetWrapper));
         }
@@ -768,8 +796,12 @@ public class GameManager : MonoBehaviour
 
     private void TweenComplete(GameObject targetWrapper)
     {
-        Destroy(m_CurWrapper);
-        m_CurWrapper = targetWrapper;
+        if (m_GuiFrameStack.Count > 0)
+        {
+            GuiFrameWrapper oldGui = m_GuiFrameStack.Pop();
+            if (oldGui) Destroy(oldGui.gameObject);
+        }
+        m_GuiFrameStack.Push(targetWrapper.GetComponent<GuiFrameWrapper>());
         m_Root.GetComponent<GraphicRaycaster>().enabled = true;
     }
 #endregion

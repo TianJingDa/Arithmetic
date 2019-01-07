@@ -63,11 +63,11 @@ public class BluetoothItem : Item, IPointerClickHandler
 		GameManager.Instance.CurBluetoothInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
-		BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
-			(address) => 
+        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
+            (address) => 
 				{
-					GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
-					GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
+                    GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
+                    GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
 				},
 			(address, serviceUUID) => {},
 			(address, serviceUUID, characteristicUUID) => 
@@ -76,21 +76,21 @@ public class BluetoothItem : Item, IPointerClickHandler
 					{				
 						if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
 						{
-							BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (GameManager.Instance.CurBluetoothInstance.address, 
-									   															   GameManager.Instance.ServiceUUID, 
-																								   GameManager.Instance.ReadUUID,
-								(deviceAddress, notification) => {}, 
-								(deviceAddress, characteristic, data) => {});
+                            BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (GameManager.Instance.CurBluetoothInstance.address,
+                                                                                                      GameManager.Instance.ServiceUUID,
+                                                                                                   GameManager.Instance.ReadUUID,
+								(string deviceAddress, string notification) => {}, 
+								(string deviceAddress, string characteristic, byte[] data) => {});
 						}
 					}
 				}, 
 			(address) =>
 				{
-					// this will get called when the device disconnects
-					// be aware that this will also get called when the disconnect
-					// is called above. both methods get call for the same action
-					// this is for backwards compatibility
-					MyDebug.LogWhite("Peripheral Disconnect!");
+                    // this will get called when the device disconnects
+                    // be aware that this will also get called when the disconnect
+                    // is called above. both methods get call for the same action
+                    // this is for backwards compatibility
+                    MyDebug.LogWhite("Peripheral Disconnect!");
 				});
 	}
 
