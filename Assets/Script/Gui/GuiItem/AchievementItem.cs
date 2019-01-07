@@ -13,7 +13,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected float durationThreshold = 1.0f;
     protected bool isLongPress;
     protected bool onlyWrong;
-    protected string userName;
 
     protected AchievementInstance content;//详情
     protected List<QuentionInstance> onlyWrongList;
@@ -111,8 +110,10 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected void OnShareBtn(BaseEventData data)
     {
-        if (SetUserName()) return;
-        ShowShareBtn();
+        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+            GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+        else
+            ShowShareBtn();
     }
     protected void ShowShareBtn()
     {
@@ -123,43 +124,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         RectTransform achievementShareBtnsBgInStatistics = detailWinDict["AchievementShareBtnsBgInStatistics"].transform as RectTransform;
         achievementShareBtnsBgInStatistics.gameObject.SetActive(true);
         achievementShareBtnsBgInStatistics.DOMoveY(achievementShareBtnsBgInStatistics.rect.y, 0.3f, true).From();
-    }
-    protected bool SetUserName()
-    {
-        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-        {
-            GameObject achievementNameBoard = detailWinDict["AchievementNameBoard"];
-            GameObject achievementInputFieldConfirmBtn = detailWinDict["AchievementInputFieldConfirmBtn"];
-            InputField achievementInputField = detailWinDict["AchievementInputField"].GetComponent<InputField>();
-            achievementNameBoard.SetActive(true);
-            achievementInputField.onEndEdit.AddListener(OnEndEdit);
-            CommonTool.AddEventTriggerListener(achievementInputFieldConfirmBtn, EventTriggerType.PointerClick, OnNameConfirmBtn);
-        }
-        return string.IsNullOrEmpty(GameManager.Instance.UserName);
-    }
-
-    protected void OnNameConfirmBtn(BaseEventData data)
-    {
-        if (string.IsNullOrEmpty(userName)) return;
-        detailWinDict["AchievementNameBoard"].SetActive(false);
-        detailWinDict["AchievementNameTipBoard"].SetActive(true);
-        Text achievementNameTipBoardContent = detailWinDict["AchievementNameTipBoardContent"].GetComponent<Text>();
-        string curName = GameManager.Instance.GetMutiLanguage(achievementNameTipBoardContent.index);
-        achievementNameTipBoardContent.text = string.Format(curName, userName);
-        CommonTool.AddEventTriggerListener(detailWinDict["AchievementNameTipBoardConfirmBtn"], EventTriggerType.PointerClick, OnTipConfirmBtn);
-    }
-    protected void OnTipConfirmBtn(BaseEventData data)
-    {
-        GameManager.Instance.UserName = userName;
-        detailWinDict["AchievementNameTipBoard"].SetActive(false);
-        detailWinDict["AchievementNameBoard"].SetActive(false);
-        ShowShareBtn();
-    }
-
-
-    protected void OnEndEdit(string text)
-    {
-        userName = text;
     }
 
     protected bool FindWrong(QuentionInstance questionInstance)

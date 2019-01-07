@@ -189,6 +189,9 @@ public class GameManager : MonoBehaviour
             return achievement == null;
         }
     }
+    /// <summary>
+    /// 用于区分三种竞赛方式：成就、自由、蓝牙 
+    /// </summary>
 	public GuiFrameID LastGUI
     {
         get;
@@ -527,13 +530,8 @@ public class GameManager : MonoBehaviour
                 if (oldGui) Destroy(oldGui.gameObject);
             }
         }
-        GuiFrameWrapper topGui = null;
-        if(m_GuiFrameStack.Count > 0)
-        {
-            topGui = m_GuiFrameStack.Peek();
-        }
-        if (topGui && topGui.id == targetID) { }
-        else
+
+        if (targetID != GuiFrameID.None)
         {
             Object reource = c_ResourceCtrl.GetGuiResource(targetID);
             if (reource == null)

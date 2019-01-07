@@ -6,6 +6,7 @@ public enum LanguageID
 }
 public enum GuiFrameID
 {
+    None,                      //空界面，用于从界面的返回，如起名界面等
     CategoryFrame,             //类别选择界面
     FightFrame,                //答题界面
     StartFrame,                //开始界面
