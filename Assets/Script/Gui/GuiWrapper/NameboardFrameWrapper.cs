@@ -7,6 +7,7 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 {
     private string          userName;
 
+    private GameObject      nameBoardPage;
     private GameObject      nameTipBoard;
 
     private Text            nameTipBoardContent;
@@ -17,10 +18,12 @@ public class NameboardFrameWrapper : GuiFrameWrapper
         id = GuiFrameID.NameBoardFrame;
         Init();
         nameBoardInputField.onEndEdit.AddListener(OnEndEdit);
+        CommonTool.GuiScale(nameBoardPage, canvasGroup, true);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
+        nameBoardPage           = gameObjectDict["NameBoardPage"];
         nameTipBoard            = gameObjectDict["NameTipBoard"];
         nameTipBoardContent     = gameObjectDict["NameTipBoardContent"].GetComponent<Text>();
         nameBoardInputField     = gameObjectDict["NameBoardInputField"].GetComponent<InputField>();
