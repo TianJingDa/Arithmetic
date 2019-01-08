@@ -106,4 +106,9 @@ public enum DifficultyID
     Senior,                    //高级
     Ultimate                   //终极
 }
-
+public enum CommonTipID
+{
+    Single,                    //单独确认键
+    Double,                    //确认加取消
+    Splash                     //无按键，自动消失
+}

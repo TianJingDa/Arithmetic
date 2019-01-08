@@ -253,3 +253,7 @@ Text_80005,否,TJD
 Text_80006,是，连接,TJD
 Text_80007,取消连接,TJD
 Text_80008,连接中，请稍后... ...,TJD
+Text_80009,蓝牙不支持,TJD
+Text_80010,蓝牙未授权,TJD
+Text_80011,蓝牙已关闭,TJD
+Text_80012,蓝牙未开启,TJD

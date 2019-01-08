@@ -276,26 +276,35 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             },
             (error) =>
             {
+                string message = "";
                 if (error.Contains("Not Supported"))
                 {
                     MyDebug.LogYellow("Not Supported");
+                    message = GameManager.Instance.GetMutiLanguage("Text_80009");
                 }
                 else if (error.Contains("Not Authorized"))
                 {
                     MyDebug.LogYellow("Not Authorized");
+                    message = GameManager.Instance.GetMutiLanguage("Text_80010");
                 }
                 else if (error.Contains("Powered Off"))
                 {
                     MyDebug.LogYellow("Powered Off");
+                    message = GameManager.Instance.GetMutiLanguage("Text_80011");
                 }
                 else if (error.Contains("Not Enabled"))
                 {
                     MyDebug.LogYellow("Not Enabled");
+                    message = GameManager.Instance.GetMutiLanguage("Text_80012");
                 }
                 else
                 {
                     MyDebug.LogYellow("Central Initialize Fail: " + error);
+                    message = "Unknow Error:" + error;
                 }
+                GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single,
+                                                                                  message, null, null);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
             });
 
     }

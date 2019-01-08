@@ -257,7 +257,9 @@ public class GameManager : MonoBehaviour
 
 	public string WriteUUID{ get; set;}
 
-	public BluetoothInstance CurBluetoothInstance { get; set;}
+	public BluetoothInstance CurBluetoothInstance { get; set; }
+
+    public CommonTipInstance CurCommonTipInstance { get; set; }
 
     public static GameManager Instance//单例
     {
