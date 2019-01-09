@@ -88,7 +88,7 @@ public class FightFrameWrapper : GuiFrameWrapper
                 RefreshResultText(btn.name);
                 break;
             case "NextBtn":
-                ShowNextQuestion();
+                ShowNextQuestion(false);
                 break;
             case "ClearBtn":
                 ClearResultText();
@@ -144,7 +144,7 @@ public class FightFrameWrapper : GuiFrameWrapper
             countdownTime--;
         }
         countdownBg.SetActive(false);
-        ShowNextQuestion();
+        ShowNextQuestion(true);
         equalImg.SetActive(true);
         startTime = Time.realtimeSinceStartup;
         InvokeRepeating(pattern + "Pattern", 0f, 0.1f);
@@ -176,7 +176,6 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void RefreshResultText(string num)
     {
         StringBuilder lastResult = new StringBuilder(result.ToString());
-        if (result.ToString() == "-1") result.Length = 0;
         if (order) result.Append(num);
         else result.Insert(0, num);
         if (long.Parse(result.ToString()) > int.MaxValue) result = lastResult;
@@ -184,8 +183,10 @@ public class FightFrameWrapper : GuiFrameWrapper
         resultImg_Text.text = result.ToString();
     }
 
-    private void ShowNextQuestion()
+    private void ShowNextQuestion(bool isFirst)
     {
+        if (result.Length <= 0 && !isFirst) return;
+
         if (result.Length > 0)//check
         {
             curInstance.Add(int.Parse(result.ToString()));
@@ -217,7 +218,6 @@ public class FightFrameWrapper : GuiFrameWrapper
     {
         resultImg_Text.text = string.Empty;
         result.Length = 0;
-        result.Append("-1");
     }
 
     private void ChangeInputOrder()

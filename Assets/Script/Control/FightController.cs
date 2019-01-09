@@ -11,6 +11,7 @@ public sealed class FightController : Controller
     {
         base.id = ControllerID.FightController;
         checkList = new List<List<int>>();
+        workList = new List<List<int>>();
         dataBase = new List<DivisionDataBase>();
         InitFightData();
         MyDebug.LogWhite("Loading Controller:" + id.ToString());
@@ -46,7 +47,7 @@ public sealed class FightController : Controller
     {
         if (symbolID == SymbolID.Division)
         {
-            workList = new List<List<int>>();
+            workList.Clear();
             List<DivisionQuestionList> qList = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID).questionList;
             for (int i = 0; i < qList.Count; i++)
             {
