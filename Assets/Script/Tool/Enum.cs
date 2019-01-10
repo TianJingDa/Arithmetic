@@ -14,16 +14,18 @@ public enum GuiFrameID
     SetUpFrame,                //设置界面
     SettlementFrame,           //结算界面
     ChapterFrame,              //关卡界面
-    BluetoothFrame,            //蓝牙选项界面
+    BluetoothFrame,            //蓝牙界面
     NameBoardFrame,            //起名界面
-    CommonTipFrame             //提示信息界面
+    CommonTipFrame,            //提示信息界面
+    BluetoothFightFrame        //蓝牙答题界面
 }
 public enum GuiItemID
 {
     AchievementItem,           //成就
     SaveFileItem,              //存档
     QuestionItem,              //问题
-    PeripheralItem             //外部设备
+    PeripheralItem,            //外部设备
+    BluetoothQuestionItem      //蓝牙问题
 }
 
 public enum ControllerID

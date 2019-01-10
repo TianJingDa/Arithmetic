@@ -66,8 +66,10 @@ public class BluetoothItem : Item, IPointerClickHandler
         BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
             (address) => 
 				{
-                    GameManager.Instance.LastGUI = GuiFrameID.BluetoothFrame;
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
+                    int seed = UnityEngine.Random.Range(1, int.MaxValue);
+                    BluetoothMessage message = new BluetoothMessage(-1, seed);
+                    string msg = JsonUtility.ToJson(message);
+                    GameManager.Instance.CentralSendMessage(msg);
 				},
 			(address, serviceUUID) => {},
 			(address, serviceUUID, characteristicUUID) => 
@@ -77,10 +79,9 @@ public class BluetoothItem : Item, IPointerClickHandler
 						if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
 						{
                             BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (GameManager.Instance.CurBluetoothInstance.address,
-                                                                                                      GameManager.Instance.ServiceUUID,
-                                                                                                   GameManager.Instance.ReadUUID,
-								(string deviceAddress, string notification) => {}, 
-								(string deviceAddress, string characteristic, byte[] data) => {});
+                                                                                                   GameManager.Instance.ServiceUUID,
+                                                                                                   GameManager.Instance.ReadUUID, null, 
+								                                                                   GameManager.Instance.CentralReceiveMessage);
 						}
 					}
 				}, 

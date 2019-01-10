@@ -41,11 +41,13 @@ public sealed class ResourceController : Controller
         frameAddressDict.Add(GuiFrameID.BluetoothFrame, "GuiWrapper/BluetoothFrame");
         frameAddressDict.Add(GuiFrameID.NameBoardFrame, "GuiWrapper/NameBoardFrame");
         frameAddressDict.Add(GuiFrameID.CommonTipFrame, "GuiWrapper/CommonTipFrame");
+        frameAddressDict.Add(GuiFrameID.BluetoothFightFrame, "GuiWrapper/BluetoothFightFrame");
 
         itemAddressDict.Add(GuiItemID.AchievementItem, "GuiItem/AchievementItem");
         itemAddressDict.Add(GuiItemID.SaveFileItem, "GuiItem/SaveFileItem");
         itemAddressDict.Add(GuiItemID.QuestionItem, "GuiItem/QuestionItem");
-		itemAddressDict.Add(GuiItemID.PeripheralItem, "GuiItem/PeripheralItem");
+        itemAddressDict.Add(GuiItemID.PeripheralItem, "GuiItem/PeripheralItem");
+        itemAddressDict.Add(GuiItemID.BluetoothQuestionItem, "GuiItem/BluetoothQuestionItem");
     }
 
     /// <summary>

@@ -6,15 +6,17 @@ using System.Text;
 using System;
 
 /// <summary>
-/// 答题界面
+/// 蓝牙答题界面
 /// </summary>
-public class FightFrameWrapper : GuiFrameWrapper
+public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
     private int                 countdownTime = 3;
     private float               amount;
     private float               startTime;
     private float               timeCost;
     private bool                order;//true: -->; false: <--
+    private bool                isSending;
+    private bool                isReceiving;
     private string              pattern;
     private string              symbol;
     private StringBuilder       result;
@@ -35,13 +37,15 @@ public class FightFrameWrapper : GuiFrameWrapper
 
     void Start () 
 	{
-        id = GuiFrameID.FightFrame;
+        id = GuiFrameID.BluetoothFightFrame;
         Dictionary<string, MyRectTransform> rectTransforms = GameManager.Instance.GetLayoutData();
         InitLayout(rectTransforms);
         Init();
 
         timeCost    = 0;
         order       = true;
+        isSending   = false;
+        isReceiving = false;
         result      = new StringBuilder();
         question    = new StringBuilder();
         resultList  = new List<List<int>>();
@@ -96,18 +100,6 @@ public class FightFrameWrapper : GuiFrameWrapper
             case "TimeBtn":
                 ChangeTimeVisibility();
                 break;
-            case "Fight2SettlementFrameBtn":
-                giveUpBg.SetActive(true);
-                break;
-            case "GiveUpBg":
-            case "CancelBtn":
-                giveUpBg.SetActive(false);
-                break;
-			case "ConfirmBtn":
-				StopAllCoroutines ();
-				CancelInvoke ();
-				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.LastGUI,MoveID.RightOrUp,false);
-	            break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
@@ -145,7 +137,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         ShowNextQuestion(true);
         equalImg.SetActive(true);
         startTime = Time.realtimeSinceStartup;
-        InvokeRepeating(pattern + "Pattern", 0f, 0.1f);
+        InvokeRepeating("NumberPattern", 0f, 0.1f);
     }
 
     private void ClearAllText()
@@ -153,16 +145,6 @@ public class FightFrameWrapper : GuiFrameWrapper
         timeBtn_Text.text = string.Empty;
         resultImg_Text.text = string.Empty;
         questionImg_Text.text = string.Empty;
-    }
-
-    private void TimePattern()
-    {
-        timeCost = Time.realtimeSinceStartup - startTime;
-        timeBtn_Text.text = (amount - timeCost).ToString("f1") + "s";
-        if (amount - timeCost <= 0)
-        {
-            FightOver();
-        }
     }
 
     private void NumberPattern()
@@ -189,7 +171,7 @@ public class FightFrameWrapper : GuiFrameWrapper
         {
             curInstance.Add(int.Parse(result.ToString()));
             resultList.Add(curInstance);
-            if (pattern == "Number" && resultList.Count == amount)
+            if (resultList.Count == amount)
             {
                 FightOver();
                 return;
@@ -232,18 +214,30 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-		switch (GameManager.Instance.LastGUI) 
-		{
-			case GuiFrameID.BluetoothFrame:
-				MyDebug.LogGreen ("Fight Over From Bluetooth!");
-				break;
-			case GuiFrameID.CategoryFrame:
-				GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
-				break;
-			case GuiFrameID.ChapterFrame:
-				GameManager.Instance.SaveAchievement(resultList, symbol, timeCost);
-				break;
-		}
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
+    }
+}
+
+[Serializable]
+public class BluetoothMessage
+{
+    public int index;
+    public List<int> message;
+
+    public BluetoothMessage()
+    {
+        message = new List<int>();
+    }
+
+    public BluetoothMessage(int index, int message)
+    {
+        this.index = index;
+        this.message = new List<int>() { message };
+    }
+
+    public BluetoothMessage(int index, List<int> message)
+    {
+        this.index = index;
+        this.message = message;
     }
 }

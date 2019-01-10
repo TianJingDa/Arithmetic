@@ -211,7 +211,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyWrite,
 				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsWriteable, null, 0, 
-				ReceiveCentralMessage);
+				GameManager.Instance.PeripheralReceiveMessage);
 
 			BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
 				{
@@ -255,12 +255,6 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 					CommonTool.GuiHorizontalMove(bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
 				});
 		}
-	}
-
-
-	private void ReceiveCentralMessage(string UUID, byte[] bytes)
-	{
-		MyDebug.LogGreen("Receive Message!");
 	}
 		
 	private void InitializeBluetooth(bool isCentral)

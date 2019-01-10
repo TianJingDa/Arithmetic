@@ -261,6 +261,10 @@ public class GameManager : MonoBehaviour
 
     public CommonTipInstance CurCommonTipInstance { get; set; }
 
+    public System.Action<BluetoothMessage> BLESendMessage { get; set; }
+
+    public System.Action<BluetoothMessage> BLEReceiveMessage { get; set; }
+
     public static GameManager Instance//单例
     {
         get;
@@ -621,6 +625,67 @@ public class GameManager : MonoBehaviour
         Object resource = c_ResourceCtrl.GetItemResource(id);
         return Instantiate(resource) as GameObject;
         //return c_ResourceCtrl.GetItemResource(name); ;
+    }
+
+    public void CentralSendMessage(string message)
+    {
+        MyDebug.LogGreen("CentralSendMessage:" + message);
+        byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, data, data.Length, true, (characteristicUUID) => {
+
+            MyDebug.LogGreen("Write Succeeded");
+        });
+    }
+
+    public void CentralReceiveMessage(string address, string characteristic, byte[] bytes)
+    {
+        string message = System.Text.Encoding.UTF8.GetString(bytes);
+        MyDebug.LogGreen("CentralReceiveMessage:" + message);
+        BluetoothMessage msg = JsonUtility.FromJson<BluetoothMessage>(message);
+        if (msg == null)
+        {
+            MyDebug.LogYellow("CentralReceiveMessage: Message is NULL!");
+            return;
+        }
+
+        if (msg.index < 0)
+        {
+            Random.InitState(msg.message[0]);
+            SwitchWrapper(GuiFrameID.BluetoothFightFrame);
+        }
+        else
+        {
+            if (BLEReceiveMessage != null) BLEReceiveMessage(msg);
+        }
+    }
+
+    public void PeripheralSendMessage(string message)
+    {
+        byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
+        BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, data, data.Length);
+    }
+
+    public void PeripheralReceiveMessage(string UUID, byte[] bytes)
+    {
+        string message = System.Text.Encoding.UTF8.GetString(bytes);
+        MyDebug.LogGreen("PeripheralReceiveMessage:" + message);
+        BluetoothMessage msg = JsonUtility.FromJson<BluetoothMessage>(message);
+        if(msg == null)
+        {
+            MyDebug.LogYellow("PeripheralReceiveMessage: Message is NULL!");
+            return;
+        }
+
+        if (msg.index < 0)
+        {
+            Random.InitState(msg.message[0]);
+            SwitchWrapper(GuiFrameID.BluetoothFightFrame);
+            PeripheralSendMessage(message);
+        }
+        else
+        {
+            if (BLEReceiveMessage != null) BLEReceiveMessage(msg);
+        }
     }
     #endregion
 
