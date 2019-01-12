@@ -12,14 +12,11 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     protected float durationThreshold = 1.0f;
     protected bool isLongPress;
     protected bool onlyWrong;
-    //protected string userName;
+    //protected bool hasAchievement;
 
     protected SaveFileInstance content;//详情
-    protected List<QuentionInstance> onlyWrongList;
-    protected GameObject detailWin;
     protected GameObject deleteWin;
     //protected GameObject saveFileAchievement_No;
-    protected Dictionary<string, GameObject> detailWinDict;
     protected Text saveFileName;
     protected Text saveFileType_Time;
     protected Text saveFileType_Number;
@@ -64,10 +61,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileType_Number = gameObjectDict["SaveFileType_Number"].GetComponent<Text>();
         //saveFileAchievement_No = gameObjectDict["SaveFileAchievement_No"];
     }
-    protected override void InitDetailWin(GameObject detailWin)
-    {
-        this.detailWin = detailWin;
-    }
     protected override void InitDeleteWin(GameObject deleteWin)
     {
         this.deleteWin = deleteWin;
@@ -103,35 +96,14 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected void OnShortPress()
     {
-        detailWin.SetActive(true);
-        detailWinDict = CommonTool.InitGameObjectDict(detailWin);
-        CommonTool.InitText(detailWin);
-        CommonTool.InitImage(detailWin);
-        Text saveFileDetailTime = detailWinDict["SaveFileDetailTime"].GetComponent<Text>();
-        Text saveFileDetailAmount = detailWinDict["SaveFileDetailAmount"].GetComponent<Text>();
-        Text saveFileDetailAccuracy = detailWinDict["SaveFileDetailAccuracy"].GetComponent<Text>();
-        GameObject shareBtnInSaveFile = detailWinDict["ShareBtnInSaveFile"];
-        GameObject onlyWrongBtnInSaveFile = detailWinDict["OnlyWrongBtnInSaveFile"];
-        saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
-        saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
-        saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
-        onlyWrongList = content.qInstancList.FindAll(FindWrong);
-        CommonTool.AddEventTriggerListener(shareBtnInSaveFile, EventTriggerType.PointerClick, OnShareBtn);
-        CommonTool.AddEventTriggerListener(onlyWrongBtnInSaveFile, EventTriggerType.PointerClick, OnOnlyWrongBtn);
-        onlyWrong = false;
-        RefreshSettlementGrid();
-        CommonTool.GuiVerticalMove(detailWin, Screen.height, MoveID.LeftOrDown, GameManager.Instance.CurCanvasGroup, true);
-    }
-    protected void OnShareBtn(BaseEventData data)
-    {
-        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-            GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
-        else
-            ShowShareBtn();
+        if (content == null) return;
+        GameManager.Instance.CurSaveFileInstance = content;
+        GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileDetailFrame, true);
     }
 
     protected void ShowShareBtn()
     {
+        Dictionary<string, GameObject> detailWinDict = new Dictionary<string, GameObject>();
         GameObject saveFileShareWinInStatistics = detailWinDict["SaveFileShareWinInStatistics"];
         saveFileShareWinInStatistics.SetActive(true);
         CommonTool.GuiScale(saveFileShareWinInStatistics, GameManager.Instance.CurCanvasGroup, true);
@@ -174,38 +146,13 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     //    //achievementDetailFinishTimeInSaveFile.text = GetFinishTime(instance.fileName);
 
     //}
-    protected string GetFinishTime(string time)
-    {
-        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
-        newTime.Insert(4, ".");
-        newTime.Insert(7, ".");
-        return newTime.ToString();
-    }
-    protected void OnOnlyWrongBtn(BaseEventData data)
-    {
-        onlyWrong = !onlyWrong;
-        RefreshSettlementGrid();
-    }
-    protected void RefreshSettlementGrid()
-    {
-        GameObject onlyWrongImageInSaveFile = detailWinDict["OnlyWrongImageInSaveFile"];
-        onlyWrongImageInSaveFile.SetActive(onlyWrong);
-        ArrayList dataList;
-        if (onlyWrong)
-        {
-            dataList = new ArrayList(onlyWrongList);
-        }
-        else
-        {
-            dataList = new ArrayList(content.qInstancList);
-        }
-        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, GuiItemID.QuestionItem);
-    }
-    protected bool FindWrong(QuentionInstance questionInstance)
-    {
-        int count = questionInstance.instance.Count;
-        return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
-    }
+    //protected string GetFinishTime(string time)
+    //{
+    //    StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
+    //    newTime.Insert(4, ".");
+    //    newTime.Insert(7, ".");
+    //    return newTime.ToString();
+    //}
 
     protected void OnLongPress()
     {
@@ -229,6 +176,6 @@ public class SaveFileInstance
     public string accuracy;
     public string opponentName;
     public List<QuentionInstance> qInstancList;
-    //public string achievementName;//所获成就
+    public string achievementName;//所获成就
     public CategoryInstance cInstance;
 }

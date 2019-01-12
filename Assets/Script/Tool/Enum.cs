@@ -17,7 +17,10 @@ public enum GuiFrameID
     BluetoothFrame,            //蓝牙界面
     NameBoardFrame,            //起名界面
     CommonTipFrame,            //提示信息界面
-    BluetoothFightFrame        //蓝牙答题界面
+    BluetoothFightFrame,       //蓝牙答题界面
+    SaveFileDetailFrame,       //存档详情界面
+    AchievementDetailFrame,    //成就详情界面
+    ShareFrame,                //分享界面
 }
 public enum GuiItemID
 {

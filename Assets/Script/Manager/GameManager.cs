@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
     private int[]                                               m_AmountArray_Number;
     private string[]                                            m_SymbolArray;
     private float                                               m_TweenDuration = 0.5f;             //Tween动画持续时间
-    private SaveFileInstance                                    m_SaveFileInstance;
     private GameObject                                          m_Root;                             //UI对象的根对象
     private Stack<GuiFrameWrapper>                              m_GuiFrameStack;                    //当前激活的GuiWrapper
     private CategoryInstance                                    m_CurCategoryInstance;              //当前试题选项
@@ -112,10 +111,10 @@ public class GameManager : MonoBehaviour
             MyDebug.LogGreen(m_CurCategoryInstance.operandID);
         }
     }
-    public SaveFileInstance CurSaveFileInstance
-    {
-        get { return m_SaveFileInstance; }
-    }
+    public SaveFileInstance CurSaveFileInstance { get; set; }
+
+    public AchievementInstance CurAchievementInstance { get; set; }
+
     public System.Action CurAction
     {
         set { m_CurAction = value; }
@@ -377,7 +376,7 @@ public class GameManager : MonoBehaviour
 
         }
 
-        m_SaveFileInstance = curSaveFileInstance;
+        CurSaveFileInstance = curSaveFileInstance;
         string toSave = JsonUtility.ToJson(curSaveFileInstance);
         c_RecordCtrl.SaveRecord(toSave, finishTime);
 
@@ -401,7 +400,7 @@ public class GameManager : MonoBehaviour
         //curSaveFileInstance.achievementName = achievementName;
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
-        m_SaveFileInstance = curSaveFileInstance;
+        CurSaveFileInstance = curSaveFileInstance;
 
         TotalGame++;
         TotalTime += timeCost;
@@ -540,6 +539,19 @@ public class GameManager : MonoBehaviour
             {
                 GuiFrameWrapper oldGui = m_GuiFrameStack.Pop();
                 if (oldGui) Destroy(oldGui.gameObject);
+            }
+            if (m_GuiFrameStack.Count > 0)
+            {
+                GuiFrameWrapper oldGui = m_GuiFrameStack.Peek();
+                if (oldGui) oldGui.GetComponent<CanvasGroup>().blocksRaycasts = true;
+            }
+        }
+        else
+        {
+            if (m_GuiFrameStack.Count > 0)
+            {
+                GuiFrameWrapper oldGui = m_GuiFrameStack.Peek();
+                if (oldGui) oldGui.GetComponent<CanvasGroup>().blocksRaycasts = false;
             }
         }
 

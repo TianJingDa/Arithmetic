@@ -15,12 +15,8 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected bool onlyWrong;
 
     protected AchievementInstance content;//详情
-    protected List<QuentionInstance> onlyWrongList;
-    protected List<QuentionInstance> allInstanceList;
-    protected GameObject detailWin;
     protected GameObject deleteWin;
     protected GameObject achievementItem_WithoutAchievement;
-    protected Dictionary<string, GameObject> detailWinDict;
     protected Text achievementName;
     protected Image achievementImage;
     protected Vector3 position;
@@ -59,64 +55,12 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected void OnShortPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        detailWin.SetActive(true);
-        CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
-        detailWinDict = CommonTool.InitGameObjectDict(detailWin);
-        CommonTool.InitText(detailWin);
-        CommonTool.InitImage(detailWin);
-        GameObject achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"];
-        Image achievementDetailImageInStatistics = detailWinDict["AchievementDetailImageInStatistics"].GetComponent<Image>();
-        Text achievementDetailMainTitleInStatistics = detailWinDict["AchievementDetailMainTitleInStatistics"].GetComponent<Text>();
-        Text achievementDetailSubTitleInStatistics = detailWinDict["AchievementDetailSubTitleInStatistics"].GetComponent<Text>();
-        Text achievementDetailFinishTimeInStatistics = detailWinDict["AchievementDetailFinishTimeInStatistics"].GetComponent<Text>();
-        GameObject achievementDetailPatternInStatistics_Time = detailWinDict["AchievementDetailPatternInStatistics_Time"];
-        GameObject achievementDetailPatternInStatistics_Number = detailWinDict["AchievementDetailPatternInStatistics_Number"];
-        Text achievementDetailTimeInStatistics = detailWinDict["AchievementDetailTimeInStatistics"].GetComponent<Text>();
-        Text achievementDetailAmountInStatistics = detailWinDict["AchievementDetailAmountInStatistics"].GetComponent<Text>();
-        Text achievementDetailSymbolInStatistics = detailWinDict["AchievementDetailSymbolInStatistics"].GetComponent<Text>();
-        Text achievementDetailDigitInStatistics = detailWinDict["AchievementDetailDigitInStatistics"].GetComponent<Text>();
-        Text achievementDetailOperandInStatistics = detailWinDict["AchievementDetailOperandInStatistics"].GetComponent<Text>();
-        Text achievementDetailConditionInStatistics = detailWinDict["AchievementDetailConditionInStatistics"].GetComponent<Text>();
-        GameObject achievementDetailShareBtnInStatistics = detailWinDict["AchievementDetailShareBtnInStatistics"];
-
-        achievementDetailTitleInStatistics.SetActive(false);
-        achievementDetailImageInStatistics.sprite = GameManager.Instance.GetSprite(content.imageIndex);
-        achievementDetailMainTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-        achievementDetailSubTitleInStatistics.text = GameManager.Instance.GetMutiLanguage(content.subTitleIndex);
-        achievementDetailFinishTimeInStatistics.text = GetFinishTime(content.finishTime);
-        bool isTimePattern = content.cInstance.patternID == PatternID.Time;
-        achievementDetailPatternInStatistics_Time.SetActive(isTimePattern);
-        achievementDetailPatternInStatistics_Number.SetActive(!isTimePattern);
-        achievementDetailTimeInStatistics.gameObject.SetActive(isTimePattern);
-        achievementDetailAmountInStatistics.gameObject.SetActive(!isTimePattern);
-        if (isTimePattern)
-        {
-            int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
-            achievementDetailTimeInStatistics.text = string.Format(achievementDetailTimeInStatistics.text, amount);
-        }
-        else
-        {
-            int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
-            achievementDetailAmountInStatistics.text = string.Format(achievementDetailAmountInStatistics.text, amount);
-        }
-        string symbol = GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID];
-        achievementDetailSymbolInStatistics.text = string.Format(achievementDetailSymbolInStatistics.text, symbol);
-        achievementDetailDigitInStatistics.text = string.Format(achievementDetailDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
-        achievementDetailOperandInStatistics.text = string.Format(achievementDetailOperandInStatistics.text, (int)(content.cInstance.operandID + 2));
-        achievementDetailConditionInStatistics.text = string.Format(achievementDetailConditionInStatistics.text, content.accuracy, content.meanTime);
-        achievementDetailShareBtnInStatistics.SetActive(true);
-        CommonTool.AddEventTriggerListener(achievementDetailShareBtnInStatistics, EventTriggerType.PointerClick, OnShareBtn);
-        detailWinDict["AchievementShareBtnsBgInStatistics"].SetActive(false);
-    }
-    protected void OnShareBtn(BaseEventData data)
-    {
-        if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-            GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
-        else
-            ShowShareBtn();
+        GameManager.Instance.CurAchievementInstance = content;
+        GameManager.Instance.SwitchWrapper(GuiFrameID.AchievementDetailFrame, true);
     }
     protected void ShowShareBtn()
     {
+        Dictionary<string, GameObject> detailWinDict = new Dictionary<string, GameObject>();
         Text achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"].GetComponent<Text>();
         achievementDetailTitleInStatistics.gameObject.SetActive(true);
         achievementDetailTitleInStatistics.text = string.Format(achievementDetailTitleInStatistics.text, GameManager.Instance.UserName);
@@ -126,38 +70,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         achievementShareBtnsBgInStatistics.DOMoveY(achievementShareBtnsBgInStatistics.rect.y, 0.3f, true).From();
     }
 
-    protected bool FindWrong(QuentionInstance questionInstance)
-    {
-        int count = questionInstance.instance.Count;
-        return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
-    }
-    protected void OnOnlyWrongBtn(BaseEventData data)
-    {
-        onlyWrong = !onlyWrong;
-        RefreshSettlementGrid();
-    }
-    protected void RefreshSettlementGrid()
-    {
-        GameObject onlyWrongImageOfAchievement = CommonTool.GetGameObjectByName(detailWin, "OnlyWrongImageOfAchievement");
-        onlyWrongImageOfAchievement.SetActive(onlyWrong);
-        ArrayList dataList;
-        if (onlyWrong)
-        {
-            dataList = new ArrayList(onlyWrongList);
-        }
-        else
-        {
-            dataList = new ArrayList(allInstanceList);
-        }
-        detailWin.GetComponentInChildren<InfiniteList>().InitList(dataList, GuiItemID.QuestionItem);
-    }
-    protected string GetFinishTime(string time)
-    {
-        StringBuilder newTime = new StringBuilder(time.Substring(0, 8));
-        newTime.Insert(4, ".");
-        newTime.Insert(7, ".");
-        return newTime.ToString();
-    }
     protected void OnLongPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
@@ -170,10 +82,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         deleteWin.SetActive(false);
         GameManager.Instance.DeleteAchievement(content.achievementName);
     }
-    protected override void InitDetailWin(GameObject detailWin)
-    {
-        this.detailWin = detailWin;
-    }
+
     protected override void InitDeleteWin(GameObject deleteWin)
     {
         this.deleteWin = deleteWin;

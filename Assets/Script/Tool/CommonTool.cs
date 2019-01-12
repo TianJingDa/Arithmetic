@@ -297,7 +297,7 @@ public static class CommonTool
     /// <param name="endValue"></param>
     /// <param name="mID"></param>
     /// <param name="isIn"></param>
-    public static void GuiHorizontalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn)
+    public static void GuiHorizontalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn, System.Action completed = null)
     {
         if (isIn)
         {
@@ -305,7 +305,11 @@ public static class CommonTool
                           From().
                           SetEase(Ease.OutQuint).
                           OnStart(() => canvasGroup.blocksRaycasts = false).
-                          OnComplete(() => canvasGroup.blocksRaycasts = true);
+                          OnComplete(() => 
+                          {
+                              if (completed != null) completed();
+                              canvasGroup.blocksRaycasts = true;
+                          });
         }
         else
         {
@@ -314,6 +318,7 @@ public static class CommonTool
                           OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
+                              if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
                               gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
@@ -327,7 +332,7 @@ public static class CommonTool
     /// <param name="endValue"></param>
     /// <param name="mID"></param>
     /// <param name="isIn"></param>
-    public static void GuiVerticalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn)
+    public static void GuiVerticalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn, System.Action completed = null)
     {
         if (isIn)
         {
@@ -335,7 +340,11 @@ public static class CommonTool
                           From().
                           SetEase(Ease.OutQuint).
                           OnStart(() => canvasGroup.blocksRaycasts = false).
-                          OnComplete(() => canvasGroup.blocksRaycasts = true);
+                          OnComplete(() =>
+                          {
+                              if (completed != null) completed();
+                              canvasGroup.blocksRaycasts = true;
+                          });
         }
         else
         {
@@ -344,9 +353,10 @@ public static class CommonTool
                           OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
+                              if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
-                              gui.transform.localPosition = Vector3.zero;
+                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                           });
         }
     }
@@ -355,7 +365,7 @@ public static class CommonTool
     /// </summary>
     /// <param name="gui"></param>
     /// <param name="isIn"></param>
-    public static void GuiScale(GameObject gui, CanvasGroup canvasGroup, bool isIn)
+    public static void GuiScale(GameObject gui, CanvasGroup canvasGroup, bool isIn, System.Action completed = null)
     {
         if (isIn)
         {
@@ -365,8 +375,9 @@ public static class CommonTool
                           OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
+                              if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
-                              gui.transform.localScale = Vector3.one;
+                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                           });
         }
         else
@@ -376,9 +387,10 @@ public static class CommonTool
                           OnStart(() => canvasGroup.blocksRaycasts = false).
                           OnComplete(() =>
                           {
+                              if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
-                              gui.transform.localScale = Vector3.one;
+                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                           });
         }
     }
