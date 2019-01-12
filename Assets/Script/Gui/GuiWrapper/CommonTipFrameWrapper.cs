@@ -90,6 +90,16 @@ public class CommonTipInstance
     public Action confirmAction;
     public Action cancelAction;
 
+    public CommonTipInstance() { }
+
+    public CommonTipInstance(CommonTipID id, string message)
+    {
+        this.id = id;
+        this.message = message;
+        this.confirmAction = null;
+        this.cancelAction = null;
+    }
+
     public CommonTipInstance(CommonTipID id, string message, Action confirmAction, Action cancelAction)
     {
         this.id = id;

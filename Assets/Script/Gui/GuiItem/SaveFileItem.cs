@@ -224,8 +224,10 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 public class SaveFileInstance
 {
     public float timeCost;
+    public float opponentAccuracy;
     public string fileName;
     public string accuracy;
+    public string opponentName;
     public List<QuentionInstance> qInstancList;
     //public string achievementName;//所获成就
     public CategoryInstance cInstance;

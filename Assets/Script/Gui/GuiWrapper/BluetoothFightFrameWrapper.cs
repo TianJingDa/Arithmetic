@@ -11,6 +11,7 @@ using System;
 public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
     private int                 countdownTime = 3;
+    private int                 index;//问题序号
     private float               amount;
     private float               startTime;
     private float               timeCost;
@@ -38,11 +39,13 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         id = GuiFrameID.BluetoothFightFrame;
+        GameManager.Instance.BLEReceiveMessage = OnReceiveMessage;
         Dictionary<string, MyRectTransform> rectTransforms = GameManager.Instance.GetLayoutData();
         InitLayout(rectTransforms);
         Init();
 
         timeCost    = 0;
+        index       = -1;
         order       = true;
         isSending   = false;
         isReceiving = false;
@@ -167,31 +170,91 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     {
         if (result.Length <= 0 && !isFirst) return;
 
-        if (result.Length > 0)//check
+        if (result.Length > 0)
         {
-            curInstance.Add(int.Parse(result.ToString()));
-            resultList.Add(curInstance);
+            int resultInt = int.Parse(result.ToString());
+            BluetoothMessage message = new BluetoothMessage(index, resultInt);
+            if (!isReceiving)
+            {
+                isSending = true;
+                GameManager.Instance.BLESendMessage(message);
+            }
+            else
+            {
+                ShowNextQuestion();
+            }
+        }
+        else //第一个题
+        {
+            ShowNextQuestion();
+        }
+    }
+
+    private void ShowNextQuestion()
+    {
+        lock (curInstance)
+        {
+            index++;
+            curInstance = GameManager.Instance.GetQuestionInstance();
+            if (curInstance == null)
+            {
+                MyDebug.LogYellow("curInstance is NULL!");
+                FightOver();
+            }
+            question.Length = 0;
+            question.Append(curInstance[0].ToString());
+            for (int i = 1; i < curInstance.Count - 1; i++)
+            {
+                question.Append(symbol);
+                question.Append(curInstance[i].ToString());
+            }
+            questionImg_Text.text = question.ToString();
+            ClearResultText();
+        }
+    }
+
+    private void OnReceiveMessage(BluetoothMessage message)
+    {
+        MyDebug.LogGreen("index: " + message.index + ", result: " + message.result);
+        isReceiving = true;
+        if(message.index == index)
+        {
+            int resultInt = int.Parse(result.ToString());
+            lock (curInstance)//倒数第一个是自己的答案，倒数第二个是正确答案，倒数第三个是对方的答案
+            {
+                curInstance.Insert(curInstance.Count - 1, message.result);
+                curInstance.Add(resultInt);
+            }
+            lock (resultList)
+            {
+                resultList.Add(curInstance);
+            }
             if (resultList.Count == amount)
             {
                 FightOver();
-                return;
             }
+            else
+            {
+                if (isSending)
+                {
+                    ShowNextQuestion();
+                }
+                else
+                {
+                    isSending = true;
+                    GameManager.Instance.BLESendMessage(new BluetoothMessage(index, resultInt));
+                    ShowNextQuestion();
+                }
+            }
+            isSending = false;
+            isReceiving = false;
         }
-        curInstance = GameManager.Instance.GetQuestionInstance();
-        if (curInstance == null)
+        else
         {
-            MyDebug.LogYellow("curInstance is NULL!");
-            FightOver();
+            string tip = "Index Wrong:" + message.index;
+            GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
+            GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
         }
-        question.Length = 0;
-        question.Append(curInstance[0].ToString());
-        for(int i = 1; i < curInstance.Count - 1; i++)
-        {
-            question.Append(symbol);
-            question.Append(curInstance[i].ToString());
-        }
-        questionImg_Text.text = question.ToString();
-        ClearResultText();
     }
 
     private void ClearResultText()
@@ -214,6 +277,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
+        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, true);
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }
@@ -222,22 +286,22 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 public class BluetoothMessage
 {
     public int index;
-    public List<int> message;
+    public int result;
+    public string centralName;
 
-    public BluetoothMessage()
-    {
-        message = new List<int>();
-    }
+    public BluetoothMessage() { }
 
-    public BluetoothMessage(int index, int message)
+    public BluetoothMessage(int index, int result)
     {
         this.index = index;
-        this.message = new List<int>() { message };
+        this.result = result;
+        this.centralName = "";
     }
 
-    public BluetoothMessage(int index, List<int> message)
+    public BluetoothMessage(int index, int result, string centralName)
     {
         this.index = index;
-        this.message = message;
+        this.result = result;
+        this.centralName = centralName;
     }
 }

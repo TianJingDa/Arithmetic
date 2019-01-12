@@ -67,11 +67,11 @@ public class BluetoothItem : Item, IPointerClickHandler
             (address) => 
 				{
                     int seed = UnityEngine.Random.Range(1, int.MaxValue);
-                    BluetoothMessage message = new BluetoothMessage(-1, seed);
-                    string msg = JsonUtility.ToJson(message);
-                    GameManager.Instance.CentralSendMessage(msg);
+                    BluetoothMessage message = new BluetoothMessage(-1, seed, GameManager.Instance.UserName);
+                    GameManager.Instance.SetSendMessageFunc(true);
+                    GameManager.Instance.BLESendMessage(message);
 				},
-			(address, serviceUUID) => {},
+			null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
 					if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
@@ -115,7 +115,9 @@ public class BluetoothInstance
 	public string address;
 	public string name;
 
-	public BluetoothInstance(string address, string name)
+    public BluetoothInstance() { }
+
+    public BluetoothInstance(string address, string name)
 	{
 		this.address = address;
 		this.name = name;

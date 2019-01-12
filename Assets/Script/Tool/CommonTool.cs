@@ -316,7 +316,7 @@ public static class CommonTool
                           {
                               canvasGroup.blocksRaycasts = true;
                               gui.SetActive(false);
-                              gui.transform.localPosition = Vector3.zero;
+                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                           });
         }
     }

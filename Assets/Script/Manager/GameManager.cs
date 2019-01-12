@@ -355,10 +355,10 @@ public class GameManager : MonoBehaviour
         }
         symbol = m_SymbolArray[(int)m_CurCategoryInstance.symbolID];
     }
-    public void SaveRecord(List<List<int>> resultList, string symbol,float timeCost)
+    public void SaveRecord(List<List<int>> resultList, string symbol, float timeCost, bool isBluetooth)
     {
         string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-        float accuracy = CalculateAccuracy(resultList);
+        float accuracy = CalculateAccuracy(resultList, 0);
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
         //float meanTime = timeCost / resultList.Count;
         //string achievementName = CheckAchievement(meanTime, accuracy, finishTime);
@@ -370,6 +370,12 @@ public class GameManager : MonoBehaviour
         curSaveFileInstance.qInstancList = qInstanceList;
         //curSaveFileInstance.achievementName = achievementName;
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
+        if (isBluetooth)
+        {
+            curSaveFileInstance.opponentName = CurBluetoothInstance.name;
+            curSaveFileInstance.fileName += "(BLE)";//标记是蓝牙对战
+
+        }
 
         m_SaveFileInstance = curSaveFileInstance;
         string toSave = JsonUtility.ToJson(curSaveFileInstance);
@@ -382,7 +388,7 @@ public class GameManager : MonoBehaviour
     public void SaveAchievement(List<List<int>> resultList, string symbol, float timeCost)
     {
         string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-        float accuracy = CalculateAccuracy(resultList);
+        float accuracy = CalculateAccuracy(resultList, 0);
         float meanTime = timeCost / resultList.Count;
         CurAchievementName = CheckAchievement(meanTime, accuracy, finishTime);
 
@@ -627,15 +633,6 @@ public class GameManager : MonoBehaviour
         //return c_ResourceCtrl.GetItemResource(name); ;
     }
 
-    public void CentralSendMessage(string message)
-    {
-        MyDebug.LogGreen("CentralSendMessage:" + message);
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
-        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, data, data.Length, true, (characteristicUUID) => {
-
-            MyDebug.LogGreen("Write Succeeded");
-        });
-    }
 
     public void CentralReceiveMessage(string address, string characteristic, byte[] bytes)
     {
@@ -650,19 +647,13 @@ public class GameManager : MonoBehaviour
 
         if (msg.index < 0)
         {
-            Random.InitState(msg.message[0]);
+            Random.InitState(msg.result);
             SwitchWrapper(GuiFrameID.BluetoothFightFrame);
         }
         else
         {
             if (BLEReceiveMessage != null) BLEReceiveMessage(msg);
         }
-    }
-
-    public void PeripheralSendMessage(string message)
-    {
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
-        BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, data, data.Length);
     }
 
     public void PeripheralReceiveMessage(string UUID, byte[] bytes)
@@ -678,21 +669,49 @@ public class GameManager : MonoBehaviour
 
         if (msg.index < 0)
         {
-            Random.InitState(msg.message[0]);
+            Random.InitState(msg.result);
+            CurBluetoothInstance = new BluetoothInstance("", msg.centralName);
+            SetSendMessageFunc(false);
+            BLESendMessage(msg);
             SwitchWrapper(GuiFrameID.BluetoothFightFrame);
-            PeripheralSendMessage(message);
         }
         else
         {
             if (BLEReceiveMessage != null) BLEReceiveMessage(msg);
         }
     }
+
+    public void SetSendMessageFunc(bool isCentral)
+    {
+        if (isCentral) BLESendMessage = CentralSendMessage;
+        else BLESendMessage = PeripheralSendMessage;
+    }
     #endregion
 
     #region 私有方法
-    private float CalculateAccuracy(List<List<int>> resultList)
+
+    private void CentralSendMessage(BluetoothMessage message)
     {
-        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
+        string msg = JsonUtility.ToJson(message);
+        MyDebug.LogGreen("CentralSendMessage:" + msg);
+        byte[] data = System.Text.Encoding.UTF8.GetBytes(msg);
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, data, data.Length, true, (characteristicUUID) => {
+
+            MyDebug.LogGreen("Write Succeeded");
+        });
+    }
+
+    private void PeripheralSendMessage(BluetoothMessage message)
+    {
+        string msg = JsonUtility.ToJson(message);
+        MyDebug.LogGreen("PeripheralSendMessage:" + msg);
+        byte[] data = System.Text.Encoding.UTF8.GetBytes(msg);
+        BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, data, data.Length);
+    }
+
+    private float CalculateAccuracy(List<List<int>> resultList, int deltaIndex)
+    {
+        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1 - deltaIndex] == x[x.Count - 2 - deltaIndex]);
         float accuracy = (float)rightList.Count * 100 / resultList.Count;
         return accuracy;
     }

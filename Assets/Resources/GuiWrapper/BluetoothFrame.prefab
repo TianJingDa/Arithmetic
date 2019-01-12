@@ -2920,8 +2920,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Text_30017
       m_Image: {fileID: 0}
-    - m_Text: Text_30018
-      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3216,9 +3214,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  index: 'Image_80005
-
-'
+  index: Image_80005
   m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0

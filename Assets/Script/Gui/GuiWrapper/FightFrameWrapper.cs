@@ -238,7 +238,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 				MyDebug.LogGreen ("Fight Over From Bluetooth!");
 				break;
 			case GuiFrameID.CategoryFrame:
-				GameManager.Instance.SaveRecord(resultList, symbol, timeCost);
+                GameManager.Instance.SaveRecord(resultList, symbol, timeCost, false);
 				break;
 			case GuiFrameID.ChapterFrame:
 				GameManager.Instance.SaveAchievement(resultList, symbol, timeCost);

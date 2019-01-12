@@ -296,8 +296,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                     MyDebug.LogYellow("Central Initialize Fail: " + error);
                     message = "Unknow Error:" + error;
                 }
-                GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single,
-                                                                                  message, null, null);
+                GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, message);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
             });
 
