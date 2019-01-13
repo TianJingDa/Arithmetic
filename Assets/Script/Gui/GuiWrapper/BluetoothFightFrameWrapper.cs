@@ -277,7 +277,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, true);
+        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, false, true);
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }

@@ -356,53 +356,40 @@ public class GameManager : MonoBehaviour
         }
         symbol = m_SymbolArray[(int)m_CurCategoryInstance.symbolID];
     }
-    public void SaveRecord(List<List<int>> resultList, string symbol, float timeCost, bool isBluetooth)
+    public void SaveRecord(List<List<int>> resultList, string symbol, float timeCost, bool isAchievement, bool isBluetooth)
     {
-        string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-        float accuracy = CalculateAccuracy(resultList, 0);
-        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        //float meanTime = timeCost / resultList.Count;
-        //string achievementName = CheckAchievement(meanTime, accuracy, finishTime);
-
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
+
         curSaveFileInstance.timeCost = timeCost;
+
+        string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         curSaveFileInstance.fileName = finishTime;
+
+        float accuracy = CalculateAccuracy(resultList, 0);
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
+
+        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
         curSaveFileInstance.qInstancList = qInstanceList;
-        //curSaveFileInstance.achievementName = achievementName;
+
+        string achievementName = "";
+        if (isAchievement)
+        {
+            achievementName = CheckAchievement(timeCost / resultList.Count, accuracy, finishTime);
+        }
+        curSaveFileInstance.achievementName = achievementName;
+
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
+
         if (isBluetooth)
         {
             curSaveFileInstance.opponentName = CurBluetoothInstance.name;
-            curSaveFileInstance.fileName += "(BLE)";//标记是蓝牙对战
-
+            float opponentAccuracy = CalculateAccuracy(resultList, 1);
+            curSaveFileInstance.opponentAccuracy = opponentAccuracy;
         }
 
         CurSaveFileInstance = curSaveFileInstance;
         string toSave = JsonUtility.ToJson(curSaveFileInstance);
         c_RecordCtrl.SaveRecord(toSave, finishTime);
-
-        TotalGame++;
-        TotalTime += timeCost;
-    }
-
-    public void SaveAchievement(List<List<int>> resultList, string symbol, float timeCost)
-    {
-        string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-        float accuracy = CalculateAccuracy(resultList, 0);
-        float meanTime = timeCost / resultList.Count;
-        CurAchievementName = CheckAchievement(meanTime, accuracy, finishTime);
-
-        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
-        SaveFileInstance curSaveFileInstance = new SaveFileInstance();
-        curSaveFileInstance.timeCost = timeCost;
-        curSaveFileInstance.fileName = finishTime;
-        curSaveFileInstance.accuracy = accuracy.ToString("f1");
-        curSaveFileInstance.qInstancList = qInstanceList;
-        //curSaveFileInstance.achievementName = achievementName;
-        curSaveFileInstance.cInstance = m_CurCategoryInstance;
-
-        CurSaveFileInstance = curSaveFileInstance;
 
         TotalGame++;
         TotalTime += timeCost;
@@ -419,30 +406,30 @@ public class GameManager : MonoBehaviour
     public void ResetSaveFile()
     {
         c_RecordCtrl.DeleteAllRecord();
-        //c_AchievementCtrl.ResetAllAchievement();
+        c_AchievementCtrl.ResetAllAchievement();
     }
-    //public void ResetSaveFileWithoutAchievement()
-    //{
-    //    List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
-    //    c_RecordCtrl.DeleteRecordWithoutAchievement(fileNameList);
-    //}
-    public void DeleteRecord(string fileName)
+    public void ResetSaveFileWithoutAchievement()
+    {
+        List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
+        c_RecordCtrl.DeleteRecordWithoutAchievement(fileNameList);
+    }
+    public void DeleteRecord(string fileName, string achievementName)
     {
         if (c_RecordCtrl.DeleteRecord(fileName))
         {
             if (m_CurAction != null) m_CurAction();
             else MyDebug.LogYellow("UnRegister Function!");
-            //if (!string.IsNullOrEmpty(achievementName))
-            //{
-            //    PlayerPrefs.DeleteKey(achievementName);
-            //}
+            if (!string.IsNullOrEmpty(achievementName))
+            {
+                PlayerPrefs.DeleteKey(achievementName);
+            }
         }
         else
         {
             MyDebug.LogYellow("Delete File Fail!");
         }
     }
-    public void DeleteAchievement(string achievementName)
+    public void DeleteAchievement(string fileName, string achievementName)
     {
         if (!PlayerPrefs.HasKey(achievementName))
         {
@@ -455,17 +442,15 @@ public class GameManager : MonoBehaviour
         //{
         //    c_AchievementCtrl.DeleteAchievement(hiddenAchievement.achievementName);
         //}
-        if (m_CurAction != null) m_CurAction();
-        else MyDebug.LogYellow("UnRegister Function!");
-        //if (c_RecordCtrl.DeleteRecord(fileName))
-        //{
-        //    if (m_CurAction != null) m_CurAction();
-        //    else MyDebug.LogYellow("UnRegister Function!");
-        //}
-        //else
-        //{
-        //    MyDebug.LogYellow("Delete File Fail!");
-        //}
+        if (c_RecordCtrl.DeleteRecord(fileName))
+        {
+            if (m_CurAction != null) m_CurAction();
+            else MyDebug.LogYellow("UnRegister Function!");
+        }
+        else
+        {
+            MyDebug.LogYellow("Delete File Fail!");
+        }
         string lastestAchievement = PlayerPrefs.GetString("LastestAchievement", "");
         if (lastestAchievement.Contains(achievementName))
         {
@@ -488,17 +473,11 @@ public class GameManager : MonoBehaviour
     }
     public void ResetAchievement()
     {
-        //List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
-        //c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
+        List<string> fileNameList = c_AchievementCtrl.GetAllFileNameWithAchievement();
+        c_RecordCtrl.DeleteRecordWithAchievement(fileNameList);
         c_AchievementCtrl.ResetAllAchievement();
         PlayerPrefs.DeleteKey("LastestAchievement");
     }
-
-    //public void InitShareInfo(PlatformType type, System.Action action)
-    //{
-    //    m_ShareAction = action;
-    //    m_ShareSDK.GetUserInfo(type);
-    //}    
 
     public void ShareImage(Rect mRect, PlatformType type)
     {
@@ -644,7 +623,6 @@ public class GameManager : MonoBehaviour
     {
         Object resource = c_ResourceCtrl.GetItemResource(id);
         return Instantiate(resource) as GameObject;
-        //return c_ResourceCtrl.GetItemResource(name); ;
     }
 
 

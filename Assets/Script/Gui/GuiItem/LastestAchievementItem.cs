@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class LastestAchievementItem : AchievementItem 
 {
@@ -26,4 +27,7 @@ public class LastestAchievementItem : AchievementItem
             achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
         }
     }
+
+    public new void OnPointerDown(PointerEventData eventData) { }
+    public new void OnPointerExit(PointerEventData eventData) { }
 }

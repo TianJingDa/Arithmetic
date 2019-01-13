@@ -104,6 +104,11 @@ public class ShareFrameWrapper : GuiFrameWrapper
                 shareBtnsBg.DOMoveY(endPos, duration, true);
                 CommonTool.GuiScale(sharePage.gameObject, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
                 break;
+            case "AchievementDetailBtn":
+                AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
+                GameManager.Instance.CurSaveFileInstance = GameManager.Instance.ReadRecord(instance.finishTime);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+                break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;

@@ -232,18 +232,8 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-		switch (GameManager.Instance.LastGUI) 
-		{
-			case GuiFrameID.BluetoothFrame:
-				MyDebug.LogGreen ("Fight Over From Bluetooth!");
-				break;
-			case GuiFrameID.CategoryFrame:
-                GameManager.Instance.SaveRecord(resultList, symbol, timeCost, false);
-				break;
-			case GuiFrameID.ChapterFrame:
-				GameManager.Instance.SaveAchievement(resultList, symbol, timeCost);
-				break;
-		}
+        bool isAchievement = GameManager.Instance.LastGUI == GuiFrameID.ChapterFrame;
+        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, isAchievement, false);
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }

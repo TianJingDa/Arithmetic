@@ -46,15 +46,8 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "ShareBtn":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-                {
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
-                }
-                else
-                {
-                    GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
-                }
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "OnlyWrongBtn":
                 onlyWrong = !onlyWrong;
@@ -62,6 +55,12 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 break;
             case "SaveFileDetailClosedBtn":
                 CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
+                break;
+            case "AchievementBtn":
+                AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
+                GameManager.Instance.CurAchievementInstance = instance;
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

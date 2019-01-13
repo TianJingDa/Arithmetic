@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Text;
 using System;
-using DG.Tweening;
 
 
 public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, IPointerClickHandler
@@ -64,7 +62,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
         string tip = GameManager.Instance.GetMutiLanguage("Text_20027");
         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip,
-                      () => GameManager.Instance.DeleteAchievement(content.achievementName), null);
+                      () => GameManager.Instance.DeleteAchievement(content.finishTime, content.achievementName), null);
         GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
@@ -105,7 +103,6 @@ public class AchievementInstance
     public string imageIndex;
     public string chapterImageIndex;
     public string finishTime;//完成时间
-    //public string classType;
     public CategoryInstance cInstance;
     public int star;
     public int difficulty;

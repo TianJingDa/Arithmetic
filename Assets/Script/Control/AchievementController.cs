@@ -54,16 +54,18 @@ public class AchievementController : Controller
         PlayerPrefs.DeleteKey(achievementName + "Star");
         WriteFinishTime(achievementName, "", 0);
     }
-    //public List<string> GetAllFileNameWithAchievement()
-    //{
-    //    List<string> fileNameList = new List<string>();
-    //    for(int i = 0;i< achievementList.Count; i++)
-    //    {
-    //        string fileName = PlayerPrefs.GetString(achievementList[i].achievementName, "");
-    //        if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
-    //    }
-    //    return fileNameList;
-    //}
+
+    public List<string> GetAllFileNameWithAchievement()
+    {
+        List<string> fileNameList = new List<string>();
+        for (int i = 0; i < achievementList.Count; i++)
+        {
+            string fileName = PlayerPrefs.GetString(achievementList[i].achievementName, "");
+            if (!string.IsNullOrEmpty(fileName)) fileNameList.Add(fileName);
+        }
+        return fileNameList;
+    }
+
     public void WriteFinishTime(string achievementName, string finishTime, int star)
     {
         AchievementInstance instance = achievementList.Find(x => x.achievementName == achievementName);
