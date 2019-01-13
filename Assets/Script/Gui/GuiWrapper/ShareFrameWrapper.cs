@@ -9,12 +9,16 @@ using cn.sharesdk.unity3d;
 
 public class ShareFrameWrapper : GuiFrameWrapper
 {
+    private const float endPos = -200f;
+    private const float duration = 0.5f;
+
     private ShareInstance content;
+    private RectTransform sharePage;
+    private Text sharelTitle;
 
     private GameObject saveFileSharePage;
     private GameObject saveFileSharePattern_Time;
     private GameObject saveFileSharePattern_Number;
-    private Text saveFileShareTitle;
     private Text saveFileShareAmount;
     private Text saveFileShareTime;
     private Text saveFileShareSymbol;
@@ -24,7 +28,6 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private Text saveFileShareMeanTime;
     private RectTransform shareBtnsBg;
 
-    private GameObject achievementDetailTitle;
     private GameObject achievementDetailPattern_Time;
     private GameObject achievementDetailPattern_Number;
     private GameObject achievementDetailPage;
@@ -46,16 +49,17 @@ public class ShareFrameWrapper : GuiFrameWrapper
         Init();
         content = GameManager.Instance.CurShareInstance;
         InitShareFrame();
-        shareBtnsBg.DOMoveY(shareBtnsBg.rect.y, 0.3f, true).From();
+        shareBtnsBg.DOMoveY(endPos, duration, true).From();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
+        sharePage                       = gameObjectDict["SharePage"].GetComponent<RectTransform>();
+        sharelTitle                     = gameObjectDict["SharelTitle"].GetComponent<Text>();
         saveFileSharePage               = gameObjectDict["SaveFileSharePage"];
         saveFileSharePattern_Time       = gameObjectDict["SaveFileSharePattern_Time"];
         saveFileSharePattern_Number     = gameObjectDict["SaveFileSharePattern_Number"];
         shareBtnsBg                     = gameObjectDict["ShareBtnsBg"].GetComponent<RectTransform>();
-        saveFileShareTitle              = gameObjectDict["SaveFileShareTitle"].GetComponent<Text>();
         saveFileShareAmount             = gameObjectDict["SaveFileShareAmount"].GetComponent<Text>();
         saveFileShareTime               = gameObjectDict["SaveFileShareTime"].GetComponent<Text>();
         saveFileShareSymbol             = gameObjectDict["SaveFileShareSymbol"].GetComponent<Text>();
@@ -64,7 +68,6 @@ public class ShareFrameWrapper : GuiFrameWrapper
         saveFileShareAccuracy           = gameObjectDict["SaveFileShareAccuracy"].GetComponent<Text>();
         saveFileShareMeanTime           = gameObjectDict["SaveFileShareMeanTime"].GetComponent<Text>();
 
-        achievementDetailTitle          = gameObjectDict["AchievementDetailTitle"];
         achievementDetailPattern_Time   = gameObjectDict["AchievementDetailPattern_Time"];
         achievementDetailPattern_Number = gameObjectDict["AchievementDetailPattern_Number"];
         achievementDetailPage           = gameObjectDict["AchievementDetailPage"];
@@ -89,25 +92,17 @@ public class ShareFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "WeChatBtn":
-                if (content.id == ShareID.Achievement)
-                    ShareImage(achievementDetailPage, PlatformType.WeChat);
-                else
-                    ShareImage(saveFileSharePage, PlatformType.WeChat);
+                ShareImage(PlatformType.WeChat);
                 break;
             case "WeChatMomentsBtn":
-                if (content.id == ShareID.Achievement)
-                    ShareImage(achievementDetailPage, PlatformType.WeChatMoments);
-                else
-                    ShareImage(saveFileSharePage, PlatformType.WeChatMoments);
+                ShareImage(PlatformType.WeChatMoments);
                 break;
             case "SinaWeiboBtn":
-                if (content.id == ShareID.Achievement)
-                    ShareImage(achievementDetailPage, PlatformType.SinaWeibo);
-                else
-                    ShareImage(saveFileSharePage, PlatformType.SinaWeibo);
+                ShareImage(PlatformType.SinaWeibo);
                 break;
             case "ShareFrameBg":
-                CommonTool.GuiScale(achievementDetailPage, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
+                shareBtnsBg.DOMoveY(endPos, duration, true);
+                CommonTool.GuiScale(sharePage.gameObject, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -139,7 +134,8 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private void InitSaveFile()
     {
         SaveFileInstance instance = GameManager.Instance.CurSaveFileInstance;
-        saveFileShareTitle.text = string.Format(saveFileShareTitle.text, GameManager.Instance.UserName);
+        if (instance == null) return;
+        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20037");
         saveFileSharePattern_Time.SetActive(instance.cInstance.patternID == PatternID.Time);
         saveFileSharePattern_Number.SetActive(instance.cInstance.patternID == PatternID.Number);
         saveFileShareAmount.text = string.Format(saveFileShareAmount.text, instance.qInstancList.Count);
@@ -155,7 +151,8 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private void InitAchievement()
     {
         AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
-        achievementDetailTitle.SetActive(false);
+        if (instance == null) return;
+        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20051");
         achievementDetailImage.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
         achievementDetailMainTitle.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
         achievementDetailSubTitle.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
@@ -190,7 +187,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
         return newTime.ToString();
     }
 
-    private void ShareImage(GameObject target, PlatformType type)
+    private void ShareImage(PlatformType type)
     {
         if (string.IsNullOrEmpty(GameManager.Instance.UserName))
         {
@@ -198,8 +195,12 @@ public class ShareFrameWrapper : GuiFrameWrapper
         }
         else
         {
-            RectTransform shotTarget = target.transform as RectTransform;
-            Rect shotRect = CommonTool.GetShotTargetRect(shotTarget);
+            if (!sharelTitle.gameObject.activeSelf)
+            {
+                sharelTitle.gameObject.SetActive(true);
+                sharelTitle.text = string.Format(sharelTitle.text, GameManager.Instance.UserName);
+            }
+            Rect shotRect = CommonTool.GetShotTargetRect(sharePage);
             GameManager.Instance.ShareImage(shotRect, type);
         }
     }
