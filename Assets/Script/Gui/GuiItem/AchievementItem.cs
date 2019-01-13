@@ -15,7 +15,6 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected bool onlyWrong;
 
     protected AchievementInstance content;//详情
-    protected GameObject deleteWin;
     protected GameObject achievementItem_WithoutAchievement;
     protected Text achievementName;
     protected Image achievementImage;
@@ -47,7 +46,7 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
             duration += Time.deltaTime;
             yield return null;
         }
-        isLongPress = deleteWin != null;
+        isLongPress = true;
         Vector3 curPosition = ((RectTransform)transform).position;
         float distance = Mathf.Abs(position.y - curPosition.y);
         if (distance <= 2 && isLongPress) OnLongPress();
@@ -56,37 +55,19 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
         GameManager.Instance.CurAchievementInstance = content;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.AchievementDetailFrame, true);
-    }
-    protected void ShowShareBtn()
-    {
-        Dictionary<string, GameObject> detailWinDict = new Dictionary<string, GameObject>();
-        Text achievementDetailTitleInStatistics = detailWinDict["AchievementDetailTitleInStatistics"].GetComponent<Text>();
-        achievementDetailTitleInStatistics.gameObject.SetActive(true);
-        achievementDetailTitleInStatistics.text = string.Format(achievementDetailTitleInStatistics.text, GameManager.Instance.UserName);
-        detailWinDict["AchievementDetailShareBtnInStatistics"].SetActive(false);
-        RectTransform achievementShareBtnsBgInStatistics = detailWinDict["AchievementShareBtnsBgInStatistics"].transform as RectTransform;
-        achievementShareBtnsBgInStatistics.gameObject.SetActive(true);
-        achievementShareBtnsBgInStatistics.DOMoveY(achievementShareBtnsBgInStatistics.rect.y, 0.3f, true).From();
+        GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
     }
 
     protected void OnLongPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        deleteWin.SetActive(true);
-        GameObject deleteConfirmBtnInAchievement = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtnInAchievement");
-        CommonTool.AddEventTriggerListener(deleteConfirmBtnInAchievement, EventTriggerType.PointerClick, OnLongPress);
-    }
-    protected void OnLongPress(BaseEventData data)
-    {
-        deleteWin.SetActive(false);
-        GameManager.Instance.DeleteAchievement(content.achievementName);
+        string tip = GameManager.Instance.GetMutiLanguage("Text_20027");
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip,
+                      () => GameManager.Instance.DeleteAchievement(content.achievementName), null);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
-    protected override void InitDeleteWin(GameObject deleteWin)
-    {
-        this.deleteWin = deleteWin;
-    }
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         achievementName                     = gameObjectDict["AchievementName"].GetComponent<Text>();

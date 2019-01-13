@@ -60,7 +60,9 @@ public class SummaryAchievementItem : AchievementItem
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
         GameManager.Instance.CurAchievementInstance = content;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.AchievementDetailFrame, true);
+        GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+
         //detailWin.SetActive(true);
         //Image achievementDetailImageInStatistics = CommonTool.GetComponentByName<Image>(detailWin, "AchievementDetailImageInStatistics");
         //Text achievementDetailMainTitleInStatistics = CommonTool.GetComponentByName<Text>(detailWin, "AchievementDetailMainTitleInStatistics");

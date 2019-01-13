@@ -42,8 +42,7 @@ public sealed class ResourceController : Controller
         frameAddressDict.Add(GuiFrameID.NameBoardFrame, "GuiWrapper/NameBoardFrame");
         frameAddressDict.Add(GuiFrameID.CommonTipFrame, "GuiWrapper/CommonTipFrame");
         frameAddressDict.Add(GuiFrameID.BluetoothFightFrame, "GuiWrapper/BluetoothFightFrame");
-        frameAddressDict.Add(GuiFrameID.SaveFileDetailFrame, "GuiWrapper/SaveFileDetailFrame");
-        frameAddressDict.Add(GuiFrameID.AchievementDetailFrame, "GuiWrapper/AchievementDetailFrame");
+        frameAddressDict.Add(GuiFrameID.SaveFileFrame, "GuiWrapper/SaveFileFrame");
         frameAddressDict.Add(GuiFrameID.ShareFrame, "GuiWrapper/ShareFrame");
 
         itemAddressDict.Add(GuiItemID.AchievementItem, "GuiItem/AchievementItem");

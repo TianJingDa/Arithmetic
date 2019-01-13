@@ -15,7 +15,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     //protected bool hasAchievement;
 
     protected SaveFileInstance content;//详情
-    protected GameObject deleteWin;
     //protected GameObject saveFileAchievement_No;
     protected Text saveFileName;
     protected Text saveFileType_Time;
@@ -48,7 +47,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
             duration += Time.deltaTime;
             yield return null;
         }
-        isLongPress = deleteWin != null;
+        isLongPress = true;
         Vector3 curPosition = ((RectTransform)transform).position;
         float distance = Mathf.Abs(position.y - curPosition.y);
         if (distance <= 2 && isLongPress) OnLongPress();
@@ -60,10 +59,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileType_Time = gameObjectDict["SaveFileType_Time"].GetComponent<Text>();
         saveFileType_Number = gameObjectDict["SaveFileType_Number"].GetComponent<Text>();
         //saveFileAchievement_No = gameObjectDict["SaveFileAchievement_No"];
-    }
-    protected override void InitDeleteWin(GameObject deleteWin)
-    {
-        this.deleteWin = deleteWin;
     }
     protected override void InitPrefabItem(object data)
     {
@@ -98,36 +93,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     {
         if (content == null) return;
         GameManager.Instance.CurSaveFileInstance = content;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileDetailFrame, true);
-    }
-
-    protected void ShowShareBtn()
-    {
-        Dictionary<string, GameObject> detailWinDict = new Dictionary<string, GameObject>();
-        GameObject saveFileShareWinInStatistics = detailWinDict["SaveFileShareWinInStatistics"];
-        saveFileShareWinInStatistics.SetActive(true);
-        CommonTool.GuiScale(saveFileShareWinInStatistics, GameManager.Instance.CurCanvasGroup, true);
-        GameObject saveFileSharePatternInStatistics_Time = detailWinDict["SaveFileSharePatternInStatistics_Time"];
-        GameObject saveFileSharePatternInStatistics_Number = detailWinDict["SaveFileSharePatternInStatistics_Number"];
-        Text saveFileShareTitleInStatistics = detailWinDict["SaveFileShareTitleInStatistics"].GetComponent<Text>();
-        Text saveFileShareAmountInStatistics = detailWinDict["SaveFileShareAmountInStatistics"].GetComponent<Text>();
-        Text saveFileShareTimeInStatistics = detailWinDict["SaveFileShareTimeInStatistics"].GetComponent<Text>();
-        Text saveFileShareSymbolInStatistics = detailWinDict["SaveFileShareSymbolInStatistics"].GetComponent<Text>();
-        Text saveFileShareDigitInStatistics = detailWinDict["SaveFileShareDigitInStatistics"].GetComponent<Text>();
-        Text saveFileShareOperandInStatistics = detailWinDict["SaveFileShareOperandInStatistics"].GetComponent<Text>();
-        Text saveFileShareAccuracyInStatistics = detailWinDict["SaveFileShareAccuracyInStatistics"].GetComponent<Text>();
-        Text saveFileShareMeanTimeInStatistics = detailWinDict["SaveFileShareMeanTimeInStatistics"].GetComponent<Text>();
-        saveFileShareTitleInStatistics.text = string.Format(saveFileShareTitleInStatistics.text, GameManager.Instance.UserName);
-        saveFileSharePatternInStatistics_Time.SetActive(content.cInstance.patternID == PatternID.Time);
-        saveFileSharePatternInStatistics_Number.SetActive(content.cInstance.patternID == PatternID.Number);
-        saveFileShareAmountInStatistics.text = string.Format(saveFileShareAmountInStatistics.text, content.qInstancList.Count);
-        saveFileShareTimeInStatistics.text = string.Format(saveFileShareTimeInStatistics.text, content.timeCost.ToString("f1"));
-        saveFileShareSymbolInStatistics.text = string.Format(saveFileShareSymbolInStatistics.text, GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID]);
-        saveFileShareDigitInStatistics.text = string.Format(saveFileShareDigitInStatistics.text, (int)(content.cInstance.digitID + 2));
-        saveFileShareOperandInStatistics.text = string.Format(saveFileShareOperandInStatistics.text, (int)(content.cInstance.operandID + 2));
-        saveFileShareAccuracyInStatistics.text = string.Format(saveFileShareAccuracyInStatistics.text, content.accuracy);
-        string meanTime = (content.timeCost / content.qInstancList.Count).ToString("f1");
-        saveFileShareMeanTimeInStatistics.text = string.Format(saveFileShareMeanTimeInStatistics.text, meanTime);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
     }
 
     //protected void OnAchievementBtn(BaseEventData data)
@@ -156,14 +122,11 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 
     protected void OnLongPress()
     {
-        deleteWin.SetActive(true);
-        GameObject deleteConfirmBtnInSaveFile = CommonTool.GetGameObjectByName(deleteWin, "DeleteConfirmBtnInSaveFile");
-        CommonTool.AddEventTriggerListener(deleteConfirmBtnInSaveFile, EventTriggerType.PointerClick, OnLongPress);
-    }
-    protected void OnLongPress(BaseEventData data)
-    {
-        deleteWin.SetActive(false);
-        GameManager.Instance.DeleteRecord(content.fileName);
+        if (content == null) return;
+        string tip = GameManager.Instance.GetMutiLanguage("Text_20015");
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip,
+                      () => GameManager.Instance.DeleteAchievement(content.achievementName), null);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
 }

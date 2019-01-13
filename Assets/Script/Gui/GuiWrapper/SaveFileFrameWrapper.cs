@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaveFileDetailFrameWrapper : GuiFrameWrapper
+public class SaveFileFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
     private List<QuentionInstance> onlyWrongList;
@@ -18,7 +18,7 @@ public class SaveFileDetailFrameWrapper : GuiFrameWrapper
 
     void Start()
     {
-        id = GuiFrameID.SaveFileDetailFrame;
+        id = GuiFrameID.SaveFileFrame;
         Init();
         content = GameManager.Instance.CurSaveFileInstance;
         saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
@@ -47,9 +47,14 @@ public class SaveFileDetailFrameWrapper : GuiFrameWrapper
         {
             case "ShareBtn":
                 if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+                {
                     GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+                }
                 else
+                {
+                    GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
                     GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                }
                 break;
             case "OnlyWrongBtn":
                 onlyWrong = !onlyWrong;

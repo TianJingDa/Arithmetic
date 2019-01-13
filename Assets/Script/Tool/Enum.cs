@@ -18,8 +18,7 @@ public enum GuiFrameID
     NameBoardFrame,            //起名界面
     CommonTipFrame,            //提示信息界面
     BluetoothFightFrame,       //蓝牙答题界面
-    SaveFileDetailFrame,       //存档详情界面
-    AchievementDetailFrame,    //成就详情界面
+    SaveFileFrame,             //存档详情界面
     ShareFrame,                //分享界面
 }
 public enum GuiItemID
@@ -116,4 +115,10 @@ public enum CommonTipID
     Single,                    //单独确认键
     Double,                    //确认加取消
     Splash                     //无按键，自动消失
+}
+public enum ShareID
+{
+    Achievement,               //成就
+    SaveFile,                  //存档
+    Bluetooth                  //蓝牙
 }

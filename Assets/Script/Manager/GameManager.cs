@@ -260,6 +260,8 @@ public class GameManager : MonoBehaviour
 
     public CommonTipInstance CurCommonTipInstance { get; set; }
 
+    public ShareInstance CurShareInstance { get; set; }
+
     public System.Action<BluetoothMessage> BLESendMessage { get; set; }
 
     public System.Action<BluetoothMessage> BLEReceiveMessage { get; set; }
