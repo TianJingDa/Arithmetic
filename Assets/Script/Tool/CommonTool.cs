@@ -377,7 +377,7 @@ public static class CommonTool
                           {
                               if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
-                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                              gui.transform.localScale = Vector3.one;
                           });
         }
         else
@@ -389,8 +389,8 @@ public static class CommonTool
                           {
                               if (completed != null) completed();
                               canvasGroup.blocksRaycasts = true;
+                              gui.transform.localScale = Vector3.one;
                               gui.SetActive(false);
-                              gui.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                           });
         }
     }

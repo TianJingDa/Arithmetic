@@ -159,7 +159,8 @@ public class ShareFrameWrapper : GuiFrameWrapper
     {
         AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
         if (instance == null) return;
-        achievementDetailBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.SaveFileFrame);
+        achievementDetailBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.SaveFileFrame
+                                    && GameManager.Instance.LastGUI != GuiFrameID.SettlementFrame);
         sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20051");
         achievementDetailImage.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
         achievementDetailMainTitle.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);

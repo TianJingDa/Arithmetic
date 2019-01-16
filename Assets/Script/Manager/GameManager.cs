@@ -390,12 +390,12 @@ public class GameManager : MonoBehaviour
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
         curSaveFileInstance.qInstancList = qInstanceList;
 
-        string achievementName = "";
+        CurAchievementName = "";
         if (isAchievement)
         {
-            achievementName = CheckAchievement(timeCost / resultList.Count, accuracy, finishTime);
+            CurAchievementName = CheckAchievement(timeCost / resultList.Count, accuracy, finishTime);
         }
-        curSaveFileInstance.achievementName = achievementName;
+        curSaveFileInstance.achievementName = CurAchievementName;
 
         curSaveFileInstance.cInstance = m_CurCategoryInstance;
 
@@ -438,7 +438,15 @@ public class GameManager : MonoBehaviour
             else MyDebug.LogYellow("UnRegister Function!");
             if (!string.IsNullOrEmpty(achievementName))
             {
-                PlayerPrefs.DeleteKey(achievementName);
+                c_AchievementCtrl.DeleteAchievement(achievementName);
+
+                string lastestAchievement = PlayerPrefs.GetString("LastestAchievement", "");
+                if (lastestAchievement.Contains(achievementName))
+                {
+                    lastestAchievement = lastestAchievement.Replace(achievementName + ",", "");
+                    PlayerPrefs.SetString("LastestAchievement", lastestAchievement);
+                }
+
             }
         }
         else
@@ -454,11 +462,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         c_AchievementCtrl.DeleteAchievement(achievementName);
-        //AchievementInstance hiddenAchievement = c_AchievementCtrl.GetAllAchievements().Find(x => x.cInstance.symbolID == SymbolID.Hidden);
-        //if (PlayerPrefs.HasKey(hiddenAchievement.achievementName))
-        //{
-        //    c_AchievementCtrl.DeleteAchievement(hiddenAchievement.achievementName);
-        //}
         if (c_RecordCtrl.DeleteRecord(fileName))
         {
             if (m_CurAction != null) m_CurAction();
@@ -479,8 +482,9 @@ public class GameManager : MonoBehaviour
     {
         return c_AchievementCtrl.GetAllAchievements();
     }
-    public AchievementInstance GetAchievement(string achievementName)
+    public AchievementInstance GetAchievement(string achievementName = "")
     {
+        if (string.IsNullOrEmpty(achievementName)) achievementName = CurAchievementName;
         return c_AchievementCtrl.GetAchievement(achievementName);
     }
     public AchievementInstance GetLastestAchievement()

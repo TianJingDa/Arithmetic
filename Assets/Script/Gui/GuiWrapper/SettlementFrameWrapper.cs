@@ -12,17 +12,20 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
 
+    private GameObject onlyWrongImage;
+    private GameObject achievementDetailBgInSettlement;
+    private GameObject curAchievementBtn;
+    private GameObject achievementDetailPageInSettlement;
+    private Image achievementDetailImageInSettlement;
     private Text settlementTime;
     private Text settlementAmount;
     private Text settlementAccuracy;
     private Text achievementDetailMainTitleInSettlement;
     private Text achievementDetailSubTitleInSettlement;
     private Text achievementDetailFinishTimeInSettlement;
-    private Image achievementDetailImageInSettlement;
-    private GameObject onlyWrongImage;
-    private GameObject achievementDetailBgInSettlement;
     private InfiniteList settlementGrid;
     private SaveFileInstance curSaveFileInstance;
+    private AchievementInstance curAchievementInstance;
     private List<QuentionInstance> onlyWrongList;
     private List<QuentionInstance> allInstanceList;
 
@@ -48,6 +51,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementDetailBgInSettlement             = gameObjectDict["AchievementDetailBgInSettlement"];
         achievementDetailImageInSettlement          = gameObjectDict["AchievementDetailImageInSettlement"].GetComponent<Image>();
         onlyWrongImage                              = gameObjectDict["OnlyWrongImage"];
+        curAchievementBtn                           = gameObjectDict["CurAchievementBtn"];
+        achievementDetailPageInSettlement           = gameObjectDict["AchievementDetailPageInSettlement"];
     }
 
     protected override void OnButtonClick(Button btn)
@@ -55,8 +60,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         base.OnButtonClick(btn);
         switch (btn.name)
         {
-            case "AchievementDetail2SettlementBtn":
-                achievementDetailBgInSettlement.SetActive(false);
+            case "AchievementDetailBgInSettlement":
+                CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, false,()=> achievementDetailBgInSettlement.SetActive(false));
                 break;
             case "OnlyWrongBtn":
                 onlyWrong = !onlyWrong;
@@ -67,6 +72,20 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 break;
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
+                break;
+            case "ShareBtnInSettlement":
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                break;
+            case "CurAchievementBtn":
+                achievementDetailBgInSettlement.SetActive(true);
+                achievementDetailPageInSettlement.SetActive(true);
+                CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, true);
+                break;
+            case "AchievementDetailShareBtn":
+                GameManager.Instance.CurAchievementInstance = curAchievementInstance;
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -110,12 +129,19 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
 		if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && GameManager.Instance.CompetitionGUI == GuiFrameID.ChapterFrame)
         {
+            curAchievementBtn.SetActive(true);
             achievementDetailBgInSettlement.SetActive(true);
-            AchievementInstance instance = GameManager.Instance.GetAchievement(GameManager.Instance.CurAchievementName);
-            achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-            achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-            achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
-            achievementDetailFinishTimeInSettlement.text = GetFinishTime(instance.finishTime);
+            achievementDetailPageInSettlement.SetActive(true);
+            CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, true);
+            curAchievementInstance = GameManager.Instance.GetAchievement();
+            achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(curAchievementInstance.imageIndex);
+            achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(curAchievementInstance.mainTitleIndex);
+            achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(curAchievementInstance.subTitleIndex);
+            achievementDetailFinishTimeInSettlement.text = GetFinishTime(curAchievementInstance.finishTime);
+        }
+        else
+        {
+            curAchievementBtn.SetActive(false);
         }
     }
     private string GetFinishTime(string time)
