@@ -191,11 +191,30 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 用于区分三种竞赛方式：成就、自由、蓝牙 
     /// </summary>
-	public GuiFrameID LastGUI
+	public GuiFrameID CompetitionGUI
     {
         get;
         set;
     }
+    //获取栈顶第二个元素的ID
+    public GuiFrameID LastGUI
+    {
+        get
+        {
+            GuiFrameID id = GuiFrameID.None;
+            lock (m_GuiFrameStack)
+            {
+                GuiFrameWrapper wrapper = m_GuiFrameStack.Pop();
+                if (m_GuiFrameStack.Count > 0)
+                {
+                    id = m_GuiFrameStack.Peek().id;
+                }
+                m_GuiFrameStack.Push(wrapper);
+            }
+            return id;
+        }
+    }
+
     public string UserName
     {
         get
@@ -365,7 +384,7 @@ public class GameManager : MonoBehaviour
         string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
         curSaveFileInstance.fileName = finishTime;
 
-        float accuracy = CalculateAccuracy(resultList, 0);
+        float accuracy = CalculateAccuracy(resultList);
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
 
         List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
@@ -383,8 +402,6 @@ public class GameManager : MonoBehaviour
         if (isBluetooth)
         {
             curSaveFileInstance.opponentName = CurBluetoothInstance.name;
-            float opponentAccuracy = CalculateAccuracy(resultList, 1);
-            curSaveFileInstance.opponentAccuracy = opponentAccuracy;
         }
 
         CurSaveFileInstance = curSaveFileInstance;
@@ -640,6 +657,7 @@ public class GameManager : MonoBehaviour
         if (msg.index < 0)
         {
             Random.InitState(msg.result);
+            CompetitionGUI = GuiFrameID.BluetoothFrame;
             SwitchWrapper(GuiFrameID.BluetoothFightFrame);
         }
         else
@@ -665,6 +683,7 @@ public class GameManager : MonoBehaviour
             CurBluetoothInstance = new BluetoothInstance("", msg.centralName);
             SetSendMessageFunc(false);
             BLESendMessage(msg);
+            CompetitionGUI = GuiFrameID.BluetoothFrame;
             SwitchWrapper(GuiFrameID.BluetoothFightFrame);
         }
         else
@@ -701,9 +720,9 @@ public class GameManager : MonoBehaviour
         BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, data, data.Length);
     }
 
-    private float CalculateAccuracy(List<List<int>> resultList, int deltaIndex)
+    private float CalculateAccuracy(List<List<int>> resultList)
     {
-        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1 - deltaIndex] == x[x.Count - 2 - deltaIndex]);
+        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
         float accuracy = (float)rightList.Count * 100 / resultList.Count;
         return accuracy;
     }

@@ -51,7 +51,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
                 break;
             case "Category2FightFrameBtn":
                 CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-				GameManager.Instance.LastGUI = GuiFrameID.CategoryFrame;
+				GameManager.Instance.CompetitionGUI = GuiFrameID.CategoryFrame;
                 GameManager.Instance.CurCategoryInstance = curCategoryInstance;
                 GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
                 break;

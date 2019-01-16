@@ -115,7 +115,6 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 public class SaveFileInstance
 {
     public float timeCost;
-    public float opponentAccuracy;
     public string fileName;
     public string accuracy;
     public string opponentName;

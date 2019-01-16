@@ -11,6 +11,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     private SaveFileInstance content;
     private GameObject saveFileDetailBg;
     private GameObject onlyWrongImage;
+    private GameObject achievementBtn;
     private Text saveFileDetailTime;
     private Text saveFileDetailAmount;
     private Text saveFileDetailAccuracy;
@@ -24,6 +25,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
         saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
+        achievementBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.ShareFrame);
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         onlyWrong = false;
         RefreshSettlementGrid();
@@ -34,6 +36,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     {
         saveFileDetailBg                = gameObjectDict["SaveFileDetailBg"];
         onlyWrongImage                  = gameObjectDict["OnlyWrongImage"];
+        achievementBtn                  = gameObjectDict["AchievementBtn"];
         saveFileDetailTime              = gameObjectDict["SaveFileDetailTime"].GetComponent<Text>();
         saveFileDetailAmount            = gameObjectDict["SaveFileDetailAmount"].GetComponent<Text>();
         saveFileDetailAccuracy          = gameObjectDict["SaveFileDetailAccuracy"].GetComponent<Text>();

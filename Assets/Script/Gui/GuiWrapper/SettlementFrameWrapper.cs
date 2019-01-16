@@ -63,7 +63,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 RefreshSettlementGrid();
                 break;
             case "Settlement2CategoryFrameBtn":
-				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.LastGUI,MoveID.RightOrUp,false);
+				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.CompetitionGUI,MoveID.RightOrUp,false);
                 break;
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
@@ -108,7 +108,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitAchievement()
     {
-		if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && GameManager.Instance.LastGUI == GuiFrameID.ChapterFrame)
+		if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && GameManager.Instance.CompetitionGUI == GuiFrameID.ChapterFrame)
         {
             achievementDetailBgInSettlement.SetActive(true);
             AchievementInstance instance = GameManager.Instance.GetAchievement(GameManager.Instance.CurAchievementName);

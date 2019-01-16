@@ -106,7 +106,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 			case "ConfirmBtn":
 				StopAllCoroutines ();
 				CancelInvoke ();
-				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.LastGUI,MoveID.RightOrUp,false);
+				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.CompetitionGUI,MoveID.RightOrUp,false);
 	            break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -232,7 +232,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-        bool isAchievement = GameManager.Instance.LastGUI == GuiFrameID.ChapterFrame;
+        bool isAchievement = GameManager.Instance.CompetitionGUI == GuiFrameID.ChapterFrame;
         GameManager.Instance.SaveRecord(resultList, symbol, timeCost, isAchievement, false);
         GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }

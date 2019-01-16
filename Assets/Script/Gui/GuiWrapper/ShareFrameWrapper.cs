@@ -31,6 +31,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private GameObject achievementDetailPattern_Time;
     private GameObject achievementDetailPattern_Number;
     private GameObject achievementDetailPage;
+    private GameObject achievementDetailBtn;
     private Image achievementDetailImage;
     private Text achievementDetailMainTitle;
     private Text achievementDetailSubTitle;
@@ -71,6 +72,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
         achievementDetailPattern_Time   = gameObjectDict["AchievementDetailPattern_Time"];
         achievementDetailPattern_Number = gameObjectDict["AchievementDetailPattern_Number"];
         achievementDetailPage           = gameObjectDict["AchievementDetailPage"];
+        achievementDetailBtn            = gameObjectDict["AchievementDetailBtn"];
         achievementDetailImage          = gameObjectDict["AchievementDetailImage"].GetComponent<Image>();
         achievementDetailMainTitle      = gameObjectDict["AchievementDetailMainTitle"].GetComponent<Text>();
         achievementDetailSubTitle       = gameObjectDict["AchievementDetailSubTitle"].GetComponent<Text>();
@@ -157,6 +159,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
     {
         AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
         if (instance == null) return;
+        achievementDetailBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.SaveFileFrame);
         sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20051");
         achievementDetailImage.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
         achievementDetailMainTitle.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
