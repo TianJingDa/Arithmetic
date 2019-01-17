@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class LastestAchievementItem : AchievementItem 
+public class LastestAchievementItem : AchievementItem, IPointerDownHandler, IPointerExitHandler
 {
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
