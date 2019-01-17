@@ -43,6 +43,15 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private Text achievementDetailOperand;
     private Text achievementDetailCondition;
 
+    private GameObject bluetoothSharePage;
+    private GameObject bluetoothSharePattern_Number;
+    private Text bluetoothShareAmount;
+    private Text bluetoothShareTime;
+    private Text bluetoothShareSymbol;
+    private Text bluetoothShareDigit;
+    private Text bluetoothShareOperand;
+    private Text bluetoothShareOwnScore;
+    private Text bluetoothShareOtherScore;
 
     void Start () 
 	{
@@ -84,6 +93,15 @@ public class ShareFrameWrapper : GuiFrameWrapper
         achievementDetailOperand        = gameObjectDict["AchievementDetailOperand"].GetComponent<Text>();
         achievementDetailCondition      = gameObjectDict["AchievementDetailCondition"].GetComponent<Text>();
 
+        bluetoothSharePage              = gameObjectDict["BluetoothSharePage"];
+        bluetoothSharePattern_Number    = gameObjectDict["BluetoothSharePattern_Number"];
+        bluetoothShareAmount            = gameObjectDict["BluetoothShareAmount"].GetComponent<Text>();
+        bluetoothShareTime              = gameObjectDict["BluetoothShareTime"].GetComponent<Text>();
+        bluetoothShareSymbol            = gameObjectDict["BluetoothShareSymbol"].GetComponent<Text>();
+        bluetoothShareDigit             = gameObjectDict["BluetoothShareDigit"].GetComponent<Text>();
+        bluetoothShareOperand           = gameObjectDict["BluetoothShareOperand"].GetComponent<Text>();
+        bluetoothShareOwnScore          = gameObjectDict["BluetoothShareOwnScore"].GetComponent<Text>();
+        bluetoothShareOtherScore        = gameObjectDict["BluetoothShareOtherScore"].GetComponent<Text>();
 
     }
 
@@ -124,16 +142,23 @@ public class ShareFrameWrapper : GuiFrameWrapper
             case ShareID.Achievement:
                 saveFileSharePage.SetActive(false);
                 achievementDetailPage.SetActive(true);
+                bluetoothSharePage.SetActive(false);
                 InitAchievement();
                 CommonTool.GuiScale(achievementDetailPage, canvasGroup, true);
                 break;
             case ShareID.SaveFile:
                 saveFileSharePage.SetActive(true);
                 achievementDetailPage.SetActive(false);
+                bluetoothSharePage.SetActive(false);
                 InitSaveFile();
                 CommonTool.GuiScale(saveFileSharePage, canvasGroup, true);
                 break;
             case ShareID.Bluetooth:
+                saveFileSharePage.SetActive(false);
+                achievementDetailPage.SetActive(false);
+                bluetoothSharePage.SetActive(true);
+                InitBluetooth();
+                CommonTool.GuiScale(bluetoothSharePage, canvasGroup, true);
                 break;
         }        
     }
@@ -194,6 +219,22 @@ public class ShareFrameWrapper : GuiFrameWrapper
         newTime.Insert(4, ".");
         newTime.Insert(7, ".");
         return newTime.ToString();
+    }
+
+    private void InitBluetooth()
+    {
+        SaveFileInstance instance = GameManager.Instance.CurSaveFileInstance;
+        if (instance == null) return;
+        sharelTitle.gameObject.SetActive(true);
+        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_80015");
+        sharelTitle.text = string.Format(sharelTitle.text, GameManager.Instance.UserName, instance.opponentName);
+        bluetoothShareAmount.text = string.Format(bluetoothShareAmount.text, instance.qInstancList.Count);
+        bluetoothShareTime.text = string.Format(bluetoothShareTime.text, instance.timeCost.ToString("f1"));
+        bluetoothShareSymbol.text = string.Format(bluetoothShareSymbol.text, GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID]);
+        bluetoothShareDigit.text = string.Format(bluetoothShareDigit.text, (int)(instance.cInstance.digitID + 2));
+        bluetoothShareOperand.text = string.Format(bluetoothShareOperand.text, (int)(instance.cInstance.operandID + 2));
+        bluetoothShareOwnScore.text = instance.ownScore.ToString();
+        bluetoothShareOtherScore.text = instance.ownScore.ToString();
     }
 
     private void ShareImage(PlatformType type)

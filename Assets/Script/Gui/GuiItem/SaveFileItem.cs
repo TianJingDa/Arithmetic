@@ -114,6 +114,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 [Serializable]
 public class SaveFileInstance
 {
+    public int ownScore;
+    public int otherScore;
     public float timeCost;
     public string fileName;
     public string accuracy;

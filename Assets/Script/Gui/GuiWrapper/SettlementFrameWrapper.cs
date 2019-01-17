@@ -11,15 +11,21 @@ using cn.sharesdk.unity3d;
 public class SettlementFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
+    private bool isBluetooth;
 
+    private GameObject commonResult;
     private GameObject onlyWrongImage;
-    private GameObject achievementDetailBgInSettlement;
     private GameObject curAchievementBtn;
+    private GameObject bluetoothResult;
+    private GameObject bluetoothOnlyWrongImage;
+    private GameObject achievementDetailBgInSettlement;
     private GameObject achievementDetailPageInSettlement;
     private Image achievementDetailImageInSettlement;
     private Text settlementTime;
     private Text settlementAmount;
     private Text settlementAccuracy;
+    private Text saveFileOwnName;
+    private Text saveFileOtherName;
     private Text achievementDetailMainTitleInSettlement;
     private Text achievementDetailSubTitleInSettlement;
     private Text achievementDetailFinishTimeInSettlement;
@@ -48,10 +54,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         achievementDetailMainTitleInSettlement      = gameObjectDict["AchievementDetailMainTitleInSettlement"].GetComponent<Text>();
         achievementDetailSubTitleInSettlement       = gameObjectDict["AchievementDetailSubTitleInSettlement"].GetComponent<Text>();
         achievementDetailFinishTimeInSettlement     = gameObjectDict["AchievementDetailFinishTimeInSettlement"].GetComponent<Text>();
+        saveFileOwnName                             = gameObjectDict["SaveFileOwnName"].GetComponent<Text>();
+        saveFileOtherName                           = gameObjectDict["SaveFileOtherName"].GetComponent<Text>();
         achievementDetailBgInSettlement             = gameObjectDict["AchievementDetailBgInSettlement"];
         achievementDetailImageInSettlement          = gameObjectDict["AchievementDetailImageInSettlement"].GetComponent<Image>();
+        commonResult                                = gameObjectDict["CommonResult"];
         onlyWrongImage                              = gameObjectDict["OnlyWrongImage"];
         curAchievementBtn                           = gameObjectDict["CurAchievementBtn"];
+        bluetoothResult                             = gameObjectDict["BluetoothResult"];
+        bluetoothOnlyWrongImage                     = gameObjectDict["BluetoothOnlyWrongImage"];
         achievementDetailPageInSettlement           = gameObjectDict["AchievementDetailPageInSettlement"];
     }
 
@@ -64,6 +75,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, false,()=> achievementDetailBgInSettlement.SetActive(false));
                 break;
             case "OnlyWrongBtn":
+            case "BluetoothOnlyWrongBtn":
                 onlyWrong = !onlyWrong;
                 RefreshSettlementGrid();
                 break;
@@ -74,6 +86,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
                 break;
             case "ShareBtnInSettlement":
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                break;
+            case "BluetoothShareBtn":
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
@@ -99,6 +115,14 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         settlementTime.text = string.Format(settlementTime.text, curSaveFileInstance.timeCost.ToString("f1"));
         settlementAmount.text = string.Format(settlementAmount.text, curSaveFileInstance.qInstancList.Count);
         settlementAccuracy.text = string.Format(settlementAccuracy.text, curSaveFileInstance.accuracy);
+        isBluetooth = !string.IsNullOrEmpty(curSaveFileInstance.opponentName);
+        commonResult.SetActive(!isBluetooth);
+        bluetoothResult.SetActive(isBluetooth);
+        if (isBluetooth)
+        {
+            saveFileOwnName.text = GameManager.Instance.UserName;
+            saveFileOtherName.text = curSaveFileInstance.opponentName;
+        }
         allInstanceList = curSaveFileInstance.qInstancList;
         onlyWrongList = allInstanceList.FindAll(FindWrong);
         onlyWrong = false;
@@ -114,6 +138,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private void RefreshSettlementGrid()
     {
         onlyWrongImage.SetActive(onlyWrong);
+        bluetoothOnlyWrongImage.SetActive(onlyWrong);
         ArrayList dataList;
         if (onlyWrong)
         {
@@ -123,7 +148,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         {
             dataList = new ArrayList(allInstanceList);
         }
-        settlementGrid.InitList(dataList, GuiItemID.QuestionItem);
+
+        if (isBluetooth) settlementGrid.InitList(dataList, GuiItemID.BluetoothQuestionItem);
+        else settlementGrid.InitList(dataList, GuiItemID.QuestionItem);
     }
     private void InitAchievement()
     {

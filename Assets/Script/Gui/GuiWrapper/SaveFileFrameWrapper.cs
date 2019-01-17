@@ -6,15 +6,21 @@ using UnityEngine.UI;
 public class SaveFileFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
+    private bool isBluetooth;
     private List<QuentionInstance> onlyWrongList;
 
     private SaveFileInstance content;
     private GameObject saveFileDetailBg;
+    private GameObject commonResult;
     private GameObject onlyWrongImage;
     private GameObject achievementBtn;
+    private GameObject bluetoothResult;
+    private GameObject bluetoothOnlyWrongImage;
     private Text saveFileDetailTime;
     private Text saveFileDetailAmount;
     private Text saveFileDetailAccuracy;
+    private Text saveFileOwnName;
+    private Text saveFileOtherName;
     private InfiniteList saveFileDetailGrid;
 
     void Start()
@@ -26,6 +32,14 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy);
         achievementBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.ShareFrame);
+        isBluetooth = !string.IsNullOrEmpty(content.opponentName);
+        commonResult.SetActive(!isBluetooth);
+        bluetoothResult.SetActive(isBluetooth);
+        if (isBluetooth)
+        {
+            saveFileOwnName.text = GameManager.Instance.UserName;
+            saveFileOtherName.text = content.opponentName;
+        }
         onlyWrongList = content.qInstancList.FindAll(FindWrong);
         onlyWrong = false;
         RefreshSettlementGrid();
@@ -35,11 +49,16 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         saveFileDetailBg                = gameObjectDict["SaveFileDetailBg"];
+        commonResult                    = gameObjectDict["CommonResult"];
         onlyWrongImage                  = gameObjectDict["OnlyWrongImage"];
         achievementBtn                  = gameObjectDict["AchievementBtn"];
+        bluetoothResult                 = gameObjectDict["BluetoothResult"];
+        bluetoothOnlyWrongImage         = gameObjectDict["BluetoothOnlyWrongImage"];
         saveFileDetailTime              = gameObjectDict["SaveFileDetailTime"].GetComponent<Text>();
         saveFileDetailAmount            = gameObjectDict["SaveFileDetailAmount"].GetComponent<Text>();
         saveFileDetailAccuracy          = gameObjectDict["SaveFileDetailAccuracy"].GetComponent<Text>();
+        saveFileOwnName                 = gameObjectDict["SaveFileOwnName"].GetComponent<Text>();
+        saveFileOtherName               = gameObjectDict["SaveFileOtherName"].GetComponent<Text>();
         saveFileDetailGrid              = gameObjectDict["SaveFileDetailGrid"].GetComponent<InfiniteList>();
     }
 
@@ -52,7 +71,12 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
+            case "BluetoothShareBtn":
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
+                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                break;
             case "OnlyWrongBtn":
+            case "BluetoothOnlyWrongBtn":
                 onlyWrong = !onlyWrong;
                 RefreshSettlementGrid();
                 break;
@@ -80,6 +104,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     private void RefreshSettlementGrid()
     {
         onlyWrongImage.SetActive(onlyWrong);
+        bluetoothOnlyWrongImage.SetActive(onlyWrong);
         ArrayList dataList;
         if (onlyWrong)
         {
@@ -89,6 +114,8 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         {
             dataList = new ArrayList(content.qInstancList);
         }
-        saveFileDetailGrid.InitList(dataList, GuiItemID.QuestionItem);
+
+        if(isBluetooth) saveFileDetailGrid.InitList(dataList, GuiItemID.BluetoothQuestionItem);
+        else saveFileDetailGrid.InitList(dataList, GuiItemID.QuestionItem);
     }
 }
