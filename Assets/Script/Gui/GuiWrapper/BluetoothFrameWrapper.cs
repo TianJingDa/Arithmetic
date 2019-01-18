@@ -7,6 +7,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 {
 	private const float 				advertisingTime = 10;
 	private bool   						isCentral;
+    private bool                        scaning;
     private Dictionary<string, string>  peripheralDict;
 
 	private PatternID   curPatternID;
@@ -29,7 +30,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.BluetoothFrame;
         Init();
-		curPatternID = PatternID.Number;
+        scaning = false;
+        curPatternID = PatternID.Number;
 		curOperandID = OperandID.TwoNumbers;
 		peripheralDict = new Dictionary<string, string> ();
     }
@@ -177,7 +179,14 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 	private void StartScan()
 	{
-		BluetoothLEHardwareInterface.RemoveCharacteristics();
+        if (scaning)
+        {
+            MyDebug.LogYellow("Scaning!!!");
+            return;
+        }
+        scaning = true;
+
+        BluetoothLEHardwareInterface.RemoveCharacteristics();
 		BluetoothLEHardwareInterface.RemoveServices();
 
 		CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
@@ -189,7 +198,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 		if (isCentral) 
 		{
-			MyDebug.LogGreen("Start Scaning!");
+			MyDebug.LogGreen("Central Start Scaning!");
 			bluetoothScanResultContent.SetActive (true);
 			RefreshScanResultContent ();
 			CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
@@ -201,7 +210,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		} 
 		else 
 		{
-			BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
+            MyDebug.LogGreen("Peripheral Start Scaning!");
+            BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
 
 			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyRead |
@@ -242,6 +252,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 
 	private void StopScan()
 	{
+        scaning = false;
 		if (isCentral)
 		{
 			BluetoothLEHardwareInterface.StopScan ();
