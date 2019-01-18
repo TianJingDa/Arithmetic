@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BluetoothFrameWrapper : GuiFrameWrapper
 {
-	private const float 				advertisingTime = 10;
+	private const float 				advertisingTime = 30;
 	private bool   						isCentral;
     private bool                        scaning;
     private Dictionary<string, string>  peripheralDict;
@@ -64,6 +64,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 				InitializeBluetooth (false);	
                 break;
 			case "BackFromContentBtn":
+                scaning = false;
                 BluetoothLEHardwareInterface.DeInitialize(() =>
                 {
                     MyDebug.LogGreen("DeInitialize Success!");
@@ -192,9 +193,17 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
 		GameManager.Instance.CurCategoryInstance = curCategoryInstance;
 
-		GameManager.Instance.ServiceUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "0";
-		GameManager.Instance.ReadUUID    = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "1";
-		GameManager.Instance.WriteUUID   = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "2";
+		string serviceUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "0";
+        string readUUID    = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "1";
+        string writeUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "2";
+
+        GameManager.Instance.ServiceUUID = BluetoothLEHardwareInterface.FullUUID(serviceUUID);
+        GameManager.Instance.ReadUUID = BluetoothLEHardwareInterface.FullUUID(readUUID);
+        GameManager.Instance.WriteUUID = BluetoothLEHardwareInterface.FullUUID(writeUUID);
+
+        MyDebug.LogGreen("ServiceUUID:" + GameManager.Instance.ServiceUUID);
+        MyDebug.LogGreen("ReadUUID:" + GameManager.Instance.ReadUUID);
+        MyDebug.LogGreen("WriteUUID:" + GameManager.Instance.WriteUUID);
 
 		if (isCentral) 
 		{
@@ -212,31 +221,37 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		{
             MyDebug.LogGreen("Peripheral Start Scaning!");
             BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
+            MyDebug.LogGreen("PeripheralName:" + GameManager.Instance.UserName);
 
-			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadUUID, 
+            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyRead |
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyNotify,
 				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsReadable, null, 0, null);
+            MyDebug.LogGreen("CreateCharacteristic:Read!");
 
-			BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteUUID, 
+            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyWrite,
 				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsWriteable, null, 0, 
 				GameManager.Instance.PeripheralReceiveMessage);
+            MyDebug.LogGreen("CreateCharacteristic:Write!");
 
-			BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
+            BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
 				{
                     MyDebug.LogGreen("Create Service Success:" + message);
-					BluetoothLEHardwareInterface.StartAdvertising (() => 
-						{
-							MyDebug.LogGreen("Start Advertising!");
-							bluetoothScanResultContent.SetActive (true);
-							RefreshScanResultContent ();
-							StartCoroutine(AdvertisingCountDown());
-							CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
-						});
 				});
-		}
-	}
+            MyDebug.LogGreen("CreateService!");
+
+            BluetoothLEHardwareInterface.StartAdvertising(() =>
+            {
+                MyDebug.LogGreen("Start Advertising!");
+                bluetoothScanResultContent.SetActive(true);
+                RefreshScanResultContent();
+                StartCoroutine(AdvertisingCountDown());
+                CommonTool.GuiHorizontalMove(bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+            });
+
+        }
+    }
 
 	private IEnumerator AdvertisingCountDown()
 	{
@@ -247,7 +262,11 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			bluetoothConnectTime.text = Mathf.CeilToInt(time).ToString();
 			yield return null;
 		}
-		StopScan();
+        bluetoothPeripheralDetailBg.SetActive(false);
+        bluetoothConnectWaiting.SetActive(false);
+        bluetoothAdvertisingStopBtn.SetActive(false);
+
+        StopScan();
 	}
 
 	private void StopScan()
@@ -271,10 +290,10 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	private void InitializeBluetooth(bool isCentral)
     {
         this.isCentral = isCentral;
-        BluetoothLEHardwareInterface.Initialize(isCentral, !isCentral,
+        BluetoothLEHardwareInterface.Initialize(true, true,
             () =>
             {
-                MyDebug.LogGreen("Initialize Success: " + isCentral);
+                MyDebug.LogGreen("Initialize Success!");
                 bluetoothCategoryContent.SetActive(true);
                 RefreshCategoryContent();
                 CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
