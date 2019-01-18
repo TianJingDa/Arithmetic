@@ -9,7 +9,7 @@ using System.Text;
 
 public class QuestionItem : Item
 {
-    private QuentionInstance content;//详情
+    private QuestionInstance content;//详情
     private GameObject questionRightAnswerBg;
     private Text questionIndex;
     private Text questionContent;
@@ -25,10 +25,10 @@ public class QuestionItem : Item
 
     protected override void InitPrefabItem(object data)
     {
-        content = data as QuentionInstance;
+        content = data as QuestionInstance;
         if (content == null)
         {
-            MyDebug.LogYellow("QuentionInstance is null!!");
+            MyDebug.LogYellow("QuestionInstance is null!!");
             return;
         }
         Init();
@@ -53,7 +53,7 @@ public class QuestionItem : Item
     }
 }
 [Serializable]
-public class QuentionInstance
+public class QuestionInstance
 {
     public string index;
     public string symbol;

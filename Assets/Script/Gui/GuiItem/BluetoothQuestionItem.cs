@@ -6,7 +6,7 @@ using System.Text;
 
 public class BluetoothQuestionItem : Item
 {
-    private QuentionInstance content;//详情
+    private QuestionInstance content;//详情
     private Image questionOwnAnswerPage;
     private Image questionOtherAnswerPage;
     private Text questionOwnAnswer_Text;
@@ -27,10 +27,10 @@ public class BluetoothQuestionItem : Item
 
     protected override void InitPrefabItem(object data)
     {
-        content = data as QuentionInstance;
+        content = data as QuestionInstance;
         if (content == null)
         {
-            MyDebug.LogYellow("BluetoothQuentionInstance is null!!");
+            MyDebug.LogYellow("BluetoothQuestionInstance is null!!");
             return;
         }
         Init();
@@ -44,9 +44,27 @@ public class BluetoothQuestionItem : Item
             question.Append(content.instance[i].ToString());
         }
         questionContent.text = question.ToString();
-        questionOwnAnswer_Text.text = content.instance[count - 1].ToString();
-        questionOtherAnswer_Text.text = content.instance[count - 3].ToString();
-        questionOwnAnswerPage.color = content.instance[count - 1] == content.instance[count - 2] ? Color.green : Color.red;
-        questionOtherAnswerPage.color = content.instance[count - 3] == content.instance[count - 2] ? Color.green : Color.red;
+
+        if(content.instance[count - 1] == 0)
+        {
+            questionOwnAnswer_Text.text = "";
+            questionOwnAnswerPage.color = Color.yellow;
+        }
+        else
+        {
+            questionOwnAnswer_Text.text = content.instance[count - 1].ToString();
+            questionOwnAnswerPage.color = content.instance[count - 1] == content.instance[count - 2] ? Color.green : Color.red;
+        }
+
+        if(content.instance[count - 3] == 0)
+        {
+            questionOtherAnswer_Text.text = "";
+            questionOtherAnswerPage.color = Color.yellow;
+        }
+        else
+        {
+            questionOtherAnswer_Text.text = content.instance[count - 3].ToString();
+            questionOtherAnswerPage.color = content.instance[count - 3] == content.instance[count - 2] ? Color.green : Color.red;
+        }
     }
 }

@@ -387,7 +387,7 @@ public class GameManager : MonoBehaviour
         float accuracy = CalculateAccuracy(resultList);
         curSaveFileInstance.accuracy = accuracy.ToString("f1");
 
-        List<QuentionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
+        List<QuestionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
         curSaveFileInstance.qInstancList = qInstanceList;
 
         CurAchievementName = "";
@@ -730,13 +730,13 @@ public class GameManager : MonoBehaviour
         float accuracy = (float)rightList.Count * 100 / resultList.Count;
         return accuracy;
     }
-    private List<QuentionInstance> ConvertToInstanceList(List<List<int>> resultList, string symbol)
+    private List<QuestionInstance> ConvertToInstanceList(List<List<int>> resultList, string symbol)
     {
-        List<QuentionInstance> qInstanceList = new List<QuentionInstance>();
+        List<QuestionInstance> qInstanceList = new List<QuestionInstance>();
         string count = resultList.Count.ToString();
         for (int i = 0; i < resultList.Count; i++)
         {
-            QuentionInstance questionInstance = new QuentionInstance();
+            QuestionInstance questionInstance = new QuestionInstance();
             questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
             questionInstance.symbol = symbol;
             questionInstance.instance = resultList[i];

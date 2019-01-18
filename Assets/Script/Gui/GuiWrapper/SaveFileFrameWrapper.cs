@@ -7,7 +7,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 {
     private bool onlyWrong;
     private bool isBluetooth;
-    private List<QuentionInstance> onlyWrongList;
+    private List<QuestionInstance> onlyWrongList;
 
     private SaveFileInstance content;
     private GameObject saveFileDetailBg;
@@ -95,7 +95,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private bool FindWrong(QuentionInstance questionInstance)
+    private bool FindWrong(QuestionInstance questionInstance)
     {
         int count = questionInstance.instance.Count;
         return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];

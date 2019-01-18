@@ -219,7 +219,11 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         isReceiving = true;
         if(message.index == index)
         {
-            int resultInt = int.Parse(result.ToString());
+            int resultInt = 0;
+            if (!int.TryParse(result.ToString(), out resultInt))
+            {
+                resultInt = 0;//被抢答的情况
+            }
             lock (curInstance)//倒数第一个是自己的答案，倒数第二个是正确答案，倒数第三个是对方的答案
             {
                 curInstance.Insert(curInstance.Count - 1, message.result);

@@ -30,13 +30,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject aboutUsWin;
     private GameObject shareUsWin;
     private GameObject thankDevelopersWin;
+    private GameObject thankDevelopersPage;
     private GameObject resetConfirmBg;
     private GameObject resetToggleGroup;
     private GameObject resetTipBg;
     private GameObject resetTipPageTitle_Text_Achievement;
     private GameObject resetTipPageTitle_Text_SaveFile;
-    private GameObject weChatQRCodeBg;
-    private GameObject alipayQRCodeBg;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
@@ -72,10 +71,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetConfirmBg                          = gameObjectDict["ResetConfirmBg"];
         resetToggleGroup                        = gameObjectDict["ResetToggleGroup"];
         thankDevelopersWin                      = gameObjectDict["ThankDevelopersWin"];
+        thankDevelopersPage                     = gameObjectDict["ThankDevelopersPage"];
         resetTipPageTitle_Text_Achievement      = gameObjectDict["ResetTipPageTitle_Text_Achievement"];
         resetTipPageTitle_Text_SaveFile         = gameObjectDict["ResetTipPageTitle_Text_SaveFile"];
-        weChatQRCodeBg                          = gameObjectDict["WeChatQRCodeBg"];
-        alipayQRCodeBg                          = gameObjectDict["AlipayQRCodeBg"];
         skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
         languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
         skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
@@ -354,16 +352,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiHorizontalMove(strategyWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "ThankDevelopersBtn":
+                thankDevelopersWin.SetActive(true);
+                thankDevelopersPage.SetActive(true);
+                CommonTool.GuiScale(thankDevelopersPage, canvasGroup, true);
+                break;
             case "ThankDevelopersWin":
-                thankDevelopersWin.SetActive(!thankDevelopersWin.activeSelf);
-                break;
-            case "WeChatPayBtn":
-            case "WeChatQRCodeBg":
-                weChatQRCodeBg.SetActive(!weChatQRCodeBg.activeSelf);
-                break;
-            case "AliPayBtn":
-            case "AlipayQRCodeBg":
-                alipayQRCodeBg.SetActive(!alipayQRCodeBg.activeSelf);
+                CommonTool.GuiScale(thankDevelopersPage, canvasGroup, false, () => thankDevelopersWin.SetActive(false));
                 break;
             case "WeChatBtnInSetUp":
                 GameManager.Instance.ShareUrl(PlatformType.WeChat);

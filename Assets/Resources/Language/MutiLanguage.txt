@@ -161,7 +161,7 @@ Text_40004,布局,TJD
 Text_40005,反馈,TJD
 Text_40006,关于我们,TJD
 Text_40007,感谢开发人员,TJD
-Text_40008,版本：1.1,TJD
+Text_40008,版本：2.0,TJD
 Text_40009,简体中文,简体中文
 Text_40010,简体中文,Simplified Chinese
 Text_40011,English,English
@@ -257,6 +257,9 @@ Text_80009,蓝牙不支持,TJD
 Text_80010,蓝牙未授权,TJD
 Text_80011,蓝牙已关闭,TJD
 Text_80012,蓝牙未开启,TJD
-Text_80013,己方得分：{0}分,TJD
-Text_80014,对方得分：{0}分,TJD
+Text_80013,己方战绩,TJD
+Text_80014,对方战绩,TJD
 Text_80015,{0}  VS  {1},TJD
+Text_80016,正确：{0}道,TJD
+Text_80017,未答：{0}道,TJD
+Text_80018,错误：{0}道,TJD

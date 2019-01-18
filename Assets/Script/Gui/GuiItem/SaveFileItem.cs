@@ -114,13 +114,11 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 [Serializable]
 public class SaveFileInstance
 {
-    public int ownScore;
-    public int otherScore;
     public float timeCost;
     public string fileName;
     public string accuracy;
     public string opponentName;
-    public List<QuentionInstance> qInstancList;
+    public List<QuestionInstance> qInstancList;
     public string achievementName;//所获成就
     public CategoryInstance cInstance;
 }

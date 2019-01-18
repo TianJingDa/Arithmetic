@@ -50,8 +50,12 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private Text bluetoothShareSymbol;
     private Text bluetoothShareDigit;
     private Text bluetoothShareOperand;
-    private Text bluetoothShareOwnScore;
-    private Text bluetoothShareOtherScore;
+    private Text bluetoothShareOwnRight;
+    private Text bluetoothShareOwnNoAnswer;
+    private Text bluetoothShareOwnWrong;
+    private Text bluetoothShareOtherRight;
+    private Text bluetoothShareOtherNoAnswer;
+    private Text bluetoothShareOtherWrong;
 
     void Start () 
 	{
@@ -100,8 +104,12 @@ public class ShareFrameWrapper : GuiFrameWrapper
         bluetoothShareSymbol            = gameObjectDict["BluetoothShareSymbol"].GetComponent<Text>();
         bluetoothShareDigit             = gameObjectDict["BluetoothShareDigit"].GetComponent<Text>();
         bluetoothShareOperand           = gameObjectDict["BluetoothShareOperand"].GetComponent<Text>();
-        bluetoothShareOwnScore          = gameObjectDict["BluetoothShareOwnScore"].GetComponent<Text>();
-        bluetoothShareOtherScore        = gameObjectDict["BluetoothShareOtherScore"].GetComponent<Text>();
+        bluetoothShareOwnRight          = gameObjectDict["BluetoothShareOwnRight"].GetComponent<Text>();
+        bluetoothShareOwnNoAnswer       = gameObjectDict["BluetoothShareOwnNoAnswer"].GetComponent<Text>();
+        bluetoothShareOwnWrong          = gameObjectDict["BluetoothShareOwnWrong"].GetComponent<Text>();
+        bluetoothShareOtherRight        = gameObjectDict["BluetoothShareOtherRight"].GetComponent<Text>();
+        bluetoothShareOtherNoAnswer     = gameObjectDict["BluetoothShareOtherNoAnswer"].GetComponent<Text>();
+        bluetoothShareOtherWrong        = gameObjectDict["BluetoothShareOtherWrong"].GetComponent<Text>();
 
     }
 
@@ -233,8 +241,30 @@ public class ShareFrameWrapper : GuiFrameWrapper
         bluetoothShareSymbol.text = string.Format(bluetoothShareSymbol.text, GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID]);
         bluetoothShareDigit.text = string.Format(bluetoothShareDigit.text, (int)(instance.cInstance.digitID + 2));
         bluetoothShareOperand.text = string.Format(bluetoothShareOperand.text, (int)(instance.cInstance.operandID + 2));
-        bluetoothShareOwnScore.text = instance.ownScore.ToString();
-        bluetoothShareOtherScore.text = instance.ownScore.ToString();
+
+        int right, noAnswer, wrong;
+
+        CalcResult(instance.qInstancList, true, out right, out noAnswer, out wrong);
+        bluetoothShareOwnRight.text = string.Format(bluetoothShareOwnRight.text, right);
+        bluetoothShareOwnNoAnswer.text = string.Format(bluetoothShareOwnNoAnswer.text, noAnswer);
+        bluetoothShareOwnWrong.text = string.Format(bluetoothShareOwnWrong.text, wrong);
+
+        CalcResult(instance.qInstancList, false, out right, out noAnswer, out wrong);
+        bluetoothShareOtherRight.text = string.Format(bluetoothShareOtherRight.text, right);
+        bluetoothShareOtherNoAnswer.text = string.Format(bluetoothShareOtherNoAnswer.text, noAnswer);
+        bluetoothShareOtherWrong.text = string.Format(bluetoothShareOtherWrong.text, wrong);
+
+    }
+
+    private void CalcResult(List<QuestionInstance> qInstancList, bool isOwn, out int right, out int noAnswer, out int wrong)
+    {
+        int count = qInstancList[0].instance.Count;
+        int target = isOwn ? count - 1 : count - 3;
+        List <QuestionInstance> questions = qInstancList.FindAll(x => x.instance[target] == x.instance[count - 2]);
+        right = questions.Count;
+        questions = qInstancList.FindAll(x => x.instance[target] == 0);
+        noAnswer = questions.Count;
+        wrong = qInstancList.Count - right - noAnswer;
     }
 
     private void ShareImage(PlatformType type)

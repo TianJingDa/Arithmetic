@@ -32,8 +32,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private InfiniteList settlementGrid;
     private SaveFileInstance curSaveFileInstance;
     private AchievementInstance curAchievementInstance;
-    private List<QuentionInstance> onlyWrongList;
-    private List<QuentionInstance> allInstanceList;
+    private List<QuestionInstance> onlyWrongList;
+    private List<QuestionInstance> allInstanceList;
 
 
 
@@ -129,7 +129,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         RefreshSettlementGrid();
     }
 
-    private bool FindWrong(QuentionInstance questionInstance)
+    private bool FindWrong(QuestionInstance questionInstance)
     {
         int count = questionInstance.instance.Count;
         return questionInstance.instance[count - 1] != questionInstance.instance[count - 2];
