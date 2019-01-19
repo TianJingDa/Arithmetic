@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224614822392553578}
   - component: {fileID: 222415809329012450}
   - component: {fileID: 114457837151705032}
-  - component: {fileID: 114945520695105298}
+  - component: {fileID: 114255257831305086}
   m_Layer: 0
   m_Name: PeripheralItem
   m_TagString: Untagged
@@ -63,6 +63,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114255257831305086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1299434801033528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0683bf655df647b78974af19b1bdf02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114457837151705032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -159,17 +170,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   index: 
   m_Text: Peripheral Address
---- !u!114 &114945520695105298
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1299434801033528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ac15442069980478cb4500885af572, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &222330455940867418
 CanvasRenderer:
   m_ObjectHideFlags: 1

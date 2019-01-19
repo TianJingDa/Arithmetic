@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
 
-public class BluetoothItem : Item, IPointerClickHandler
+public class PeripheralItem : Item, IPointerClickHandler
 {
 	private const float connectTime = 5f;
 
