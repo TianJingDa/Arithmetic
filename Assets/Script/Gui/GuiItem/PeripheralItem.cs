@@ -66,24 +66,31 @@ public class PeripheralItem : Item, IPointerClickHandler
         BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
             (address) => 
 				{
-                    StopAllCoroutines();
-                    int seed = UnityEngine.Random.Range(1, int.MaxValue);
-                    BluetoothMessage message = new BluetoothMessage(-1, seed, GameManager.Instance.UserName);
-                    GameManager.Instance.SetSendMessageFunc(true);
-                    GameManager.Instance.BLESendMessage(message);
 				},
 			null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
-					if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
-					{				
-						if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
-						{
-                            BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress (GameManager.Instance.CurBluetoothInstance.address,
+                    MyDebug.LogGreen("Address:" + address);
+                    MyDebug.LogGreen("ServiceUUID:" + serviceUUID);
+                    MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
+
+                    if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
+					{
+                        if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
+                        {
+                            BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
                                                                                                    GameManager.Instance.ServiceUUID,
-                                                                                                   GameManager.Instance.ReadUUID, null, 
-								                                                                   GameManager.Instance.CentralReceiveMessage);
-						}
+                                                                                                   GameManager.Instance.ReadUUID, null,
+                                                                                                   GameManager.Instance.CentralReceiveMessage);
+                        }
+                        else if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.WriteUUID))
+                        {
+                            StopAllCoroutines();
+                            int seed = UnityEngine.Random.Range(1, int.MaxValue);
+                            BluetoothMessage message = new BluetoothMessage(-1, seed, GameManager.Instance.UserName);
+                            GameManager.Instance.SetSendMessageFunc(true);
+                            GameManager.Instance.BLESendMessage(message);
+                        }
 					}
 				}, 
 			(address) =>

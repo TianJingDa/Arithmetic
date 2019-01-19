@@ -710,6 +710,8 @@ public class GameManager : MonoBehaviour
         string msg = JsonUtility.ToJson(message);
         MyDebug.LogGreen("CentralSendMessage:" + msg);
         byte[] data = System.Text.Encoding.UTF8.GetBytes(msg);
+        MyDebug.LogGreen("ServiceUUID:" + ServiceUUID);
+        MyDebug.LogGreen("WriteUUID:" + WriteUUID);
         BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, data, data.Length, true, (characteristicUUID) => {
 
             MyDebug.LogGreen("Write Succeeded");
