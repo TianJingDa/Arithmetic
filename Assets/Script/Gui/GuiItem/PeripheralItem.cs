@@ -42,7 +42,7 @@ public class PeripheralItem : Item, IPointerClickHandler
 		
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if(detailWin)
+        if (detailWin)
 		{
 			detailWin.SetActive(true);
 			Dictionary<string, GameObject> detailWinDict = CommonTool.InitGameObjectDict(detailWin);
@@ -66,6 +66,7 @@ public class PeripheralItem : Item, IPointerClickHandler
         BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
             (address) => 
 				{
+                    StopAllCoroutines();
                     int seed = UnityEngine.Random.Range(1, int.MaxValue);
                     BluetoothMessage message = new BluetoothMessage(-1, seed, GameManager.Instance.UserName);
                     GameManager.Instance.SetSendMessageFunc(true);
@@ -92,7 +93,11 @@ public class PeripheralItem : Item, IPointerClickHandler
                     // is called above. both methods get call for the same action
                     // this is for backwards compatibility
                     MyDebug.LogWhite("Peripheral Disconnect!");
-				});
+                    string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
+                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip, () => GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame), null);
+                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+
+                });
 	}
 
 	private IEnumerator ConnectCountDown()

@@ -159,7 +159,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			GameObject peripheral = GameManager.Instance.GetPrefabItem(GuiItemID.PeripheralItem);
 			peripheral.name = "BluetoothItem" + peripheralDict.Count;
 			peripheral.SendMessage("InitPrefabItem", new BluetoothInstance(address, name));
-            peripheral.SendMessage("InitDeleteWin", bluetoothPeripheralDetailBg);
+            peripheral.SendMessage("InitDetailWin", bluetoothPeripheralDetailBg);
 			peripheral.transform.SetParent(bluetoothScrollContent);
 			peripheral.transform.localScale = Vector3.one;
 
