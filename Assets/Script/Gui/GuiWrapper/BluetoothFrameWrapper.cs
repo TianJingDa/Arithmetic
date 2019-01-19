@@ -73,7 +73,10 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 				break;
 			case "BackFromScanResultBtn":
 			case "BluetoothAdvertisingStopBtn":
-				StopScan();
+                bluetoothPeripheralDetailBg.SetActive(false);
+                bluetoothConnectWaiting.SetActive(false);
+                bluetoothAdvertisingStopBtn.SetActive(false);
+                StopScan();
 				break;
 			case "BluetoothScanBtn":
 				StartScan();
