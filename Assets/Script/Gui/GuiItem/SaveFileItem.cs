@@ -75,7 +75,7 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         saveFileName.text = content.fileName;
         saveFileAchiOrBLE.gameObject.SetActive(hasAchievement || isBluetooth);
         if (hasAchievement) saveFileAchiOrBLE.sprite = GameManager.Instance.GetSprite("Image_20006");
-        if (isBluetooth) saveFileAchiOrBLE.sprite = GameManager.Instance.GetSprite("Image_00052");
+        if (isBluetooth) saveFileAchiOrBLE.sprite = GameManager.Instance.GetSprite("Image_10006");
 
         int digit = (int)content.cInstance.digitID + 2;
         int operand = (int)content.cInstance.operandID + 2;
