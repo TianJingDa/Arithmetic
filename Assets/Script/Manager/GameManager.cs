@@ -649,16 +649,14 @@ public class GameManager : MonoBehaviour
 
     public void CentralReceiveMessage(string address, string characteristic, byte[] bytes)
     {
-        string message = System.Text.Encoding.UTF8.GetString(bytes);
-        MyDebug.LogGreen("CentralReceiveMessage:" + message);
-        BluetoothMessage msg = JsonUtility.FromJson<BluetoothMessage>(message);
+        BluetoothMessage msg = new BluetoothMessage(bytes);
         if (msg == null)
         {
             MyDebug.LogYellow("CentralReceiveMessage: Message is NULL!");
             return;
         }
 
-        if (msg.index < 0)
+        if (msg.index == 0)
         {
             Random.InitState(msg.result);
             CompetitionGUI = GuiFrameID.BluetoothFrame;
@@ -672,19 +670,17 @@ public class GameManager : MonoBehaviour
 
     public void PeripheralReceiveMessage(string UUID, byte[] bytes)
     {
-        string message = System.Text.Encoding.UTF8.GetString(bytes);
-        MyDebug.LogGreen("PeripheralReceiveMessage:" + message);
-        BluetoothMessage msg = JsonUtility.FromJson<BluetoothMessage>(message);
+        BluetoothMessage msg = new BluetoothMessage(bytes);
         if(msg == null)
         {
             MyDebug.LogYellow("PeripheralReceiveMessage: Message is NULL!");
             return;
         }
 
-        if (msg.index < 0)
+        if (msg.index == 0)
         {
             Random.InitState(msg.result);
-            CurBluetoothInstance = new BluetoothInstance("", msg.centralName);
+            CurBluetoothInstance = new BluetoothInstance("", msg.name);
             SetSendMessageFunc(false);
             BLESendMessage(msg);
             CompetitionGUI = GuiFrameID.BluetoothFrame;
@@ -707,23 +703,14 @@ public class GameManager : MonoBehaviour
 
     private void CentralSendMessage(BluetoothMessage message)
     {
-        string msg = JsonUtility.ToJson(message);
-        MyDebug.LogGreen("CentralSendMessage:" + msg);
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(msg);
-        MyDebug.LogGreen("ServiceUUID:" + ServiceUUID);
-        MyDebug.LogGreen("WriteUUID:" + WriteUUID);
-        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, data, data.Length, true, (characteristicUUID) => {
-
-            MyDebug.LogGreen("Write Succeeded");
-        });
+        MyDebug.LogGreen("Length:" + message.data.Length);
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, false, null);
     }
 
     private void PeripheralSendMessage(BluetoothMessage message)
     {
-        string msg = JsonUtility.ToJson(message);
-        MyDebug.LogGreen("PeripheralSendMessage:" + msg);
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(msg);
-        BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, data, data.Length);
+        MyDebug.LogGreen("Length:" + message.data.Length);
+        BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, message.data, message.data.Length);
     }
 
     private float CalculateAccuracy(List<List<int>> resultList)

@@ -158,6 +158,7 @@ public class BluetoothLEHardwareInterface
 
 	public static void Log (string message)
 	{
+        return;
 #if UNITY_EDITOR
         message = "@TJD@" + message;
         Debug.Log(message);

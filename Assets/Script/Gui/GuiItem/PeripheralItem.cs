@@ -7,7 +7,9 @@ using UnityEngine.EventSystems;
 
 public class PeripheralItem : Item, IPointerClickHandler
 {
-	private const float connectTime = 5f;
+	private const float connectTime = 10f;
+    private bool receiveReadID;
+    private bool receiveWriteID;
 
 	private BluetoothInstance content;
 	private GameObject detailWin;
@@ -25,7 +27,9 @@ public class PeripheralItem : Item, IPointerClickHandler
 			MyDebug.LogYellow("BluetoothInstance is null!!");
 			return;
 		}
-		periphralName.text = content.name;
+        receiveReadID = false;
+        receiveWriteID = false;
+        periphralName.text = content.name;
 		periphralAddress.text = content.address;
 	}
 
@@ -63,33 +67,35 @@ public class PeripheralItem : Item, IPointerClickHandler
 		GameManager.Instance.CurBluetoothInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
-        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, 
-            (address) => 
-				{
-				},
-			null,
+        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, null, null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
-                    MyDebug.LogGreen("Address:" + address);
-                    MyDebug.LogGreen("ServiceUUID:" + serviceUUID);
-                    MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
-
                     if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
 					{
+                        MyDebug.LogGreen("Address:" + address);
+                        MyDebug.LogGreen("ServiceUUID:" + serviceUUID);
+
                         if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
                         {
-                            BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
-                                                                                                   GameManager.Instance.ServiceUUID,
-                                                                                                   GameManager.Instance.ReadUUID, null,
-                                                                                                   GameManager.Instance.CentralReceiveMessage);
+                            MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
+                            receiveReadID = true;
+                            if (receiveWriteID)
+                            {
+                                StartCoroutine(SubscribeCharacteristic());
+                                receiveWriteID = false;
+                                receiveWriteID = false;
+                            }
                         }
                         else if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.WriteUUID))
                         {
-                            StopAllCoroutines();
-                            int seed = UnityEngine.Random.Range(1, int.MaxValue);
-                            BluetoothMessage message = new BluetoothMessage(-1, seed, GameManager.Instance.UserName);
-                            GameManager.Instance.SetSendMessageFunc(true);
-                            GameManager.Instance.BLESendMessage(message);
+                            MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
+                            receiveWriteID = true;
+                            if (receiveReadID)
+                            {
+                                StartCoroutine(SubscribeCharacteristic());
+                                receiveWriteID = false;
+                                receiveWriteID = false;
+                            }
                         }
 					}
 				}, 
@@ -107,7 +113,36 @@ public class PeripheralItem : Item, IPointerClickHandler
                 });
 	}
 
-	private IEnumerator ConnectCountDown()
+    private void NotificationAction(string address,string characteristicUUID)
+    {
+        MyDebug.LogGreen("Subscribe NotificationAction!");
+        MyDebug.LogGreen("Address:" + address);
+        MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
+        StartCoroutine(FirstWrite());
+    }
+
+    private IEnumerator SubscribeCharacteristic()
+    {
+        MyDebug.LogGreen("Subscribe Characteristic!");
+        yield return new WaitForSeconds(0.5f);
+        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
+                                                                       GameManager.Instance.ServiceUUID,
+                                                                       GameManager.Instance.ReadUUID, NotificationAction,
+                                                                       GameManager.Instance.CentralReceiveMessage);
+    }
+
+    private IEnumerator FirstWrite()
+    {
+        MyDebug.LogGreen("First Write!");
+        yield return new WaitForSeconds(0.5f);
+        StopAllCoroutines();
+        int seed = UnityEngine.Random.Range(1, int.MaxValue);
+        BluetoothMessage message = new BluetoothMessage(0, seed, GameManager.Instance.UserName);
+        GameManager.Instance.SetSendMessageFunc(true);
+        GameManager.Instance.BLESendMessage(message);
+    }
+
+    private IEnumerator ConnectCountDown()
 	{
 		float time = connectTime;
 		while(time > 0)

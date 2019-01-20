@@ -45,7 +45,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         Init();
 
         timeCost    = 0;
-        index       = -1;
+        index       = 0;
         order       = true;
         isSending   = false;
         isReceiving = false;
@@ -291,21 +291,53 @@ public class BluetoothMessage
 {
     public int index;
     public int result;
-    public string centralName;
+    public string name;
+    public byte[] data;
 
     public BluetoothMessage() { }
+
+    public BluetoothMessage(byte[] data)
+    {
+        this.data = data;
+        index = data[0];
+        result = 0;
+        for (int i = 1; i <= 5; i++)
+        {
+            result = result * 100 + data[i];
+        }
+        List<byte> byteList = new List<byte>(data);
+        byteList.RemoveRange(0, 6);
+        name = Encoding.UTF8.GetString(byteList.ToArray());
+    }
 
     public BluetoothMessage(int index, int result)
     {
         this.index = index;
         this.result = result;
-        this.centralName = "";
+        this.name = "";
+        List<byte> byteList = new List<byte> { 0, 0, 0, 0, 0, 0 };
+        byteList[0] = (byte)index;
+        for(int i = 1; i <= 5; i++)
+        {
+            byteList[6 - i] = (byte)(result % 100);
+            result /= 100;
+        }
+        data = byteList.ToArray();
     }
 
     public BluetoothMessage(int index, int result, string centralName)
     {
         this.index = index;
         this.result = result;
-        this.centralName = centralName;
+        this.name = centralName;
+        List<byte> byteList = new List<byte> { 0, 0, 0, 0, 0, 0 };
+        byteList[0] = (byte)index;
+        for (int i = 1; i <= 5; i++)
+        {
+            byteList[6 - i] = (byte)(result % 100);
+            result /= 100;
+        }
+        byteList.AddRange(Encoding.UTF8.GetBytes(centralName));
+        data = byteList.ToArray();
     }
 }
