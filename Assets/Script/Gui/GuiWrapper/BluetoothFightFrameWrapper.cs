@@ -60,7 +60,15 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         ClearAllText();
         StartCoroutine(StartFight());
     }
-    
+
+    void OnDestroy()
+    {
+        BluetoothLEHardwareInterface.DeInitialize(() =>
+        {
+            MyDebug.LogGreen("DeInitialize Success!");
+        });
+    }
+
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         equalImg            			= gameObjectDict["EqualImg"];
