@@ -656,6 +656,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        MyDebug.LogGreen("Index:" + msg.index + ", Result:" + msg.result + ", name:" + msg.name);
+
         if (msg.index == 0)
         {
             Random.InitState(msg.result);
@@ -676,6 +678,8 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("PeripheralReceiveMessage: Message is NULL!");
             return;
         }
+
+        MyDebug.LogGreen("Index:" + msg.index + ", Result:" + msg.result + ", name:" + msg.name);
 
         if (msg.index == 0)
         {
@@ -704,7 +708,10 @@ public class GameManager : MonoBehaviour
     private void CentralSendMessage(BluetoothMessage message)
     {
         MyDebug.LogGreen("Length:" + message.data.Length);
-        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, false, null);
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, true, (characteristicUUID) =>
+        {
+            BluetoothLEHardwareInterface.Log("Write Succeeded");
+        });
     }
 
     private void PeripheralSendMessage(BluetoothMessage message)
