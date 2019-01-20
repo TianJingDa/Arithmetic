@@ -113,7 +113,17 @@ public class PeripheralItem : Item, IPointerClickHandler
                 });
 	}
 
-    private void NotificationAction(string address,string characteristicUUID)
+    private IEnumerator SubscribeCharacteristic()
+    {
+        MyDebug.LogGreen("Subscribe Characteristic!");
+        yield return new WaitForSeconds(1f);
+        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
+                                                                       GameManager.Instance.ServiceUUID,
+                                                                       GameManager.Instance.ReadUUID, NotificationAction,
+                                                                       GameManager.Instance.CentralReceiveMessage);
+    }
+
+    private void NotificationAction(string address, string characteristicUUID)
     {
         MyDebug.LogGreen("Subscribe NotificationAction!");
         MyDebug.LogGreen("Address:" + address);
@@ -121,20 +131,10 @@ public class PeripheralItem : Item, IPointerClickHandler
         StartCoroutine(FirstWrite());
     }
 
-    private IEnumerator SubscribeCharacteristic()
-    {
-        MyDebug.LogGreen("Subscribe Characteristic!");
-        yield return new WaitForSeconds(0.5f);
-        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
-                                                                       GameManager.Instance.ServiceUUID,
-                                                                       GameManager.Instance.ReadUUID, NotificationAction,
-                                                                       GameManager.Instance.CentralReceiveMessage);
-    }
-
     private IEnumerator FirstWrite()
     {
         MyDebug.LogGreen("First Write!");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         StopAllCoroutines();
         int seed = UnityEngine.Random.Range(1, int.MaxValue);
         BluetoothMessage message = new BluetoothMessage(0, seed, GameManager.Instance.UserName);

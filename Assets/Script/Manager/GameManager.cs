@@ -649,6 +649,8 @@ public class GameManager : MonoBehaviour
 
     public void CentralReceiveMessage(string address, string characteristic, byte[] bytes)
     {
+        MyDebug.LogGreen("CentralReceiveMessage");
+
         BluetoothMessage msg = new BluetoothMessage(bytes);
         if (msg == null)
         {
@@ -672,6 +674,7 @@ public class GameManager : MonoBehaviour
 
     public void PeripheralReceiveMessage(string UUID, byte[] bytes)
     {
+        MyDebug.LogGreen("PeripheralReceiveMessage");
         BluetoothMessage msg = new BluetoothMessage(bytes);
         if(msg == null)
         {
@@ -707,6 +710,10 @@ public class GameManager : MonoBehaviour
 
     private void CentralSendMessage(BluetoothMessage message)
     {
+        MyDebug.LogGreen("CentralSendMessage");
+        MyDebug.LogGreen("index:" + message.index);
+        MyDebug.LogGreen("result:" + message.result);
+        MyDebug.LogGreen("name:" + message.name);
         MyDebug.LogGreen("Length:" + message.data.Length);
         BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, true, (characteristicUUID) =>
         {
@@ -716,6 +723,10 @@ public class GameManager : MonoBehaviour
 
     private void PeripheralSendMessage(BluetoothMessage message)
     {
+        MyDebug.LogGreen("PeripheralSendMessage");
+        MyDebug.LogGreen("index:" + message.index);
+        MyDebug.LogGreen("result:" + message.result);
+        MyDebug.LogGreen("name:" + message.name);
         MyDebug.LogGreen("Length:" + message.data.Length);
         BluetoothLEHardwareInterface.UpdateCharacteristicValue(ReadUUID, message.data, message.data.Length);
     }
