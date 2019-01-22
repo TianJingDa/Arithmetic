@@ -68,9 +68,9 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 BluetoothLEHardwareInterface.DeInitialize(() =>
                 {
                     MyDebug.LogGreen("DeInitialize Success!");
-                    CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 });
-				break;
+                CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                break;
 			case "BackFromScanResultBtn":
 			case "BluetoothAdvertisingStopBtn":
                 bluetoothPeripheralDetailBg.SetActive(false);
