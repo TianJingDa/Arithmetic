@@ -51,6 +51,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         isReceiving = false;
         result      = new StringBuilder();
         question    = new StringBuilder();
+		curInstance = new List<int>();
         resultList  = new List<List<int>>();
         equalImg.SetActive(false);
         countdownBg.SetActive(true);
@@ -180,7 +181,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
         if (result.Length > 0)
         {
-            int resultInt = int.Parse(result.ToString());
+            int resultInt = int.Parse(result.ToString()); 
             BluetoothMessage message = new BluetoothMessage(index, resultInt);
             if (!isReceiving)
             {
