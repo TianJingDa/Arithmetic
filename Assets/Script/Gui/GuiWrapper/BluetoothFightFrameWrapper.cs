@@ -10,6 +10,8 @@ using System;
 /// </summary>
 public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
+    private const string        end = "end";
+
     private int                 countdownTime = 3;
     private int                 index;//问题序号
     private float               amount;
@@ -244,6 +246,11 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             }
             if (resultList.Count == amount)
             {
+                if (!message.name.Equals(end))
+                {
+                    isSending = true;
+                    GameManager.Instance.BLESendMessage(new BluetoothMessage(index, resultInt, end));
+                }
                 FightOver();
             }
             else
