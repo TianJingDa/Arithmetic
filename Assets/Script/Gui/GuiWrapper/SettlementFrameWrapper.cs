@@ -86,11 +86,11 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
                 break;
             case "ShareBtnInSettlement":
-                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "BluetoothShareBtn":
-                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
+                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "CurAchievementBtn":
