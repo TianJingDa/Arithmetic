@@ -715,7 +715,10 @@ public class GameManager : MonoBehaviour
         MyDebug.LogGreen("result:" + message.result);
         MyDebug.LogGreen("name:" + message.name);
         MyDebug.LogGreen("Length:" + message.data.Length);
-        BluetoothLEHardwareInterface.WriteCharacteristic(CurPeripheralInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, false, null);
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurPeripheralInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, true, (characteristicUUID) =>
+        {
+            BluetoothLEHardwareInterface.Log("Write Succeeded");
+        });
     }
 
     private void PeripheralSendMessage(BluetoothMessage message)
