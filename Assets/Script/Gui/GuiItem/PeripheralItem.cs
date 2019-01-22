@@ -135,7 +135,6 @@ public class PeripheralItem : Item, IPointerClickHandler
     {
         MyDebug.LogGreen("First Write!");
         yield return new WaitForSeconds(1f);
-        StopAllCoroutines();
         int seed = UnityEngine.Random.Range(1, int.MaxValue);
         BluetoothMessage message = new BluetoothMessage(0, seed, GameManager.Instance.UserName);
         GameManager.Instance.SetSendMessageFunc(true);
