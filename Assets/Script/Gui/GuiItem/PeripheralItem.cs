@@ -11,7 +11,7 @@ public class PeripheralItem : Item, IPointerClickHandler
     private bool receiveReadID;
     private bool receiveWriteID;
 
-	private BluetoothInstance content;
+	private PeripheralInstance content;
 	private GameObject detailWin;
 	private GameObject bluetoothConnectWaiting;
 	private Text periphralName;
@@ -21,7 +21,7 @@ public class PeripheralItem : Item, IPointerClickHandler
 	protected override void InitPrefabItem(object data)
 	{
 		Init();
-		content = data as BluetoothInstance;
+		content = data as PeripheralInstance;
 		if (content == null)
 		{
 			MyDebug.LogYellow("BluetoothInstance is null!!");
@@ -64,10 +64,10 @@ public class PeripheralItem : Item, IPointerClickHandler
 
 	private void ConnectToPeripheral(BaseEventData evenData)
 	{
-		GameManager.Instance.CurBluetoothInstance = content;
+		GameManager.Instance.CurPeripheralInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
-        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurBluetoothInstance.address, null, null,
+        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurPeripheralInstance.address, null, null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
                     if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
@@ -81,9 +81,9 @@ public class PeripheralItem : Item, IPointerClickHandler
                             receiveReadID = true;
                             if (receiveWriteID)
                             {
+                                receiveReadID = false;
+                                receiveWriteID = false;
                                 StartCoroutine(SubscribeCharacteristic());
-                                receiveWriteID = false;
-                                receiveWriteID = false;
                             }
                         }
                         else if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.WriteUUID))
@@ -92,9 +92,9 @@ public class PeripheralItem : Item, IPointerClickHandler
                             receiveWriteID = true;
                             if (receiveReadID)
                             {
+                                receiveReadID = false;
+                                receiveWriteID = false;
                                 StartCoroutine(SubscribeCharacteristic());
-                                receiveWriteID = false;
-                                receiveWriteID = false;
                             }
                         }
 					}
@@ -107,7 +107,7 @@ public class PeripheralItem : Item, IPointerClickHandler
                     // this is for backwards compatibility
                     MyDebug.LogWhite("Peripheral Disconnect!");
                     string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
-                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip, () => GameManager.Instance.SwitchWrapper(GuiFrameID.StartFrame), null);
+                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
                     GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 
                 });
@@ -117,7 +117,7 @@ public class PeripheralItem : Item, IPointerClickHandler
     {
         MyDebug.LogGreen("Subscribe Characteristic!");
         yield return new WaitForSeconds(1f);
-        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurBluetoothInstance.address,
+        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurPeripheralInstance.address,
                                                                        GameManager.Instance.ServiceUUID,
                                                                        GameManager.Instance.ReadUUID, NotificationAction,
                                                                        GameManager.Instance.CentralReceiveMessage);
@@ -157,14 +157,14 @@ public class PeripheralItem : Item, IPointerClickHandler
 }
 
 [Serializable]
-public class BluetoothInstance
+public class PeripheralInstance
 {
 	public string address;
 	public string name;
 
-    public BluetoothInstance() { }
+    public PeripheralInstance() { }
 
-    public BluetoothInstance(string address, string name)
+    public PeripheralInstance(string address, string name)
 	{
 		this.address = address;
 		this.name = name;

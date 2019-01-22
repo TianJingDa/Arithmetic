@@ -275,7 +275,7 @@ public class GameManager : MonoBehaviour
 
 	public string WriteUUID{ get; set;}
 
-	public BluetoothInstance CurBluetoothInstance { get; set; }
+	public PeripheralInstance CurPeripheralInstance { get; set; }
 
     public CommonTipInstance CurCommonTipInstance { get; set; }
 
@@ -401,7 +401,7 @@ public class GameManager : MonoBehaviour
 
         if (isBluetooth)
         {
-            curSaveFileInstance.opponentName = CurBluetoothInstance.name;
+            curSaveFileInstance.opponentName = CurPeripheralInstance.name;
         }
 
         CurSaveFileInstance = curSaveFileInstance;
@@ -687,7 +687,7 @@ public class GameManager : MonoBehaviour
         if (msg.index == 0)
         {
             Random.InitState(msg.result);
-            CurBluetoothInstance = new BluetoothInstance("", msg.name);
+            CurPeripheralInstance = new PeripheralInstance("", msg.name);
             SetSendMessageFunc(false);
             BLESendMessage(msg);
             CompetitionGUI = GuiFrameID.BluetoothFrame;
@@ -715,10 +715,7 @@ public class GameManager : MonoBehaviour
         MyDebug.LogGreen("result:" + message.result);
         MyDebug.LogGreen("name:" + message.name);
         MyDebug.LogGreen("Length:" + message.data.Length);
-        BluetoothLEHardwareInterface.WriteCharacteristic(CurBluetoothInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, true, (characteristicUUID) =>
-        {
-            BluetoothLEHardwareInterface.Log("Write Succeeded");
-        });
+        BluetoothLEHardwareInterface.WriteCharacteristic(CurPeripheralInstance.address, ServiceUUID, WriteUUID, message.data, message.data.Length, false, null);
     }
 
     private void PeripheralSendMessage(BluetoothMessage message)

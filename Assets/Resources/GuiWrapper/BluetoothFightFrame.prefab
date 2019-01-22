@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 224177841348849234}
   - component: {fileID: 222820168736423382}
   - component: {fileID: 114677777109597702}
-  - component: {fileID: 114673590579557246}
+  - component: {fileID: 114953073521065600}
   - component: {fileID: 225815253961669122}
   m_Layer: 0
   m_Name: BluetoothFightFrame
@@ -1909,18 +1909,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114673590579557246
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1833224954277008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e224b6337f6a6341ac6207acd64a359, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
 --- !u!114 &114677777109597702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2495,6 +2483,18 @@ MonoBehaviour:
     m_LineSpacing: 1
   index: Text_50001
   m_Text: Text_50001
+--- !u!114 &114953073521065600
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1833224954277008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edaf276d9fb2d6a488e70e420df213dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
 --- !u!114 &114973885148669866
 MonoBehaviour:
   m_ObjectHideFlags: 1
