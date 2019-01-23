@@ -36,6 +36,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject resetTipBg;
     private GameObject resetTipPageTitle_Text_Achievement;
     private GameObject resetTipPageTitle_Text_SaveFile;
+    private GameObject layoutV_RImg;
+    private GameObject layoutV_LImg;
+    private GameObject layoutH_RImg;
+    private GameObject layoutH_LImg;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
@@ -74,6 +78,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         thankDevelopersPage                     = gameObjectDict["ThankDevelopersPage"];
         resetTipPageTitle_Text_Achievement      = gameObjectDict["ResetTipPageTitle_Text_Achievement"];
         resetTipPageTitle_Text_SaveFile         = gameObjectDict["ResetTipPageTitle_Text_SaveFile"];
+        layoutV_RImg                            = gameObjectDict["LayoutV_RImg"];
+        layoutV_LImg                            = gameObjectDict["LayoutV_LImg"];
+        layoutH_RImg                            = gameObjectDict["LayoutH_RImg"];
+        layoutH_LImg                            = gameObjectDict["LayoutH_LImg"];
         skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
         languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
         skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
@@ -263,6 +271,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 layoutWin.SetActive(true);
                 RefreshDropdown(layoutDropdown, tempLayoutID);
                 RefreshDropdown(handednessDropdown, tempHandednessID);
+                RefreshLayoutSketch();
                 layoutApplyBtn.interactable = false;
                 firstInLayout = false;
                 CommonTool.GuiHorizontalMove(layoutWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
@@ -446,7 +455,17 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 MyDebug.LogYellow("Can not find Dropdown:" + dpd.name);
                 break;
         }
+        RefreshLayoutSketch();
         layoutApplyBtn.interactable = true;
+    }
+
+    private void RefreshLayoutSketch()
+    {
+        layoutV_RImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Right);
+        layoutV_LImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Left);
+        layoutH_RImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Right);
+        layoutH_LImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Left);
+
     }
     //public override void OnToggleClick(bool check)
     //{
