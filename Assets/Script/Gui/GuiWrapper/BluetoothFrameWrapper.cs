@@ -22,6 +22,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	private GameObject  bluetoothAdvertisingStopBtn;
 	private GameObject  bluetoothConnectWaiting;
     private GameObject  bluetoothReScanBtn;
+    private GameObject  bluetoothAndroidTip;
+    private GameObject  bluetoothPeripheralBtn;
     private Transform   bluetoothScrollContent;
     private Text  		bluetoothConnectTime;
 
@@ -34,6 +36,14 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         curPatternID = PatternID.Number;
 		curOperandID = OperandID.TwoNumbers;
 		peripheralDict = new Dictionary<string, string> ();
+
+#if UNITY_ANDROID
+        bluetoothPeripheralBtn.SetActive(false);
+        bluetoothAndroidTip.SetActive(true);
+#elif UNITY_IOS
+        bluetoothPeripheralBtn.SetActive(true);
+        bluetoothAndroidTip.SetActive(false);
+#endif
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -44,6 +54,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		bluetoothConnectWaiting 		= gameObjectDict["BluetoothConnectWaiting"];
         bluetoothAdvertisingStopBtn     = gameObjectDict["BluetoothAdvertisingStopBtn"];
         bluetoothReScanBtn              = gameObjectDict["BluetoothReScanBtn"];
+        bluetoothAndroidTip             = gameObjectDict["BluetoothAndroidTip"];
+        bluetoothPeripheralBtn          = gameObjectDict["BluetoothPeripheralBtn"];
         bluetoothConnectTime            = gameObjectDict["BluetoothConnectTime"].GetComponent<Text>();
         bluetoothScrollContent          = gameObjectDict["BluetoothScrollContent"].GetComponent<Transform>();
     }
