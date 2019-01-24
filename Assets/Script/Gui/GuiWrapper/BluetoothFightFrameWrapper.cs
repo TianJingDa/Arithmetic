@@ -12,7 +12,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
     private const string        end = "end";
 
-    private int                 countdownTime = 3;
+    private int                 startCountdown = 3;
+    private int                 pauseCountdown = 2;
     private int                 index;//问题序号
     private float               amount;
     private float               startTime;
@@ -20,6 +21,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     private bool                order;//true: -->; false: <--
     private bool                isSending;
     private bool                isReceiving;
+    private bool                isPausing;
     private string              pattern;
     private string              symbol;
     private StringBuilder       result;
@@ -51,6 +53,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         order       = true;
         isSending   = false;
         isReceiving = false;
+        isPausing   = false;
         result      = new StringBuilder();
         question    = new StringBuilder();
 		curInstance = new List<int>();
@@ -138,14 +141,14 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     private IEnumerator StartFight()
     {
-        while (countdownTime > 0)
+        while (startCountdown > 0)
         {
             for(int i = 0; i < countdownNumsList.Count; i++)
             {
-                countdownNumsList[i].SetActive(i == countdownTime - 1);
+                countdownNumsList[i].SetActive(i == startCountdown - 1);
             }
             yield return new WaitForSeconds(1f);
-            countdownTime--;
+            startCountdown--;
         }
         countdownBg.SetActive(false);
         ShowNextQuestion(true);
@@ -163,6 +166,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     private void NumberPattern()
     {
+        if (isPausing) return;
         timeCost = Time.realtimeSinceStartup - startTime;
         timeBtn_Text.text = timeCost.ToString("f1") + "s";
     }
@@ -192,17 +196,37 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             }
             else
             {
-                ShowNextQuestion();
+                StartCoroutine(ShowNextQuestion());
             }
         }
         else //第一个题
         {
-            ShowNextQuestion();
+            StartCoroutine(ShowNextQuestion());
         }
     }
 
-    private void ShowNextQuestion()
+    private IEnumerator ShowNextQuestion()
     {
+        questionImg_Text.text = string.Empty;
+        ClearResultText();
+        countdownBg.SetActive(true);
+        equalImg.SetActive(false);
+        isPausing = true;
+        int pauseTime = 1;
+        while (pauseTime <= pauseCountdown)
+        {
+            for (int i = 0; i < countdownNumsList.Count; i++)
+            {
+                countdownNumsList[i].SetActive(i == pauseCountdown - pauseTime);
+            }
+            yield return new WaitForSeconds(1f);
+            pauseTime++;
+            startTime++;
+        }
+        isPausing = false;
+        equalImg.SetActive(true);
+        countdownBg.SetActive(false);
+
         lock (curInstance)
         {
             index++;
@@ -220,7 +244,6 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
                 question.Append(curInstance[i].ToString());
             }
             questionImg_Text.text = question.ToString();
-            ClearResultText();
         }
     }
 
@@ -257,13 +280,13 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             {
                 if (isSending)
                 {
-                    ShowNextQuestion();
+                    StartCoroutine(ShowNextQuestion());
                 }
                 else
                 {
                     isSending = true;
                     GameManager.Instance.BLESendMessage(new BluetoothMessage(index, resultInt));
-                    ShowNextQuestion();
+                    StartCoroutine(ShowNextQuestion());
                 }
             }
             isSending = false;
