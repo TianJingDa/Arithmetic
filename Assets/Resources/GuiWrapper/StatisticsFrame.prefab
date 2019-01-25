@@ -433,7 +433,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224010763066455610}
   - component: {fileID: 114814666157249702}
-  - component: {fileID: 114217197932943552}
+  - component: {fileID: 114656828729581842}
   m_Layer: 0
   m_Name: SaveFileGrid
   m_TagString: Untagged
@@ -2220,7 +2220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224164318659097108}
   - component: {fileID: 114049732280015878}
-  - component: {fileID: 114925625166523560}
+  - component: {fileID: 114124182629225314}
   m_Layer: 0
   m_Name: AchievementGrid
   m_TagString: Untagged
@@ -3998,6 +3998,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0958fcd5ed05f408948f48ecdc4ae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114124182629225314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1796154907538392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
 --- !u!114 &114129028124913174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4566,17 +4579,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   index: Text_20058
   m_Text: Text_20058
---- !u!114 &114217197932943552
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1134877499695362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba7fd3aac87e4a4399eabc1eed6fe69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114218739890678820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7206,6 +7208,19 @@ MonoBehaviour:
     m_LineSpacing: 1
   index: Text_20002
   m_Text: Text_20002
+--- !u!114 &114656828729581842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1134877499695362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
 --- !u!114 &114666925485143000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9327,17 +9342,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114925625166523560
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1796154907538392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba7fd3aac87e4a4399eabc1eed6fe69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114930283738218424
 MonoBehaviour:
   m_ObjectHideFlags: 1

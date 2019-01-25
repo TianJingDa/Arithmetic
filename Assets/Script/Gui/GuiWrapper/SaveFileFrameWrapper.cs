@@ -21,7 +21,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     private Text saveFileDetailAccuracy;
     private Text saveFileOwnName;
     private Text saveFileOtherName;
-    private InfiniteList saveFileDetailGrid;
+    private RectTransform saveFileDetailGrid;
 
     void Start()
     {
@@ -59,7 +59,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         saveFileDetailAccuracy          = gameObjectDict["SaveFileDetailAccuracy"].GetComponent<Text>();
         saveFileOwnName                 = gameObjectDict["SaveFileOwnName"].GetComponent<Text>();
         saveFileOtherName               = gameObjectDict["SaveFileOtherName"].GetComponent<Text>();
-        saveFileDetailGrid              = gameObjectDict["SaveFileDetailGrid"].GetComponent<InfiniteList>();
+        saveFileDetailGrid              = gameObjectDict["SaveFileDetailGrid"].GetComponent<RectTransform>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -115,7 +115,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
             dataList = new ArrayList(content.qInstancList);
         }
 
-        if(isBluetooth) saveFileDetailGrid.InitList(dataList, GuiItemID.BluetoothQuestionItem);
-        else saveFileDetailGrid.InitList(dataList, GuiItemID.QuestionItem);
+        if (isBluetooth) CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.BluetoothQuestionItem);
+        else CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.QuestionItem);
     }
 }

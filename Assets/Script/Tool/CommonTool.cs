@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using DG.Tweening;
 using System.IO;
 using System.Text;
-
+using System.Collections;
 
 public static class CommonTool 
 {
@@ -447,4 +447,22 @@ public static class CommonTool
 
 		return (uuid1.ToUpper().CompareTo(uuid2.ToUpper()) == 0);
 	}
+
+    public static void RefreshScrollContent(RectTransform parent, ArrayList dataList, GuiItemID id, GameObject detailWin = null)
+    {
+        parent.anchoredPosition = Vector2.zero;
+        for(int i = 0; i < parent.childCount; i++)
+        {
+            Object.Destroy(parent.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < dataList.Count; i++)
+        {
+            GameObject item = GameManager.Instance.GetPrefabItem(id);
+            item.name = id.ToString() + i;
+            item.SendMessage("InitPrefabItem", dataList[i]);
+            if (detailWin) item.SendMessage("InitDetailWin", detailWin);
+            item.transform.SetParent(parent);
+            item.transform.localScale = Vector3.one;
+        }
+    }
 }

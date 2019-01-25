@@ -29,8 +29,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private GameObject achievementWin;
     private GameObject saveFileSummary;
     private GameObject achievementSummary;
-    private InfiniteList achievementGrid;
-    private InfiniteList saveFileGrid;
+    private RectTransform achievementGrid;
+    private RectTransform saveFileGrid;
     private ToggleGroup saveFileToggleGroup;
     private ToggleGroup achievementToggleGroup;
     private SummarySaveFileItem additionSaveFileItem;
@@ -66,8 +66,8 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementWin                          = gameObjectDict["AchievementWin"];
         saveFileWin                             = gameObjectDict["SaveFileWin"];
-        saveFileGrid                            = gameObjectDict["SaveFileGrid"].GetComponent<InfiniteList>();
-        achievementGrid                         = gameObjectDict["AchievementGrid"].GetComponent<InfiniteList>();
+        saveFileGrid                            = gameObjectDict["SaveFileGrid"].GetComponent<RectTransform>();
+        achievementGrid                         = gameObjectDict["AchievementGrid"].GetComponent<RectTransform>();
         saveFileSummary                         = gameObjectDict["SaveFileSummary"];
         achievementSummary                      = gameObjectDict["AchievementSummary"];
         totelTimeImg_Text2                      = gameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
@@ -236,14 +236,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementSummary.SetActive(false);
         ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
-        achievementGrid.InitList(dataList, GuiItemID.AchievementItem);
+        CommonTool.RefreshScrollContent(achievementGrid, dataList, GuiItemID.AchievementItem);
     }
     private void RefreshAchievementDict()
     {
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict[(DifficultyID)curAchievementIndex] = achievementList.FindAll(x => x.difficulty == curAchievementIndex);
         ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
-        achievementGrid.InitList(dataList, GuiItemID.AchievementItem);
+        CommonTool.RefreshScrollContent(achievementGrid, dataList, GuiItemID.AchievementItem);
     }
 
     #endregion
@@ -291,7 +291,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         saveFileSummary.SetActive(false);
         SymbolID symbolID = (SymbolID)curSaveFileIndex;
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
-        saveFileGrid.InitList(dataList, GuiItemID.SaveFileItem);
+        CommonTool.RefreshScrollContent(saveFileGrid, dataList, GuiItemID.SaveFileItem);
     }
     /// <summary>
     /// 用于删除存档时对saveFileDict进行更新，并更新显示
@@ -304,7 +304,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         curSaveFileCount = saveFileList.Count;
         saveFileDict[symbolID] = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);
-        saveFileGrid.InitList(dataList, GuiItemID.SaveFileItem);
+        CommonTool.RefreshScrollContent(saveFileGrid, dataList, GuiItemID.SaveFileItem);
     }
     #endregion
 }

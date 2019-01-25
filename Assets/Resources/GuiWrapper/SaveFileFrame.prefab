@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224182062667027998}
   - component: {fileID: 114890403976072138}
-  - component: {fileID: 114912380450360130}
+  - component: {fileID: 114000485179940430}
   m_Layer: 0
   m_Name: SaveFileDetailGrid
   m_TagString: Untagged
@@ -374,6 +374,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114000485179940430
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1276751462136302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
 --- !u!114 &114038521344460668
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1232,17 +1245,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   index: Text_20009
   m_Text: Text_20009
---- !u!114 &114912380450360130
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1276751462136302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba7fd3aac87e4a4399eabc1eed6fe69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &222000669922336010
 CanvasRenderer:
   m_ObjectHideFlags: 1

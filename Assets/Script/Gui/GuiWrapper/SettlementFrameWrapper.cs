@@ -29,7 +29,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     private Text achievementDetailMainTitleInSettlement;
     private Text achievementDetailSubTitleInSettlement;
     private Text achievementDetailFinishTimeInSettlement;
-    private InfiniteList settlementGrid;
+    private RectTransform settlementGrid;
     private SaveFileInstance curSaveFileInstance;
     private AchievementInstance curAchievementInstance;
     private List<QuestionInstance> onlyWrongList;
@@ -47,7 +47,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        settlementGrid                              = gameObjectDict["SettlementGrid"].GetComponent<InfiniteList>();
+        settlementGrid                              = gameObjectDict["SettlementGrid"].GetComponent<RectTransform>();
         settlementTime                              = gameObjectDict["SettlementTime"].GetComponent<Text>();
         settlementAmount                            = gameObjectDict["SettlementAmount"].GetComponent<Text>();
         settlementAccuracy                          = gameObjectDict["SettlementAccuracy"].GetComponent<Text>();
@@ -149,8 +149,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             dataList = new ArrayList(allInstanceList);
         }
 
-        if (isBluetooth) settlementGrid.InitList(dataList, GuiItemID.BluetoothQuestionItem);
-        else settlementGrid.InitList(dataList, GuiItemID.QuestionItem);
+        if (isBluetooth) CommonTool.RefreshScrollContent(settlementGrid, dataList, GuiItemID.BluetoothQuestionItem);
+        else CommonTool.RefreshScrollContent(settlementGrid, dataList, GuiItemID.QuestionItem);
     }
     private void InitAchievement()
     {
