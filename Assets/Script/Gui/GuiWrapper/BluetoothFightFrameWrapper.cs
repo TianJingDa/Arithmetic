@@ -12,8 +12,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
     private const string        end = "end";
 
-    private int                 startCountdown = 3;
-    private int                 pauseCountdown = 2;
+    private const int           countdownTime = 2;
     private int                 index;//问题序号
     private float               amount;
     private float               startTime;
@@ -58,13 +57,11 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         question    = new StringBuilder();
 		curInstance = new List<int>();
         resultList  = new List<List<int>>();
-        equalImg.SetActive(false);
-        countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetList();
         ClearAllText();
-        StartCoroutine(StartFight());
+        StartFight();
     }
 
     void OnDestroy()
@@ -139,20 +136,9 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private IEnumerator StartFight()
+    private void StartFight()
     {
-        while (startCountdown > 0)
-        {
-            for(int i = 0; i < countdownNumsList.Count; i++)
-            {
-                countdownNumsList[i].SetActive(i == startCountdown - 1);
-            }
-            yield return new WaitForSeconds(1f);
-            startCountdown--;
-        }
-        countdownBg.SetActive(false);
         ShowNextQuestion(true);
-        equalImg.SetActive(true);
         startTime = Time.realtimeSinceStartup;
         InvokeRepeating("NumberPattern", 0f, 0.1f);
     }
@@ -207,25 +193,25 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     private IEnumerator ShowNextQuestion()
     {
-        questionImg_Text.text = string.Empty;
-        ClearResultText();
+        isPausing = true;
         countdownBg.SetActive(true);
         equalImg.SetActive(false);
-        isPausing = true;
+        questionImg_Text.text = string.Empty;
+        ClearResultText();
         int pauseTime = 1;
-        while (pauseTime <= pauseCountdown)
+        while (pauseTime <= countdownTime)
         {
             for (int i = 0; i < countdownNumsList.Count; i++)
             {
-                countdownNumsList[i].SetActive(i == pauseCountdown - pauseTime);
+                countdownNumsList[i].SetActive(i == countdownTime - pauseTime);
             }
             yield return new WaitForSeconds(1f);
             pauseTime++;
             startTime++;
         }
-        isPausing = false;
         equalImg.SetActive(true);
         countdownBg.SetActive(false);
+        isPausing = false;
 
         lock (curInstance)
         {
