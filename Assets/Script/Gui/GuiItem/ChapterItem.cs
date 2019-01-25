@@ -9,6 +9,12 @@ public class ChapterItem: MonoBehaviour
     private AchievementInstance content;//详情
     private GameObject detailWin;
 
+    void Start()
+    {
+        Button button = GetComponent<Button>();
+        button.onClick.AddListener(OnItemClick);
+    }
+
     private void InitDetailWin(GameObject detailWin)
     {
         this.detailWin = detailWin;
@@ -23,10 +29,9 @@ public class ChapterItem: MonoBehaviour
             stars[i].SetActive((i + 1) <= content.star);
         }
         GetComponent<Image>().sprite = GameManager.Instance.GetSprite(content.chapterImageIndex);
-        CommonTool.AddEventTriggerListener(gameObject, EventTriggerType.PointerClick, OnItemClick);
     }
 
-    private void OnItemClick(BaseEventData data)
+    private void OnItemClick()
     {
         detailWin.SetActive(true);
         CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
