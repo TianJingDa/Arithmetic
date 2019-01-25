@@ -314,7 +314,7 @@ public class GameManager : MonoBehaviour
         m_Root = GameObject.Find("UIRoot");
         m_GuiFrameStack = new Stack<GuiFrameWrapper>();
         SwitchWrapper(GuiFrameID.StartFrame, true);
-        m_AmountArray_Time = new int[] { 180, 300, 600 };//这里不应该直接写在代码里，但应该写在哪里？
+        m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 10, 30, 50 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         m_ShareSDK = GetComponent<ShareSDK>();
