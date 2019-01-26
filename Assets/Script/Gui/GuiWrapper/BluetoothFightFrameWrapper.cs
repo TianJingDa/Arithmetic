@@ -60,12 +60,17 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
         GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
         GameManager.Instance.ResetList();
+        result.Length = 0;
+        question.Length = 0;
         ClearAllText();
         StartFight();
     }
 
     void OnDestroy()
     {
+        BluetoothLEHardwareInterface.RemoveCharacteristics();
+        BluetoothLEHardwareInterface.RemoveServices();
+
         BluetoothLEHardwareInterface.DeInitialize(() =>
         {
             MyDebug.LogGreen("DeInitialize Success!");

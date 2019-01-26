@@ -77,6 +77,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 break;
 			case "BackFromContentBtn":
                 scaning = false;
+                BluetoothLEHardwareInterface.RemoveCharacteristics();
+                BluetoothLEHardwareInterface.RemoveServices();
                 BluetoothLEHardwareInterface.DeInitialize(() =>
                 {
                     MyDebug.LogGreen("DeInitialize Success!");
@@ -204,8 +206,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         }
         scaning = true;
 
-        BluetoothLEHardwareInterface.RemoveServices();
         BluetoothLEHardwareInterface.RemoveCharacteristics();
+        BluetoothLEHardwareInterface.RemoveServices();
 
         CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
 		GameManager.Instance.CurCategoryInstance = curCategoryInstance;
