@@ -140,8 +140,10 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			{
 				dropdownArray[i].options[j].text = GameManager.Instance.GetMutiLanguage(dropdownArray[i].options[j].text);
 			}
-		}
-	}
+            dropdownArray[i].value = 0;
+            dropdownArray[i].RefreshShownValue();
+        }
+    }
 
 	private void ReScan()
 	{
