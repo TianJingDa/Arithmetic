@@ -64,12 +64,17 @@ public class PeripheralItem : Item, IPointerClickHandler
 
 	private void ConnectToPeripheral(BaseEventData evenData)
 	{
+        MyDebug.LogGreen("ConnectToPeripheral");
 		GameManager.Instance.CurPeripheralInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
         BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurPeripheralInstance.address, null, null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
+                    MyDebug.LogGreen("_Address:" + address);
+                    MyDebug.LogGreen("_ServiceUUID:" + serviceUUID);
+                    MyDebug.LogGreen("_CharacteristicUUID:" + characteristicUUID);
+
                     if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
 					{
                         MyDebug.LogGreen("Address:" + address);
