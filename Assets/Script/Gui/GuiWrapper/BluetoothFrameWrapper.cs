@@ -77,8 +77,9 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 break;
 			case "BackFromContentBtn":
                 scaning = false;
-                BluetoothLEHardwareInterface.RemoveCharacteristics();
-                BluetoothLEHardwareInterface.RemoveServices();
+                BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.ReadUUID);
+                BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.WriteUUID);
+                BluetoothLEHardwareInterface.RemoveService(GameManager.Instance.ServiceUUID);
                 BluetoothLEHardwareInterface.DeInitialize(() =>
                 {
                     MyDebug.LogGreen("DeInitialize Success!");
@@ -313,6 +314,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             () =>
             {
                 MyDebug.LogGreen("Initialize Success!");
+                BluetoothLEHardwareInterface.RemoveCharacteristics();
+                BluetoothLEHardwareInterface.RemoveServices();
                 bluetoothCategoryContent.SetActive(true);
                 RefreshCategoryContent();
                 CommonTool.GuiHorizontalMove(bluetoothCategoryContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);

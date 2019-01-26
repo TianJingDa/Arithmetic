@@ -68,8 +68,13 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     void OnDestroy()
     {
-        BluetoothLEHardwareInterface.RemoveCharacteristics();
-        BluetoothLEHardwareInterface.RemoveServices();
+        MyDebug.LogGreen("ReadUUID:" + GameManager.Instance.ReadUUID);
+        MyDebug.LogGreen("WriteUUID:" + GameManager.Instance.WriteUUID);
+        MyDebug.LogGreen("ServiceUUID:" + GameManager.Instance.ServiceUUID);
+
+        BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.ReadUUID);
+        BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.WriteUUID);
+        BluetoothLEHardwareInterface.RemoveService(GameManager.Instance.ServiceUUID);
 
         BluetoothLEHardwareInterface.DeInitialize(() =>
         {
