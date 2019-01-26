@@ -77,9 +77,8 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 break;
 			case "BackFromContentBtn":
                 scaning = false;
-                BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.ReadUUID);
-                BluetoothLEHardwareInterface.RemoveCharacteristic(GameManager.Instance.WriteUUID);
-                BluetoothLEHardwareInterface.RemoveService(GameManager.Instance.ServiceUUID);
+                BluetoothLEHardwareInterface.RemoveCharacteristics();
+                BluetoothLEHardwareInterface.RemoveServices();
                 BluetoothLEHardwareInterface.DeInitialize(() =>
                 {
                     MyDebug.LogGreen("DeInitialize Success!");
