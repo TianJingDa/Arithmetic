@@ -308,9 +308,8 @@ public class GameManager : MonoBehaviour
         c_RecordCtrl            = RecordController.Instance;
     }
 
-    IEnumerator Start()
+    void Start()
     {
-        yield return new WaitForSeconds(1);
         //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
         m_GuiFrameStack = new Stack<GuiFrameWrapper>();
