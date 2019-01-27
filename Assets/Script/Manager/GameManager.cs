@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private int[]                                               m_AmountArray_Time;
     private int[]                                               m_AmountArray_Number;
     private string[]                                            m_SymbolArray;
+    private bool                                                m_IsCentral;
     private float                                               m_TweenDuration = 0.5f;             //Tween动画持续时间
     private GameObject                                          m_Root;                             //UI对象的根对象
     private Stack<GuiFrameWrapper>                              m_GuiFrameStack;                    //当前激活的GuiWrapper
@@ -701,9 +702,38 @@ public class GameManager : MonoBehaviour
 
     public void SetSendMessageFunc(bool isCentral)
     {
+        m_IsCentral = isCentral;
         if (isCentral) BLESendMessage = CentralSendMessage;
         else BLESendMessage = PeripheralSendMessage;
     }
+
+    public void OnBluetoothFightFinish()
+    {
+        if (m_IsCentral)
+        {
+            BluetoothLEHardwareInterface.UnSubscribeCharacteristic(CurPeripheralInstance.address, 
+                                                                   ServiceUUID, 
+                                                                   ReadUUID, 
+                                                                   (characteristic) => 
+                {
+                    MyDebug.LogGreen("UnSubscribeCharacteristic Success :" + characteristic);
+                    BluetoothLEHardwareInterface.DisconnectPeripheral(CurPeripheralInstance.address, 
+                                                                     (disconnectAddress) => 
+                    {
+                        MyDebug.LogGreen("DisconnectPeripheral Success:" + disconnectAddress);
+                    }
+                );
+            });
+        }
+        else
+        {
+            BluetoothLEHardwareInterface.StopAdvertising(() =>
+            {
+                MyDebug.LogGreen("Stop Advertising!");
+            });
+        }
+    }
+
     #endregion
 
     #region 私有方法

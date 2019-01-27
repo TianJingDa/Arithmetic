@@ -65,7 +65,8 @@ public class PeripheralItem : Item, IPointerClickHandler
 	private void ConnectToPeripheral(BaseEventData evenData)
 	{
         MyDebug.LogGreen("ConnectToPeripheral");
-		GameManager.Instance.CurPeripheralInstance = content;
+        BluetoothLEHardwareInterface.StopScan();
+        GameManager.Instance.CurPeripheralInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
         BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurPeripheralInstance.address, null, null,
