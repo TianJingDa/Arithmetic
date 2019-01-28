@@ -180,6 +180,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     private void ShowNextQuestion(bool isFirst)
     {
+        if (isSending || isReceiving) return;
+
         if (result.Length <= 0 && !isFirst) return;
 
         if (result.Length > 0)
