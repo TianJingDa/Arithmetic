@@ -216,6 +216,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public GuiFrameID CurGUI
+    {
+        get
+        {
+            GuiFrameID id = GuiFrameID.None;
+            if (m_GuiFrameStack.Count > 0)
+            {
+                id = m_GuiFrameStack.Peek().id;
+            }
+            return id;
+        }
+    }
+
+
     public string UserName
     {
         get
@@ -718,13 +732,14 @@ public class GameManager : MonoBehaviour
                                                                    (characteristic) => 
                 {
                     MyDebug.LogGreen("UnSubscribeCharacteristic Success :" + characteristic);
-                    BluetoothLEHardwareInterface.DisconnectPeripheral(CurPeripheralInstance.address, 
-                                                                     (disconnectAddress) => 
-                    {
-                        MyDebug.LogGreen("DisconnectPeripheral Success:" + disconnectAddress);
-                    }
-                );
-            });
+                });
+
+            BluetoothLEHardwareInterface.DisconnectPeripheral(CurPeripheralInstance.address,
+                (disconnectAddress) =>
+                {
+                    MyDebug.LogGreen("DisconnectPeripheral Success:" + disconnectAddress);
+                });
+
         }
         else
         {

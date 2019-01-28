@@ -111,11 +111,13 @@ public class PeripheralItem : Item, IPointerClickHandler
                     // be aware that this will also get called when the disconnect
                     // is called above. both methods get call for the same action
                     // this is for backwards compatibility
-                    MyDebug.LogWhite("Peripheral Disconnect!");
-                    string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
-                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
-
+                    if(GameManager.Instance.CurGUI == GuiFrameID.BluetoothFrame || GameManager.Instance.CurGUI == GuiFrameID.BluetoothFightFrame)
+                    {
+                        MyDebug.LogWhite("Peripheral Disconnect!");
+                        string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
+                        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
+                        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    }
                 });
 	}
 
