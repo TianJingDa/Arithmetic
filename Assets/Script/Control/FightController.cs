@@ -48,10 +48,23 @@ public sealed class FightController : Controller
         if (symbolID == SymbolID.Division)
         {
             workList.Clear();
-            List<DivisionQuestionList> qList = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID).questionList;
-            for (int i = 0; i < qList.Count; i++)
+            DivisionDataBase divisionDataBase = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID);
+            if (divisionDataBase != null)
             {
-                workList.Add(qList[i].questionList);
+                List<DivisionQuestionList> qList = divisionDataBase.questionList;
+                for (int i = 0; i < qList.Count; i++)
+                {
+                    List<int> questionList = new List<int>();
+                    for (int j = 0; j < qList[i].questionList.Count; j++)
+                    {
+                        questionList.Add(qList[i].questionList[j]);
+                    }
+                    workList.Add(questionList);
+                }
+            }
+            else
+            {
+                MyDebug.LogYellow("divisionDataBase == null! digitID = " + digitID + ", operandID:" + operandID);
             }
         }
         else
@@ -368,10 +381,20 @@ public class DivisionDataBase
     public DigitID digitID;
     public OperandID operandID;
     public List<DivisionQuestionList> questionList;
+
+    public DivisionDataBase()
+    {
+        questionList = new List<DivisionQuestionList>();
+    }
 }
 [System.Serializable]
 public class DivisionQuestionList
 {
     public List<int> questionList;
+
+    public DivisionQuestionList()
+    {
+        questionList = new List<int>();
+    }
 }
 

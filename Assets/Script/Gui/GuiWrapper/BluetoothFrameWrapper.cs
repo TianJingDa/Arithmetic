@@ -145,6 +145,9 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             dropdownArray[i].value = 0;
             dropdownArray[i].RefreshShownValue();
         }
+        curAmountID = 0;
+        curSymbolID = 0;
+        curDigitID = 0;
     }
 
 	private void ReScan()
