@@ -265,6 +265,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RefreshGui();
                 break;
             case "LayoutBtn":
+                RectTransform layoutRect = layoutWin.GetComponent<RectTransform>();
+                if (layoutRect) layoutRect.anchoredPosition = Vector2.zero;
                 firstInLayout = true;
                 tempLayoutID = (int)GameManager.Instance.CurLayoutID;
                 tempHandednessID = (int)GameManager.Instance.CurHandednessID;
@@ -304,6 +306,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 shareUsWin.SetActive(false);
                 break;
             case "ResetBtn":
+                RectTransform resetRect = resetWin.GetComponent<RectTransform>();
+                if (resetRect) resetRect.anchoredPosition = Vector2.zero;
                 resetWin.SetActive(true);
                 RefreshResetWin();
                 CommonTool.GuiHorizontalMove(resetWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);

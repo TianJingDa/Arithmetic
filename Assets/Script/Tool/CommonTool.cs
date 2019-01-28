@@ -299,6 +299,11 @@ public static class CommonTool
     /// <param name="isIn"></param>
     public static void GuiHorizontalMove(GameObject gui, float endValue, MoveID mID, CanvasGroup canvasGroup, bool isIn, System.Action completed = null)
     {
+        if (!gui)
+        {
+            MyDebug.LogYellow("gui is NULL!");
+            return;
+        }
         if (isIn)
         {
             gui.transform.DOLocalMoveX(endValue * (int)mID, tweenDuration, true).
