@@ -708,8 +708,10 @@ public class GameManager : MonoBehaviour
 
     public void OnBluetoothFightFinish()
     {
+        MyDebug.LogGreen("OnBluetoothFightFinish");
         if (m_IsCentral)
         {
+            MyDebug.LogGreen("OnBluetoothFightFinish:Central");
             BluetoothLEHardwareInterface.UnSubscribeCharacteristic(CurPeripheralInstance.address, 
                                                                    ServiceUUID, 
                                                                    ReadUUID, 
@@ -726,6 +728,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            MyDebug.LogGreen("OnBluetoothFightFinish:Peripheral");
             BluetoothLEHardwareInterface.StopAdvertising(() =>
             {
                 MyDebug.LogGreen("Stop Advertising!");
