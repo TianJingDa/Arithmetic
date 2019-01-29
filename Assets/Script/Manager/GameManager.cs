@@ -749,6 +749,15 @@ public class GameManager : MonoBehaviour
                 MyDebug.LogGreen("Stop Advertising!");
             });
         }
+
+        BluetoothLEHardwareInterface.RemoveCharacteristics();
+        BluetoothLEHardwareInterface.RemoveServices();
+
+        BluetoothLEHardwareInterface.DeInitialize(() =>
+        {
+            MyDebug.LogGreen("DeInitialize Success!");
+        });
+        BluetoothLEHardwareInterface.BluetoothEnable(false);
     }
 
     #endregion

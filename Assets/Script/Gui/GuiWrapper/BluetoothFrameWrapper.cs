@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class BluetoothFrameWrapper : GuiFrameWrapper
 {
 	private const float 				advertisingTime = 30;
-	private bool   						isCentral;
+    private int                         delta;
+    private bool   						isCentral;
     private bool                        scaning;
     private Dictionary<string, string>  peripheralDict;
+    private List<Dropdown.OptionData>   digitDropdownOptionsList;
 
-	private PatternID   curPatternID;
+    private PatternID   curPatternID;
 	private AmountID    curAmountID;
 	private SymbolID    curSymbolID;
 	private DigitID     curDigitID;
@@ -26,16 +28,21 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
     private GameObject  bluetoothPeripheralBtn;
     private Transform   bluetoothScrollContent;
     private Text  		bluetoothConnectTime;
+    private Dropdown    digitDropdown;
+
 
 
     void Start ()
     {
+        BluetoothLEHardwareInterface.BluetoothEnable(true);
         id = GuiFrameID.BluetoothFrame;
         Init();
+        delta = 0;
         scaning = false;
         curPatternID = PatternID.Number;
 		curOperandID = OperandID.TwoNumbers;
 		peripheralDict = new Dictionary<string, string> ();
+        digitDropdownOptionsList = new List<Dropdown.OptionData>(digitDropdown.options);
 
 #if UNITY_ANDROID
         bluetoothPeripheralBtn.SetActive(false);
@@ -58,6 +65,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         bluetoothPeripheralBtn          = gameObjectDict["BluetoothPeripheralBtn"];
         bluetoothConnectTime            = gameObjectDict["BluetoothConnectTime"].GetComponent<Text>();
         bluetoothScrollContent          = gameObjectDict["BluetoothScrollContent"].GetComponent<Transform>();
+        digitDropdown                   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -120,20 +128,42 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 				break;
 			case "SymbolDropdown":
 				curSymbolID = (SymbolID)dpd.value;
-				break;
+                RefreshDigitDropdown(dpd.value);
+                break;
 			case "DigitDropdown":
-				curDigitID = (DigitID)dpd.value;
-				break;
+				curDigitID = (DigitID)(dpd.value + delta);
+                break;
 			default:
 				MyDebug.LogYellow("Can not find Dropdown: " + dpd.name);
 				break;
 		}
 	}
 
-	/// <summary>
-	/// 刷新Dropdown的状态
-	/// </summary>
-	private void RefreshCategoryContent()
+    private void RefreshDigitDropdown(int index)
+    {
+        switch (index)
+        {
+            case 0:
+            case 1:
+            case 2:
+                digitDropdown.options = digitDropdownOptionsList.GetRange(0, 2);
+                delta = 0;
+                break;
+            case 3:
+                digitDropdown.options = digitDropdownOptionsList.GetRange(1, 2);
+                delta = 1;
+                break;
+        }
+        digitDropdown.value = 0;
+        digitDropdown.RefreshShownValue();
+        OnDropdownClick(digitDropdown);
+    }
+
+
+    /// <summary>
+    /// 刷新Dropdown的状态
+    /// </summary>
+    private void RefreshCategoryContent()
 	{
 		Dropdown[] dropdownArray = GetComponentsInChildren<Dropdown>(true);
 		for(int i = 0; i < dropdownArray.Length; i++)
@@ -145,6 +175,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             dropdownArray[i].value = 0;
             dropdownArray[i].RefreshShownValue();
         }
+        RefreshDigitDropdown(0);
         curAmountID = 0;
         curSymbolID = 0;
         curDigitID = 0;

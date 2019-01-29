@@ -73,14 +73,6 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         MyDebug.LogGreen("ServiceUUID:" + GameManager.Instance.ServiceUUID);
 
         GameManager.Instance.OnBluetoothFightFinish();
-
-        BluetoothLEHardwareInterface.RemoveCharacteristics();
-        BluetoothLEHardwareInterface.RemoveServices();
-
-        BluetoothLEHardwareInterface.DeInitialize(() =>
-        {
-            MyDebug.LogGreen("DeInitialize Success!");
-        });
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
