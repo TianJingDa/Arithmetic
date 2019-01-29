@@ -379,7 +379,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 else
                 {
                     MyDebug.LogYellow("Central Initialize Fail: " + error);
-                    message = "Unknow Error:" + error;
+                    message = GameManager.Instance.GetMutiLanguage("Text_80021"); 
                 }
                 GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, message);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
