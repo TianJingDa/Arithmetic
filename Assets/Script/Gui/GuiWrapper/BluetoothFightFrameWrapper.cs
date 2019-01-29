@@ -90,6 +90,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     protected override void OnButtonClick(Button btn)
     {
+        if (isSending || isReceiving) return;
+
         base.OnButtonClick(btn);
         switch (btn.name)
         {
@@ -172,8 +174,6 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     private void ShowNextQuestion(bool isFirst)
     {
-        if (isSending || isReceiving) return;
-
         if (result.Length <= 0 && !isFirst) return;
 
         if (result.Length > 0)
