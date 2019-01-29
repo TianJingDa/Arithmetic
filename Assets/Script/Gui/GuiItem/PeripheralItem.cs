@@ -158,7 +158,6 @@ public class PeripheralItem : Item, IPointerClickHandler
 			bluetoothConnectTime.text = Mathf.CeilToInt(time).ToString();
 			yield return null;
 		}
-        BluetoothLEHardwareInterface.DisconnectPeripheral(content.address, null);
         detailWin.SetActive(false);
     }
 }
