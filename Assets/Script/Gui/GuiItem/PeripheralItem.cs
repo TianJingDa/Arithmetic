@@ -117,6 +117,11 @@ public class PeripheralItem : Item, IPointerClickHandler
                         string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
                         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
                         GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                        if(GameManager.Instance.CurGUI == GuiFrameID.BluetoothFrame)
+                        {
+                            StopAllCoroutines();
+                            detailWin.SetActive(false);
+                        }
                     }
                 });
 	}
