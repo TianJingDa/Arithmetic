@@ -120,6 +120,7 @@ public class UITool : Editor
     [MenuItem("Custom Editor/恢复TextIndex")]
     public static void RecoverTextIndex()
     {
+        return;
         for(int i = 0; i < Selection.gameObjects.Length; i++)
         {
             Text[] textArray = Selection.gameObjects[i].GetComponentsInChildren<Text>(true);
@@ -135,6 +136,7 @@ public class UITool : Editor
     [MenuItem("Custom Editor/恢复ImageIndex")]
     public static void RecoverImageIndex()
     {
+        return;
         int num = 0;
         Dictionary<string, string> imageDict = InitImageData();
         for (int i = 0; i < Selection.gameObjects.Length; i++)
