@@ -9,6 +9,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
     private GameObject chapterWin;
     private GameObject chapterTipBg;
     private GameObject chapterDetailWin;
+    private RectTransform chapterRect;
     private ChapterItem[] chapterItemList;
     private Dictionary<DifficultyID, List<AchievementInstance>> achievementDict;
 
@@ -18,6 +19,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
         id = GuiFrameID.ChapterFrame;
         Init();
         chapterItemList = chapterWin.GetComponentsInChildren<ChapterItem>();
+        chapterRect = chapterWin.GetComponent<RectTransform>();
         List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict = new Dictionary<DifficultyID, List<AchievementInstance>>
                 {
@@ -77,21 +79,25 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiScale(chapterDetailWin, canvasGroup, false);
                 break;
             case "JuniorClassBtn":
+                chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Junior]);
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "MediumClassBtn":
+                chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Medium]);
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "SeniorClassBtn":
+                chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Senior]);
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
             case "UltimateClassBtn":
+                chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Ultimate]);
                 CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
