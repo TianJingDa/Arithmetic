@@ -22,25 +22,38 @@ public class LayoutController : Controller
     private Dictionary<LayoutID, List<Dictionary<string, MyRectTransform>>> layoutAssetDict;
     private void InitLayoutData()
     {
-        string data = CommonTool.GetDataFromResources("Layout/Vertical/Right");
+        string pad = IsPad ? "_Pad" : "";
+
+        string data = CommonTool.GetDataFromResources("Layout/Vertical/Right" + pad);
         LayoutDataWrapper wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> vertical_Right = ConvertToDict(wrapper);
 
-        data = CommonTool.GetDataFromResources("Layout/Vertical/Left");
+        data = CommonTool.GetDataFromResources("Layout/Vertical/Left" + pad);
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> vertical_Left = ConvertToDict(wrapper);
 
-        data = CommonTool.GetDataFromResources("Layout/Horizontal/Right");
+        data = CommonTool.GetDataFromResources("Layout/Horizontal/Right"+ pad);
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> horizontal_Right = ConvertToDict(wrapper);
 
-        data = CommonTool.GetDataFromResources("Layout/Horizontal/Left");
+        data = CommonTool.GetDataFromResources("Layout/Horizontal/Left"+ pad);
         wrapper = JsonUtility.FromJson<LayoutDataWrapper>(data);
         Dictionary<string, MyRectTransform> horizontal_Left = ConvertToDict(wrapper);
 
         layoutAssetDict.Add(LayoutID.Vertical, new List<Dictionary<string, MyRectTransform>> { vertical_Right, vertical_Left });
         layoutAssetDict.Add(LayoutID.Horizontal, new List<Dictionary<string, MyRectTransform>> { horizontal_Right, horizontal_Left });
     }
+
+    private bool IsPad
+    {
+        get
+        {
+            float width = Screen.width;
+            float height = Screen.height;
+            return width / height > 0.6f;
+        }
+    }
+
 
     private Dictionary<string, MyRectTransform> ConvertToDict(LayoutDataWrapper wrapper)
     {
