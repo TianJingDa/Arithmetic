@@ -49,12 +49,17 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private ToggleGroup skinToggleGroup;
     private Dropdown layoutDropdown;
     private Dropdown handednessDropdown;
+    private Text editionImg_Text;
 
     void Start () 
 	{
         id = GuiFrameID.SetUpFrame;
         Init();
-
+#if UNITY_ANDROID
+        editionImg_Text.text = GameManager.Instance.GetMutiLanguage("Text_40008");
+#elif UNITY_IOS
+        editionImg_Text.text = GameManager.Instance.GetMutiLanguage("Text_40050");
+#endif
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
 
@@ -90,6 +95,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         languageApplyBtn                        = gameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
         layoutDropdown                          = gameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
         handednessDropdown                      = gameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
+        editionImg_Text                         = gameObjectDict["EditionImg_Text"].GetComponent<Text>();
     }
 
 

@@ -5363,8 +5363,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  index: Text_40008
-  m_Text: Text_40008
+  index: 
+  m_Text: Version
 --- !u!114 &114248247613500248
 MonoBehaviour:
   m_ObjectHideFlags: 1
