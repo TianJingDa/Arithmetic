@@ -19,23 +19,6 @@ public class UITool : Editor
             RectTransform targetParent = Selection.gameObjects[i].transform.parent as RectTransform;
             if (target != null && targetParent != null)
             {
-                //Debug.Log("target.rect.min:" + target.rect.min.ToString());
-                //Debug.Log("target.rect.max:" + target.rect.max.ToString());
-                //Debug.Log("target.offsetMax:" + target.offsetMax.ToString());
-                //Debug.Log("target.offsetMin:" + target.offsetMin.ToString());
-                //Debug.Log("target.anchorMax:" + target.anchorMax.ToString());
-                //Debug.Log("target.anchorMin:" + target.anchorMin.ToString());
-                //Debug.Log("target.rect.x:" + target.rect.x.ToString());
-                //Debug.Log("target.rect.y:" + target.rect.y.ToString());
-                //Debug.Log("target.rect.xMin:" + target.rect.xMin.ToString());
-                //Debug.Log("target.rect.xMax:" + target.rect.xMax.ToString());
-                //Debug.Log("target.rect.yMin:" + target.rect.yMin.ToString());
-                //Debug.Log("target.rect.yMax:" + target.rect.yMax.ToString());
-                //Debug.Log("target.rect.position:" + target.rect.position.ToString());
-                //Debug.Log("target.position:" + target.position.ToString());
-                //Debug.Log("target.localPosition:" + target.localPosition.ToString());
-                //Debug.Log("target.anchoredPosition:" + target.anchoredPosition.ToString());
-                //return;
                 float deltaX = target.localPosition.x;
                 float deltaY = target.localPosition.y;
                 float minX = 0.5f * (1 - target.rect.width / targetParent.rect.width) + deltaX / targetParent.rect.width;
@@ -46,6 +29,36 @@ public class UITool : Editor
                 target.anchorMax = new Vector2(maxX, maxY);
                 target.offsetMin = Vector2.zero;
                 target.offsetMax = Vector2.zero;
+            }
+
+        }
+    }
+
+    [MenuItem("Custom Editor/显示UI信息")]
+    public static void ShowUIInfo()
+    {
+        for (int i = 0; i < Selection.gameObjects.Length; i++)
+        {
+            RectTransform target = Selection.gameObjects[i].transform as RectTransform;
+            RectTransform targetParent = Selection.gameObjects[i].transform.parent as RectTransform;
+            if (target != null && targetParent != null)
+            {
+                Debug.Log("target.rect.min:" + target.rect.min.ToString());
+                Debug.Log("target.rect.max:" + target.rect.max.ToString());
+                Debug.Log("target.offsetMax:" + target.offsetMax.ToString());
+                Debug.Log("target.offsetMin:" + target.offsetMin.ToString());
+                Debug.Log("target.anchorMax:" + target.anchorMax.ToString());
+                Debug.Log("target.anchorMin:" + target.anchorMin.ToString());
+                Debug.Log("target.rect.x:" + target.rect.x.ToString());
+                Debug.Log("target.rect.y:" + target.rect.y.ToString());
+                Debug.Log("target.rect.xMin:" + target.rect.xMin.ToString());
+                Debug.Log("target.rect.xMax:" + target.rect.xMax.ToString());
+                Debug.Log("target.rect.yMin:" + target.rect.yMin.ToString());
+                Debug.Log("target.rect.yMax:" + target.rect.yMax.ToString());
+                Debug.Log("target.rect.position:" + target.rect.position.ToString());
+                Debug.Log("target.position:" + target.position.ToString());
+                Debug.Log("target.localPosition:" + target.localPosition.ToString());
+                Debug.Log("target.anchoredPosition:" + target.anchoredPosition.ToString());
             }
 
         }
@@ -93,8 +106,8 @@ public class UITool : Editor
                 float maxY = 0.5f * (1 + target.rect.height / targetParent.rect.height) + deltaY / targetParent.rect.height;
                 target.anchorMin = new Vector2((minX + maxX) / 2, minY);
                 target.anchorMax = new Vector2((minX + maxX) / 2, maxY);
-                target.offsetMin = new Vector2(0, -(width / 2));
-                target.offsetMax = new Vector2(0, (width / 2));
+                target.offsetMin = new Vector2(-(width / 2), 0);
+                target.offsetMax = new Vector2((width / 2), 0);
             }
         }
     }
@@ -180,7 +193,7 @@ public class UITool : Editor
         RectTransform[] rectTransformArray = Selection.gameObjects[0].GetComponentsInChildren<RectTransform>(true);
         for (int i = 0; i < rectTransformArray.Length; i++)
         {
-            if (rectTransformArray[i].name == "FightFrame") continue;
+            if (rectTransformArray[i].name.Contains("FightFrame")) continue;
             MyRectTransform rect = new MyRectTransform();
             rect.pivot = new MyVector2(rectTransformArray[i].pivot.x, rectTransformArray[i].pivot.y);
             rect.anchorMax = new MyVector2(rectTransformArray[i].anchorMax.x, rectTransformArray[i].anchorMax.y);
@@ -191,9 +204,20 @@ public class UITool : Editor
 
             rectTransformDict.Add(rectTransformArray[i].name, rect);
         }
-        string path = Application.dataPath + "/Resources/Layout/Vertical/Right.txt";
-        //IOHelper.SetData(path, rectTransformDict);
+        string path = Application.dataPath + "/Temp/Vertical/Left_Pad.txt";
+        LayoutDataWrapper wrapper = ConvertToDataWrapper(rectTransformDict);
+        string toSave = JsonUtility.ToJson(wrapper);
+        CommonTool.SetData(path, toSave);
     }
+
+    private static LayoutDataWrapper ConvertToDataWrapper(Dictionary<string, MyRectTransform> rectTransformDict)
+    {
+        LayoutDataWrapper wrapper = new LayoutDataWrapper();
+        wrapper.names.AddRange(rectTransformDict.Keys);
+        wrapper.transforms.AddRange(rectTransformDict.Values);
+        return wrapper;
+    }
+
     [MenuItem("Custom Editor/生成试题")]
     public static void ProduceQuestion()
     {
