@@ -11,7 +11,7 @@ using System;
 public class BluetoothFightFrameWrapper : GuiFrameWrapper
 {
     private const string        end = "end";
-
+    private const int           maxAnswer = 999999;
     private const int           countdownTime = 2;
     private int                 index;//问题序号
     private float               amount;
@@ -167,8 +167,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         StringBuilder lastResult = new StringBuilder(result.ToString());
         if (order) result.Append(num);
         else result.Insert(0, num);
-        if (long.Parse(result.ToString()) > int.MaxValue) result = lastResult;
-        if (result.Length > int.MaxValue.ToString().Length) result = lastResult;
+        if (long.Parse(result.ToString()) > maxAnswer) result = lastResult;
+        if (result.Length > maxAnswer.ToString().Length) result = lastResult;
         resultImg_Text.text = result.ToString();
     }
 
