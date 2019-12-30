@@ -64,7 +64,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
             case "ChapterWin2ChapterFrameBtn":
-                CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
             case "ChapterTipBg":
             case "ChapterConfirmBtn":
@@ -82,25 +82,25 @@ public class ChapterFrameWrapper : GuiFrameWrapper
                 chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Junior]);
-                CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "MediumClassBtn":
                 chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Medium]);
-                CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "SeniorClassBtn":
                 chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Senior]);
-                CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "UltimateClassBtn":
                 chapterRect.anchoredPosition = Vector2.zero;
                 chapterWin.SetActive(true);
                 InitAllChapterItem(achievementDict[DifficultyID.Ultimate]);
-                CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button:" + btn.name);

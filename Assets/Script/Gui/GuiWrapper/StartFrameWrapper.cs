@@ -45,6 +45,9 @@ public class StartFrameWrapper : GuiFrameWrapper
                 }
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.BluetoothFrame, true);
                 break;
+			case "RankBtn":
+				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.RankFrame, true);
+				break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;

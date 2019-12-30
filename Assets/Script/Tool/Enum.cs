@@ -20,6 +20,7 @@ public enum GuiFrameID
     BluetoothFightFrame,       //蓝牙答题界面
     SaveFileFrame,             //存档详情界面
     ShareFrame,                //分享界面
+	RankFrame,				   //排行榜界面
 }
 public enum GuiItemID
 {
@@ -27,7 +28,8 @@ public enum GuiItemID
     SaveFileItem,              //存档
     QuestionItem,              //问题
     PeripheralItem,            //外部设备
-    BluetoothQuestionItem      //蓝牙问题
+    BluetoothQuestionItem,     //蓝牙问题
+	RankItem				   //排行榜
 }
 
 public enum ControllerID
@@ -40,7 +42,8 @@ public enum ControllerID
     LayoutController,          //布局控制器
     FontController,            //字体控制器
     TextColorController,       //字色控制器
-    RecordController           //存档控制器
+    RecordController,          //存档控制器
+	RankController             //排行榜控制器
 }
 public enum SkinID
 {
