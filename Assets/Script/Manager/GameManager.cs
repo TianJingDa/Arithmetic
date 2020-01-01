@@ -104,6 +104,19 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HandednessID", handednessID);
         }
     }
+    public KeyboardID CurKeyboardID
+    {
+        get
+        {
+            int keyboardID = PlayerPrefs.GetInt("KeyboardID", 0);
+            return (KeyboardID)keyboardID;
+        }
+        set
+        {
+            int keyboardID = (int)value;
+            PlayerPrefs.SetInt("KeyboardID", keyboardID);
+        }
+    }
     public CategoryInstance CurCategoryInstance
     {
         set

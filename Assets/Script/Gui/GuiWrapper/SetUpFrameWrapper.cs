@@ -13,6 +13,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private int tempSkinID;
     private int tempLayoutID;
     private int tempHandednessID;
+    private int tempKeyboardID;
     private bool firstInLayout;//用于标识进入布局设置界面
 
     private List<int> resetTogglesIndexList;
@@ -36,10 +37,14 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject resetTipBg;
     private GameObject resetTipPageTitle_Text_Achievement;
     private GameObject resetTipPageTitle_Text_SaveFile;
-    private GameObject layoutV_RImg;
-    private GameObject layoutV_LImg;
-    private GameObject layoutH_RImg;
-    private GameObject layoutH_LImg;
+    private GameObject layoutV_R_DImg;
+    private GameObject layoutV_L_DImg;
+    private GameObject layoutH_R_DImg;
+    private GameObject layoutH_L_DImg;
+    private GameObject layoutV_R_UImg;
+    private GameObject layoutV_L_UImg;
+    private GameObject layoutH_R_UImg;
+    private GameObject layoutH_L_UImg;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
@@ -49,6 +54,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private ToggleGroup skinToggleGroup;
     private Dropdown layoutDropdown;
     private Dropdown handednessDropdown;
+    private Dropdown keyboardDropdown;
     private Text editionImg_Text;
 
     void Start () 
@@ -83,10 +89,14 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         thankDevelopersPage                     = gameObjectDict["ThankDevelopersPage"];
         resetTipPageTitle_Text_Achievement      = gameObjectDict["ResetTipPageTitle_Text_Achievement"];
         resetTipPageTitle_Text_SaveFile         = gameObjectDict["ResetTipPageTitle_Text_SaveFile"];
-        layoutV_RImg                            = gameObjectDict["LayoutV_RImg"];
-        layoutV_LImg                            = gameObjectDict["LayoutV_LImg"];
-        layoutH_RImg                            = gameObjectDict["LayoutH_RImg"];
-        layoutH_LImg                            = gameObjectDict["LayoutH_LImg"];
+        layoutV_R_DImg                          = gameObjectDict["LayoutV_R_DImg"];
+        layoutV_L_DImg                          = gameObjectDict["LayoutV_L_DImg"];
+        layoutH_R_DImg                          = gameObjectDict["LayoutH_R_DImg"];
+        layoutH_L_DImg                          = gameObjectDict["LayoutH_L_DImg"];
+        layoutV_R_UImg                          = gameObjectDict["LayoutV_R_UImg"];
+        layoutV_L_UImg                          = gameObjectDict["LayoutV_L_UImg"];
+        layoutH_R_UImg                          = gameObjectDict["LayoutH_R_UImg"];
+        layoutH_L_UImg                          = gameObjectDict["LayoutH_L_UImg"];
         skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
         languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
         skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
@@ -95,6 +105,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         languageApplyBtn                        = gameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
         layoutDropdown                          = gameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
         handednessDropdown                      = gameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
+        keyboardDropdown                        = gameObjectDict["KeyboardDropdown"].GetComponent<Dropdown>();
         editionImg_Text                         = gameObjectDict["EditionImg_Text"].GetComponent<Text>();
     }
 
@@ -276,9 +287,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 firstInLayout = true;
                 tempLayoutID = (int)GameManager.Instance.CurLayoutID;
                 tempHandednessID = (int)GameManager.Instance.CurHandednessID;
+                tempKeyboardID = (int)GameManager.Instance.CurKeyboardID;
                 layoutWin.SetActive(true);
                 RefreshDropdown(layoutDropdown, tempLayoutID);
                 RefreshDropdown(handednessDropdown, tempHandednessID);
+                RefreshDropdown(keyboardDropdown, tempKeyboardID);
                 RefreshLayoutSketch();
                 layoutApplyBtn.interactable = false;
                 firstInLayout = false;
@@ -293,6 +306,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "LayoutApplyBtn":
                 GameManager.Instance.CurLayoutID = (LayoutID)tempLayoutID;
                 GameManager.Instance.CurHandednessID = (HandednessID)tempHandednessID;
+                GameManager.Instance.CurKeyboardID = (KeyboardID)tempKeyboardID;
                 layoutApplyBtn.interactable = false;
                 break;
             case "AboutUs2StartFrameBtn":
@@ -461,6 +475,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "HandednessDropdown":
                 tempHandednessID = dpd.value;
                 break;
+            case "KeyboardDropdown":
+                tempKeyboardID = dpd.value;
+                break;
             default:
                 MyDebug.LogYellow("Can not find Dropdown:" + dpd.name);
                 break;
@@ -471,11 +488,15 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 
     private void RefreshLayoutSketch()
     {
-        layoutV_RImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Right);
-        layoutV_LImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Left);
-        layoutH_RImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Right);
-        layoutH_LImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Left);
+        layoutV_R_DImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Right && tempKeyboardID == (int)KeyboardID.Down);
+        layoutV_L_DImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Left && tempKeyboardID == (int)KeyboardID.Down);
+        layoutH_R_DImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Right && tempKeyboardID == (int)KeyboardID.Down);
+        layoutH_L_DImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Left && tempKeyboardID == (int)KeyboardID.Down);
 
+        layoutV_R_UImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Right && tempKeyboardID == (int)KeyboardID.Up);
+        layoutV_L_UImg.SetActive(tempLayoutID == (int)LayoutID.Vertical && tempHandednessID == (int)HandednessID.Left && tempKeyboardID == (int)KeyboardID.Up);
+        layoutH_R_UImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Right && tempKeyboardID == (int)KeyboardID.Up);
+        layoutH_L_UImg.SetActive(tempLayoutID == (int)LayoutID.Horizontal && tempHandednessID == (int)HandednessID.Left && tempKeyboardID == (int)KeyboardID.Up);
     }
     //public override void OnToggleClick(bool check)
     //{

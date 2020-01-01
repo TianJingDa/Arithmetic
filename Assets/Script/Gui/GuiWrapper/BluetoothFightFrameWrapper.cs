@@ -139,6 +139,20 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             myTrans.offsetMin = new Vector2(pair.Value.offsetMin.x, pair.Value.offsetMin.y);
             myTrans.localEulerAngles = new Vector3(pair.Value.localEulerAngles.x, pair.Value.localEulerAngles.y, pair.Value.localEulerAngles.z);
         }
+
+        if (GameManager.Instance.CurKeyboardID == KeyboardID.Up)
+        {
+            ExchangePosition(rectTransformDict["1"], rectTransformDict["7"]);
+            ExchangePosition(rectTransformDict["2"], rectTransformDict["8"]);
+            ExchangePosition(rectTransformDict["3"], rectTransformDict["9"]);
+        }
+    }
+
+    private void ExchangePosition(RectTransform x, RectTransform y)
+    {
+        Vector3 pos = x.localPosition;
+        x.localPosition = y.localPosition;
+        y.localPosition = pos;
     }
 
     private void StartFight()

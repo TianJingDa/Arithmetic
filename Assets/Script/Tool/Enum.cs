@@ -63,6 +63,11 @@ public enum HandednessID
     Left,                      //左撇子
     Custom                     //自定义
 }
+public enum KeyboardID
+{
+    Down,                      //123在下
+    Up                         //123在上
+}
 public enum PatternID
 {
     Any = -1,                  //任意
