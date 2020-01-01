@@ -778,12 +778,12 @@ public class GameManager : MonoBehaviour
         BluetoothLEHardwareInterface.BluetoothEnable(false);
     }
 
-    public void DownloadData(WWWForm form, System.Action<ArrayList> OnSucceed)
+	public void DownloadData(CategoryInstance instance, System.Action<ArrayList> OnSucceed,System.Action<string> OnFail)
     {
-        StartCoroutine(c_RankController.DownloadData(form, OnSucceed));
+		StartCoroutine(c_RankController.DownloadData(instance, OnSucceed, OnFail));
     }
 
-    public void UploadData(WWWForm form, System.Action OnSucceed)
+	public void UploadData(WWWForm form, System.Action<string> OnSucceed)
     {
         StartCoroutine(c_RankController.UploadData(form, OnSucceed));
     }

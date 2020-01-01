@@ -54,13 +54,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
 				break;
 			case "RankDataBtn":
-                WWWForm form = new WWWForm();
-                form.AddField("pattern", (int)curPatternID);
-                form.AddField("amount", (int)curAmountID);
-                form.AddField("symbol", (int)curSymbolID);
-                form.AddField("digit", (int)curDigitID);
-                form.AddField("operand", (int)curOperandID);
-                GameManager.Instance.DownloadData(form, OnDownloadSucceed);
+				CategoryInstance instance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
+				GameManager.Instance.DownloadData(instance, OnDownloadSucceed, OnDownloadFail);
 				break;
 			case "RankData2RankFrameBtn":
 				CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
@@ -153,4 +148,10 @@ public class RankFrameWrapper : GuiFrameWrapper
         CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
         CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
     }
+
+	private void OnDownloadFail(string message)
+	{
+		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+	}
 }

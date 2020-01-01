@@ -111,7 +111,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 string data = JsonUtility.ToJson(rInstance);
                 form.AddField("data", data);
 
-                GameManager.Instance.UploadData(form, null);
+				GameManager.Instance.UploadData(form, OnUploadFinished);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -142,4 +142,10 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         if (isBluetooth) CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.BluetoothQuestionItem);
         else CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.QuestionItem);
     }
+
+	private void OnUploadFinished(string message)
+	{
+		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+	}
 }

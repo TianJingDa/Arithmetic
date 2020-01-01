@@ -119,7 +119,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 string data = JsonUtility.ToJson(instance);
                 form.AddField("data", data);
 
-                GameManager.Instance.UploadData(form, null);
+				GameManager.Instance.UploadData(form, OnUploadFinished);
                 break;
             case "AchievementDetailShareBtn":
                 GameManager.Instance.CurAchievementInstance = curAchievementInstance;
@@ -201,4 +201,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         newTime.Insert(7, ".");
         return newTime.ToString();
     }
+
+	private void OnUploadFinished(string message)
+	{
+		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+	}
 }
