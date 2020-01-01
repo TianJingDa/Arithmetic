@@ -183,7 +183,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
         saveFileShareSymbol.text = string.Format(saveFileShareSymbol.text, GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID]);
         saveFileShareDigit.text = string.Format(saveFileShareDigit.text, (int)(instance.cInstance.digitID + 2));
         saveFileShareOperand.text = string.Format(saveFileShareOperand.text, (int)(instance.cInstance.operandID + 2));
-        saveFileShareAccuracy.text = string.Format(saveFileShareAccuracy.text, instance.accuracy);
+        saveFileShareAccuracy.text = string.Format(saveFileShareAccuracy.text, instance.accuracy.ToString("f1"));
         string meanTime = (instance.timeCost / instance.qInstancList.Count).ToString("f1");
         saveFileShareMeanTime.text = string.Format(saveFileShareMeanTime.text, meanTime);
     }

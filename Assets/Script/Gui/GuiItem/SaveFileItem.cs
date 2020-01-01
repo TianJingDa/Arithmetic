@@ -63,13 +63,14 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
     }
     protected override void InitPrefabItem(object data)
     {
-        Init();
         content = data as SaveFileInstance;
         if (content == null)
         {
             MyDebug.LogYellow("SaveFileInstance is null!!");
             return;
         }
+
+        Init();
         hasAchievement = !string.IsNullOrEmpty(content.achievementName);
         isBluetooth = !string.IsNullOrEmpty(content.opponentName);
         saveFileName.text = content.fileName;
@@ -115,8 +116,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 public class SaveFileInstance
 {
     public float timeCost;
+    public float accuracy;
     public string fileName;
-    public string accuracy;
     public string opponentName;
     public List<QuestionInstance> qInstancList;
     public string achievementName;//所获成就

@@ -14,8 +14,14 @@ public class LastestAchievementItem : AchievementItem, IPointerDownHandler, IPoi
     }
     protected override void InitPrefabItem(object data)
     {
-        Init();
         content = data as AchievementInstance;
+        if (content == null)
+        {
+            MyDebug.LogYellow("LastestAchievementInstance is null!!");
+            return;
+        }
+
+        Init();
         bool hasLastestAchievement = !string.IsNullOrEmpty(content.achievementName);
         achievementName.gameObject.SetActive(hasLastestAchievement);
         achievementItem_WithoutAchievement.SetActive(!hasLastestAchievement);

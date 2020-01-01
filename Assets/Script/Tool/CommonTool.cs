@@ -440,7 +440,7 @@ public static class CommonTool
 		return null;
 	}
 
-	public static string FullUUID (string uuid)
+	private static string FullUUID (string uuid)
 	{
 		return "0000" + uuid + "-0000-1000-8000-00805f9b34fb";
 	}
@@ -456,7 +456,7 @@ public static class CommonTool
     public static void RefreshScrollContent(RectTransform parent, ArrayList dataList, GuiItemID id, GameObject detailWin = null)
     {
         parent.anchoredPosition = Vector2.zero;
-        for(int i = 0; i < parent.childCount; i++)
+        for(int i = parent.childCount - 1; i >= 0; i--)
         {
             Object.Destroy(parent.GetChild(i).gameObject);
         }

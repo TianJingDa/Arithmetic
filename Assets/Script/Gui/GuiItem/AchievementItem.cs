@@ -74,13 +74,14 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     }
     protected override void InitPrefabItem(object data)
     {
-        Init();
         content = data as AchievementInstance;
         if (content == null)
         {
             MyDebug.LogYellow("AchievementInstance is null!!");
             return;
         }
+
+        Init();
         bool notHasAchievement = string.IsNullOrEmpty(content.finishTime);
         achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);

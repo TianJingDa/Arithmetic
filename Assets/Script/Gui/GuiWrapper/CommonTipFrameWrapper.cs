@@ -24,6 +24,7 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
         if (instance.id == CommonTipID.Splash)
         {
             //开启自动关闭
+            StartCoroutine(AutoClose());
         }
     }
 
@@ -80,6 +81,12 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
             default:
                 break;
         }
+    }
+
+    private IEnumerator AutoClose()
+    {
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.None);
     }
 }
 

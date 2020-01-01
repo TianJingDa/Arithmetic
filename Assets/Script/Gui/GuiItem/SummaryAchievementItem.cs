@@ -16,13 +16,14 @@ public class SummaryAchievementItem : AchievementItem
     }
     protected override void InitPrefabItem(object data)
     {
-        Init();
         content = data as AchievementInstance;
         if (content == null)
         {
             MyDebug.LogYellow("SummaryAchievementInstance is null!!");
             return;
         }
+
+        Init();
         try
         {
             SymbolID symbol = (SymbolID)System.Enum.Parse(typeof(SymbolID), content.achievementName);

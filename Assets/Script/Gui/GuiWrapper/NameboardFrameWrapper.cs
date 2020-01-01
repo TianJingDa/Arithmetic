@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class NameboardFrameWrapper : GuiFrameWrapper
 {
+    private const float     TimeOut = 1f;
+    private const string    NameURL = "";
+
     private string          userName;
 
     private GameObject      nameBoardPage;
@@ -44,8 +47,7 @@ public class NameboardFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.None);
                 break;
             case "NameTipBoardConfirmBtn":
-                GameManager.Instance.UserName = userName;
-                GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                StartCoroutine(CreateUserName(userName));
                 break;
             case "NameTipBoardCancelBtn":
                 nameTipBoard.SetActive(false);
@@ -56,8 +58,61 @@ public class NameboardFrameWrapper : GuiFrameWrapper
         }
     }
 
-    protected void OnEndEdit(string text)
+    private void OnEndEdit(string text)
     {
         userName = text;
+    }
+
+    private IEnumerator CreateUserName(string name)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("name", name);
+        WWW www = new WWW(NameURL, form);
+
+        float responseTime = 0;
+        while (!www.isDone && responseTime < TimeOut)
+        {
+            responseTime += Time.deltaTime;
+            yield return www;
+        }
+
+        string message = "";
+        if (www.isDone)
+        {
+            CreateNameResponse response = JsonUtility.FromJson<CreateNameResponse>(www.text);
+            if (response != null)
+            {
+                if (response.error == 0)
+                {
+                    MyDebug.LogGreen("Create User Name Succeed:" + response.name);
+                    GameManager.Instance.UserName = response.name;
+                    GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                    yield break;
+                }
+                else
+                {
+                    MyDebug.LogYellow("Create User Name Fail:" + response.error);
+                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                }
+            }
+            else
+            {
+                MyDebug.LogYellow("Create User Name: Message Is Not Response!");
+                message = GameManager.Instance.GetMutiLanguage("Text_20066");
+            }
+        }
+        else
+        {
+            MyDebug.LogYellow("Create User Name Fail: Long Time!");
+            message = GameManager.Instance.GetMutiLanguage("Text_20067");
+        }
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private class CreateNameResponse
+    {
+        public int error;
+        public string name;
     }
 }

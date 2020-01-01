@@ -8,6 +8,9 @@ using System;
 /// </summary>
 public class RankFrameWrapper : GuiFrameWrapper
 {
+    private const float TimeOut = 1f;
+    private const string GetURL = "";
+
 	private int delta;
 	private Dictionary<int, string[]> amountDropdownTextDict;
 	private List<Dropdown.OptionData> digitDropdownOptionsList;
@@ -19,7 +22,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 	private OperandID   curOperandID;
 
 	private GameObject  rankDataContent;
-	private Dropdown    amountDropdown;
+    private RectTransform rankDataGrid;
+    private Dropdown    amountDropdown;
 	private Dropdown    digitDropdown;
 
 	void Start () 
@@ -38,7 +42,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 	{
 		rankDataContent = gameObjectDict["RankDataContent"];
 
-		digitDropdown   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
+        rankDataGrid    = gameObjectDict["RankDataGrid"].GetComponent<RectTransform>();
+        digitDropdown   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
 		amountDropdown  = gameObjectDict["AmountDropdown"].GetComponent<Dropdown>();
 	}
 
@@ -52,9 +57,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
 				break;
 			case "RankDataBtn":
-				//CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-				rankDataContent.SetActive(true);
-				CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+                StartCoroutine(GetRankData());
 				break;
 			case "RankData2RankFrameBtn":
 				CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
@@ -140,4 +143,63 @@ public class RankFrameWrapper : GuiFrameWrapper
 		digitDropdown.RefreshShownValue();
 		OnDropdownClick(digitDropdown);
 	}
+
+    private IEnumerator GetRankData()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("pattern", (int)curPatternID);
+        form.AddField("amount", (int)curAmountID);
+        form.AddField("symbol", (int)curSymbolID);
+        form.AddField("digit", (int)curDigitID);
+        form.AddField("operand", (int)curOperandID);
+        WWW www = new WWW(GetURL, form);
+
+        float responseTime = 0;
+        while (!www.isDone && responseTime < TimeOut)
+        {
+            responseTime += Time.deltaTime;
+            yield return www;
+        }
+
+        string message = "";
+        if (www.isDone)
+        {
+            GetRankDataResponse response = JsonUtility.FromJson<GetRankDataResponse>(www.text);
+            if (response != null)
+            {
+                if (response.error == 0)
+                {
+                    MyDebug.LogGreen("Get Rank Data Succeed!");
+                    rankDataContent.SetActive(true);
+                    ArrayList dataList = new ArrayList(response.instances);
+                    CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
+                    CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+                    yield break;
+                }
+                else
+                {
+                    MyDebug.LogYellow("Get Rank Data Fail:" + response.error);
+                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                }
+            }
+            else
+            {
+                MyDebug.LogYellow("Get Rank Data: Message Is Not Response!");
+                message = GameManager.Instance.GetMutiLanguage("Text_20066");
+            }
+        }
+        else
+        {
+            MyDebug.LogYellow("Get Rank Data Fail: Long Time!");
+            message = GameManager.Instance.GetMutiLanguage("Text_20067");
+        }
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private class GetRankDataResponse
+    {
+        public int error;
+        public List<RankInstance> instances;
+    }
 }

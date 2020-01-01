@@ -20,13 +20,14 @@ public class PeripheralItem : Item, IPointerClickHandler
 
 	protected override void InitPrefabItem(object data)
 	{
-		Init();
 		content = data as PeripheralInstance;
 		if (content == null)
 		{
 			MyDebug.LogYellow("BluetoothInstance is null!!");
 			return;
 		}
+
+        Init();
         receiveReadID = false;
         receiveWriteID = false;
         periphralName.text = content.name;

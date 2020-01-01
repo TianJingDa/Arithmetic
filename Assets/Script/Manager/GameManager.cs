@@ -11,6 +11,9 @@ using DG.Tweening;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private const float                                         TimeOut = 1f;
+    private const string                                        VisitorURL = "";
+
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
     private FightController                                     c_FightCtrl;
@@ -327,14 +330,14 @@ public class GameManager : MonoBehaviour
         //PlayerPrefs.DeleteKey("UserName");
         m_Root = GameObject.Find("UIRoot");
         m_GuiFrameStack = new Stack<GuiFrameWrapper>();
-        SwitchWrapper(GuiFrameID.StartFrame, true);
         m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
         m_AmountArray_Number = new int[] { 10, 30, 50 };
         m_SymbolArray = new string[] { "＋", "－", "×", "÷" };
         m_ShareSDK = GetComponent<ShareSDK>();
         m_ShareSDK.shareHandler = OnShareResultHandler;
         InitShareIcon();
-
+        StartCoroutine(GetVisitorInfo());
+        SwitchWrapper(GuiFrameID.StartFrame, true);
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
 #endif
@@ -399,7 +402,7 @@ public class GameManager : MonoBehaviour
         curSaveFileInstance.fileName = finishTime;
 
         float accuracy = CalculateAccuracy(resultList);
-        curSaveFileInstance.accuracy = accuracy.ToString("f1");
+        curSaveFileInstance.accuracy = accuracy;
 
         List<QuestionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
         curSaveFileInstance.qInstancList = qInstanceList;
@@ -791,7 +794,7 @@ public class GameManager : MonoBehaviour
     {
         List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
         float accuracy = (float)rightList.Count * 100 / resultList.Count;
-        return accuracy;
+        return accuracy; 
     }
     private List<QuestionInstance> ConvertToInstanceList(List<List<int>> resultList, string symbol)
     {
@@ -966,6 +969,31 @@ public class GameManager : MonoBehaviour
         m_GuiFrameStack.Push(targetWrapper.GetComponent<GuiFrameWrapper>());
         m_Root.GetComponent<GraphicRaycaster>().enabled = true;
     }
-#endregion
+
+    /// <summary>
+    /// 获取游客信息
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator GetVisitorInfo()
+    {
+        WWW www = new WWW(VisitorURL);
+
+        float responseTime = 0;
+        while (!www.isDone && responseTime < TimeOut)
+        {
+            responseTime += Time.deltaTime;
+            yield return www;
+        }
+
+        if (www.isDone)
+        {
+            MyDebug.LogGreen("Get Visitor Info Succeed:" + www.text);
+        }
+        else
+        {
+            MyDebug.LogYellow("Get Visitor Info Fail: " + www.error);
+        }
+    }
+    #endregion
 
 }

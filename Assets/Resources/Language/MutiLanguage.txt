@@ -123,6 +123,11 @@ Text_20062,四个字符,TJD
 Text_20063,“{0}”,TJD
 Text_20064,否,TJD
 Text_20065,是，继续,TJD
+Text_20066,网络异常，请稍后再试！,TJD
+Text_20067,请求超时，请稍后再试！,TJD
+Text_20068,上传成功，您的排名是{0}！,TJD
+Text_20069,您的战绩已上传！,TJD
+Text_20070,暂未上榜，请继续努力哦！,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
@@ -269,3 +274,9 @@ Text_80020,安卓平台仅支持发起挑战！,TJD
 Text_80021,蓝牙连接异常！,TJD
 Text_90000,排行榜,TJD
 Text_90001,查看,TJD
+Text_90002,排名,TJD
+Text_90003,昵称,TJD
+Text_90004,耗时,TJD
+Text_90005,准确率,TJD
+Text_90006,{0}秒,TJD
+Text_90007,{0}%,TJD
