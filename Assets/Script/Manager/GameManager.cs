@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private FontController                                      c_FontCtrl;
     private TextColorController                                 c_TextColorCtrl;
     private RecordController                                    c_RecordCtrl;
+    private RankController                                      c_RankController;
 
     private int[]                                               m_AmountArray_Time;
     private int[]                                               m_AmountArray_Number;
@@ -323,6 +324,7 @@ public class GameManager : MonoBehaviour
         c_SkinCtrl              = SkinController.Instance;
         c_TextColorCtrl         = TextColorController.Instance;
         c_RecordCtrl            = RecordController.Instance;
+        c_RankController        = RankController.Instance;
     }
 
     void Start()
@@ -761,6 +763,16 @@ public class GameManager : MonoBehaviour
             MyDebug.LogGreen("DeInitialize Success!");
         });
         BluetoothLEHardwareInterface.BluetoothEnable(false);
+    }
+
+    public void DownloadData(WWWForm form, System.Action<ArrayList> OnSucceed)
+    {
+        StartCoroutine(c_RankController.DownloadData(form, OnSucceed));
+    }
+
+    public void UploadData(WWWForm form, System.Action OnSucceed)
+    {
+        StartCoroutine(c_RankController.UploadData(form, OnSucceed));
     }
 
     #endregion

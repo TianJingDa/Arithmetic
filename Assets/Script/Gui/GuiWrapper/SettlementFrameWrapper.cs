@@ -10,9 +10,6 @@ using cn.sharesdk.unity3d;
 /// </summary>
 public class SettlementFrameWrapper : GuiFrameWrapper
 {
-    private const float TimeOut = 1f;
-    private const string UploadURL = "";
-
     private bool onlyWrong;
     private bool isBluetooth;
 
@@ -107,7 +104,22 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                     GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
                     return;
                 }
-                StartCoroutine(UploadData());
+
+                WWWForm form = new WWWForm();
+                form.AddField("pattern", (int)curSaveFileInstance.cInstance.patternID);
+                form.AddField("amount", (int)curSaveFileInstance.cInstance.amountID);
+                form.AddField("symbol", (int)curSaveFileInstance.cInstance.symbolID);
+                form.AddField("digit", (int)curSaveFileInstance.cInstance.digitID);
+                form.AddField("operand", (int)curSaveFileInstance.cInstance.operandID);
+                float result = curSaveFileInstance.timeCost * (1 - curSaveFileInstance.accuracy);
+                form.AddField("result", result.ToString());
+                RankInstance instance = new RankInstance();
+                instance.userName = GameManager.Instance.UserName;
+                instance.saveFile = curSaveFileInstance;
+                string data = JsonUtility.ToJson(instance);
+                form.AddField("data", data);
+
+                GameManager.Instance.UploadData(form, null);
                 break;
             case "AchievementDetailShareBtn":
                 GameManager.Instance.CurAchievementInstance = curAchievementInstance;
@@ -188,72 +200,5 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         newTime.Insert(4, ".");
         newTime.Insert(7, ".");
         return newTime.ToString();
-    }
-    private IEnumerator UploadData()
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("pattern", (int)curSaveFileInstance.cInstance.patternID);
-        form.AddField("amount", (int)curSaveFileInstance.cInstance.amountID);
-        form.AddField("symbol", (int)curSaveFileInstance.cInstance.symbolID);
-        form.AddField("digit", (int)curSaveFileInstance.cInstance.digitID);
-        form.AddField("operand", (int)curSaveFileInstance.cInstance.operandID);
-        float result = curSaveFileInstance.timeCost * (1 - curSaveFileInstance.accuracy);
-        form.AddField("result", result.ToString());
-        RankInstance instance = new RankInstance();
-        instance.userName = GameManager.Instance.UserName;
-        instance.saveFile = curSaveFileInstance;
-        string data = JsonUtility.ToJson(instance);
-        form.AddField("data", data);
-
-        WWW www = new WWW(UploadURL, form);
-
-        float responseTime = 0;
-        while (!www.isDone && responseTime < TimeOut)
-        {
-            responseTime += Time.deltaTime;
-            yield return www;
-        }
-
-        string message = "";
-        if (www.isDone)
-        {
-            UploadDataResponse response = JsonUtility.FromJson<UploadDataResponse>(www.text);
-            if (response != null)
-            {
-                if (response.error == 0)
-                {
-                    MyDebug.LogGreen("Upload Rank Data Succeed!");
-                    message = GameManager.Instance.GetMutiLanguage("Text_20068");
-                    message = string.Format(message, response.index);
-                }
-                else if (response.error == 1)
-                {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20069");
-                }
-                else if (response.error == 2)
-                {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20070");
-                }
-                else
-                {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
-                }
-            }
-            else
-            {
-                MyDebug.LogYellow("Upload Rank Data: Message Is Not Response!");
-                message = GameManager.Instance.GetMutiLanguage("Text_20066");
-            }
-        }
-        else
-        {
-            MyDebug.LogYellow("Upload Rank Data Fail: Long Time!");
-            message = GameManager.Instance.GetMutiLanguage("Text_20067");
-        }
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 }
