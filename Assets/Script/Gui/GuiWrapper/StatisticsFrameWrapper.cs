@@ -13,6 +13,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private int curSaveFileIndex;//当前所选存档类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
     private int curSaveFileCount;//存档总数量
     private int curAchievementIndex;//当前所选成就类别序号，-1、综合；0、加法；1、减法；2、乘法；3、除法
+    private Text statisticsTitleImg_Text;
     private Text totelTimeImg_Text2;
     private Text totelGameImg_Text2;
     private Text achievementBtn_Text2;
@@ -48,6 +49,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
+        RefreshStatisticsTitle();
         int totalTime = (int)GameManager.Instance.TotalTime;
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
@@ -70,6 +72,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementGrid                         = gameObjectDict["AchievementGrid"].GetComponent<RectTransform>();
         saveFileSummary                         = gameObjectDict["SaveFileSummary"];
         achievementSummary                      = gameObjectDict["AchievementSummary"];
+        statisticsTitleImg_Text                 = gameObjectDict["StatisticsTitleImg_Text"].GetComponent<Text>();
         totelTimeImg_Text2                      = gameObjectDict["TotelTimeImg_Text2"].GetComponent<Text>();
         totelGameImg_Text2                      = gameObjectDict["TotelGameImg_Text2"].GetComponent<Text>();
         additionSaveFile_Text                   = gameObjectDict["AdditionSaveFile_Text"].GetComponent<Text>();
@@ -157,6 +160,16 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             }
         }
     }
+
+    private void RefreshStatisticsTitle()
+    {
+        if (!string.IsNullOrEmpty(GameManager.Instance.UserName))
+        {
+            string title = GameManager.Instance.GetMutiLanguage("Text_20072");
+            statisticsTitleImg_Text.text = string.Format(title, GameManager.Instance.UserName);
+        }
+    }
+
     private void ShareImage(GameObject target, PlatformType type)
     {
         RectTransform shotTarget = target.transform as RectTransform;
