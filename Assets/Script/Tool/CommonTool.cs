@@ -34,8 +34,8 @@ public static class CommonTool
         }
         StreamReader streamReader = File.OpenText(path);
         string data = streamReader.ReadToEnd();
+        streamReader.Close();
         return data;
-
     }
 
     public static T GetComponentByName<T>(GameObject root, string name) where T : Component

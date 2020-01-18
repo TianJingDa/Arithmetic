@@ -448,6 +448,8 @@ public class GameManager : MonoBehaviour
     {
         SaveFileInstance curSaveFileInstance = new SaveFileInstance();
 
+        curSaveFileInstance.isUpload = false;
+
         curSaveFileInstance.timeCost = timeCost;
 
         string finishTime = System.DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -479,6 +481,12 @@ public class GameManager : MonoBehaviour
 
         TotalGame++;
         TotalTime += timeCost;
+    }
+
+    public void EditRecord(SaveFileInstance instance)
+    {
+        string toSave = JsonUtility.ToJson(instance);
+        c_RecordCtrl.SaveRecord(toSave, instance.fileName);
     }
 
     public List<SaveFileInstance> ReadAllRecords()
@@ -515,7 +523,6 @@ public class GameManager : MonoBehaviour
                     lastestAchievement = lastestAchievement.Replace(achievementName + ",", "");
                     PlayerPrefs.SetString("LastestAchievement", lastestAchievement);
                 }
-
             }
         }
         else
@@ -820,9 +827,9 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(c_RankController.DownloadRecord(instance, OnSucceed, OnFail));
     }
 
-	public void UploadRecord(WWWForm form, System.Action<string> OnSucceed)
+	public void UploadRecord(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)
     {
-        StartCoroutine(c_RankController.UploadRecord(form, OnSucceed));
+        StartCoroutine(c_RankController.UploadRecord(form, OnSucceed, OnFail));
     }
 
 	public void GetRankDetail(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)

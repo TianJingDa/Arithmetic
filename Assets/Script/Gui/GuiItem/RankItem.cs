@@ -55,9 +55,15 @@ public class RankItem : Item, IPointerClickHandler
 		SaveFileInstance instance = JsonUtility.FromJson<SaveFileInstance>(data);
 		if(instance != null)
 		{
-			GameManager.Instance.CurSaveFileInstance = instance;
+            instance.isUpload = true;
+            GameManager.Instance.CurSaveFileInstance = instance;
 			GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
 		}
+        else
+        {
+            string message = GameManager.Instance.GetMutiLanguage("Text_20066");
+            OnGetRankDetailFail(message);
+        }
 	}
 
 	private void OnGetRankDetailFail(string message)

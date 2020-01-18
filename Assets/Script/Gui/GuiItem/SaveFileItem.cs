@@ -115,11 +115,12 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
 [Serializable]
 public class SaveFileInstance
 {
+    public bool isUpload;
     public float timeCost;
     public float accuracy;
     public string fileName;
     public string opponentName;
-    public List<QuestionInstance> qInstancList;
     public string achievementName;//所获成就
+    public List<QuestionInstance> qInstancList;
     public CategoryInstance cInstance;
 }

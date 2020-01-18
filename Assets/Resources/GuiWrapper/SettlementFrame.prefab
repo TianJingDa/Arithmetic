@@ -562,7 +562,7 @@ GameObject:
   - component: {fileID: 114678446840298770}
   - component: {fileID: 114626585259868524}
   m_Layer: 0
-  m_Name: ShareBtnInSettlement
+  m_Name: SettlementShareBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

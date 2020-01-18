@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CommonTipFrameWrapper : GuiFrameWrapper
 {
-    private const float splashTime = 2f;
+    private const float splashTime = 1.5f;
 
     private CommonTipInstance instance;
 

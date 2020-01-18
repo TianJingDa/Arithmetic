@@ -85,7 +85,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
             case "Settlement2StartFrameBtn":
                 GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
                 break;
-            case "ShareBtnInSettlement":
+            case "SettlementShareBtn":
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
@@ -105,6 +105,14 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                     return;
                 }
 
+                if (curSaveFileInstance.isUpload)
+                {
+                    string message = GameManager.Instance.GetMutiLanguage("Text_90008");
+                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    return;
+                }
+
                 WWWForm form = new WWWForm();
 				form.AddField("userId", GameManager.Instance.UserID);
 				form.AddField("jwttoken", GameManager.Instance.Token);
@@ -115,9 +123,10 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 				form.AddField("operate", (int)curSaveFileInstance.cInstance.operandID + 2);
 				form.AddField("timelast", curSaveFileInstance.timeCost.ToString("f1"));
 				form.AddField("accuracy", curSaveFileInstance.accuracy.ToString("f1"));
-				string data = JsonUtility.ToJson(curSaveFileInstance);
+                curSaveFileInstance.achievementName = "";//上传的战绩都没有成就
+                string data = JsonUtility.ToJson(curSaveFileInstance);
                 form.AddField("data", data);
-				GameManager.Instance.UploadRecord(form, OnUploadFinished);
+                GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
                 break;
             case "AchievementDetailShareBtn":
                 GameManager.Instance.CurAchievementInstance = curAchievementInstance;
@@ -200,7 +209,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         return newTime.ToString();
     }
 
-	private void OnUploadFinished(string message)
+    private void OnUploadSuccees(string message)
+    {
+        curSaveFileInstance.isUpload = true;
+        GameManager.Instance.EditRecord(curSaveFileInstance);
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OnUploadFail(string message)
 	{
 		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
 		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);

@@ -14,6 +14,8 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     private GameObject commonResult;
     private GameObject onlyWrongImage;
     private GameObject achievementBtn;
+    private GameObject uploadDataBtn;
+    private GameObject shareBtn;
     private GameObject bluetoothResult;
     private GameObject bluetoothOnlyWrongImage;
     private Text saveFileDetailTime;
@@ -33,6 +35,8 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy.ToString("f1"));
         achievementBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.ShareFrame 
                               && !string.IsNullOrEmpty(content.achievementName));
+        uploadDataBtn.SetActive(!content.isUpload);
+        shareBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.RankFrame);
         isBluetooth = !string.IsNullOrEmpty(content.opponentName);
         commonResult.SetActive(!isBluetooth);
         bluetoothResult.SetActive(isBluetooth);
@@ -53,6 +57,8 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         commonResult                    = gameObjectDict["CommonResult"];
         onlyWrongImage                  = gameObjectDict["OnlyWrongImage"];
         achievementBtn                  = gameObjectDict["AchievementBtn"];
+        uploadDataBtn                   = gameObjectDict["UploadDataBtn"];
+        shareBtn                        = gameObjectDict["ShareBtn"];
         bluetoothResult                 = gameObjectDict["BluetoothResult"];
         bluetoothOnlyWrongImage         = gameObjectDict["BluetoothOnlyWrongImage"];
         saveFileDetailTime              = gameObjectDict["SaveFileDetailTime"].GetComponent<Text>();
@@ -97,7 +103,15 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 					return;
 				}
 
-				WWWForm form = new WWWForm();
+                if (content.isUpload)
+                {
+                    string message = GameManager.Instance.GetMutiLanguage("Text_90008");
+                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    return;
+                }
+
+                WWWForm form = new WWWForm();
 				form.AddField("userId", GameManager.Instance.UserID);
 				form.AddField("jwttoken", GameManager.Instance.Token);
 				form.AddField("model", (int)content.cInstance.patternID + 1);
@@ -107,9 +121,10 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 				form.AddField("operate", (int)content.cInstance.operandID + 2);
 				form.AddField("timelast", content.timeCost.ToString("f1"));
 				form.AddField("accuracy", content.accuracy.ToString("f1"));
+                content.achievementName = "";//上传的战绩都没有成就
 				string data = JsonUtility.ToJson(content);
                 form.AddField("data", data);
-				GameManager.Instance.UploadRecord(form, OnUploadFinished);
+                GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -141,9 +156,17 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         else CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.QuestionItem);
     }
 
-	private void OnUploadFinished(string message)
-	{
-		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
-	}
+    private void OnUploadSuccees(string message)
+    {
+        content.isUpload = true;
+        GameManager.Instance.EditRecord(content);
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OnUploadFail(string message)
+    {
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
 }

@@ -150,7 +150,7 @@ public class RankController : Controller
     /// 上传排行榜信息
     /// </summary>
     /// <returns></returns>
-	public IEnumerator UploadRecord(WWWForm form, Action<string> OnFinished)
+	public IEnumerator UploadRecord(WWWForm form, Action<string> OnSuccees, Action<string> OnFail)
     {
         WWW www = new WWW(UploadURL, form);
 
@@ -172,6 +172,11 @@ public class RankController : Controller
                     MyDebug.LogGreen("Upload Rank Data Succeed!");
                     message = GameManager.Instance.GetMutiLanguage("Text_20068");
 					message = string.Format(message, response.data.rank);
+                    if (OnSuccees != null)
+                    {
+                        OnSuccees(message);
+                    }
+                    yield break;
                 }
                 else
                 {
@@ -191,9 +196,9 @@ public class RankController : Controller
             message = GameManager.Instance.GetMutiLanguage("Text_20067");
         }
 
-		if(OnFinished != null)
+		if(OnFail != null)
 		{
-			OnFinished(message);
+            OnFail(message);
 		}     
     }
 
@@ -221,6 +226,7 @@ public class RankController : Controller
 					{
 						OnSucceed(response.data);
 					}
+                    yield break;
 				}
 				else
 				{
