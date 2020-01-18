@@ -94,12 +94,12 @@ public class RankController : Controller
                 {
                     MyDebug.LogGreen("Download Rank Data Succeed!");
 					lastRefreshTimeDict[instance] = DateTime.Now;
-					if(response.data.instances != null && response.data.instances.Count > 0)
+					if(response.data != null && response.data.Count > 0)
 					{
-						rankDataDict[instance] = response.data.instances;
+						rankDataDict[instance] = response.data;
 						if(OnSucceed != null)
 						{
-							ArrayList dataList = new ArrayList(response.data.instances);
+							ArrayList dataList = new ArrayList(response.data);
 							OnSucceed(dataList);
 						}
 						yield break;
@@ -251,14 +251,8 @@ public class RankController : Controller
     {
 		public int code;//200:成功
 		public string errmsg;
-		public DownloadData data;
+		public List<RankInstance> data;
     }
-
-	[Serializable]
-	private class DownloadData
-	{
-		public List<RankInstance> instances;
-	}
 
     [Serializable]
     private class UploadDataResponse
