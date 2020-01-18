@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class CommonTipFrameWrapper : GuiFrameWrapper
 {
+    private const float splashTime = 2f;
+
     private CommonTipInstance instance;
 
     private GameObject commonTipPage;
@@ -85,7 +87,7 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
 
     private IEnumerator AutoClose()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(splashTime);
         GameManager.Instance.SwitchWrapper(GuiFrameID.None);
     }
 }

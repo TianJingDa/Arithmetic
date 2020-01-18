@@ -50,11 +50,11 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 			case "NameTipBoardConfirmBtn":
 				if(GameManager.Instance.IsLogin)
 				{
-					StartCoroutine(CreateUserName(userName));					
-				}
+                    CreateUserName();
+                }
 				else
 				{
-					GameManager.Instance.StartSilentLogin();
+                    GameManager.Instance.StartSilentLogin(CreateUserName, OnSilentLoginFail);
 				}
                 break;
             case "NameTipBoardCancelBtn":
@@ -69,6 +69,17 @@ public class NameboardFrameWrapper : GuiFrameWrapper
     private void OnEndEdit(string text)
     {
         userName = text;
+    }
+
+    private void OnSilentLoginFail(string message)
+    {
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void CreateUserName()
+    {
+        StartCoroutine(CreateUserName(userName));
     }
 
     private IEnumerator CreateUserName(string name)

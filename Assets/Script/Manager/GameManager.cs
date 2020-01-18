@@ -291,8 +291,8 @@ public class GameManager : MonoBehaviour
 	{
 		get
 		{
-			bool hasToken = string.IsNullOrEmpty(Token);
-			bool hasUserID = string.IsNullOrEmpty(UserID);
+			bool hasToken = !string.IsNullOrEmpty(Token);
+			bool hasUserID = !string.IsNullOrEmpty(UserID);
 			return hasToken && hasUserID;
 		}
 	}
@@ -381,7 +381,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteKey("UserName");
+        //PlayerPrefs.DeleteAll();
         m_Root = GameObject.Find("UIRoot");
         m_GuiFrameStack = new Stack<GuiFrameWrapper>();
         m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
@@ -395,8 +395,6 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
 #endif
-
-        //ActiveGui(GuiFrameID.StartFrame);
     }
 
     #region 公共方法
@@ -832,9 +830,9 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(c_RankController.GetRankDetail(form, OnSucceed, OnFail));
 	}
 
-	public void StartSilentLogin()
+    public void StartSilentLogin(System.Action OnSucceed = null, System.Action<string> OnFail = null)
 	{
-		StartCoroutine(SilentLogin());
+        StartCoroutine(SilentLogin(OnSucceed, OnFail));
 	}
 
     #endregion
@@ -1048,7 +1046,7 @@ public class GameManager : MonoBehaviour
     /// 获取游客信息
     /// </summary>
     /// <returns></returns>
-    private IEnumerator SilentLogin()
+    private IEnumerator SilentLogin(System.Action OnSucceed, System.Action<string> OnFail)
     {
         WWW www = new WWW(VisitorURL);
 
@@ -1068,20 +1066,31 @@ public class GameManager : MonoBehaviour
 				{
 					Token = response.token;
 					UserID = response.data.id;
+                    if (OnSucceed != null)
+                    {
+                        OnSucceed();
+                    }
+                    yield break;
 				}
 				else
 				{
-					MyDebug.LogYellow("Create User Name Fail:" + response.code);
+					MyDebug.LogYellow("Silent Login Fail:" + response.code);
 				}
 			}
 			else
 			{
-				MyDebug.LogYellow("Create User Name: Message Is Not Response!");
+				MyDebug.LogYellow("Silent Login Fail: Message Is Not Response!");
 			}
         }
         else
         {
-            MyDebug.LogYellow("Get Visitor Info Fail: " + www.error);
+            MyDebug.LogYellow("Silent Login Fail Fail: " + www.error);
+        }
+
+        string message = GetMutiLanguage("Text_20066");
+        if (OnFail != null)
+        {
+            OnFail(message);
         }
     }
 
