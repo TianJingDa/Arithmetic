@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class NameboardFrameWrapper : GuiFrameWrapper
 {
     private const float     TimeOut = 1f;
-    private const string    NameURL = "";
+	private const string    NameURL = "http://182.92.68.73:8091/changeName";
 
     private string          userName;
 
@@ -46,8 +47,15 @@ public class NameboardFrameWrapper : GuiFrameWrapper
             case "NameBoardInputFieldCancelBtn":
                 GameManager.Instance.SwitchWrapper(GuiFrameID.None);
                 break;
-            case "NameTipBoardConfirmBtn":
-                StartCoroutine(CreateUserName(userName));
+			case "NameTipBoardConfirmBtn":
+				if(GameManager.Instance.IsLogin)
+				{
+					StartCoroutine(CreateUserName(userName));					
+				}
+				else
+				{
+					GameManager.Instance.StartSilentLogin();
+				}
                 break;
             case "NameTipBoardCancelBtn":
                 nameTipBoard.SetActive(false);
@@ -65,8 +73,10 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 
     private IEnumerator CreateUserName(string name)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("name", name);
+		WWWForm form = new WWWForm();
+		form.AddField("userId", GameManager.Instance.UserID);
+		form.AddField("jwttoken", GameManager.Instance.Token);
+		form.AddField("userName", name);
         WWW www = new WWW(NameURL, form);
 
         float responseTime = 0;
@@ -82,16 +92,16 @@ public class NameboardFrameWrapper : GuiFrameWrapper
             CreateNameResponse response = JsonUtility.FromJson<CreateNameResponse>(www.text);
             if (response != null)
             {
-                if (response.error == 0)
+				if (response.code == 200)
                 {
-                    MyDebug.LogGreen("Create User Name Succeed:" + response.name);
-                    GameManager.Instance.UserName = response.name;
+                    MyDebug.LogGreen("Create User Name Succeed:" + name);
+                    GameManager.Instance.UserName = name;
                     GameManager.Instance.SwitchWrapper(GuiFrameID.None);
                     yield break;
                 }
                 else
                 {
-                    MyDebug.LogYellow("Create User Name Fail:" + response.error);
+					MyDebug.LogYellow("Create User Name Fail:" + response.code);
                     message = GameManager.Instance.GetMutiLanguage("Text_20066");
                 }
             }
@@ -110,9 +120,10 @@ public class NameboardFrameWrapper : GuiFrameWrapper
         GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
+	[Serializable]
     private class CreateNameResponse
     {
-        public int error;
-        public string name;
+        public int code;
+		public string errmsg;
     }
 }

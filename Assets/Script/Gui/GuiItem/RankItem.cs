@@ -24,12 +24,12 @@ public class RankItem : Item, IPointerClickHandler
         }
 
         Init();
-        rankIndex.text = content.index.ToString();
-        rankUserName.text = content.userName;
+		rankIndex.text = content.rank.ToString();
+		rankUserName.text = content.name;
         string timeCost = GameManager.Instance.GetMutiLanguage("Text_90006");
-        rankTimeCost.text = string.Format(timeCost, content.saveFile.timeCost.ToString("f1"));
+		rankTimeCost.text = string.Format(timeCost, content.timelast.ToString("f1"));
         string accuracy = GameManager.Instance.GetMutiLanguage("Text_90007");
-        rankAccuracy.text = string.Format(accuracy, content.saveFile.accuracy.ToString("f1"));
+        rankAccuracy.text = string.Format(accuracy, content.accuracy.ToString("f1"));
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -42,15 +42,39 @@ public class RankItem : Item, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.Instance.CurSaveFileInstance = content.saveFile;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+		WWWForm form = new WWWForm();
+		form.AddField("userId", GameManager.Instance.UserID);
+		form.AddField("jwttoken", GameManager.Instance.Token);
+		form.AddField("model", (int)GameManager.Instance.CurCategoryInstance.patternID + 1);
+		form.AddField("rankId", content.id);
+		GameManager.Instance.GetRankDetail(form, OnGetRankDetailSucceed, OnGetRankDetailFail);
     }
+
+	private void OnGetRankDetailSucceed(string data)
+	{
+		SaveFileInstance instance = JsonUtility.FromJson<SaveFileInstance>(data);
+		if(instance != null)
+		{
+			GameManager.Instance.CurSaveFileInstance = instance;
+			GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+		}
+	}
+
+	private void OnGetRankDetailFail(string message)
+	{
+		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+	}
 }
 
 [Serializable]
 public class RankInstance
 {
-    public int index;
-    public string userName;
-    public SaveFileInstance saveFile;
+	public int rank;//排名
+	public int id;//用于获取详情
+	public string userId;
+	public string name;
+	public float timelast;
+	public float accuracy;
+	public float score;
 }

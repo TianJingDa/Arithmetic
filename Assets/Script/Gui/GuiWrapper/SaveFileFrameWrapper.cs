@@ -90,28 +90,26 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
-            case "UploadDataBtn":
-                if (string.IsNullOrEmpty(GameManager.Instance.UserName))
-                {
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
-                    return;
-                }
+			case "UploadDataBtn":
+				if(string.IsNullOrEmpty(GameManager.Instance.UserName))
+				{
+					GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+					return;
+				}
 
-                WWWForm form = new WWWForm();
-                form.AddField("pattern", (int)content.cInstance.patternID);
-                form.AddField("amount", (int)content.cInstance.amountID);
-                form.AddField("symbol", (int)content.cInstance.symbolID);
-                form.AddField("digit", (int)content.cInstance.digitID);
-                form.AddField("operand", (int)content.cInstance.operandID);
-                float result = content.timeCost * (1 - content.accuracy);
-                form.AddField("result", result.ToString());
-                RankInstance rInstance = new RankInstance();
-                rInstance.userName = GameManager.Instance.UserName;
-                rInstance.saveFile = content;
-                string data = JsonUtility.ToJson(rInstance);
+				WWWForm form = new WWWForm();
+				form.AddField("userId", GameManager.Instance.UserID);
+				form.AddField("jwttoken", GameManager.Instance.Token);
+				form.AddField("model", (int)content.cInstance.patternID + 1);
+				form.AddField("num", (int)content.cInstance.amountID + 1);
+				form.AddField("calcu", (int)content.cInstance.symbolID + 1);
+				form.AddField("digit", (int)content.cInstance.digitID + 2);
+				form.AddField("operate", (int)content.cInstance.operandID + 2);
+				form.AddField("timelast", content.timeCost.ToString("f1"));
+				form.AddField("accuracy", content.accuracy.ToString("f1"));
+				string data = JsonUtility.ToJson(content);
                 form.AddField("data", data);
-
-				GameManager.Instance.UploadData(form, OnUploadFinished);
+				GameManager.Instance.UploadRecord(form, OnUploadFinished);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

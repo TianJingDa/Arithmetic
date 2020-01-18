@@ -21,8 +21,9 @@ public class RankController : Controller
 
 	private const float RefreshInterval = 60f;
     private const float TimeOut = 1f;
-    private const string DownloadURL = "";
-    private const string UploadURL = "";
+	private const string DownloadURL = "http://182.92.68.73:8091/getData";
+	private const string UploadURL = "http://182.92.68.73:8091/setData";
+	private const string DetailURL = "http://182.92.68.73:8091/getDetail";
 
 	private Dictionary<CategoryInstance, DateTime> lastRefreshTimeDict;
 	private Dictionary<CategoryInstance, List<RankInstance>> rankDataDict;
@@ -40,7 +41,7 @@ public class RankController : Controller
     /// <param name="form"></param>
     /// <param name="OnSucceed"></param>
     /// <returns></returns>
-	public IEnumerator DownloadData(CategoryInstance instance, Action<ArrayList> OnSucceed, Action<string> OnFail)
+	public IEnumerator DownloadRecord(CategoryInstance instance, Action<ArrayList> OnSucceed, Action<string> OnFail)
     {
 		if(!CanRefreshRankData(instance))
 		{
@@ -66,11 +67,13 @@ public class RankController : Controller
 		}
 
 		WWWForm form = new WWWForm();
-		form.AddField("pattern", (int)instance.patternID);
-		form.AddField("amount", (int)instance.amountID);
-		form.AddField("symbol", (int)instance.symbolID);
-		form.AddField("digit", (int)instance.digitID);
-		form.AddField("operand", (int)instance.operandID);
+		form.AddField("userId", GameManager.Instance.UserID);
+		form.AddField("jwttoken", GameManager.Instance.Token);
+		form.AddField("model", (int)instance.patternID + 1);
+		form.AddField("num", (int)instance.amountID + 1);
+		form.AddField("calcu", (int)instance.symbolID + 1);
+		form.AddField("digit", (int)instance.digitID + 2);
+		form.AddField("operate", (int)instance.operandID + 2);
 
         WWW www = new WWW(DownloadURL, form);
 
@@ -87,16 +90,16 @@ public class RankController : Controller
             DownloadDataResponse response = JsonUtility.FromJson<DownloadDataResponse>(www.text);
             if (response != null)
             {
-                if (response.error == 0)
+				if (response.code == 200)
                 {
                     MyDebug.LogGreen("Download Rank Data Succeed!");
 					lastRefreshTimeDict[instance] = DateTime.Now;
-					if(response.instances != null && response.instances.Count > 0)
+					if(response.data.instances != null && response.data.instances.Count > 0)
 					{
-						rankDataDict[instance] = response.instances;
+						rankDataDict[instance] = response.data.instances;
 						if(OnSucceed != null)
 						{
-							ArrayList dataList = new ArrayList(response.instances);
+							ArrayList dataList = new ArrayList(response.data.instances);
 							OnSucceed(dataList);
 						}
 						yield break;
@@ -108,7 +111,7 @@ public class RankController : Controller
                 }
                 else
                 {
-					MyDebug.LogYellow("Download Rank Data Fail:" + response.error);
+					MyDebug.LogYellow("Download Rank Data Fail:" + response.code);
                     message = GameManager.Instance.GetMutiLanguage("Text_20066");
                 }
             }
@@ -147,7 +150,7 @@ public class RankController : Controller
     /// 上传排行榜信息
     /// </summary>
     /// <returns></returns>
-	public IEnumerator UploadData(WWWForm form, Action<string> OnFinished)
+	public IEnumerator UploadRecord(WWWForm form, Action<string> OnFinished)
     {
         WWW www = new WWW(UploadURL, form);
 
@@ -164,25 +167,15 @@ public class RankController : Controller
             UploadDataResponse response = JsonUtility.FromJson<UploadDataResponse>(www.text);
             if (response != null)
             {
-                if (response.error == 0)
+				if (response.code == 200)
                 {
                     MyDebug.LogGreen("Upload Rank Data Succeed!");
                     message = GameManager.Instance.GetMutiLanguage("Text_20068");
-                    message = string.Format(message, response.index);
-                }
-                else if (response.error == 1)
-                {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20069");
-                }
-                else if (response.error == 2)
-                {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20070");
+					message = string.Format(message, response.data.rank);
                 }
                 else
                 {
-                    MyDebug.LogYellow("Upload Rank Data Fail:" + response.error);
+					MyDebug.LogYellow("Upload Rank Data Fail:" + response.code);
                     message = GameManager.Instance.GetMutiLanguage("Text_20066");
                 }
             }
@@ -204,17 +197,88 @@ public class RankController : Controller
 		}     
     }
 
+	public IEnumerator GetRankDetail(WWWForm form, Action<string> OnSucceed, Action<string> OnFail)
+	{
+		WWW www = new WWW(DetailURL, form);
+
+		float responseTime = 0;
+		while (!www.isDone && responseTime < TimeOut)
+		{
+			responseTime += Time.deltaTime;
+			yield return www;
+		}
+
+		string message = "";
+		if (www.isDone)
+		{
+			GetDetailResponse response = JsonUtility.FromJson<GetDetailResponse>(www.text);
+			if (response != null)
+			{
+				if (response.code == 200)
+				{
+					MyDebug.LogGreen("Get Rank Detail Succeed!");
+					if(OnSucceed != null)
+					{
+						OnSucceed(response.data);
+					}
+				}
+				else
+				{
+					MyDebug.LogYellow("Get Rank Detail Fail:" + response.code);
+					message = GameManager.Instance.GetMutiLanguage("Text_20066");
+				}
+			}
+			else
+			{
+				MyDebug.LogYellow("Get Rank Detail Fail: Message Is Not Response!");
+				message = GameManager.Instance.GetMutiLanguage("Text_20066");
+			}
+		}
+		else
+		{
+			MyDebug.LogYellow("Get Rank Detail Fail: Long Time!");
+			message = GameManager.Instance.GetMutiLanguage("Text_20067");
+		}
+
+		if(OnFail != null)
+		{
+			OnFail(message);
+		}     
+	}
+
     [Serializable]
     private class DownloadDataResponse
     {
-        public int error;
-        public List<RankInstance> instances;
+		public int code;//200:成功
+		public string errmsg;
+		public DownloadData data;
     }
+
+	[Serializable]
+	private class DownloadData
+	{
+		public List<RankInstance> instances;
+	}
 
     [Serializable]
     private class UploadDataResponse
     {
-        public int error;//0:成功,1:重复上传,2:未上榜,3:上传失败
-        public int index;
+		public int code;//200:成功
+		public string errmsg;
+		public UploadData data;
     }
+
+	[Serializable]
+	private class UploadData
+	{
+		public int rank;
+	}
+
+	[Serializable]
+	private class GetDetailResponse
+	{
+		public int code;//200:成功
+		public string errmsg;
+		public string data;
+	}
 }

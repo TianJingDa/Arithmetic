@@ -12,6 +12,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 	private Dictionary<int, string[]> amountDropdownTextDict;
 	private List<Dropdown.OptionData> digitDropdownOptionsList;
 
+	private CategoryInstance curInstance;
 	private PatternID   curPatternID;
 	private AmountID    curAmountID;
 	private SymbolID    curSymbolID;
@@ -54,8 +55,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
 				break;
 			case "RankDataBtn":
-				CategoryInstance instance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-				GameManager.Instance.DownloadData(instance, OnDownloadSucceed, OnDownloadFail);
+				curInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
+				GameManager.Instance.DownloadRecord(curInstance, OnDownloadSucceed, OnDownloadFail);
 				break;
 			case "RankData2RankFrameBtn":
 				CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, false);
@@ -144,6 +145,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 
     private void OnDownloadSucceed(ArrayList dataList)
     {
+		GameManager.Instance.CurCategoryInstance = curInstance;
         rankDataContent.SetActive(true);
         CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
         CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);

@@ -12,7 +12,7 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     private const float                                         TimeOut = 1f;
-    private const string                                        VisitorURL = "";
+	private const string                                        VisitorURL = "http://182.92.68.73:8091/register";
 
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
@@ -119,6 +119,10 @@ public class GameManager : MonoBehaviour
     }
     public CategoryInstance CurCategoryInstance
     {
+		get
+		{
+			return m_CurCategoryInstance;
+		}
         set
         {
             m_CurCategoryInstance = value;
@@ -258,6 +262,41 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetString("UserName", value);
         }
     }
+
+	public string Token
+	{
+		get
+		{
+			return PlayerPrefs.GetString("Token", null);
+		}
+		private set
+		{
+			PlayerPrefs.SetString("Token", value);
+		}
+	}
+
+	public string UserID
+	{
+		get
+		{
+			return PlayerPrefs.GetString("UserID", null);
+		}
+		private set
+		{
+			PlayerPrefs.SetString("UserID", value);
+		}
+	}
+		
+	public bool IsLogin
+	{
+		get
+		{
+			bool hasToken = string.IsNullOrEmpty(Token);
+			bool hasUserID = string.IsNullOrEmpty(UserID);
+			return hasToken && hasUserID;
+		}
+	}
+
     public string CurAchievementName
     {
         get;
@@ -351,7 +390,7 @@ public class GameManager : MonoBehaviour
         m_ShareSDK = GetComponent<ShareSDK>();
         m_ShareSDK.shareHandler = OnShareResultHandler;
         InitShareIcon();
-        StartCoroutine(GetVisitorInfo());
+		if(!IsLogin) StartSilentLogin();
         SwitchWrapper(GuiFrameID.StartFrame, true);
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
@@ -778,15 +817,25 @@ public class GameManager : MonoBehaviour
         BluetoothLEHardwareInterface.BluetoothEnable(false);
     }
 
-	public void DownloadData(CategoryInstance instance, System.Action<ArrayList> OnSucceed,System.Action<string> OnFail)
+	public void DownloadRecord(CategoryInstance instance, System.Action<ArrayList> OnSucceed,System.Action<string> OnFail)
     {
-		StartCoroutine(c_RankController.DownloadData(instance, OnSucceed, OnFail));
+		StartCoroutine(c_RankController.DownloadRecord(instance, OnSucceed, OnFail));
     }
 
-	public void UploadData(WWWForm form, System.Action<string> OnSucceed)
+	public void UploadRecord(WWWForm form, System.Action<string> OnSucceed)
     {
-        StartCoroutine(c_RankController.UploadData(form, OnSucceed));
+        StartCoroutine(c_RankController.UploadRecord(form, OnSucceed));
     }
+
+	public void GetRankDetail(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)
+	{
+		StartCoroutine(c_RankController.GetRankDetail(form, OnSucceed, OnFail));
+	}
+
+	public void StartSilentLogin()
+	{
+		StartCoroutine(SilentLogin());
+	}
 
     #endregion
 
@@ -999,7 +1048,7 @@ public class GameManager : MonoBehaviour
     /// 获取游客信息
     /// </summary>
     /// <returns></returns>
-    private IEnumerator GetVisitorInfo()
+    private IEnumerator SilentLogin()
     {
         WWW www = new WWW(VisitorURL);
 
@@ -1012,13 +1061,47 @@ public class GameManager : MonoBehaviour
 
         if (www.isDone)
         {
-            MyDebug.LogGreen("Get Visitor Info Succeed:" + www.text);
+			LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.text);
+			if (response != null)
+			{
+				if (response.code == 200)
+				{
+					Token = response.token;
+					UserID = response.data.id;
+				}
+				else
+				{
+					MyDebug.LogYellow("Create User Name Fail:" + response.code);
+				}
+			}
+			else
+			{
+				MyDebug.LogYellow("Create User Name: Message Is Not Response!");
+			}
         }
         else
         {
             MyDebug.LogYellow("Get Visitor Info Fail: " + www.error);
         }
     }
+
+	[System.Serializable]
+	private class LoginResponse
+	{
+		public int code;
+		public string errmsg;
+		public string token;
+		public LoginData data;
+
+	}
+
+	[System.Serializable]
+	private class LoginData
+	{
+		public string id;
+		public string name;
+	}
+
     #endregion
 
 }

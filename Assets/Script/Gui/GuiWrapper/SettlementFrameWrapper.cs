@@ -106,20 +106,18 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 }
 
                 WWWForm form = new WWWForm();
-                form.AddField("pattern", (int)curSaveFileInstance.cInstance.patternID);
-                form.AddField("amount", (int)curSaveFileInstance.cInstance.amountID);
-                form.AddField("symbol", (int)curSaveFileInstance.cInstance.symbolID);
-                form.AddField("digit", (int)curSaveFileInstance.cInstance.digitID);
-                form.AddField("operand", (int)curSaveFileInstance.cInstance.operandID);
-                float result = curSaveFileInstance.timeCost * (1 - curSaveFileInstance.accuracy);
-                form.AddField("result", result.ToString());
-                RankInstance instance = new RankInstance();
-                instance.userName = GameManager.Instance.UserName;
-                instance.saveFile = curSaveFileInstance;
-                string data = JsonUtility.ToJson(instance);
+				form.AddField("userId", GameManager.Instance.UserID);
+				form.AddField("jwttoken", GameManager.Instance.Token);
+				form.AddField("model", (int)curSaveFileInstance.cInstance.patternID + 1);
+				form.AddField("num", (int)curSaveFileInstance.cInstance.amountID + 1);
+				form.AddField("calcu", (int)curSaveFileInstance.cInstance.symbolID + 1);
+				form.AddField("digit", (int)curSaveFileInstance.cInstance.digitID + 2);
+				form.AddField("operate", (int)curSaveFileInstance.cInstance.operandID + 2);
+				form.AddField("timelast", curSaveFileInstance.timeCost.ToString("f1"));
+				form.AddField("accuracy", curSaveFileInstance.accuracy.ToString("f1"));
+				string data = JsonUtility.ToJson(curSaveFileInstance);
                 form.AddField("data", data);
-
-				GameManager.Instance.UploadData(form, OnUploadFinished);
+				GameManager.Instance.UploadRecord(form, OnUploadFinished);
                 break;
             case "AchievementDetailShareBtn":
                 GameManager.Instance.CurAchievementInstance = curAchievementInstance;
