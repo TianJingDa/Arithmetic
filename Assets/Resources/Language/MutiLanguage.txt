@@ -125,7 +125,7 @@ Text_20064,否,TJD
 Text_20065,是，继续,TJD
 Text_20066,网络异常，请稍后再试！,TJD
 Text_20067,请求超时，请稍后再试！,TJD
-Text_20068,上传成功，您的排名是\n第{0}名！,TJD
+Text_20068,上传成功，您的排名是\n\n第{0}名！,TJD
 Text_20069,您的战绩已上传！,TJD
 Text_20070,暂未上榜，请继续努力哦！,TJD
 Text_20071,暂时无人上榜哦！,TJD
@@ -281,7 +281,7 @@ Text_90001,查看,TJD
 Text_90002,排名,TJD
 Text_90003,昵称,TJD
 Text_90004,耗时,TJD
-Text_90005,准确率,TJD
+Text_90005,正确率,TJD
 Text_90006,{0}秒,TJD
 Text_90007,{0}%,TJD
 Text_90008,战绩已上传！,TJD

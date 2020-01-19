@@ -12,7 +12,7 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     private const float                                         TimeOut = 1f;
-	private const string                                        VisitorURL = "http://182.92.68.73:8091/register";
+	private const string                                        VisitorURL = "http://47.105.77.226:8091/register";
 
     private MutiLanguageController                              c_MutiLanguageCtrl;
     private ResourceController                                  c_ResourceCtrl;
@@ -340,7 +340,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-	public string ServiceUUID{ get; set;}
+    private bool ResetUserName
+    {
+        get
+        {
+            int reset = PlayerPrefs.GetInt("ResetUserName", 0);
+            return reset > 0;
+        }
+        set
+        {
+            int reset = value ? 1 : 0;
+            PlayerPrefs.SetInt("ResetUserName", reset);
+        }
+    }
+
+    public string ServiceUUID{ get; set;}
 
 	public string ReadUUID{ get; set;}
 
@@ -390,7 +404,8 @@ public class GameManager : MonoBehaviour
         m_ShareSDK = GetComponent<ShareSDK>();
         m_ShareSDK.shareHandler = OnShareResultHandler;
         InitShareIcon();
-		if(!IsLogin) StartSilentLogin();
+        ResetUserNameOnce();
+        if (!IsLogin) StartSilentLogin();
         SwitchWrapper(GuiFrameID.StartFrame, true);
 #if UNITY_EDITOR
         gameObject.AddComponent<Camera>();
@@ -1047,6 +1062,18 @@ public class GameManager : MonoBehaviour
         }
         m_GuiFrameStack.Push(targetWrapper.GetComponent<GuiFrameWrapper>());
         m_Root.GetComponent<GraphicRaycaster>().enabled = true;
+    }
+
+    /// <summary>
+    /// 为了兼容之前版本中已经起名的玩家，需要清除用户名，重新起名
+    /// </summary>
+    private void ResetUserNameOnce()
+    {
+        if (!ResetUserName)
+        {
+            UserName = null;
+            ResetUserName = true;
+        }
     }
 
     /// <summary>

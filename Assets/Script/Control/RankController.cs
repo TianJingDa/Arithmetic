@@ -21,9 +21,9 @@ public class RankController : Controller
 
 	private const float RefreshInterval = 60f;
     private const float TimeOut = 1f;
-	private const string DownloadURL = "http://182.92.68.73:8091/getData";
-	private const string UploadURL = "http://182.92.68.73:8091/setData";
-	private const string DetailURL = "http://182.92.68.73:8091/getDetail";
+	private const string DownloadURL = "http://47.105.77.226:8091/getData";
+	private const string UploadURL = "http://47.105.77.226:8091/setData";
+	private const string DetailURL = "http://47.105.77.226:8091/getDetail";
 
 	private Dictionary<CategoryInstance, DateTime> lastRefreshTimeDict;
 	private Dictionary<CategoryInstance, List<RankInstance>> rankDataDict;
