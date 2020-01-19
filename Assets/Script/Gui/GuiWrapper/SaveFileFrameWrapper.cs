@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SaveFileFrameWrapper : GuiFrameWrapper
 {
+    private bool isUploading;
     private bool onlyWrong;
     private bool isBluetooth;
     private List<QuestionInstance> onlyWrongList;
@@ -97,6 +98,11 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
 			case "UploadDataBtn":
+                if (isUploading)
+                {
+                    return;
+                }
+
 				if(string.IsNullOrEmpty(GameManager.Instance.UserName))
 				{
 					GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
@@ -124,6 +130,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 content.achievementName = "";//上传的战绩都没有成就
 				string data = JsonUtility.ToJson(content);
                 form.AddField("data", data);
+                isUploading = true;
                 GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
                 break;
             default:
@@ -158,6 +165,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 
     private void OnUploadSuccees(string message)
     {
+        isUploading = false;
         content.isUpload = true;
         GameManager.Instance.EditRecord(content);
         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
@@ -166,6 +174,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 
     private void OnUploadFail(string message)
     {
+        isUploading = false;
         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
         GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }

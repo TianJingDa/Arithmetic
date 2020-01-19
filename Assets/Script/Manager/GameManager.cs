@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private int[]                                               m_AmountArray_Number;
     private string[]                                            m_SymbolArray;
     private bool                                                m_IsCentral;
+    private bool                                                m_IsLogining;
     private float                                               m_TweenDuration = 0.5f;             //Tween动画持续时间
     private GameObject                                          m_Root;                             //UI对象的根对象
     private Stack<GuiFrameWrapper>                              m_GuiFrameStack;                    //当前激活的GuiWrapper
@@ -854,6 +855,11 @@ public class GameManager : MonoBehaviour
 
     public void StartSilentLogin(System.Action OnSucceed = null, System.Action<string> OnFail = null)
 	{
+        if (m_IsLogining)
+        {
+            return;
+        }
+        m_IsLogining = true;
         StartCoroutine(SilentLogin(OnSucceed, OnFail));
 	}
 
@@ -1098,6 +1104,7 @@ public class GameManager : MonoBehaviour
 			{
 				if (response.code == 200)
 				{
+                    m_IsLogining = false;
 					Token = response.token;
 					UserID = response.data.id;
                     if (OnSucceed != null)
@@ -1121,6 +1128,7 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Silent Login Fail Fail: " + www.error);
         }
 
+        m_IsLogining = false;
         string message = GetMutiLanguage("Text_20066");
         if (OnFail != null)
         {

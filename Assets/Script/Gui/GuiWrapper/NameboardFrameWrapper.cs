@@ -9,6 +9,7 @@ public class NameboardFrameWrapper : GuiFrameWrapper
     private const float     TimeOut = 1f;
 	private const string    NameURL = "http://47.105.77.226:8091/changeName";
 
+    private bool            isCreating;
     private string          userName;
 
     private GameObject      nameBoardPage;
@@ -79,6 +80,11 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 
     private void CreateUserName()
     {
+        if (isCreating)
+        {
+            return;
+        }
+        isCreating = true;
         StartCoroutine(CreateUserName(userName));
     }
 
@@ -106,6 +112,7 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 				if (response.code == 200)
                 {
                     MyDebug.LogGreen("Create User Name Succeed:" + name);
+                    isCreating = false;
                     GameManager.Instance.UserName = name;
                     GameManager.Instance.SwitchWrapper(GuiFrameID.None);
                     yield break;
@@ -127,6 +134,7 @@ public class NameboardFrameWrapper : GuiFrameWrapper
             MyDebug.LogYellow("Create User Name Fail: Long Time!");
             message = GameManager.Instance.GetMutiLanguage("Text_20067");
         }
+        isCreating = false;
         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
         GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }

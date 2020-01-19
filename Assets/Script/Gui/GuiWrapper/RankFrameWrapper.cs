@@ -9,6 +9,7 @@ using System;
 public class RankFrameWrapper : GuiFrameWrapper
 {
 	private int delta;
+    private bool isDownloading;
 	private Dictionary<int, string[]> amountDropdownTextDict;
 	private List<Dropdown.OptionData> digitDropdownOptionsList;
 
@@ -55,7 +56,12 @@ public class RankFrameWrapper : GuiFrameWrapper
 				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
 				break;
 			case "RankDataBtn":
-				curInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
+                if (isDownloading)
+                {
+                    return;
+                }
+                isDownloading = true;
+                curInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
 				GameManager.Instance.DownloadRecord(curInstance, OnDownloadSucceed, OnDownloadFail);
 				break;
 			case "RankData2RankFrameBtn":
@@ -145,7 +151,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 
     private void OnDownloadSucceed(ArrayList dataList)
     {
-		GameManager.Instance.CurCategoryInstance = curInstance;
+        isDownloading = false;
+        GameManager.Instance.CurCategoryInstance = curInstance;
         rankDataContent.SetActive(true);
         CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
         CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
@@ -153,7 +160,8 @@ public class RankFrameWrapper : GuiFrameWrapper
 
 	private void OnDownloadFail(string message)
 	{
-		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        isDownloading = false;
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
 		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 	}
 }

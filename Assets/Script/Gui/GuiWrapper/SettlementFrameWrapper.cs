@@ -10,6 +10,7 @@ using cn.sharesdk.unity3d;
 /// </summary>
 public class SettlementFrameWrapper : GuiFrameWrapper
 {
+    private bool isUploading;
     private bool onlyWrong;
     private bool isBluetooth;
 
@@ -99,6 +100,11 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, true);
                 break;
             case "UploadDataBtn":
+                if (isUploading)
+                {
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(GameManager.Instance.UserName))
                 {
                     GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
@@ -126,6 +132,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 curSaveFileInstance.achievementName = "";//上传的战绩都没有成就
                 string data = JsonUtility.ToJson(curSaveFileInstance);
                 form.AddField("data", data);
+                isUploading = true;
                 GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
                 break;
             case "AchievementDetailShareBtn":
@@ -211,6 +218,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void OnUploadSuccees(string message)
     {
+        isUploading = false;
         curSaveFileInstance.isUpload = true;
         GameManager.Instance.EditRecord(curSaveFileInstance);
         GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
@@ -219,7 +227,8 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void OnUploadFail(string message)
 	{
-		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        isUploading = false;
+        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
 		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 	}
 }
