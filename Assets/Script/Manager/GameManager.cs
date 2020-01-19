@@ -287,6 +287,20 @@ public class GameManager : MonoBehaviour
 			PlayerPrefs.SetString("UserID", value);
 		}
 	}
+
+    public bool IsNewPlayer
+    {
+        get
+        {
+            int isNew = PlayerPrefs.GetInt("IsNewPlayer", 1);
+            return isNew > 0;
+        }
+        set
+        {
+            int isNew = value ? 1 : 0;
+            PlayerPrefs.SetInt("IsNewPlayer", isNew);
+        }
+    }
 		
 	public bool IsLogin
 	{
@@ -341,20 +355,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool ResetUserName
-    {
-        get
-        {
-            int reset = PlayerPrefs.GetInt("ResetUserName", 0);
-            return reset > 0;
-        }
-        set
-        {
-            int reset = value ? 1 : 0;
-            PlayerPrefs.SetInt("ResetUserName", reset);
-        }
-    }
-
     public string ServiceUUID{ get; set;}
 
 	public string ReadUUID{ get; set;}
@@ -396,7 +396,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.DeleteAll();
         m_Root = GameObject.Find("UIRoot");
         m_GuiFrameStack = new Stack<GuiFrameWrapper>();
         m_AmountArray_Time = new int[] { 60, 180, 300 };//这里不应该直接写在代码里，但应该写在哪里？
@@ -405,7 +404,7 @@ public class GameManager : MonoBehaviour
         m_ShareSDK = GetComponent<ShareSDK>();
         m_ShareSDK.shareHandler = OnShareResultHandler;
         InitShareIcon();
-        ResetUserNameOnce();
+        ResetUserName();
         if (!IsLogin) StartSilentLogin();
         SwitchWrapper(GuiFrameID.StartFrame, true);
 #if UNITY_EDITOR
@@ -1073,12 +1072,11 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 为了兼容之前版本中已经起名的玩家，需要清除用户名，重新起名
     /// </summary>
-    private void ResetUserNameOnce()
+    private void ResetUserName()
     {
-        if (!ResetUserName)
+        if (IsNewPlayer)
         {
             UserName = null;
-            ResetUserName = true;
         }
     }
 
@@ -1102,10 +1100,11 @@ public class GameManager : MonoBehaviour
 			LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.text);
 			if (response != null)
 			{
-				if (response.code == 200)
+				if (response.code == (int)CodeID.SUCCESS)
 				{
                     m_IsLogining = false;
-					Token = response.token;
+                    IsNewPlayer = true;
+                    Token = response.token;
 					UserID = response.data.id;
                     if (OnSucceed != null)
                     {
@@ -1150,8 +1149,7 @@ public class GameManager : MonoBehaviour
 	private class LoginData
 	{
 		public string id;
-		public string name;
-	}
+    }
 
     #endregion
 

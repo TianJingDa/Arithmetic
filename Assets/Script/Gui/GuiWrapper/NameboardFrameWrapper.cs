@@ -109,13 +109,24 @@ public class NameboardFrameWrapper : GuiFrameWrapper
             CreateNameResponse response = JsonUtility.FromJson<CreateNameResponse>(www.text);
             if (response != null)
             {
-				if (response.code == 200)
+				if (response.code == (int)CodeID.SUCCESS)
                 {
                     MyDebug.LogGreen("Create User Name Succeed:" + name);
                     isCreating = false;
+                    GameManager.Instance.IsNewPlayer = false;
                     GameManager.Instance.UserName = name;
                     GameManager.Instance.SwitchWrapper(GuiFrameID.None);
                     yield break;
+                }
+                else if(response.code == (int)CodeID.NAME_FILTER_ERROR)
+                {
+                    MyDebug.LogYellow("Create User Name Fail: Illegal");
+                    message = GameManager.Instance.GetMutiLanguage("Text_20073");
+                }
+                else if(response.code == (int)CodeID.NAME_REPEAT_ERROR)
+                {
+                    MyDebug.LogYellow("Create User Name Fail: Repeat");
+                    message = GameManager.Instance.GetMutiLanguage("Text_20074");
                 }
                 else
                 {

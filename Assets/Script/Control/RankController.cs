@@ -90,7 +90,7 @@ public class RankController : Controller
             DownloadDataResponse response = JsonUtility.FromJson<DownloadDataResponse>(www.text);
             if (response != null)
             {
-				if (response.code == 200)
+				if (response.code == (int)CodeID.SUCCESS)
                 {
                     MyDebug.LogGreen("Download Rank Data Succeed!");
 					lastRefreshTimeDict[instance] = DateTime.Now;
@@ -167,7 +167,7 @@ public class RankController : Controller
             UploadDataResponse response = JsonUtility.FromJson<UploadDataResponse>(www.text);
             if (response != null)
             {
-				if (response.code == 200)
+				if (response.code == (int)CodeID.SUCCESS)
                 {
                     MyDebug.LogGreen("Upload Rank Data Succeed!");
                     message = GameManager.Instance.GetMutiLanguage("Text_20068");
@@ -219,7 +219,7 @@ public class RankController : Controller
 			GetDetailResponse response = JsonUtility.FromJson<GetDetailResponse>(www.text);
 			if (response != null)
 			{
-				if (response.code == 200)
+				if (response.code == (int)CodeID.SUCCESS)
 				{
 					MyDebug.LogGreen("Get Rank Detail Succeed!");
 					if(OnSucceed != null)

@@ -130,3 +130,16 @@ public enum ShareID
     SaveFile,                  //存档
     Bluetooth                  //蓝牙
 }
+
+public enum CodeID
+{
+    SUCCESS             = 200, //成功
+    ERROR               = 1001,
+    DB_ERROR            = 1002,//数据库错误
+    NO_USER             = 1003,//
+    PARAM_ERROR         = 1004,//参数错误
+    TOKEN_ERROR         = 1005,//Token错误
+    NAME_FILTER_ERROR   = 1006,//名称非法
+    NAME_REPEAT_ERROR   = 1007,//名称重复
+    FINISH              = 99999
+}

@@ -130,6 +130,8 @@ Text_20069,您的战绩已上传！,TJD
 Text_20070,暂未上榜，请继续努力哦！,TJD
 Text_20071,暂时无人上榜哦！,TJD
 Text_20072,{0}的统计数据,TJD
+Text_20073,非法大名，大侠请换一个吧！,TJD
+Text_20074,大名已存在！,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
@@ -168,7 +170,7 @@ Text_40004,布局,TJD
 Text_40005,反馈,TJD
 Text_40006,关于我们,TJD
 Text_40007,感谢开发人员,TJD
-Text_40008,版本：2.0,TJD
+Text_40008,版本：4.0,TJD
 Text_40009,简体中文,简体中文
 Text_40010,简体中文,Simplified Chinese
 Text_40011,English,English
@@ -279,7 +281,7 @@ Text_80021,蓝牙连接异常！,TJD
 Text_90000,排行榜,TJD
 Text_90001,查看,TJD
 Text_90002,排名,TJD
-Text_90003,昵称,TJD
+Text_90003,大名,TJD
 Text_90004,耗时,TJD
 Text_90005,正确率,TJD
 Text_90006,{0}秒,TJD
