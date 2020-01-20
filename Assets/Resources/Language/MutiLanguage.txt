@@ -132,6 +132,7 @@ Text_20071,暂时无人上榜哦！,TJD
 Text_20072,{0}的统计数据,TJD
 Text_20073,非法大名，大侠请换一个吧！,TJD
 Text_20074,大名已存在！,TJD
+Text_20075,试题详情,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
