@@ -1,2 +1,2 @@
 # Arithmetic
-作者对游戏中的UGUI系统进行了一些修改，建议使用Unity5.5.0f3打开工程，同时将Unity\Editor\Data\UnityExtensions\Unity下的GUISystem文件夹替换为工程中对应的文件夹
+作者对游戏中的UGUI系统进行了一些修改，建议使用Unity2017.3.1打开工程，同时将Unity\Editor\Data\UnityExtensions\Unity下的GUISystem文件夹替换为工程中对应的文件夹
