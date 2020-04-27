@@ -15,9 +15,9 @@ public class HiddenAchievementItem : AchievementItem
     protected new void OnShortPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        GameManager.Instance.CurAchievementInstance = content;
+        AchievementController.Instance.CurAchievementInstance = content;
         GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
 
 
         //detailWin.SetActive(true);

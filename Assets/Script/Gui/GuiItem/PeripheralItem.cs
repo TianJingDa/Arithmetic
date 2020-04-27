@@ -57,7 +57,7 @@ public class PeripheralItem : Item, IPointerClickHandler
 			Text bluetoothPeripheralDetailTitle_Text = detailWinDict["BluetoothPeripheralDetailTitle_Text"].GetComponent<Text>();
 
 			bluetoothConnectWaiting.SetActive(false);
-			string tip = GameManager.Instance.GetMutiLanguage(bluetoothPeripheralDetailTitle_Text.index);
+			string tip = LanguageController.Instance.GetLanguage(bluetoothPeripheralDetailTitle_Text.index);
             bluetoothPeripheralDetailTitle_Text.text = string.Format(tip, content.name);
 			CommonTool.AddEventTriggerListener(connectConfirmBtn, EventTriggerType.PointerClick, ConnectToPeripheral);
 		}
@@ -67,22 +67,22 @@ public class PeripheralItem : Item, IPointerClickHandler
 	{
         MyDebug.LogGreen("ConnectToPeripheral");
         BluetoothLEHardwareInterface.StopScan();
-        GameManager.Instance.CurPeripheralInstance = content;
+        BluetoothController.Instance.CurPeripheralInstance = content;
 		bluetoothConnectWaiting.SetActive(true);
 		StartCoroutine(ConnectCountDown());
-        BluetoothLEHardwareInterface.ConnectToPeripheral (GameManager.Instance.CurPeripheralInstance.address, null, null,
+        BluetoothLEHardwareInterface.ConnectToPeripheral (BluetoothController.Instance.CurPeripheralInstance.address, null, null,
 			(address, serviceUUID, characteristicUUID) => 
 				{
                     MyDebug.LogGreen("_Address:" + address);
                     MyDebug.LogGreen("_ServiceUUID:" + serviceUUID);
                     MyDebug.LogGreen("_CharacteristicUUID:" + characteristicUUID);
 
-                    if (CommonTool.IsEqualUUID(serviceUUID, GameManager.Instance.ServiceUUID))
+                    if (BluetoothController.Instance.IsEqualUUID(serviceUUID, BluetoothController.Instance.ServiceUUID))
 					{
                         MyDebug.LogGreen("Address:" + address);
                         MyDebug.LogGreen("ServiceUUID:" + serviceUUID);
 
-                        if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.ReadUUID))
+                        if (BluetoothController.Instance.IsEqualUUID(characteristicUUID, BluetoothController.Instance.ReadUUID))
                         {
                             MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
                             receiveReadID = true;
@@ -93,7 +93,7 @@ public class PeripheralItem : Item, IPointerClickHandler
                                 StartCoroutine(SubscribeCharacteristic());
                             }
                         }
-                        else if (CommonTool.IsEqualUUID(characteristicUUID, GameManager.Instance.WriteUUID))
+                        else if (BluetoothController.Instance.IsEqualUUID(characteristicUUID, BluetoothController.Instance.WriteUUID))
                         {
                             MyDebug.LogGreen("CharacteristicUUID:" + characteristicUUID);
                             receiveWriteID = true;
@@ -112,13 +112,13 @@ public class PeripheralItem : Item, IPointerClickHandler
                     // be aware that this will also get called when the disconnect
                     // is called above. both methods get call for the same action
                     // this is for backwards compatibility
-                    if(GameManager.Instance.CurGUI == GuiFrameID.BluetoothFrame || GameManager.Instance.CurGUI == GuiFrameID.BluetoothFightFrame)
+                    if(GuiController.Instance.CurGUI == GuiFrameID.BluetoothFrame || GuiController.Instance.CurGUI == GuiFrameID.BluetoothFightFrame)
                     {
                         MyDebug.LogWhite("Peripheral Disconnect!");
-                        string tip = GameManager.Instance.GetMutiLanguage("Text_80019");
-                        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
-                        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
-                        if(GameManager.Instance.CurGUI == GuiFrameID.BluetoothFrame)
+                        string tip = LanguageController.Instance.GetLanguage("Text_80019");
+                        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
+                        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                        if(GuiController.Instance.CurGUI == GuiFrameID.BluetoothFrame)
                         {
                             StopAllCoroutines();
                             detailWin.SetActive(false);
@@ -131,10 +131,10 @@ public class PeripheralItem : Item, IPointerClickHandler
     {
         MyDebug.LogGreen("Subscribe Characteristic!");
         yield return new WaitForSeconds(1f);
-        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(GameManager.Instance.CurPeripheralInstance.address,
-                                                                       GameManager.Instance.ServiceUUID,
-                                                                       GameManager.Instance.ReadUUID, NotificationAction,
-                                                                       GameManager.Instance.CentralReceiveMessage);
+        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(BluetoothController.Instance.CurPeripheralInstance.address,
+                                                                       BluetoothController.Instance.ServiceUUID,
+                                                                       BluetoothController.Instance.ReadUUID, NotificationAction,
+                                                                       BluetoothController.Instance.CentralReceiveMessage);
     }
 
     private void NotificationAction(string address, string characteristicUUID)
@@ -151,8 +151,8 @@ public class PeripheralItem : Item, IPointerClickHandler
         yield return new WaitForSeconds(1f);
         int seed = UnityEngine.Random.Range(1, int.MaxValue);
         BluetoothMessage message = new BluetoothMessage(0, seed, GameManager.Instance.UserName);
-        GameManager.Instance.SetSendMessageFunc(true);
-        GameManager.Instance.BLESendMessage(message);
+        BluetoothController.Instance.SetSendMessageFunc(true);
+        BluetoothController.Instance.BLESendMessage(message);
     }
 
     private IEnumerator ConnectCountDown()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LayoutController : Controller 
+public sealed class LayoutController : Controller 
 {
     #region C#单例
     private static LayoutController instance = null;
@@ -54,6 +54,47 @@ public class LayoutController : Controller
         }
     }
 
+    public LayoutID CurLayoutID
+    {
+        get
+        {
+            int layoutID = PlayerPrefs.GetInt("LayoutID", 0);
+            return (LayoutID)layoutID;
+        }
+        set
+        {
+            int layout = (int)value;
+            PlayerPrefs.SetInt("LayoutID", layout);
+        }
+    }
+
+    public HandednessID CurHandednessID
+    {
+        get
+        {
+            int handednessID = PlayerPrefs.GetInt("HandednessID", 0);
+            return (HandednessID)handednessID;
+        }
+        set
+        {
+            int handednessID = (int)value;
+            PlayerPrefs.SetInt("HandednessID", handednessID);
+        }
+    }
+
+    public KeyboardID CurKeyboardID
+    {
+        get
+        {
+            int keyboardID = PlayerPrefs.GetInt("KeyboardID", 0);
+            return (KeyboardID)keyboardID;
+        }
+        set
+        {
+            int keyboardID = (int)value;
+            PlayerPrefs.SetInt("KeyboardID", keyboardID);
+        }
+    }
 
     private Dictionary<string, MyRectTransform> ConvertToDict(LayoutDataWrapper wrapper)
     {
@@ -67,9 +108,9 @@ public class LayoutController : Controller
         return dict;
     }
 
-    public Dictionary<string, MyRectTransform> GetLayoutData(LayoutID curLayout, HandednessID curHandedness)
+    public Dictionary<string, MyRectTransform> GetLayoutData()
     {
-        return layoutAssetDict[curLayout][(int)curHandedness];
+        return layoutAssetDict[CurLayoutID][(int)CurHandednessID];
     }
 }
 

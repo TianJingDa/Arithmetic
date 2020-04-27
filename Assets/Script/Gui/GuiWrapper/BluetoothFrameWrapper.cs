@@ -75,7 +75,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Bluetooth2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
 			case "BluetoothCentralBtn":
 				InitializeBluetooth (true);
@@ -170,7 +170,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 		{
 			for (int j = 0; j < dropdownArray[i].options.Count; j++)
 			{
-				dropdownArray[i].options[j].text = GameManager.Instance.GetMutiLanguage(dropdownArray[i].options[j].text);
+				dropdownArray[i].options[j].text = LanguageController.Instance.GetLanguage(dropdownArray[i].options[j].text);
 			}
             dropdownArray[i].value = 0;
             dropdownArray[i].RefreshShownValue();
@@ -188,7 +188,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			BluetoothLEHardwareInterface.StopScan();
 			RemovePeripherals();
 			MyDebug.LogGreen("Start ReScaning!");
-			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{GameManager.Instance.ServiceUUID}, 
+			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{ BluetoothController.Instance.ServiceUUID}, 
 				(address, name) => 
 				{
 					AddPeripheral (address, name);
@@ -209,7 +209,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 	{
 		if(!peripheralDict.ContainsKey(address))
 		{
-			GameObject peripheral = GameManager.Instance.GetPrefabItem(GuiItemID.PeripheralItem);
+			GameObject peripheral = GuiController.Instance.GetPrefabItem(GuiItemID.PeripheralItem);
 			peripheral.name = "BluetoothItem" + peripheralDict.Count;
 			peripheral.SendMessage("InitPrefabItem", new PeripheralInstance(address, name));
             peripheral.SendMessage("InitDetailWin", bluetoothPeripheralDetailBg);
@@ -244,19 +244,19 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
         BluetoothLEHardwareInterface.RemoveServices();
 
         CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-		GameManager.Instance.CurCategoryInstance = curCategoryInstance;
+		FightController.Instance.CurCategoryInstance = curCategoryInstance;
 
 		string serviceUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "0";
         string readUUID    = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "1";
         string writeUUID = (int)curAmountID + "" + (int)curSymbolID + "" + (int)curDigitID + "2";
 
-        GameManager.Instance.ServiceUUID = BluetoothLEHardwareInterface.FullUUID(serviceUUID);
-        GameManager.Instance.ReadUUID = BluetoothLEHardwareInterface.FullUUID(readUUID);
-        GameManager.Instance.WriteUUID = BluetoothLEHardwareInterface.FullUUID(writeUUID);
+        BluetoothController.Instance.ServiceUUID = BluetoothLEHardwareInterface.FullUUID(serviceUUID);
+        BluetoothController.Instance.ReadUUID = BluetoothLEHardwareInterface.FullUUID(readUUID);
+        BluetoothController.Instance.WriteUUID = BluetoothLEHardwareInterface.FullUUID(writeUUID);
 
-        MyDebug.LogGreen("ServiceUUID:" + GameManager.Instance.ServiceUUID);
-        MyDebug.LogGreen("ReadUUID:" + GameManager.Instance.ReadUUID);
-        MyDebug.LogGreen("WriteUUID:" + GameManager.Instance.WriteUUID);
+        MyDebug.LogGreen("ServiceUUID:" + BluetoothController.Instance.ServiceUUID);
+        MyDebug.LogGreen("ReadUUID:" + BluetoothController.Instance.ReadUUID);
+        MyDebug.LogGreen("WriteUUID:" + BluetoothController.Instance.WriteUUID);
 
 		if (isCentral) 
 		{
@@ -264,7 +264,7 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
 			bluetoothScanResultContent.SetActive (true);
 			RefreshScanResultContent ();
 			CommonTool.GuiHorizontalMove (bluetoothScanResultContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
-			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{GameManager.Instance.ServiceUUID}, 
+			BluetoothLEHardwareInterface.ScanForPeripheralsWithServices (new string[]{ BluetoothController.Instance.ServiceUUID}, 
 				(address, name) => 
 				{
 					AddPeripheral (address, name);
@@ -276,19 +276,19 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
             BluetoothLEHardwareInterface.PeripheralName(GameManager.Instance.UserName);
             MyDebug.LogGreen("PeripheralName:" + GameManager.Instance.UserName);
 
-            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.ReadUUID, 
+            BluetoothLEHardwareInterface.CreateCharacteristic(BluetoothController.Instance.ReadUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyRead |
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyNotify,
 				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsReadable, null, 0, null);
             MyDebug.LogGreen("CreateCharacteristic:Read!");
 
-            BluetoothLEHardwareInterface.CreateCharacteristic(GameManager.Instance.WriteUUID, 
+            BluetoothLEHardwareInterface.CreateCharacteristic(BluetoothController.Instance.WriteUUID, 
 				BluetoothLEHardwareInterface.CBCharacteristicProperties.CBCharacteristicPropertyWrite,
 				BluetoothLEHardwareInterface.CBAttributePermissions.CBAttributePermissionsWriteable, null, 0, 
-				GameManager.Instance.PeripheralReceiveMessage);
+				BluetoothController.Instance.PeripheralReceiveMessage);
             MyDebug.LogGreen("CreateCharacteristic:Write!");
 
-            BluetoothLEHardwareInterface.CreateService(GameManager.Instance.ServiceUUID, true, (message)=>
+            BluetoothLEHardwareInterface.CreateService(BluetoothController.Instance.ServiceUUID, true, (message)=>
 				{
                     MyDebug.LogGreen("Create Service Success:" + message);
 				});
@@ -359,30 +359,30 @@ public class BluetoothFrameWrapper : GuiFrameWrapper
                 if (error.Contains("Not Supported"))
                 {
                     MyDebug.LogYellow("Not Supported");
-                    message = GameManager.Instance.GetMutiLanguage("Text_80009");
+                    message = LanguageController.Instance.GetLanguage("Text_80009");
                 }
                 else if (error.Contains("Not Authorized"))
                 {
                     MyDebug.LogYellow("Not Authorized");
-                    message = GameManager.Instance.GetMutiLanguage("Text_80010");
+                    message = LanguageController.Instance.GetLanguage("Text_80010");
                 }
                 else if (error.Contains("Powered Off"))
                 {
                     MyDebug.LogYellow("Powered Off");
-                    message = GameManager.Instance.GetMutiLanguage("Text_80011");
+                    message = LanguageController.Instance.GetLanguage("Text_80011");
                 }
                 else if (error.Contains("Not Enabled"))
                 {
                     MyDebug.LogYellow("Not Enabled");
-                    message = GameManager.Instance.GetMutiLanguage("Text_80012");
+                    message = LanguageController.Instance.GetLanguage("Text_80012");
                 }
                 else
                 {
                     MyDebug.LogYellow("Central Initialize Fail: " + error);
-                    message = GameManager.Instance.GetMutiLanguage("Text_80021"); 
+                    message = LanguageController.Instance.GetLanguage("Text_80021"); 
                 }
-                GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, message);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, message);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
             });
 
     }

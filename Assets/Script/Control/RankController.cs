@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankController : Controller
+public sealed class RankController : Controller
 {
 	#region C#单例
 	private static RankController instance = null;
@@ -28,6 +28,7 @@ public class RankController : Controller
 	private Dictionary<CategoryInstance, DateTime> lastRefreshTimeDict;
 	private Dictionary<CategoryInstance, List<RankInstance>> rankDataDict;
 
+    public RankInstance CurRankInstance { get; set; }
 
     private void InitRankData()
 	{
@@ -59,7 +60,7 @@ public class RankController : Controller
 			{
 				if(OnFail != null)
 				{
-					string msg = GameManager.Instance.GetMutiLanguage("Text_20071");
+					string msg = LanguageController.Instance.GetLanguage("Text_20071");
 					OnFail(msg);
 				}
 			}
@@ -106,25 +107,25 @@ public class RankController : Controller
 					}
 					else
 					{
-						message = GameManager.Instance.GetMutiLanguage("Text_20071");
+						message = LanguageController.Instance.GetLanguage("Text_20071");
 					}
                 }
                 else
                 {
 					MyDebug.LogYellow("Download Rank Data Fail:" + response.code);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                    message = LanguageController.Instance.GetLanguage("Text_20066");
                 }
             }
             else
             {
 				MyDebug.LogYellow("Download Rank Data Fail: Message Is Not Response!");
-                message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                message = LanguageController.Instance.GetLanguage("Text_20066");
             }
         }
         else
         {
 			MyDebug.LogYellow("Download Rank Data Fail: Long Time!");
-            message = GameManager.Instance.GetMutiLanguage("Text_20067");
+            message = LanguageController.Instance.GetLanguage("Text_20067");
         }
 
 		if(OnFail != null)
@@ -170,8 +171,16 @@ public class RankController : Controller
 				if (response.code == (int)CodeID.SUCCESS)
                 {
                     MyDebug.LogGreen("Upload Rank Data Succeed!");
-                    message = GameManager.Instance.GetMutiLanguage("Text_20068");
-					message = string.Format(message, response.data.rank);
+                    if (response.data.rank > 0)
+                    {
+                        message = LanguageController.Instance.GetLanguage("Text_20068");
+                        message = string.Format(message, response.data.rank);
+                    }
+                    else
+                    {
+                        message = LanguageController.Instance.GetLanguage("Text_20070");
+                    }
+
                     if (OnSuccees != null)
                     {
                         OnSuccees(message);
@@ -181,19 +190,19 @@ public class RankController : Controller
                 else
                 {
 					MyDebug.LogYellow("Upload Rank Data Fail:" + response.code);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                    message = LanguageController.Instance.GetLanguage("Text_20066");
                 }
             }
             else
             {
                 MyDebug.LogYellow("Upload Rank Data Fail: Message Is Not Response!");
-                message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                message = LanguageController.Instance.GetLanguage("Text_20066");
             }
         }
         else
         {
             MyDebug.LogYellow("Upload Rank Data Fail: Long Time!");
-            message = GameManager.Instance.GetMutiLanguage("Text_20067");
+            message = LanguageController.Instance.GetLanguage("Text_20067");
         }
 
 		if(OnFail != null)
@@ -231,19 +240,19 @@ public class RankController : Controller
 				else
 				{
 					MyDebug.LogYellow("Get Rank Detail Fail:" + response.code);
-					message = GameManager.Instance.GetMutiLanguage("Text_20066");
+					message = LanguageController.Instance.GetLanguage("Text_20066");
 				}
 			}
 			else
 			{
 				MyDebug.LogYellow("Get Rank Detail Fail: Message Is Not Response!");
-				message = GameManager.Instance.GetMutiLanguage("Text_20066");
+				message = LanguageController.Instance.GetLanguage("Text_20066");
 			}
 		}
 		else
 		{
 			MyDebug.LogYellow("Get Rank Detail Fail: Long Time!");
-			message = GameManager.Instance.GetMutiLanguage("Text_20067");
+			message = LanguageController.Instance.GetLanguage("Text_20067");
 		}
 
 		if(OnFail != null)

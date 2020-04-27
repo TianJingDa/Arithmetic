@@ -49,7 +49,7 @@ public class SummaryAchievementItem : AchievementItem
             else
             {
                 content.finishTime = "HasFinish";
-                achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+                achievementName.text = LanguageController.Instance.GetLanguage(content.mainTitleIndex);
             }
         }
         catch
@@ -60,9 +60,9 @@ public class SummaryAchievementItem : AchievementItem
     protected new void OnShortPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        GameManager.Instance.CurAchievementInstance = content;
+        AchievementController.Instance.CurAchievementInstance = content;
         GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
 
         //detailWin.SetActive(true);
         //Image achievementDetailImageInStatistics = CommonTool.GetComponentByName<Image>(detailWin, "AchievementDetailImageInStatistics");
@@ -80,11 +80,14 @@ public class SummaryAchievementItem : AchievementItem
     }
     private int GetAchievementCountBySymbol(SymbolID symbol, out int countWithAchievement)
     {
-        List<AchievementInstance> instanceList = GameManager.Instance.GetAllAchievements().FindAll(x => x.cInstance.symbolID == symbol);
+        List<AchievementInstance> instanceList = AchievementController.Instance.GetAchievementsBySymbol(symbol);
         countWithAchievement = 0;
         for (int i = 0; i < instanceList.Count; i++)
         {
-            if (string.IsNullOrEmpty(instanceList[i].finishTime)) continue;
+            if (string.IsNullOrEmpty(instanceList[i].finishTime))
+            {
+                continue;
+            } 
             countWithAchievement++;
         }
         return instanceList.Count;

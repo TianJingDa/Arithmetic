@@ -52,18 +52,23 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
     protected void OnShortPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        GameManager.Instance.CurAchievementInstance = content;
+        AchievementController.Instance.CurAchievementInstance = content;
         GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
     }
 
     protected void OnLongPress()
     {
         if (content == null || string.IsNullOrEmpty(content.finishTime)) return;
-        string tip = GameManager.Instance.GetMutiLanguage("Text_20027");
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip,
-                      () => GameManager.Instance.DeleteAchievement(content.finishTime, content.achievementName), null);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        string tip = LanguageController.Instance.GetLanguage("Text_20027");
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip, OnDeleteConfirmed, null);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OnDeleteConfirmed()
+    {
+        RecordController.Instance.DeleteRecord(content.finishTime);
+        AchievementController.Instance.DeleteAchievement(content.achievementName, true);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -83,9 +88,9 @@ public class AchievementItem : Item, IPointerDownHandler, IPointerExitHandler, I
 
         Init();
         bool notHasAchievement = string.IsNullOrEmpty(content.finishTime);
-        achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
+        achievementName.text = LanguageController.Instance.GetLanguage(content.mainTitleIndex);
         achievementItem_WithoutAchievement.SetActive(notHasAchievement);
-        if (!notHasAchievement) achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+        if (!notHasAchievement) achievementImage.sprite = SkinController.Instance.GetSprite(content.imageIndex);
         List<GameObject> stars = CommonTool.GetGameObjectsContainName(gameObject, "Star");
         for(int i = 0; i < stars.Count; i++)
         {

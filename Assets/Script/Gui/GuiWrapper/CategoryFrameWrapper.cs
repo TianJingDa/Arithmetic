@@ -47,13 +47,13 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Category2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
             case "Category2FightFrameBtn":
                 CategoryInstance curCategoryInstance = new CategoryInstance(curPatternID, curAmountID, curSymbolID, curDigitID, curOperandID);
-				GameManager.Instance.CompetitionGUI = GuiFrameID.CategoryFrame;
-                GameManager.Instance.CurCategoryInstance = curCategoryInstance;
-                GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
+                GuiController.Instance.CompetitionGUI = GuiFrameID.CategoryFrame;
+                FightController.Instance.CurCategoryInstance = curCategoryInstance;
+                GuiController.Instance.SwitchWrapper(GuiFrameID.FightFrame);
                 break;
             //case "CategoryTipBtn":
             //case "CategoryTipBg":
@@ -106,7 +106,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
         {
             for (int j = 0; j < dropdownArray[i].options.Count; j++)
             {
-                dropdownArray[i].options[j].text = GameManager.Instance.GetMutiLanguage(dropdownArray[i].options[j].text);
+                dropdownArray[i].options[j].text = LanguageController.Instance.GetLanguage(dropdownArray[i].options[j].text);
             }
         }
     }
@@ -114,7 +114,7 @@ public class CategoryFrameWrapper : GuiFrameWrapper
     {
         for (int i = 0; i < amountDropdown.options.Count; i++)
         {
-            amountDropdown.options[i].text = GameManager.Instance.GetMutiLanguage(amountDropdownTextDict[index][i]);
+            amountDropdown.options[i].text = LanguageController.Instance.GetLanguage(amountDropdownTextDict[index][i]);
         }
         amountDropdown.value = 0;
         amountDropdown.RefreshShownValue();

@@ -21,7 +21,8 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         InitButton(OnButtonClick);
         InitToggle(OnToggleClick);
         InitDropdown(OnDropdownClick);
-        OnStart(CommonTool.InitGameObjectDict(gameObject));
+        var dict = CommonTool.InitGameObjectDict(gameObject);
+        OnStart(dict);
     }
 
     protected void RefreshGui()

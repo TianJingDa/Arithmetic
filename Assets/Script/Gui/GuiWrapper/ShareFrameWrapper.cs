@@ -57,6 +57,18 @@ public class ShareFrameWrapper : GuiFrameWrapper
     private Text bluetoothShareOtherNoAnswer;
     private Text bluetoothShareOtherWrong;
 
+    private GameObject rankSharePage;
+    private GameObject rankSharePattern_Time;
+    private GameObject rankSharePattern_Number;
+    private Text rankShareRank;
+    private Text rankShareAmount;
+    private Text rankShareTime;
+    private Text rankShareSymbol;
+    private Text rankShareDigit;
+    private Text rankShareOperand;
+    private Text rankShareAccuracy;
+    private Text rankShareMeanTime;
+
     void Start () 
 	{
         id = GuiFrameID.ShareFrame;
@@ -111,6 +123,17 @@ public class ShareFrameWrapper : GuiFrameWrapper
         bluetoothShareOtherNoAnswer     = gameObjectDict["BluetoothShareOtherNoAnswer"].GetComponent<Text>();
         bluetoothShareOtherWrong        = gameObjectDict["BluetoothShareOtherWrong"].GetComponent<Text>();
 
+        rankSharePage                   = gameObjectDict["RankSharePage"];
+        rankSharePattern_Time           = gameObjectDict["RankSharePattern_Time"];
+        rankSharePattern_Number         = gameObjectDict["RankSharePattern_Number"];
+        rankShareRank                   = gameObjectDict["RankShareRank"].GetComponent<Text>();
+        rankShareAmount                 = gameObjectDict["RankShareAmount"].GetComponent<Text>();
+        rankShareTime                   = gameObjectDict["RankShareTime"].GetComponent<Text>();
+        rankShareSymbol                 = gameObjectDict["RankShareSymbol"].GetComponent<Text>();
+        rankShareDigit                  = gameObjectDict["RankShareDigit"].GetComponent<Text>();
+        rankShareOperand                = gameObjectDict["RankShareOperand"].GetComponent<Text>();
+        rankShareAccuracy               = gameObjectDict["RankShareAccuracy"].GetComponent<Text>();
+        rankShareMeanTime               = gameObjectDict["RankShareMeanTime"].GetComponent<Text>();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -130,12 +153,12 @@ public class ShareFrameWrapper : GuiFrameWrapper
                 break;
             case "ShareFrameBg":
                 shareBtnsBg.DOMoveY(endPos, duration, true);
-                CommonTool.GuiScale(sharePage.gameObject, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
+                CommonTool.GuiScale(sharePage.gameObject, canvasGroup, false, () => GuiController.Instance.SwitchWrapper(GuiFrameID.None));
                 break;
             case "AchievementDetailBtn":
-                AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
-                GameManager.Instance.CurSaveFileInstance = GameManager.Instance.ReadRecord(instance.finishTime);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+                AchievementInstance instance = AchievementController.Instance.CurAchievementInstance;
+                RecordController.Instance.CurSaveFileInstance = RecordController.Instance.ReadRecord(instance.finishTime);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -151,6 +174,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
                 saveFileSharePage.SetActive(false);
                 achievementDetailPage.SetActive(true);
                 bluetoothSharePage.SetActive(false);
+                rankSharePage.SetActive(false);
                 InitAchievement();
                 CommonTool.GuiScale(achievementDetailPage, canvasGroup, true);
                 break;
@@ -158,6 +182,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
                 saveFileSharePage.SetActive(true);
                 achievementDetailPage.SetActive(false);
                 bluetoothSharePage.SetActive(false);
+                rankSharePage.SetActive(false);
                 InitSaveFile();
                 CommonTool.GuiScale(saveFileSharePage, canvasGroup, true);
                 break;
@@ -165,22 +190,30 @@ public class ShareFrameWrapper : GuiFrameWrapper
                 saveFileSharePage.SetActive(false);
                 achievementDetailPage.SetActive(false);
                 bluetoothSharePage.SetActive(true);
+                rankSharePage.SetActive(false);
                 InitBluetooth();
                 CommonTool.GuiScale(bluetoothSharePage, canvasGroup, true);
+                break;
+            case ShareID.Rank:
+                saveFileSharePage.SetActive(false);
+                achievementDetailPage.SetActive(false);
+                bluetoothSharePage.SetActive(false);
+                rankSharePage.SetActive(true);
+                InitRank();
                 break;
         }        
     }
 
     private void InitSaveFile()
     {
-        SaveFileInstance instance = GameManager.Instance.CurSaveFileInstance;
+        SaveFileInstance instance = RecordController.Instance.CurSaveFileInstance;
         if (instance == null) return;
-        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20037");
+        sharelTitle.text = LanguageController.Instance.GetLanguage("Text_20037");
         saveFileSharePattern_Time.SetActive(instance.cInstance.patternID == PatternID.Time);
         saveFileSharePattern_Number.SetActive(instance.cInstance.patternID == PatternID.Number);
         saveFileShareAmount.text = string.Format(saveFileShareAmount.text, instance.qInstancList.Count);
         saveFileShareTime.text = string.Format(saveFileShareTime.text, instance.timeCost.ToString("f1"));
-        saveFileShareSymbol.text = string.Format(saveFileShareSymbol.text, GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID]);
+        saveFileShareSymbol.text = string.Format(saveFileShareSymbol.text, FightController.Instance.GetSymbol(instance.cInstance.symbolID));
         saveFileShareDigit.text = string.Format(saveFileShareDigit.text, (int)(instance.cInstance.digitID + 2));
         saveFileShareOperand.text = string.Format(saveFileShareOperand.text, (int)(instance.cInstance.operandID + 2));
         saveFileShareAccuracy.text = string.Format(saveFileShareAccuracy.text, instance.accuracy.ToString("f1"));
@@ -190,14 +223,14 @@ public class ShareFrameWrapper : GuiFrameWrapper
 
     private void InitAchievement()
     {
-        AchievementInstance instance = GameManager.Instance.CurAchievementInstance;
+        AchievementInstance instance = AchievementController.Instance.CurAchievementInstance;
         if (instance == null) return;
-        achievementDetailBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.SaveFileFrame
-                                    && GameManager.Instance.LastGUI != GuiFrameID.SettlementFrame);
-        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_20051");
-        achievementDetailImage.sprite = GameManager.Instance.GetSprite(instance.imageIndex);
-        achievementDetailMainTitle.text = GameManager.Instance.GetMutiLanguage(instance.mainTitleIndex);
-        achievementDetailSubTitle.text = GameManager.Instance.GetMutiLanguage(instance.subTitleIndex);
+        achievementDetailBtn.SetActive(GuiController.Instance.LastGUI != GuiFrameID.SaveFileFrame
+                                    && GuiController.Instance.LastGUI != GuiFrameID.SettlementFrame);
+        sharelTitle.text = LanguageController.Instance.GetLanguage("Text_20051");
+        achievementDetailImage.sprite = SkinController.Instance.GetSprite(instance.imageIndex);
+        achievementDetailMainTitle.text = LanguageController.Instance.GetLanguage(instance.mainTitleIndex);
+        achievementDetailSubTitle.text = LanguageController.Instance.GetLanguage(instance.subTitleIndex);
         achievementDetailFinishTime.text = GetFinishTime(instance.finishTime);
         bool isTimePattern = instance.cInstance.patternID == PatternID.Time;
         achievementDetailPattern_Time.SetActive(isTimePattern);
@@ -206,15 +239,15 @@ public class ShareFrameWrapper : GuiFrameWrapper
         achievementDetailAmount.gameObject.SetActive(!isTimePattern);
         if (isTimePattern)
         {
-            int amount = GameManager.Instance.AmountArray_Time[(int)instance.cInstance.amountID];
+            int amount = FightController.Instance.GetTimeAmount(instance.cInstance.amountID);
             achievementDetailTime.text = string.Format(achievementDetailTime.text, amount);
         }
         else
         {
-            int amount = GameManager.Instance.AmountArray_Number[(int)instance.cInstance.amountID];
+            int amount = FightController.Instance.GetNumberAmount(instance.cInstance.amountID);
             achievementDetailAmount.text = string.Format(achievementDetailAmount.text, amount);
         }
-        string symbol = GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID];
+        string symbol = FightController.Instance.GetSymbol(instance.cInstance.symbolID);
         achievementDetailSymbol.text = string.Format(achievementDetailSymbol.text, symbol);
         achievementDetailDigit.text = string.Format(achievementDetailDigit.text, (int)(instance.cInstance.digitID + 2));
         achievementDetailOperand.text = string.Format(achievementDetailOperand.text, (int)(instance.cInstance.operandID + 2));
@@ -231,14 +264,14 @@ public class ShareFrameWrapper : GuiFrameWrapper
 
     private void InitBluetooth()
     {
-        SaveFileInstance instance = GameManager.Instance.CurSaveFileInstance;
+        SaveFileInstance instance = RecordController.Instance.CurSaveFileInstance;
         if (instance == null) return;
         sharelTitle.gameObject.SetActive(true);
-        sharelTitle.text = GameManager.Instance.GetMutiLanguage("Text_80015");
+        sharelTitle.text = LanguageController.Instance.GetLanguage("Text_80015");
         sharelTitle.text = string.Format(sharelTitle.text, GameManager.Instance.UserName, instance.opponentName);
         bluetoothShareAmount.text = string.Format(bluetoothShareAmount.text, instance.qInstancList.Count);
         bluetoothShareTime.text = string.Format(bluetoothShareTime.text, instance.timeCost.ToString("f1"));
-        bluetoothShareSymbol.text = string.Format(bluetoothShareSymbol.text, GameManager.Instance.SymbolArray[(int)instance.cInstance.symbolID]);
+        bluetoothShareSymbol.text = string.Format(bluetoothShareSymbol.text, FightController.Instance.GetSymbol(instance.cInstance.symbolID));
         bluetoothShareDigit.text = string.Format(bluetoothShareDigit.text, (int)(instance.cInstance.digitID + 2));
         bluetoothShareOperand.text = string.Format(bluetoothShareOperand.text, (int)(instance.cInstance.operandID + 2));
 
@@ -256,6 +289,28 @@ public class ShareFrameWrapper : GuiFrameWrapper
 
     }
 
+    private void InitRank()
+    {
+        RankInstance rInstance = RankController.Instance.CurRankInstance;
+        SaveFileInstance sInstance = RecordController.Instance.CurSaveFileInstance;
+        if (rInstance == null || sInstance == null) return;
+
+        sharelTitle.gameObject.SetActive(true);
+        sharelTitle.text = LanguageController.Instance.GetLanguage("Text_90009");
+        sharelTitle.text = string.Format(sharelTitle.text, rInstance.name);
+        rankSharePattern_Time.SetActive(sInstance.cInstance.patternID == PatternID.Time);
+        rankSharePattern_Number.SetActive(sInstance.cInstance.patternID == PatternID.Number);
+        rankShareRank.text = string.Format(rankShareRank.text, rInstance.rank);
+        rankShareAmount.text = string.Format(rankShareAmount.text, sInstance.qInstancList.Count);
+        rankShareTime.text = string.Format(rankShareTime.text, sInstance.timeCost.ToString("f1"));
+        rankShareSymbol.text = string.Format(rankShareSymbol.text, FightController.Instance.GetSymbol(sInstance.cInstance.symbolID));
+        rankShareDigit.text = string.Format(rankShareDigit.text, (int)(sInstance.cInstance.digitID + 2));
+        rankShareOperand.text = string.Format(rankShareOperand.text, (int)(sInstance.cInstance.operandID + 2));
+        rankShareAccuracy.text = string.Format(rankShareAccuracy.text, sInstance.accuracy.ToString("f1"));
+        string meanTime = (sInstance.timeCost / sInstance.qInstancList.Count).ToString("f1");
+        rankShareMeanTime.text = string.Format(rankShareMeanTime.text, meanTime);
+    }
+
     private void CalcResult(List<QuestionInstance> qInstancList, bool isOwn, out int right, out int noAnswer, out int wrong)
     {
         int count = qInstancList[0].instance.Count;
@@ -271,7 +326,7 @@ public class ShareFrameWrapper : GuiFrameWrapper
     {
         if (string.IsNullOrEmpty(GameManager.Instance.UserName))
         {
-            GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+            GuiController.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
         }
         else
         {

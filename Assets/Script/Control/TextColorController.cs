@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TextColorController : Controller 
+public sealed class TextColorController : Controller 
 {
     #region C#单例
     private static TextColorController instance = null;

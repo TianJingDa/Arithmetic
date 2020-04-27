@@ -53,7 +53,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 		{
 			case "Rank2StartFrameBtn":
 			case "RankData2StartFrameBtn":
-				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
+				GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
 				break;
 			case "RankDataBtn":
                 if (isDownloading)
@@ -113,7 +113,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 		{
 			for (int j = 0; j < dropdownArray[i].options.Count; j++)
 			{
-				dropdownArray[i].options[j].text = GameManager.Instance.GetMutiLanguage(dropdownArray[i].options[j].text);
+				dropdownArray[i].options[j].text = LanguageController.Instance.GetLanguage(dropdownArray[i].options[j].text);
 			}
 		}
 	}
@@ -121,7 +121,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 	{
 		for (int i = 0; i < amountDropdown.options.Count; i++)
 		{
-			amountDropdown.options[i].text = GameManager.Instance.GetMutiLanguage(amountDropdownTextDict[index][i]);
+			amountDropdown.options[i].text = LanguageController.Instance.GetLanguage(amountDropdownTextDict[index][i]);
 		}
 		amountDropdown.value = 0;
 		amountDropdown.RefreshShownValue();
@@ -152,7 +152,7 @@ public class RankFrameWrapper : GuiFrameWrapper
     private void OnDownloadSucceed(ArrayList dataList)
     {
         isDownloading = false;
-        GameManager.Instance.CurCategoryInstance = curInstance;
+        FightController.Instance.CurCategoryInstance = curInstance;
         rankDataContent.SetActive(true);
         CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
         CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
@@ -161,7 +161,7 @@ public class RankFrameWrapper : GuiFrameWrapper
 	private void OnDownloadFail(string message)
 	{
         isDownloading = false;
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 	}
 }

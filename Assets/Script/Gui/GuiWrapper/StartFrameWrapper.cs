@@ -25,28 +25,28 @@ public class StartFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "StatisticsBtn":
-                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.StatisticsFrame, MoveID.LeftOrDown, true);
+                GuiController.Instance.SwitchWrapperWithMove(GuiFrameID.StatisticsFrame, MoveID.LeftOrDown, true);
                 break;
             case "CategoryBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.CategoryFrame, true);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.CategoryFrame, true);
                 break;
             case "SetUpBtn":
-                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.SetUpFrame, MoveID.RightOrUp, true);
+                GuiController.Instance.SwitchWrapperWithMove(GuiFrameID.SetUpFrame, MoveID.RightOrUp, true);
                 break;
             case "ChapterBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.ChapterFrame, true);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.ChapterFrame, true);
                 break;
             case "BluetoothBtn":
                 //if (Application.isEditor) return;
                 if (string.IsNullOrEmpty(GameManager.Instance.UserName))
                 {
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
                     return;
                 }
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.BluetoothFrame, true);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.BluetoothFrame, true);
                 break;
 			case "RankBtn":
-				GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.RankFrame, true);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.RankFrame, true);
 				break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

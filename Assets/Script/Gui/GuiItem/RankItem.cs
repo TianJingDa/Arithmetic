@@ -26,9 +26,9 @@ public class RankItem : Item, IPointerClickHandler
         Init();
 		rankIndex.text = content.rank.ToString();
 		rankUserName.text = content.name;
-        string timeCost = GameManager.Instance.GetMutiLanguage("Text_90006");
+        string timeCost = LanguageController.Instance.GetLanguage("Text_90006");
 		rankTimeCost.text = string.Format(timeCost, content.timelast.ToString("f1"));
-        string accuracy = GameManager.Instance.GetMutiLanguage("Text_90007");
+        string accuracy = LanguageController.Instance.GetLanguage("Text_90007");
         rankAccuracy.text = string.Format(accuracy, content.accuracy.ToString("f1"));
     }
 
@@ -45,7 +45,7 @@ public class RankItem : Item, IPointerClickHandler
 		WWWForm form = new WWWForm();
 		form.AddField("userId", GameManager.Instance.UserID);
 		form.AddField("jwttoken", GameManager.Instance.Token);
-		form.AddField("model", (int)GameManager.Instance.CurCategoryInstance.patternID + 1);
+		form.AddField("model", (int)FightController.Instance.CurCategoryInstance.patternID + 1);
 		form.AddField("rankId", content.id);
 		GameManager.Instance.GetRankDetail(form, OnGetRankDetailSucceed, OnGetRankDetailFail);
     }
@@ -56,20 +56,21 @@ public class RankItem : Item, IPointerClickHandler
 		if(instance != null)
 		{
             instance.isUpload = true;
-            GameManager.Instance.CurSaveFileInstance = instance;
-			GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+            RankController.Instance.CurRankInstance = content;
+            RecordController.Instance.CurSaveFileInstance = instance;
+			GuiController.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
 		}
         else
         {
-            string message = GameManager.Instance.GetMutiLanguage("Text_20066");
+            string message = LanguageController.Instance.GetLanguage("Text_20066");
             OnGetRankDetailFail(message);
         }
 	}
 
 	private void OnGetRankDetailFail(string message)
 	{
-		GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+		GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 	}
 }
 

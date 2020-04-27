@@ -49,11 +49,13 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.StatisticsFrame;
         Init();
+        RecordController.Instance.OnRecordDeleted = RefreshSaveFileDict;
+        AchievementController.Instance.OnAchievementDeleted = RefreshAchievementDict;
         RefreshStatisticsTitle();
-        int totalTime = (int)GameManager.Instance.TotalTime;
+        int totalTime = (int)RecordController.Instance.TotalTime;
         TimeSpan ts = new TimeSpan(0, 0, totalTime);
         totelTimeImg_Text2.text = string.Format(totelTimeImg_Text2.text, ts.Hours, ts.Minutes, ts.Seconds);
-        totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, GameManager.Instance.TotalGame);
+        totelGameImg_Text2.text = string.Format(totelGameImg_Text2.text, RecordController.Instance.TotalGame);
         RefreshStatisticsContent();
         rawAchievementTextList = new List<Text>
         {
@@ -95,6 +97,12 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
         achievementToggleGroup                  = gameObjectDict["AchievementToggleGroup"].GetComponent<ToggleGroup>();
     }
 
+    private void OnDestroy()
+    {
+        RecordController.Instance.OnRecordDeleted = null;
+        AchievementController.Instance.OnAchievementDeleted = null;
+    }
+
     protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
@@ -103,10 +111,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             case "Achievement2StartFrameBtn":
             case "Save2StartFrameBtn":
             case "Statistics2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.StartFrame, MoveID.LeftOrDown, false);
+                GuiController.Instance.SwitchWrapperWithMove(GuiFrameID.StartFrame, MoveID.LeftOrDown, false);
                 break;
             case "Achievement2StatisticsFrameBtn":
-                GameManager.Instance.CurAction = null;
                 RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
@@ -116,7 +123,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiHorizontalMove(achievementWin, Screen.width, MoveID.LeftOrDown, canvasGroup, true);
                 break;
             case "Save2StatisticsFrameBtn":
-                GameManager.Instance.CurAction = null;
                 RefreshStatisticsContent();
                 CommonTool.GuiHorizontalMove(saveFileWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);
                 break;
@@ -165,7 +171,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         if (!string.IsNullOrEmpty(GameManager.Instance.UserName))
         {
-            string title = GameManager.Instance.GetMutiLanguage("Text_20072");
+            string title = LanguageController.Instance.GetLanguage("Text_20072");
             statisticsTitleImg_Text.text = string.Format(title, GameManager.Instance.UserName);
         }
     }
@@ -179,9 +185,9 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
 
     private void RefreshStatisticsContent()
     {
-        string achievementData = GameManager.Instance.GetMutiLanguage(achievementBtn_Text2.index);
-        achievementBtn_Text2.text = string.Format(achievementData, CommonTool.CalculateAllStar());
-        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
+        string achievementData = LanguageController.Instance.GetLanguage(achievementBtn_Text2.index);
+        achievementBtn_Text2.text = string.Format(achievementData, AchievementController.Instance.CalculateAllStar());
+        List<SaveFileInstance> saveFileList = RecordController.Instance.ReadAllRecords();
         saveFileBtn_Text2.text = saveFileList.Count.ToString();
     }
 
@@ -190,19 +196,17 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         achievementWin.SetActive(true);
         //if (summaryAchievementArray == null) summaryAchievementArray = achievementSummary.GetComponentsInChildren<SummaryAchievementItem>(true);
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict = new Dictionary<DifficultyID, List<AchievementInstance>>
                 {
-                    {DifficultyID.Junior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Junior)},
-                    {DifficultyID.Medium, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Medium)},
-                    {DifficultyID.Senior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Senior)},
-                    {DifficultyID.Ultimate, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Ultimate)},
+                    {DifficultyID.Junior, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Junior)},
+                    {DifficultyID.Medium, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Medium)},
+                    {DifficultyID.Senior, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Senior)},
+                    {DifficultyID.Ultimate, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Ultimate)},
                     //{SymbolID.Summary, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Summary)},
                     //{SymbolID.Hidden, achievementList.FindAll(x => x.cInstance.symbolID == SymbolID.Hidden)}
                 };
         achievementToggleGroup.SetAllTogglesOff();
         achievementToggleGroup.toggles[0].isOn = true;
-        GameManager.Instance.CurAction = RefreshAchievementDict;
     }
     private void RefreshSummaryAchievementPage()
     {
@@ -216,14 +220,14 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     {
         for(int i = 0; i < rawAchievementTextList.Count; i++)
         {
-            string data = GameManager.Instance.GetMutiLanguage(rawAchievementTextList[i].index);
+            string data = LanguageController.Instance.GetLanguage(rawAchievementTextList[i].index);
             rawAchievementTextList[i].text = string.Format(data, CommonTool.CalculateStar(achievementDict[(DifficultyID)i]));
         }
     }
 
     private void RefreshLastestAchievement()
     {
-        AchievementInstance lastestAchievement = GameManager.Instance.GetLastestAchievement();
+        AchievementInstance lastestAchievement = AchievementController.Instance.GetLastestAchievement();
         lastestAchievementItem.SendMessage("InitPrefabItem", lastestAchievement);
     }
     //private void RefreshSummaryAchievement()
@@ -253,8 +257,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     }
     private void RefreshAchievementDict()
     {
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        achievementDict[(DifficultyID)curAchievementIndex] = achievementList.FindAll(x => x.difficulty == curAchievementIndex);
+        achievementDict[(DifficultyID)curAchievementIndex] = AchievementController.Instance.GetAchievementByDifficulty(curAchievementIndex);
         ArrayList dataList = new ArrayList(achievementDict[(DifficultyID)curAchievementIndex]);
         CommonTool.RefreshScrollContent(achievementGrid, dataList, GuiItemID.AchievementItem);
     }
@@ -264,7 +267,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     #region 存档
     private void RefreshSaveFileWin()
     {
-        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
+        List<SaveFileInstance> saveFileList = RecordController.Instance.ReadAllRecords();
         curSaveFileCount = saveFileList.Count;
         saveFileDict = new Dictionary<SymbolID, List<SaveFileInstance>>
                 {
@@ -275,7 +278,6 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
                 };
         saveFileToggleGroup.SetAllTogglesOff();
         saveFileToggleGroup.toggles[0].isOn = true;
-        GameManager.Instance.CurAction = RefreshSaveFileDict;
     }
     private void RefreshSummarySaveFilePage()
     {
@@ -296,7 +298,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
             SaveFileInstance latestInstance = instanceList[instanceList.Count - 1];
             item.SendMessage("InitPrefabItem", latestInstance);
         }
-        string content = GameManager.Instance.GetMutiLanguage(summary.index);
+        string content = LanguageController.Instance.GetLanguage(summary.index);
         summary.text = string.Format(content, instanceList.Count, curSaveFileCount);
     }
     private void RefreshSaveFileList()
@@ -313,7 +315,7 @@ public class StatisticsFrameWrapper : GuiFrameWrapper
     private void RefreshSaveFileDict()
     {
         SymbolID symbolID = (SymbolID)curSaveFileIndex;
-        List<SaveFileInstance> saveFileList = GameManager.Instance.ReadAllRecords();
+        List<SaveFileInstance> saveFileList = RecordController.Instance.ReadAllRecords();
         curSaveFileCount = saveFileList.Count;
         saveFileDict[symbolID] = saveFileList.FindAll(x => x.cInstance.symbolID == symbolID);
         ArrayList dataList = new ArrayList(saveFileDict[symbolID]);

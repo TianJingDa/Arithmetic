@@ -28,13 +28,13 @@ public class ChapterItem: MonoBehaviour
         {
             stars[i].SetActive((i + 1) <= content.star);
         }
-        GetComponent<Image>().sprite = GameManager.Instance.GetSprite(content.chapterImageIndex);
+        GetComponent<Image>().sprite = SkinController.Instance.GetSprite(content.chapterImageIndex);
     }
 
     private void OnItemClick()
     {
         detailWin.SetActive(true);
-        CommonTool.GuiScale(detailWin, GameManager.Instance.CurCanvasGroup, true);
+        CommonTool.GuiScale(detailWin, GuiController.Instance.CurCanvasGroup, true);
         Dictionary<string, GameObject> detailWinDict = CommonTool.InitGameObjectDict(detailWin);
         CommonTool.InitText(detailWin);
         CommonTool.InitImage(detailWin);
@@ -56,15 +56,15 @@ public class ChapterItem: MonoBehaviour
         chapterDetailNumber.gameObject.SetActive(!isTimePattern);
         if (isTimePattern)
         {
-            int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
+            int amount = FightController.Instance.GetTimeAmount(content.cInstance.amountID);
             chapterDetailTime.text = string.Format(chapterDetailTime.text, amount);
         }
         else
         {
-            int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
+            int amount = FightController.Instance.GetNumberAmount(content.cInstance.amountID);
             chapterDetailNumber.text = string.Format(chapterDetailNumber.text, amount);
         }
-        string symbol = GameManager.Instance.SymbolArray[(int)content.cInstance.symbolID];
+        string symbol = FightController.Instance.GetSymbol(content.cInstance.symbolID);
         chapterDetailSymbol.text = string.Format(chapterDetailSymbol.text, symbol);
         chapterDetailDigit.text = string.Format(chapterDetailDigit.text, (int)(content.cInstance.digitID + 2));
         chapterDetailOperand.text = string.Format(chapterDetailOperand.text, (int)(content.cInstance.operandID + 2));
@@ -77,13 +77,13 @@ public class ChapterItem: MonoBehaviour
     }
     private void InitCondition(Text condition, int starCount)
     {
-        string text = GameManager.Instance.GetMutiLanguage(condition.index);
+        string text = LanguageController.Instance.GetLanguage(condition.index);
         condition.text = string.Format(text, content.accuracy - (3 - starCount) * 5, (content.meanTime * (1 + (3-starCount) * 0.1)).ToString("f1"));
     }
     private void OnFightClick(BaseEventData data)
     {
-		GameManager.Instance.CompetitionGUI = GuiFrameID.ChapterFrame;
-        GameManager.Instance.CurCategoryInstance = content.cInstance;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.FightFrame);
+		GuiController.Instance.CompetitionGUI = GuiFrameID.ChapterFrame;
+        FightController.Instance.CurCategoryInstance = content.cInstance;
+        GuiController.Instance.SwitchWrapper(GuiFrameID.FightFrame);
     }
 }

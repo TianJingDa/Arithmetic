@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkinController : Controller 
+public sealed class SkinController : Controller 
 {
     #region C#单例
     private static SkinController instance = null;
@@ -20,9 +20,23 @@ public class SkinController : Controller
 
     private string path;
 
-    public Sprite GetSpriteResource(SkinID id,string index)
+    public SkinID CurSkinID
     {
-        GameObject resouce = Resources.Load<GameObject>(string.Format(path, id) + index);
+        get
+        {
+            int skinID = PlayerPrefs.GetInt("SkinID", 0);
+            return (SkinID)skinID;
+        }
+        set
+        {
+            int skinID = (int)value;
+            PlayerPrefs.SetInt("SkinID", skinID);
+        }
+    }
+
+    public Sprite GetSprite(string index)
+    {
+        GameObject resouce = Resources.Load<GameObject>(string.Format(path, CurSkinID) + index);
         if (resouce) return resouce.GetComponent<SpriteRenderer>().sprite;
         else return null;
     }

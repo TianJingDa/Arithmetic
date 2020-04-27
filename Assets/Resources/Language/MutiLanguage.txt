@@ -133,6 +133,9 @@ Text_20072,{0}的统计数据,TJD
 Text_20073,非法大名，大侠请换一个吧！,TJD
 Text_20074,大名已存在！,TJD
 Text_20075,试题详情,TJD
+Text_20076,分享成功,TJD
+Text_20077,分享失败,TJD
+Text_20078,分享取消,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
@@ -288,3 +291,5 @@ Text_90005,正确率,TJD
 Text_90006,{0}秒,TJD
 Text_90007,{0}%,TJD
 Text_90008,战绩已上传！,TJD
+Text_90009,{0}的排名,TJD
+Text_90010,全国排名：{0},TJD

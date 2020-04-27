@@ -30,14 +30,13 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.SaveFileFrame;
         Init();
-        content = GameManager.Instance.CurSaveFileInstance;
+        content = RecordController.Instance.CurSaveFileInstance;
         saveFileDetailTime.text = string.Format(saveFileDetailTime.text, content.timeCost.ToString("f1"));
         saveFileDetailAmount.text = string.Format(saveFileDetailAmount.text, content.qInstancList.Count);
         saveFileDetailAccuracy.text = string.Format(saveFileDetailAccuracy.text, content.accuracy.ToString("f1"));
-        achievementBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.ShareFrame 
+        achievementBtn.SetActive(GuiController.Instance.LastGUI != GuiFrameID.ShareFrame 
                               && !string.IsNullOrEmpty(content.achievementName));
         uploadDataBtn.SetActive(!content.isUpload);
-        shareBtn.SetActive(GameManager.Instance.LastGUI != GuiFrameID.RankFrame);
         isBluetooth = !string.IsNullOrEmpty(content.opponentName);
         commonResult.SetActive(!isBluetooth);
         bluetoothResult.SetActive(isBluetooth);
@@ -76,12 +75,13 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "ShareBtn":
-                GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                var shareID = GuiController.Instance.LastGUI == GuiFrameID.RankFrame ? ShareID.Rank : ShareID.SaveFile;
+                GameManager.Instance.CurShareInstance = new ShareInstance(shareID);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "BluetoothShareBtn":
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "OnlyWrongBtn":
             case "BluetoothOnlyWrongBtn":
@@ -89,13 +89,13 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 RefreshSettlementGrid();
                 break;
             case "SaveFileDetailClosedBtn":
-                CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false, () => GameManager.Instance.SwitchWrapper(GuiFrameID.None));
+                CommonTool.GuiVerticalMove(saveFileDetailBg, Screen.height, MoveID.LeftOrDown, canvasGroup, false, () => GuiController.Instance.SwitchWrapper(GuiFrameID.None));
                 break;
             case "AchievementBtn":
-                AchievementInstance instance = GameManager.Instance.GetAchievement(content.achievementName);
-                GameManager.Instance.CurAchievementInstance = instance;
+                AchievementInstance instance = AchievementController.Instance.GetAchievement(content.achievementName);
+                AchievementController.Instance.CurAchievementInstance = instance;
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
 			case "UploadDataBtn":
                 if (isUploading)
@@ -105,15 +105,15 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 
 				if(string.IsNullOrEmpty(GameManager.Instance.UserName))
 				{
-					GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
 					return;
 				}
 
                 if (content.isUpload)
                 {
-                    string message = GameManager.Instance.GetMutiLanguage("Text_90008");
-                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    string message = LanguageController.Instance.GetLanguage("Text_90008");
+                    GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
                     return;
                 }
 
@@ -167,15 +167,15 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
     {
         isUploading = false;
         content.isUpload = true;
-        GameManager.Instance.EditRecord(content);
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        RecordController.Instance.RefreshRecord(content);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
     private void OnUploadFail(string message)
     {
         isUploading = false;
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 }

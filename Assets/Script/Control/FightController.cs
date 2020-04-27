@@ -22,9 +22,14 @@ public sealed class FightController : Controller
     }
     #endregion
 
+    private int[] amountArray_Time;
+    private int[] amountArray_Number;
+    private string[] symbolArray;
     private List<List<int>> workList;
     private List<List<int>> checkList;
     private List<DivisionDataBase> dataBase;
+
+    public CategoryInstance CurCategoryInstance { get; set; }
 
     private void InitFightData()
     {
@@ -41,14 +46,18 @@ public sealed class FightController : Controller
         dataBase.Add(d_3_3List);
         dataBase.Add(d_4_2List);
         dataBase.Add(d_4_3List);
+
+        amountArray_Time = new int[] { 60, 180, 300 };
+        amountArray_Number = new int[] { 10, 30, 50 };
+        symbolArray = new string[] { "＋", "－", "×", "÷" };
     }
 
-    public void ResetList(SymbolID symbolID, DigitID digitID, OperandID operandID)
+    public void ResetList()
     {
-        if (symbolID == SymbolID.Division)
+        if (CurCategoryInstance.symbolID == SymbolID.Division)
         {
             workList.Clear();
-            DivisionDataBase divisionDataBase = dataBase.Find(x => x.digitID == digitID && x.operandID == operandID);
+            DivisionDataBase divisionDataBase = dataBase.Find(x => x.digitID == CurCategoryInstance.digitID && x.operandID == CurCategoryInstance.operandID);
             if (divisionDataBase != null)
             {
                 List<DivisionQuestionList> qList = divisionDataBase.questionList;
@@ -64,7 +73,7 @@ public sealed class FightController : Controller
             }
             else
             {
-                MyDebug.LogYellow("divisionDataBase == null! digitID = " + digitID + ", operandID:" + operandID);
+                MyDebug.LogYellow("divisionDataBase == null! digitID = " + CurCategoryInstance.digitID + ", operandID:" + CurCategoryInstance.operandID);
             }
         }
         else
@@ -72,6 +81,62 @@ public sealed class FightController : Controller
             checkList.Clear();
         }
     }
+
+    /// <summary>
+    /// 获取试题参数
+    /// </summary>
+    /// <param name="pattern"></param>
+    /// <param name="amount"></param>
+    /// <param name="symbol"></param>
+    public void GetFightParameter(out string pattern, out float amount, out string symbol)
+    {
+        pattern = CurCategoryInstance.patternID.ToString();
+        switch (CurCategoryInstance.patternID)
+        {
+            case PatternID.Time:
+                amount = amountArray_Time[(int)CurCategoryInstance.amountID];
+                break;
+            case PatternID.Number:
+                amount = amountArray_Number[(int)CurCategoryInstance.amountID];
+                break;
+            default:
+                amount = -1;
+                MyDebug.LogYellow("Can not get AMOUNT!");
+                break;
+        }
+        symbol = symbolArray[(int)CurCategoryInstance.symbolID];
+    }
+
+    /// <summary>
+    /// 获取限时模式中的时间
+    /// </summary>
+    /// <param name="amountID"></param>
+    /// <returns></returns>
+    public int GetTimeAmount(AmountID amountID)
+    {
+        return amountArray_Time[(int)amountID];
+    }
+
+    /// <summary>
+    /// 获取限数模式中的数量
+    /// </summary>
+    /// <param name="amountID"></param>
+    /// <returns></returns>
+    public int GetNumberAmount(AmountID amountID)
+    {
+        return amountArray_Number[(int)amountID];
+    }
+
+    /// <summary>
+    /// 获取法则符号
+    /// </summary>
+    /// <param name="symbolID"></param>
+    /// <returns></returns>
+    public string GetSymbol(SymbolID symbolID)
+    {
+        return symbolArray[(int)symbolID];
+    }
+
     /// <summary>
     /// 获取试题
     /// </summary>
@@ -79,22 +144,22 @@ public sealed class FightController : Controller
     /// <param name="digitID"></param>
     /// <param name="operandID"></param>
     /// <returns></returns>
-    public List<int> GetQuestionInstance(SymbolID symbolID, DigitID digitID, OperandID operandID)
+    public List<int> GetQuestionInstance()
     {
         List<int> instance = new List<int>();
-        switch (symbolID)
+        switch (CurCategoryInstance.symbolID)
         {
             case SymbolID.Addition:
-                instance = GetAdditionInstance(digitID, operandID);
+                instance = GetAdditionInstance();
                 break;
             case SymbolID.Subtraction:
-                instance = GetSubtractionInstance(digitID, operandID);
+                instance = GetSubtractionInstance();
                 break;
             case SymbolID.Multiplication:
-                instance = GetMultiplicationInstance(digitID, operandID);
+                instance = GetMultiplicationInstance();
                 break;
             case SymbolID.Division:
-                instance = GetDivisionInstance(digitID, operandID);
+                instance = GetDivisionInstance();
                 break;
         }
         return instance;
@@ -105,15 +170,15 @@ public sealed class FightController : Controller
     /// <param name="digitID"></param>
     /// <param name="operandID"></param>
     /// <returns></returns>
-    private List<int> GetAdditionInstance(DigitID digitID, OperandID operandID)
+    private List<int> GetAdditionInstance()
     {
         List<int> instance = null;
         int sum = 0;
-        int min = (int)Mathf.Pow(10, (int)digitID + 1);
-        int max = (int)Mathf.Pow(10, (int)digitID + 2);
+        int min = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID + 1);
+        int max = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID + 2);
         do
         {
-            instance = GetInstance(min, max, (int)operandID);
+            instance = GetInstance(min, max, (int)CurCategoryInstance.operandID);
             sum = GetSum(instance);
         }
         while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance));
@@ -128,15 +193,15 @@ public sealed class FightController : Controller
     /// <param name="digitID"></param>
     /// <param name="operandID"></param>
     /// <returns></returns>
-    private List<int> GetSubtractionInstance(DigitID digitID, OperandID operandID)
+    private List<int> GetSubtractionInstance()
     {
         List<int> instance = null;
         int difference = 0;
-        int min = (int)Mathf.Pow(10, (int)digitID + 1);
-        int max = (int)Mathf.Pow(10, (int)digitID + 2);
+        int min = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID + 1);
+        int max = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID + 2);
         do
         {
-            instance = GetInstance(min, max, (int)operandID);
+            instance = GetInstance(min, max, (int)CurCategoryInstance.operandID);
         }
         while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanMinus(instance, min, out difference));
         checkList.Add(instance);
@@ -153,15 +218,15 @@ public sealed class FightController : Controller
     /// <param name="digitID"></param>
     /// <param name="operandID"></param>
     /// <returns></returns>
-    private List<int> GetMultiplicationInstance(DigitID digitID, OperandID operandID)
+    private List<int> GetMultiplicationInstance()
     {
         List<int> instance = null;
         int product = 0;
-        int min = (int)Mathf.Pow(10, (int)digitID);
-        int max = (int)Mathf.Pow(10, (int)digitID + 2);
+        int min = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID);
+        int max = (int)Mathf.Pow(10, (int)CurCategoryInstance.digitID + 2);
         do
         {
-            instance = GetInstance(min + 1, max, (int)operandID);
+            instance = GetInstance(min + 1, max, (int)CurCategoryInstance.operandID);
             product = GetProduct(instance);
         }
         while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanMultiply(instance, min));
@@ -176,28 +241,8 @@ public sealed class FightController : Controller
     /// <param name="digitID"></param>
     /// <param name="operandID"></param>
     /// <returns></returns>
-    private List<int> GetDivisionInstance(DigitID digitID, OperandID operandID)
+    private List<int> GetDivisionInstance()
     {
-        #region 原算法
-        //int min = 0;
-        //int max = 0;
-        //if(digitID == DigitID.FourDigits && operandID == OperandID.TwoNumbers)
-        //{
-        //    min = 10;
-        //    max = 1000;
-        //}
-        //else
-        //{
-        //    min = 1;
-        //    max = 100;
-        //}
-        //
-        //do
-        //{
-        //    instance = GetInstance(min + 1, max, (int)operandID);
-        //}
-        //while (CanDividedByTen(instance) || HasInstance(instance) || IsRepeat(instance) || !CanDevide(instance, digitID, out product));
-        #endregion
         if (workList.Count <= 0) return null;
         int index = Random.Range(0, workList.Count);
         List<int> instance = workList[index];

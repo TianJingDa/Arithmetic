@@ -75,8 +75,8 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         isBluetooth = !string.IsNullOrEmpty(content.opponentName);
         saveFileName.text = content.fileName;
         saveFileAchiOrBLE.gameObject.SetActive(hasAchievement || isBluetooth);
-        if (hasAchievement) saveFileAchiOrBLE.sprite = GameManager.Instance.GetSprite("Image_20006");
-        if (isBluetooth) saveFileAchiOrBLE.sprite = GameManager.Instance.GetSprite("Image_10006");
+        if (hasAchievement) saveFileAchiOrBLE.sprite = SkinController.Instance.GetSprite("Image_20006");
+        if (isBluetooth) saveFileAchiOrBLE.sprite = SkinController.Instance.GetSprite("Image_10006");
 
         int digit = (int)content.cInstance.digitID + 2;
         int operand = (int)content.cInstance.operandID + 2;
@@ -84,31 +84,36 @@ public class SaveFileItem : Item, IPointerDownHandler, IPointerExitHandler, IPoi
         {
             saveFileType_Time.gameObject.SetActive(true);
             saveFileType_Number.gameObject.SetActive(false);
-            int amount = GameManager.Instance.AmountArray_Time[(int)content.cInstance.amountID];
+            int amount = FightController.Instance.GetTimeAmount(content.cInstance.amountID);
             saveFileType_Time.text = string.Format(saveFileType_Time.text, amount, digit, operand);
         }
         else
         {
             saveFileType_Time.gameObject.SetActive(false);
             saveFileType_Number.gameObject.SetActive(true);
-            int amount = GameManager.Instance.AmountArray_Number[(int)content.cInstance.amountID];
+            int amount = FightController.Instance.GetNumberAmount(content.cInstance.amountID);
             saveFileType_Number.text = string.Format(saveFileType_Number.text, amount, digit, operand);
         }
     }
     protected void OnShortPress()
     {
         if (content == null) return;
-        GameManager.Instance.CurSaveFileInstance = content;
-        GameManager.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
+        RecordController.Instance.CurSaveFileInstance = content;
+        GuiController.Instance.SwitchWrapper(GuiFrameID.SaveFileFrame, true);
     }
 
     protected void OnLongPress()
     {
         if (content == null) return;
-        string tip = GameManager.Instance.GetMutiLanguage("Text_20015");
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip,
-                      () => GameManager.Instance.DeleteRecord(content.fileName, content.achievementName), null);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        string tip = LanguageController.Instance.GetLanguage("Text_20015");
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Double, tip, OnDeleteConfirmed, null);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OnDeleteConfirmed()
+    {
+        RecordController.Instance.DeleteRecord(content.fileName, true);
+        AchievementController.Instance.DeleteAchievement(content.achievementName);
     }
 
 }

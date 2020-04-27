@@ -62,9 +62,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         id = GuiFrameID.SetUpFrame;
         Init();
 #if UNITY_ANDROID
-        editionImg_Text.text = GameManager.Instance.GetMutiLanguage("Text_40008");
+        editionImg_Text.text = LanguageController.Instance.GetLanguage("Text_40008");
 #elif UNITY_IOS
-        editionImg_Text.text = GameManager.Instance.GetMutiLanguage("Text_40050");
+        editionImg_Text.text = LanguageController.Instance.GetLanguage("Text_40050");
 #endif
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
@@ -176,7 +176,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         }
         for(int i = 0; i < dpd.options.Count; i++)
         {
-            dpd.options[i].text = GameManager.Instance.GetMutiLanguage(dpd.options[i].text);
+            dpd.options[i].text = LanguageController.Instance.GetLanguage(dpd.options[i].text);
         }
         dpd.value = index;
         dpd.RefreshShownValue();
@@ -198,7 +198,6 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             //resetDelegateList.Add(ResetTotalGame);
             resetDelegateList.Add(ResetAchievement);
             resetDelegateList.Add(ResetSaveFile);
-            //resetDelegateList.Add(ResetSaveFileWithoutAchievement);
             resetDelegateList.Add(ResetSetUp);
         }
     }
@@ -221,14 +220,17 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     /// </summary>
     private void ResetAchievement()
     {
-        GameManager.Instance.ResetAchievement();
+        List<string> fileNameList = AchievementController.Instance.GetAllFileNameWithAchievement();
+        RecordController.Instance.DeleteRecords(fileNameList);
+        AchievementController.Instance.DeleteAllAchievement();
     }
     /// <summary>
     /// 重置所有游戏存档
     /// </summary>
     private void ResetSaveFile()
     {
-        GameManager.Instance.ResetSaveFile();
+        RecordController.Instance.DeleteAllRecords();
+        AchievementController.Instance.DeleteAllAchievement();
     }
     /// <summary>
     /// 重置所有不带成就的游戏存档
@@ -268,7 +270,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "LanguageBtn":
                 tempLanguageID = -1;
                 languageWin.SetActive(true);
-                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)LanguageController.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
                 CommonTool.GuiHorizontalMove(languageWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
@@ -276,8 +278,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiHorizontalMove(languageWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "LanguageApplyBtn":
-                GameManager.Instance.CurLanguageID = (LanguageID)tempLanguageID;
-                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)GameManager.Instance.CurLanguageID);
+                LanguageController.Instance.CurLanguageID = (LanguageID)tempLanguageID;
+                RefreshToggleGroup(languageToggleGroup, languageTogglesAnchoredPositonList, (int)LanguageController.Instance.CurLanguageID);
                 languageApplyBtn.interactable = false;
                 RefreshGui();
                 break;
@@ -285,9 +287,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 RectTransform layoutRect = layoutWin.GetComponent<RectTransform>();
                 if (layoutRect) layoutRect.anchoredPosition = Vector2.zero;
                 firstInLayout = true;
-                tempLayoutID = (int)GameManager.Instance.CurLayoutID;
-                tempHandednessID = (int)GameManager.Instance.CurHandednessID;
-                tempKeyboardID = (int)GameManager.Instance.CurKeyboardID;
+                tempLayoutID = (int)LayoutController.Instance.CurLayoutID;
+                tempHandednessID = (int)LayoutController.Instance.CurHandednessID;
+                tempKeyboardID = (int)LayoutController.Instance.CurKeyboardID;
                 layoutWin.SetActive(true);
                 RefreshDropdown(layoutDropdown, tempLayoutID);
                 RefreshDropdown(handednessDropdown, tempHandednessID);
@@ -304,9 +306,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiHorizontalMove(layoutWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "LayoutApplyBtn":
-                GameManager.Instance.CurLayoutID = (LayoutID)tempLayoutID;
-                GameManager.Instance.CurHandednessID = (HandednessID)tempHandednessID;
-                GameManager.Instance.CurKeyboardID = (KeyboardID)tempKeyboardID;
+                LayoutController.Instance.CurLayoutID = (LayoutID)tempLayoutID;
+                LayoutController.Instance.CurHandednessID = (HandednessID)tempHandednessID;
+                LayoutController.Instance.CurKeyboardID = (KeyboardID)tempKeyboardID;
                 layoutApplyBtn.interactable = false;
                 break;
             case "AboutUs2StartFrameBtn":
@@ -316,7 +318,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "SetUp2StartFrameBtn":
             case "Skin2StartFrameBtn":
             case "Strategy2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithMove(GuiFrameID.StartFrame, MoveID.RightOrUp, false);
+                GuiController.Instance.SwitchWrapperWithMove(GuiFrameID.StartFrame, MoveID.RightOrUp, false);
                 break;
             case "ShareUsBtn":
                 shareUsWin.SetActive(true);
@@ -364,7 +366,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
             case "SkinBtn":
                 tempSkinID = -1;
                 skinWin.SetActive(true);
-                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
+                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)SkinController.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
                 CommonTool.GuiHorizontalMove(skinWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
                 break;
@@ -372,8 +374,8 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 CommonTool.GuiHorizontalMove(skinWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
                 break;
             case "SkinApplyBtn":
-                GameManager.Instance.CurSkinID = (SkinID)tempSkinID;
-                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)GameManager.Instance.CurSkinID);
+                SkinController.Instance.CurSkinID = (SkinID)tempSkinID;
+                RefreshToggleGroup(skinToggleGroup, skinTogglesAnchoredPositonList, (int)SkinController.Instance.CurSkinID);
                 skinApplyBtn.interactable = false;
                 RefreshGui();
                 break;

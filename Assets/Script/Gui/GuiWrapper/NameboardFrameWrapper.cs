@@ -42,11 +42,11 @@ public class NameboardFrameWrapper : GuiFrameWrapper
             case "NameBoardInputFieldConfirmBtn":
                 if (string.IsNullOrEmpty(userName)) return;
                 nameTipBoard.SetActive(true);
-                string curName = GameManager.Instance.GetMutiLanguage(nameTipBoardContent.index);
+                string curName = LanguageController.Instance.GetLanguage(nameTipBoardContent.index);
                 nameTipBoardContent.text = string.Format(curName, userName);
                 break;
             case "NameBoardInputFieldCancelBtn":
-                GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.None);
                 break;
 			case "NameTipBoardConfirmBtn":
 				if(GameManager.Instance.IsLogin)
@@ -74,8 +74,8 @@ public class NameboardFrameWrapper : GuiFrameWrapper
 
     private void OnSilentLoginFail(string message)
     {
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
     private void CreateUserName()
@@ -115,39 +115,39 @@ public class NameboardFrameWrapper : GuiFrameWrapper
                     isCreating = false;
                     GameManager.Instance.IsNewPlayer = false;
                     GameManager.Instance.UserName = name;
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.None);
                     yield break;
                 }
                 else if(response.code == (int)CodeID.NAME_FILTER_ERROR)
                 {
                     MyDebug.LogYellow("Create User Name Fail: Illegal");
-                    message = GameManager.Instance.GetMutiLanguage("Text_20073");
+                    message = LanguageController.Instance.GetLanguage("Text_20073");
                 }
                 else if(response.code == (int)CodeID.NAME_REPEAT_ERROR)
                 {
                     MyDebug.LogYellow("Create User Name Fail: Repeat");
-                    message = GameManager.Instance.GetMutiLanguage("Text_20074");
+                    message = LanguageController.Instance.GetLanguage("Text_20074");
                 }
                 else
                 {
 					MyDebug.LogYellow("Create User Name Fail:" + response.code);
-                    message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                    message = LanguageController.Instance.GetLanguage("Text_20066");
                 }
             }
             else
             {
                 MyDebug.LogYellow("Create User Name: Message Is Not Response!");
-                message = GameManager.Instance.GetMutiLanguage("Text_20066");
+                message = LanguageController.Instance.GetLanguage("Text_20066");
             }
         }
         else
         {
             MyDebug.LogYellow("Create User Name Fail: Long Time!");
-            message = GameManager.Instance.GetMutiLanguage("Text_20067");
+            message = LanguageController.Instance.GetLanguage("Text_20067");
         }
         isCreating = false;
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
 	[Serializable]

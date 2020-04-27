@@ -43,7 +43,11 @@ public enum ControllerID
     FontController,            //字体控制器
     TextColorController,       //字色控制器
     RecordController,          //存档控制器
-	RankController             //排行榜控制器
+	RankController,            //排行榜控制器
+    GuiController,             //界面控制器
+    BluetoothController,       //蓝牙控制器
+    LoginController,           //登录控制器
+    ShareController            //分享控制器
 }
 public enum SkinID
 {
@@ -128,7 +132,8 @@ public enum ShareID
 {
     Achievement,               //成就
     SaveFile,                  //存档
-    Bluetooth                  //蓝牙
+    Bluetooth,                 //蓝牙
+    Rank                       //排行榜
 }
 
 public enum CodeID

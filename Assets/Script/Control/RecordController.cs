@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public sealed class RecordController : Controller 
 {
@@ -24,12 +25,90 @@ public sealed class RecordController : Controller
     private readonly string saveDir;
     private readonly string fileFullName;
 
+    public SaveFileInstance CurSaveFileInstance { get; set; }
+
+    public Action OnRecordDeleted;
+
+    public float TotalTime
+    {
+        get
+        {
+            float totalTime = PlayerPrefs.GetFloat("TotalTime", 0);
+            return totalTime;
+        }
+        private set
+        {
+            float totalTime = value;
+            PlayerPrefs.SetFloat("TotalTime", totalTime);
+        }
+    }
+    public int TotalGame
+    {
+        get
+        {
+            int totalGame = PlayerPrefs.GetInt("TotalGame", 0);
+            return totalGame;
+        }
+        private set
+        {
+            int totalGame = value;
+            PlayerPrefs.SetInt("TotalGame", totalGame);
+        }
+    }
+
+    public bool NewSaveFile
+    {
+        get
+        {
+            int newSaveFile = PlayerPrefs.GetInt("NewSaveFile", 0);
+            return newSaveFile != 0;
+        }
+        private set
+        {
+            int newSaveFile = value ? 1 : 0;
+            PlayerPrefs.SetInt("NewSaveFile", newSaveFile);
+        }
+    }
+
     private void InitRecordData()
     {
 
     }
 
-    public void SaveRecord(string toSave, string fileName)
+    public void SaveRecord(SaveFileInstance curSaveFileInstance, List<List<int>> resultList, string symbol, float timeCost)
+    {
+        curSaveFileInstance.isUpload = false;
+
+        curSaveFileInstance.timeCost = timeCost;
+
+        string finishTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+        curSaveFileInstance.fileName = finishTime;
+
+        float accuracy = CalculateAccuracy(resultList);
+        curSaveFileInstance.accuracy = accuracy;
+
+        List<QuestionInstance> qInstanceList = ConvertToInstanceList(resultList, symbol);
+        curSaveFileInstance.qInstancList = qInstanceList;
+
+        curSaveFileInstance.achievementName = "";
+
+        curSaveFileInstance.opponentName = "";
+
+        CurSaveFileInstance = curSaveFileInstance;
+        string toSave = JsonUtility.ToJson(curSaveFileInstance);
+        SaveRecord(toSave, finishTime);
+
+        TotalGame++;
+        TotalTime += timeCost;
+    }
+
+    public void RefreshRecord(SaveFileInstance instance)
+    {
+        string toSave = JsonUtility.ToJson(instance);
+        SaveRecord(toSave, instance.fileName);
+    }
+
+    private void SaveRecord(string toSave, string fileName)
     {
         if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
         string fullName = string.Format(fileFullName, fileName);
@@ -59,7 +138,7 @@ public sealed class RecordController : Controller
         return saveFileInstance;
     }
 
-    public void DeleteAllRecord()
+    public void DeleteAllRecords()
     {
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
         for(int i = 0; i < fileNames.Length; i++)
@@ -67,17 +146,8 @@ public sealed class RecordController : Controller
             File.Delete(fileNames[i]);
         }
     }
-    public void DeleteRecordWithoutAchievement(List<string> fileNameList)
-    {
-        string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
-        for (int i = 0; i < fileNames.Length; i++)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(fileNames[i]);
-            if (fileNameList.Contains(fileName)) continue;
-            File.Delete(fileNames[i]);
-        }
-    }
-    public void DeleteRecordWithAchievement(List<string> fileNameList)
+
+    public void DeleteRecords(List<string> fileNameList)
     {
         string[] fileNames = Directory.GetFiles(saveDir, "*.sav");
         for (int i = 0; i < fileNames.Length; i++)
@@ -87,20 +157,45 @@ public sealed class RecordController : Controller
         }
     }
 
-
-    public bool DeleteRecord(string fileName)
+    public void DeleteRecord(string fileName, bool withAction = false)
     {
         string fullName = string.Format(fileFullName, fileName);
         if (File.Exists(fullName))
         {
             File.Delete(fullName);
             MyDebug.LogGreen("Delete:" + fileName);
-            return !File.Exists(fullName);
+
+            if (withAction && OnRecordDeleted != null)
+            {
+                OnRecordDeleted();
+            }
         }
         else
         {
             MyDebug.LogYellow("The file does not exist!!!");
-            return false;
         }
     }
+
+    private float CalculateAccuracy(List<List<int>> resultList)
+    {
+        List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
+        float accuracy = (float)rightList.Count * 100 / resultList.Count;
+        return accuracy;
+    }
+
+    private List<QuestionInstance> ConvertToInstanceList(List<List<int>> resultList, string symbol)
+    {
+        List<QuestionInstance> qInstanceList = new List<QuestionInstance>();
+        string count = resultList.Count.ToString();
+        for (int i = 0; i < resultList.Count; i++)
+        {
+            QuestionInstance questionInstance = new QuestionInstance();
+            questionInstance.index = (i + 1).ToString().PadLeft(count.Length, '0');
+            questionInstance.symbol = symbol;
+            questionInstance.instance = resultList[i];
+            qInstanceList.Add(questionInstance);
+        }
+        return qInstanceList;
+    }
+
 }

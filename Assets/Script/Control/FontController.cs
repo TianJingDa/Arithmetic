@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FontController : Controller 
+public sealed class FontController : Controller 
 {
     #region C#单例
     private static FontController instance = null;
@@ -20,7 +20,7 @@ public class FontController : Controller
 
     private string path;
 
-    public Font GetFontResource(SkinID sID,LanguageID lID)
+    public Font GetFont(SkinID sID,LanguageID lID)
     {
         GameObject resouce = Resources.Load<GameObject>(string.Format(path, sID, lID));
         return resouce.GetComponent<GUIText>().font;

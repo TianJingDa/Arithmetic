@@ -36,7 +36,7 @@ public class FightFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         id = GuiFrameID.FightFrame;
-        Dictionary<string, MyRectTransform> rectTransforms = GameManager.Instance.GetLayoutData();
+        Dictionary<string, MyRectTransform> rectTransforms = LayoutController.Instance.GetLayoutData();
         InitLayout(rectTransforms);
         Init();
 
@@ -48,8 +48,8 @@ public class FightFrameWrapper : GuiFrameWrapper
         equalImg.SetActive(false);
         countdownBg.SetActive(true);
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
-        GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
-        GameManager.Instance.ResetList();
+        FightController.Instance.GetFightParameter(out pattern, out amount, out symbol);
+        FightController.Instance.ResetList();
         ClearAllText();
         StartCoroutine(StartFight());
     }
@@ -106,7 +106,7 @@ public class FightFrameWrapper : GuiFrameWrapper
 			case "ConfirmBtn":
 				StopAllCoroutines ();
 				CancelInvoke ();
-				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.CompetitionGUI,MoveID.RightOrUp,false);
+                GuiController.Instance.SwitchWrapperWithMove(GuiController.Instance.CompetitionGUI, MoveID.RightOrUp, false);
 	            break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -129,7 +129,7 @@ public class FightFrameWrapper : GuiFrameWrapper
             myTrans.localEulerAngles = new Vector3(pair.Value.localEulerAngles.x, pair.Value.localEulerAngles.y, pair.Value.localEulerAngles.z);
         }
 
-        if(GameManager.Instance.CurKeyboardID == KeyboardID.Up)
+        if(LayoutController.Instance.CurKeyboardID == KeyboardID.Up)
         {
             ExchangePosition(rectTransformDict["1"], rectTransformDict["7"]);
             ExchangePosition(rectTransformDict["2"], rectTransformDict["8"]);
@@ -209,7 +209,7 @@ public class FightFrameWrapper : GuiFrameWrapper
                 return;
             }
         }
-        curInstance = GameManager.Instance.GetQuestionInstance();
+        curInstance = FightController.Instance.GetQuestionInstance();
         if (curInstance == null)
         {
             MyDebug.LogYellow("curInstance is NULL!");
@@ -246,8 +246,14 @@ public class FightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-        bool isAchievement = GameManager.Instance.CompetitionGUI == GuiFrameID.ChapterFrame;
-        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, isAchievement, false);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
+        SaveFileInstance curSaveFileInstance = new SaveFileInstance();
+        curSaveFileInstance.cInstance = FightController.Instance.CurCategoryInstance;
+        RecordController.Instance.SaveRecord(curSaveFileInstance, resultList, symbol, timeCost);
+        if(GuiController.Instance.CompetitionGUI == GuiFrameID.ChapterFrame
+        && AchievementController.Instance.CheckAchievement(curSaveFileInstance))
+        {
+            RecordController.Instance.RefreshRecord(curSaveFileInstance);
+        }
+        GuiController.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }

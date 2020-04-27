@@ -81,18 +81,18 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 RefreshSettlementGrid();
                 break;
             case "Settlement2CategoryFrameBtn":
-				GameManager.Instance.SwitchWrapperWithMove(GameManager.Instance.CompetitionGUI,MoveID.RightOrUp,false);
+                GuiController.Instance.SwitchWrapperWithMove(GuiController.Instance.CompetitionGUI,MoveID.RightOrUp,false);
                 break;
             case "Settlement2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame,false);
                 break;
             case "SettlementShareBtn":
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.SaveFile);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "BluetoothShareBtn":
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Bluetooth);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             case "CurAchievementBtn":
                 achievementDetailBgInSettlement.SetActive(true);
@@ -107,15 +107,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
                 if (string.IsNullOrEmpty(GameManager.Instance.UserName))
                 {
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
                     return;
                 }
 
                 if (curSaveFileInstance.isUpload)
                 {
-                    string message = GameManager.Instance.GetMutiLanguage("Text_90008");
-                    GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-                    GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    string message = LanguageController.Instance.GetLanguage("Text_90008");
+                    GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
                     return;
                 }
 
@@ -136,9 +136,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
                 break;
             case "AchievementDetailShareBtn":
-                GameManager.Instance.CurAchievementInstance = curAchievementInstance;
+                AchievementController.Instance.CurAchievementInstance = curAchievementInstance;
                 GameManager.Instance.CurShareInstance = new ShareInstance(ShareID.Achievement);
-                GameManager.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.ShareFrame, true);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -148,7 +148,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 
     private void InitSettlement()
     {
-        curSaveFileInstance = GameManager.Instance.CurSaveFileInstance;
+        curSaveFileInstance = RecordController.Instance.CurSaveFileInstance;
         settlementTime.text = string.Format(settlementTime.text, curSaveFileInstance.timeCost.ToString("f1"));
         settlementAmount.text = string.Format(settlementAmount.text, curSaveFileInstance.qInstancList.Count);
         settlementAccuracy.text = string.Format(settlementAccuracy.text, curSaveFileInstance.accuracy.ToString("f1"));
@@ -191,16 +191,16 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     }
     private void InitAchievement()
     {
-		if (!string.IsNullOrEmpty(GameManager.Instance.CurAchievementName) && GameManager.Instance.CompetitionGUI == GuiFrameID.ChapterFrame)
+		if (!string.IsNullOrEmpty(AchievementController.Instance.CurAchievementName) && GuiController.Instance.CompetitionGUI == GuiFrameID.ChapterFrame)
         {
             curAchievementBtn.SetActive(true);
             achievementDetailBgInSettlement.SetActive(true);
             achievementDetailPageInSettlement.SetActive(true);
             CommonTool.GuiScale(achievementDetailPageInSettlement, canvasGroup, true);
-            curAchievementInstance = GameManager.Instance.GetAchievement();
-            achievementDetailImageInSettlement.sprite = GameManager.Instance.GetSprite(curAchievementInstance.imageIndex);
-            achievementDetailMainTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(curAchievementInstance.mainTitleIndex);
-            achievementDetailSubTitleInSettlement.text = GameManager.Instance.GetMutiLanguage(curAchievementInstance.subTitleIndex);
+            curAchievementInstance = AchievementController.Instance.GetCurAchievement();
+            achievementDetailImageInSettlement.sprite = SkinController.Instance.GetSprite(curAchievementInstance.imageIndex);
+            achievementDetailMainTitleInSettlement.text = LanguageController.Instance.GetLanguage(curAchievementInstance.mainTitleIndex);
+            achievementDetailSubTitleInSettlement.text = LanguageController.Instance.GetLanguage(curAchievementInstance.subTitleIndex);
             achievementDetailFinishTimeInSettlement.text = GetFinishTime(curAchievementInstance.finishTime);
         }
         else
@@ -220,15 +220,15 @@ public class SettlementFrameWrapper : GuiFrameWrapper
     {
         isUploading = false;
         curSaveFileInstance.isUpload = true;
-        GameManager.Instance.EditRecord(curSaveFileInstance);
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        RecordController.Instance.RefreshRecord(curSaveFileInstance);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
     }
 
     private void OnUploadFail(string message)
 	{
         isUploading = false;
-        GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
-		GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
 	}
 }

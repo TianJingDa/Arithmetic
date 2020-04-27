@@ -29,8 +29,8 @@ public class LastestAchievementItem : AchievementItem, IPointerDownHandler, IPoi
         lastestAchievementName_WithoutAchievement.SetActive(!hasLastestAchievement);
         if (hasLastestAchievement)
         {
-            achievementName.text = GameManager.Instance.GetMutiLanguage(content.mainTitleIndex);
-            achievementImage.sprite = GameManager.Instance.GetSprite(content.imageIndex);
+            achievementName.text = LanguageController.Instance.GetLanguage(content.mainTitleIndex);
+            achievementImage.sprite = SkinController.Instance.GetSprite(content.imageIndex);
         }
     }
 

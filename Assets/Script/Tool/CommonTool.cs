@@ -197,7 +197,9 @@ public static class CommonTool
         {
             return;
         }
-        Font curFont = GameManager.Instance.GetFont();
+        var skinID = SkinController.Instance.CurSkinID;
+        var languageID = LanguageController.Instance.CurLanguageID;
+        Font curFont = FontController.Instance.GetFont(skinID, languageID);
         for (int i = 0; i < textArray.Length; i++)
         {
             textArray[i].font = curFont;
@@ -208,7 +210,7 @@ public static class CommonTool
             }
             else
             {
-                textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
+                textArray[i].text = LanguageController.Instance.GetLanguage(textArray[i].index);
             }
         }
     }
@@ -226,7 +228,7 @@ public static class CommonTool
                 imageArray[i].color = Color.white;
                 continue;
             }
-            Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
+            Sprite sprite = SkinController.Instance.GetSprite(imageArray[i].index);
             if (sprite != null)
             {
                 imageArray[i].color = Color.white;
@@ -250,10 +252,13 @@ public static class CommonTool
             }
             catch
             {
-                if(!gameObjectArray[i].name.Contains("Question"))
+                if (!gameObjectArray[i].name.Contains("Question"))
+                {
                     MyDebug.LogYellow(gameObjectArray[i].name);
+                }
             }
         }
+
         return gameObjectDict;
     }
     public static Dictionary<string, RectTransform> InitRectTransformDict(GameObject root)
@@ -410,20 +415,6 @@ public static class CommonTool
         return total;
     }
 
-    public static int CalculateAllStar()
-    {
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
-        int total = 0;
-        for (int i = 0; i < achievementList.Count; i++)
-        {
-            //if (achievementList[i].cInstance.symbolID != SymbolID.Hidden)
-            //{
-            //    total += achievementList[i].star;
-            //}
-            total += achievementList[i].star;
-        }
-        return total;
-    }
 	//TODO：不要每次都new一个stringbuilder
 	public static string BytesToString (byte[] bytes)
 	{
@@ -440,19 +431,6 @@ public static class CommonTool
 		return null;
 	}
 
-	private static string FullUUID (string uuid)
-	{
-		return "0000" + uuid + "-0000-1000-8000-00805f9b34fb";
-	}
-
-	public static bool IsEqualUUID(string uuid1, string uuid2)
-	{
-		if(uuid1.Length == 4) uuid1 = FullUUID(uuid1);
-		if(uuid2.Length == 4) uuid2 = FullUUID(uuid2);
-
-		return (uuid1.ToUpper().CompareTo(uuid2.ToUpper()) == 0);
-	}
-
     public static void RefreshScrollContent(RectTransform parent, ArrayList dataList, GuiItemID id, GameObject detailWin = null)
     {
         parent.anchoredPosition = Vector2.zero;
@@ -462,7 +440,7 @@ public static class CommonTool
         }
         for (int i = 0; i < dataList.Count; i++)
         {
-            GameObject item = GameManager.Instance.GetPrefabItem(id);
+            GameObject item = GuiController.Instance.GetPrefabItem(id);
             item.name = id.ToString() + i;
             item.SendMessage("InitPrefabItem", dataList[i]);
             if (detailWin) item.SendMessage("InitDetailWin", detailWin);

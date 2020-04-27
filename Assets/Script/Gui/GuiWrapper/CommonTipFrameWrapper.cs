@@ -19,7 +19,7 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
     {
         id = GuiFrameID.CommonTipFrame;
         Init();
-        instance = GameManager.Instance.CurCommonTipInstance;
+        instance = GuiController.Instance.CurCommonTipInstance;
         InitBtns();
         message.text = instance.message;
         CommonTool.GuiScale(commonTipPage, canvasGroup, true);
@@ -48,14 +48,14 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
                 {
                     instance.confirmAction();
                 }
-                GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.None);
                 break;
             case "CancelBtn":
                 if (instance.cancelAction != null)
                 {
                     instance.cancelAction();
                 }
-                GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+                GuiController.Instance.SwitchWrapper(GuiFrameID.None);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -88,7 +88,7 @@ public class CommonTipFrameWrapper : GuiFrameWrapper
     private IEnumerator AutoClose()
     {
         yield return new WaitForSeconds(splashTime);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.None);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.None);
     }
 }
 

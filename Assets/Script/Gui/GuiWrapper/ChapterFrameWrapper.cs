@@ -20,15 +20,14 @@ public class ChapterFrameWrapper : GuiFrameWrapper
         Init();
         chapterItemList = chapterWin.GetComponentsInChildren<ChapterItem>();
         chapterRect = chapterWin.GetComponent<RectTransform>();
-        List<AchievementInstance> achievementList = GameManager.Instance.GetAllAchievements();
         achievementDict = new Dictionary<DifficultyID, List<AchievementInstance>>
                 {
-                    {DifficultyID.Junior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Junior)},
-                    {DifficultyID.Medium, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Medium)},
-                    {DifficultyID.Senior, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Senior)},
-                    {DifficultyID.Ultimate, achievementList.FindAll(x => x.difficulty == (int)DifficultyID.Ultimate)},
+                    {DifficultyID.Junior, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Junior)},
+                    {DifficultyID.Medium, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Medium)},
+                    {DifficultyID.Senior, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Senior)},
+                    {DifficultyID.Ultimate, AchievementController.Instance.GetAchievementByDifficulty((int)DifficultyID.Ultimate)},
                 };
-        chapterStarStatisticsImg_Text.text = string.Format(chapterStarStatisticsImg_Text.text, CommonTool.CalculateAllStar());
+        chapterStarStatisticsImg_Text.text = string.Format(chapterStarStatisticsImg_Text.text, AchievementController.Instance.CalculateAllStar());
         List<GameObject> lockList = CommonTool.GetGameObjectsContainName(gameObject, "Lock");
         List<Image> classList = CommonTool.GetComponentsContainName<Image>(gameObject, "ClassBtn");
         //lockList[0].SetActive(false);
@@ -61,7 +60,7 @@ public class ChapterFrameWrapper : GuiFrameWrapper
         {
             case "Chapter2StartFrameBtn":
             case "ChapterWin2StartFrameBtn":
-                GameManager.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
+                GuiController.Instance.SwitchWrapperWithScale(GuiFrameID.StartFrame, false);
                 break;
             case "ChapterWin2ChapterFrameBtn":
 				CommonTool.GuiHorizontalMove(chapterWin, Screen.width, MoveID.LeftOrDown, canvasGroup, false);

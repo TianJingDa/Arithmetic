@@ -42,8 +42,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     void Start () 
 	{
         id = GuiFrameID.BluetoothFightFrame;
-        GameManager.Instance.BLEReceiveMessage = OnReceiveMessage;
-        Dictionary<string, MyRectTransform> rectTransforms = GameManager.Instance.GetLayoutData();
+        BluetoothController.Instance.BLEReceiveMessage = OnReceiveMessage;
+        Dictionary<string, MyRectTransform> rectTransforms = LayoutController.Instance.GetLayoutData();
         InitLayout(rectTransforms);
         Init();
 
@@ -58,8 +58,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 		curInstance = new List<int>();
         resultList  = new List<List<int>>();
         countdownNumsList = CommonTool.GetGameObjectsContainName(countdownBg, "Countdown_");
-        GameManager.Instance.GetFightParameter(out pattern, out amount, out symbol);
-        GameManager.Instance.ResetList();
+        FightController.Instance.GetFightParameter(out pattern, out amount, out symbol);
+        FightController.Instance.ResetList();
         result.Length = 0;
         question.Length = 0;
         ClearAllText();
@@ -68,11 +68,11 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
 
     void OnDestroy()
     {
-        MyDebug.LogGreen("ReadUUID:" + GameManager.Instance.ReadUUID);
-        MyDebug.LogGreen("WriteUUID:" + GameManager.Instance.WriteUUID);
-        MyDebug.LogGreen("ServiceUUID:" + GameManager.Instance.ServiceUUID);
+        MyDebug.LogGreen("ReadUUID:" + BluetoothController.Instance.ReadUUID);
+        MyDebug.LogGreen("WriteUUID:" + BluetoothController.Instance.WriteUUID);
+        MyDebug.LogGreen("ServiceUUID:" + BluetoothController.Instance.ServiceUUID);
 
-        GameManager.Instance.OnBluetoothFightFinish();
+        BluetoothController.Instance.OnBluetoothFightFinish();
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -140,7 +140,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             myTrans.localEulerAngles = new Vector3(pair.Value.localEulerAngles.x, pair.Value.localEulerAngles.y, pair.Value.localEulerAngles.z);
         }
 
-        if (GameManager.Instance.CurKeyboardID == KeyboardID.Up)
+        if (LayoutController.Instance.CurKeyboardID == KeyboardID.Up)
         {
             ExchangePosition(rectTransformDict["1"], rectTransformDict["7"]);
             ExchangePosition(rectTransformDict["2"], rectTransformDict["8"]);
@@ -197,7 +197,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
             if (!isReceiving)
             {
                 isSending = true;
-                GameManager.Instance.BLESendMessage(message);
+                BluetoothController.Instance.BLESendMessage(message);
             }
             else
             {
@@ -235,7 +235,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         lock (curInstance)
         {
             index++;
-            curInstance = GameManager.Instance.GetQuestionInstance();
+            curInstance = FightController.Instance.GetQuestionInstance();
             if (curInstance == null)
             {
                 MyDebug.LogYellow("curInstance is NULL!");
@@ -277,7 +277,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
                 if (!message.name.Equals(end))
                 {
                     isSending = true;
-                    GameManager.Instance.BLESendMessage(new BluetoothMessage(index, resultInt, end));
+                    BluetoothController.Instance.BLESendMessage(new BluetoothMessage(index, resultInt, end));
                 }
                 FightOver();
             }
@@ -290,7 +290,7 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
                 else
                 {
                     isSending = true;
-                    GameManager.Instance.BLESendMessage(new BluetoothMessage(index, resultInt));
+                    BluetoothController.Instance.BLESendMessage(new BluetoothMessage(index, resultInt));
                     StartCoroutine(ShowNextQuestion());
                 }
             }
@@ -300,8 +300,8 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
         else
         {
             string tip = "Index Wrong:" + message.index;
-            GameManager.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
-            GameManager.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+            GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Single, tip);
+            GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
         }
     }
 
@@ -325,8 +325,11 @@ public class BluetoothFightFrameWrapper : GuiFrameWrapper
     private void FightOver()
     {
         CancelInvoke();
-        GameManager.Instance.SaveRecord(resultList, symbol, timeCost, false, true);
-        GameManager.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
+        SaveFileInstance curSaveFileInstance = new SaveFileInstance();
+        curSaveFileInstance.cInstance = FightController.Instance.CurCategoryInstance;
+        curSaveFileInstance.opponentName = BluetoothController.Instance.CurPeripheralInstance.name;
+        RecordController.Instance.SaveRecord(curSaveFileInstance, resultList, symbol, timeCost);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.SettlementFrame);
     }
 }
 
