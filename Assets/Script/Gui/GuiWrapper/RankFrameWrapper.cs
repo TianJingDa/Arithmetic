@@ -24,8 +24,9 @@ public class RankFrameWrapper : GuiFrameWrapper
     private RectTransform rankDataGrid;
     private Dropdown    amountDropdown;
 	private Dropdown    digitDropdown;
+    private Text        rankDataNum;
 
-	void Start () 
+    void Start () 
 	{
 		id = GuiFrameID.RankFrame;
 		Init();
@@ -44,7 +45,8 @@ public class RankFrameWrapper : GuiFrameWrapper
         rankDataGrid    = gameObjectDict["RankDataGrid"].GetComponent<RectTransform>();
         digitDropdown   = gameObjectDict["DigitDropdown"].GetComponent<Dropdown>();
 		amountDropdown  = gameObjectDict["AmountDropdown"].GetComponent<Dropdown>();
-	}
+        rankDataNum     = gameObjectDict["RankDataNum"].GetComponent<Text>();
+    }
 
 	protected override void OnButtonClick(Button btn)
 	{
@@ -153,9 +155,23 @@ public class RankFrameWrapper : GuiFrameWrapper
     {
         isDownloading = false;
         FightController.Instance.CurCategoryInstance = curInstance;
+        rankDataNum.text = GetDataNumName();
         rankDataContent.SetActive(true);
+
         CommonTool.RefreshScrollContent(rankDataGrid, dataList, GuiItemID.RankItem);
         CommonTool.GuiHorizontalMove(rankDataContent, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+    }
+
+    private string GetDataNumName()
+    {
+        if(curInstance.patternID == PatternID.Number)
+        {
+            return LanguageController.Instance.GetLanguage("Text_90004");
+        }
+        else
+        {
+            return LanguageController.Instance.GetLanguage("Text_90011");
+        }
     }
 
 	private void OnDownloadFail(string message)

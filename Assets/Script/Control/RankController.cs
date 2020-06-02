@@ -110,6 +110,11 @@ public sealed class RankController : Controller
 						message = LanguageController.Instance.GetLanguage("Text_20071");
 					}
                 }
+                else if (response.code == (int)CodeID.GAME_VERSION_ERROR)
+                {
+                    MyDebug.LogYellow("Download Rank Data Fail:" + response.code);
+                    message = LanguageController.Instance.GetLanguage("Text_20079");
+                }
                 else
                 {
 					MyDebug.LogYellow("Download Rank Data Fail:" + response.code);
@@ -176,8 +181,14 @@ public sealed class RankController : Controller
                         message = LanguageController.Instance.GetLanguage("Text_20068");
                         message = string.Format(message, response.data.rank);
                     }
+                    else if (response.code == (int)CodeID.GAME_VERSION_ERROR)
+                    {
+                        MyDebug.LogYellow("Upload Rank Data Fail:" + response.code);
+                        message = LanguageController.Instance.GetLanguage("Text_20079");
+                    }
                     else
                     {
+                        MyDebug.LogYellow("Upload Rank Data Fail:" + response.code);
                         message = LanguageController.Instance.GetLanguage("Text_20070");
                     }
 
@@ -237,7 +248,12 @@ public sealed class RankController : Controller
 					}
                     yield break;
 				}
-				else
+                else if(response.code == (int)CodeID.GAME_VERSION_ERROR)
+                {
+                    MyDebug.LogYellow("Get Rank Detail Fail:" + response.code);
+                    message = LanguageController.Instance.GetLanguage("Text_20079");
+                }
+                else
 				{
 					MyDebug.LogYellow("Get Rank Detail Fail:" + response.code);
 					message = LanguageController.Instance.GetLanguage("Text_20066");

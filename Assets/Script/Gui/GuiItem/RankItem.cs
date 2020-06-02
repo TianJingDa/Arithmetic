@@ -26,10 +26,23 @@ public class RankItem : Item, IPointerClickHandler
         Init();
 		rankIndex.text = content.rank.ToString();
 		rankUserName.text = content.name;
-        string timeCost = LanguageController.Instance.GetLanguage("Text_90006");
-		rankTimeCost.text = string.Format(timeCost, content.timelast.ToString("f1"));
+        InitRankTimeCost();
         string accuracy = LanguageController.Instance.GetLanguage("Text_90007");
         rankAccuracy.text = string.Format(accuracy, content.accuracy.ToString("f1"));
+    }
+
+    private void InitRankTimeCost()
+    {
+        if (FightController.Instance.CurCategoryInstance.patternID == PatternID.Number)
+        {
+            string timeCost = LanguageController.Instance.GetLanguage("Text_90006");
+            rankTimeCost.text = string.Format(timeCost, content.timelast.ToString("f1"));
+        }
+        else
+        {
+            string timeCost = LanguageController.Instance.GetLanguage("Text_90012");
+            rankTimeCost.text = string.Format(timeCost, content.timelast.ToString());
+        }
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)

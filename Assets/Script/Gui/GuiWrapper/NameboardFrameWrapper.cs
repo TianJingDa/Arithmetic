@@ -118,7 +118,12 @@ public class NameboardFrameWrapper : GuiFrameWrapper
                     GuiController.Instance.SwitchWrapper(GuiFrameID.None);
                     yield break;
                 }
-                else if(response.code == (int)CodeID.NAME_FILTER_ERROR)
+                else if (response.code == (int)CodeID.GAME_VERSION_ERROR)
+                {
+                    MyDebug.LogYellow("Create User Name Fail:" + response.code);
+                    message = LanguageController.Instance.GetLanguage("Text_20079");
+                }
+                else if (response.code == (int)CodeID.NAME_FILTER_ERROR)
                 {
                     MyDebug.LogYellow("Create User Name Fail: Illegal");
                     message = LanguageController.Instance.GetLanguage("Text_20073");

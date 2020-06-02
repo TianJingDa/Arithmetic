@@ -709,7 +709,7 @@ GameObject:
   - component: {fileID: 222491432704888768}
   - component: {fileID: 114139047797799610}
   m_Layer: 0
-  m_Name: RankDataTimeCost
+  m_Name: RankDataNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1399,8 +1399,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  index: Text_90004
-  m_Text: Text_90004
+  index: 
+  m_Text: 
 --- !u!114 &114140747274997590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4374,7 +4374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000140052625}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: -1051}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224463139955221046

@@ -127,8 +127,9 @@ public class SettlementFrameWrapper : GuiFrameWrapper
 				form.AddField("calcu", (int)curSaveFileInstance.cInstance.symbolID + 1);
 				form.AddField("digit", (int)curSaveFileInstance.cInstance.digitID + 2);
 				form.AddField("operate", (int)curSaveFileInstance.cInstance.operandID + 2);
-				form.AddField("timelast", curSaveFileInstance.timeCost.ToString("f1"));
-				form.AddField("accuracy", curSaveFileInstance.accuracy.ToString("f1"));
+                form.AddField("timelast", RecordController.Instance.FillTimeLast(curSaveFileInstance));
+                form.AddField("accuracy", curSaveFileInstance.accuracy.ToString("f1"));
+                form.AddField("version", GameManager.Instance.Version);
                 curSaveFileInstance.achievementName = "";//上传的战绩都没有成就
                 string data = JsonUtility.ToJson(curSaveFileInstance);
                 form.AddField("data", data);

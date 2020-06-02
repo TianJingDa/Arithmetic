@@ -125,8 +125,9 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
 				form.AddField("calcu", (int)content.cInstance.symbolID + 1);
 				form.AddField("digit", (int)content.cInstance.digitID + 2);
 				form.AddField("operate", (int)content.cInstance.operandID + 2);
-				form.AddField("timelast", content.timeCost.ToString("f1"));
+				form.AddField("timelast", RecordController.Instance.FillTimeLast(content));
 				form.AddField("accuracy", content.accuracy.ToString("f1"));
+                form.AddField("version", GameManager.Instance.Version);
                 content.achievementName = "";//上传的战绩都没有成就
 				string data = JsonUtility.ToJson(content);
                 form.AddField("data", data);

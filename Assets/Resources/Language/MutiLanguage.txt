@@ -136,6 +136,7 @@ Text_20075,试题详情,TJD
 Text_20076,分享成功,TJD
 Text_20077,分享失败,TJD
 Text_20078,分享取消,TJD
+Text_20079,版本错误，请下载最新版！,TJD
 Text_30000,自由挑战,TJD
 Text_30001,限时,TJD
 Text_30002,限时,TJD
@@ -174,7 +175,7 @@ Text_40004,布局,TJD
 Text_40005,反馈,TJD
 Text_40006,关于我们,TJD
 Text_40007,感谢开发人员,TJD
-Text_40008,版本：3.0,TJD
+Text_40008,版本：{0},TJD
 Text_40009,简体中文,简体中文
 Text_40010,简体中文,Simplified Chinese
 Text_40011,English,English
@@ -293,3 +294,5 @@ Text_90007,{0}%,TJD
 Text_90008,战绩已上传！,TJD
 Text_90009,{0}的排名,TJD
 Text_90010,全国排名：{0},TJD
+Text_90011,题数,TJD
+Text_90012,{0}道,TJD

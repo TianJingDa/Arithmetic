@@ -146,5 +146,6 @@ public enum CodeID
     TOKEN_ERROR         = 1005,//Token错误
     NAME_FILTER_ERROR   = 1006,//名称非法
     NAME_REPEAT_ERROR   = 1007,//名称重复
+    GAME_VERSION_ERROR  = 1008,//版本错误
     FINISH              = 99999
 }

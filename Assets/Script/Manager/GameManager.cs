@@ -90,6 +90,18 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+    public string Version
+    {
+        get
+        {
+#if UNITY_ANDROID
+            return "3.1";
+#elif UNITY_IOS
+            return "1.0";
+#endif
+        }
+    }
+
     public static GameManager Instance//单例
     {
         get;
@@ -127,7 +139,7 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    #region 公共方法
+#region 公共方法
 
     public void ShareImage(Rect mRect, PlatformType type)
     {
@@ -183,9 +195,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(c_RankCtrl.GetRankDetail(form, OnSucceed, OnFail));
     }
 
-    #endregion
+#endregion
 
-    #region 私有方法
+#region 私有方法
 
     /// <summary>
     /// 截屏
@@ -300,8 +312,12 @@ public class GameManager : MonoBehaviour
                     }
                     yield break;
 				}
-				else
-				{
+                else if (response.code == (int)CodeID.GAME_VERSION_ERROR)
+                {
+                    MyDebug.LogYellow("Silent Login Fail:" + response.code);
+                }
+                else
+                {
 					MyDebug.LogYellow("Silent Login Fail:" + response.code);
 				}
 			}
@@ -339,6 +355,6 @@ public class GameManager : MonoBehaviour
 		public string id;
     }
 
-    #endregion
+#endregion
 
 }

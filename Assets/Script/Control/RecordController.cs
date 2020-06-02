@@ -178,6 +178,10 @@ public sealed class RecordController : Controller
 
     private float CalculateAccuracy(List<List<int>> resultList)
     {
+        if(resultList == null || resultList.Count <= 0)
+        {
+            return 0;
+        }
         List<List<int>> rightList = resultList.FindAll(x => x[x.Count - 1] == x[x.Count - 2]);
         float accuracy = (float)rightList.Count * 100 / resultList.Count;
         return accuracy;
@@ -198,4 +202,19 @@ public sealed class RecordController : Controller
         return qInstanceList;
     }
 
+    /// <summary>
+    /// “TimeLast”字段，在限数模式下传耗时，在限时模式下传答题数
+    /// </summary>
+    /// <returns></returns>
+    public string FillTimeLast(SaveFileInstance content)
+    {
+        if (content.cInstance.patternID == PatternID.Number)
+        {
+            return content.timeCost.ToString("f1");
+        }
+        else
+        {
+            return content.qInstancList.Count.ToString();
+        }
+    }
 }

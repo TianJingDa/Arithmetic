@@ -61,14 +61,10 @@ public class SetUpFrameWrapper : GuiFrameWrapper
 	{
         id = GuiFrameID.SetUpFrame;
         Init();
-#if UNITY_ANDROID
-        editionImg_Text.text = LanguageController.Instance.GetLanguage("Text_40008");
-#elif UNITY_IOS
-        editionImg_Text.text = LanguageController.Instance.GetLanguage("Text_40050");
-#endif
+        string version = LanguageController.Instance.GetLanguage("Text_40008");
+        editionImg_Text.text = string.Format(version, GameManager.Instance.Version);
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
-
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
