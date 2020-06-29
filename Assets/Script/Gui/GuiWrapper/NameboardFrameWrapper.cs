@@ -7,7 +7,11 @@ using System;
 public class NameboardFrameWrapper : GuiFrameWrapper
 {
     private const float     TimeOut = 1f;
-	private const string    NameURL = "http://47.105.77.226:8091/changeName";
+#if TEST
+    private const string    NameURL = "http://182.92.68.73:8091/changeName";
+#else
+    private const string    NameURL = "http://47.105.77.226:8091/changeName";
+#endif
 
     private bool            isCreating;
     private string          userName;

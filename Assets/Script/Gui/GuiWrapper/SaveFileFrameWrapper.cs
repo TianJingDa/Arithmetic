@@ -117,6 +117,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                     return;
                 }
 
+                isUploading = true;
                 WWWForm form = new WWWForm();
 				form.AddField("userId", GameManager.Instance.UserID);
 				form.AddField("jwttoken", GameManager.Instance.Token);
@@ -131,8 +132,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
                 content.achievementName = "";//上传的战绩都没有成就
 				string data = JsonUtility.ToJson(content);
                 form.AddField("data", data);
-                isUploading = true;
-                GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
+                GameManager.Instance.UploadRecord(form, OnUploadSucceed, OnUploadFail);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -164,7 +164,7 @@ public class SaveFileFrameWrapper : GuiFrameWrapper
         else CommonTool.RefreshScrollContent(saveFileDetailGrid, dataList, GuiItemID.QuestionItem);
     }
 
-    private void OnUploadSuccees(string message)
+    private void OnUploadSucceed(string message)
     {
         isUploading = false;
         content.isUpload = true;

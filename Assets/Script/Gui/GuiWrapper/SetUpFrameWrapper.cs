@@ -14,7 +14,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private int tempLayoutID;
     private int tempHandednessID;
     private int tempKeyboardID;
+    private bool isEnrolling;
     private bool firstInLayout;//用于标识进入布局设置界面
+    private string inputNum;
 
     private List<int> resetTogglesIndexList;
     private List<Vector2> languageTogglesAnchoredPositonList;
@@ -28,6 +30,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject horizontalLayoutTipBg;
     private GameObject resetWin;
     private GameObject feedbackWin;
+    private GameObject activityWin;
+    private GameObject activityEnrollBoard;
+    private GameObject activityEnrollTipBoard;
     private GameObject aboutUsWin;
     private GameObject shareUsWin;
     private GameObject thankDevelopersWin;
@@ -45,26 +50,41 @@ public class SetUpFrameWrapper : GuiFrameWrapper
     private GameObject layoutV_L_UImg;
     private GameObject layoutH_R_UImg;
     private GameObject layoutH_L_UImg;
+    private GameObject activityRankDetailPattern_Time;
+    private GameObject activityRankDetailPattern_Number;
     private Button languageApplyBtn;
     private Button skinApplyBtn;
     private Button layoutApplyBtn;
     private Button resetApplyBtn;
+    private Button activityEnrollBtn;
+    private Button activityRankDetailBtn;
+    private Button activityRankDetailBoardBg;
     private Toggle resetTempTgl;
     private ToggleGroup languageToggleGroup;
     private ToggleGroup skinToggleGroup;
     private Dropdown layoutDropdown;
     private Dropdown handednessDropdown;
     private Dropdown keyboardDropdown;
+    private InputField activityEnrollBoardInputField;
+    private Text activityEnrollTipBoardContent;
     private Text editionImg_Text;
+    private Text activityRankDetailAmount;
+    private Text activityRankDetailTime;
+    private Text activityRankDetailSymbol;
+    private Text activityRankDetailDigit;
+    private Text activityRankDetailOperand;
 
     void Start () 
 	{
         id = GuiFrameID.SetUpFrame;
         Init();
+        activityEnrollBoardInputField.onEndEdit.AddListener(OnEndEdit);
         string version = LanguageController.Instance.GetLanguage("Text_40008");
         editionImg_Text.text = string.Format(version, GameManager.Instance.Version);
         languageTogglesAnchoredPositonList = InitToggleAnchoredPositon(languageToggleGroup);
         skinTogglesAnchoredPositonList = InitToggleAnchoredPositon(skinToggleGroup);
+        activityEnrollBtn.gameObject.SetActive(!RankController.Instance.AlreadyEnroll);
+        activityRankDetailBtn.gameObject.SetActive(RankController.Instance.AlreadyEnroll);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -74,6 +94,9 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         resetTipBg                              = gameObjectDict["ResetTipBg"];
         layoutWin                               = gameObjectDict["LayoutWin"];
         horizontalLayoutTipBg                   = gameObjectDict["HorizontalLayoutTipBg"];
+        activityWin                             = gameObjectDict["ActivityWin"];
+        activityEnrollBoard                     = gameObjectDict["ActivityEnrollBoard"];
+        activityEnrollTipBoard                  = gameObjectDict["ActivityEnrollTipBoard"];
         aboutUsWin                              = gameObjectDict["AboutUsWin"];
         shareUsWin                              = gameObjectDict["ShareUsWin"];
         feedbackWin                             = gameObjectDict["FeedbackWin"];
@@ -93,19 +116,29 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         layoutV_L_UImg                          = gameObjectDict["LayoutV_L_UImg"];
         layoutH_R_UImg                          = gameObjectDict["LayoutH_R_UImg"];
         layoutH_L_UImg                          = gameObjectDict["LayoutH_L_UImg"];
-        skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
-        languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
-        skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
-        resetApplyBtn                           = gameObjectDict["ResetApplyBtn"].GetComponent<Button>();
-        layoutApplyBtn                          = gameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
+        activityRankDetailPattern_Time          = gameObjectDict["ActivityRankDetailPattern_Time"];
+        activityRankDetailPattern_Number        = gameObjectDict["ActivityRankDetailPattern_Number"];
         languageApplyBtn                        = gameObjectDict["LanguageApplyBtn"].GetComponent<Button>();
+        skinApplyBtn                            = gameObjectDict["SkinApplyBtn"].GetComponent<Button>();
+        layoutApplyBtn                          = gameObjectDict["LayoutApplyBtn"].GetComponent<Button>();
+        resetApplyBtn                           = gameObjectDict["ResetApplyBtn"].GetComponent<Button>();
+        activityEnrollBtn                       = gameObjectDict["ActivityEnrollBtn"].GetComponent<Button>();
+        activityRankDetailBtn                   = gameObjectDict["ActivityRankDetailBtn"].GetComponent<Button>();
+        activityRankDetailBoardBg               = gameObjectDict["ActivityRankDetailBoardBg"].GetComponent<Button>();
+        languageToggleGroup                     = gameObjectDict["LanguageToggleGroup"].GetComponent<ToggleGroup>();
+        skinToggleGroup                         = gameObjectDict["SkinToggleGroup"].GetComponent<ToggleGroup>();
         layoutDropdown                          = gameObjectDict["LayoutDropdown"].GetComponent<Dropdown>();
         handednessDropdown                      = gameObjectDict["HandednessDropdown"].GetComponent<Dropdown>();
         keyboardDropdown                        = gameObjectDict["KeyboardDropdown"].GetComponent<Dropdown>();
+        activityEnrollBoardInputField           = gameObjectDict["ActivityEnrollBoardInputField"].GetComponent<InputField>();
+        activityEnrollTipBoardContent           = gameObjectDict["ActivityEnrollTipBoardContent"].GetComponent<Text>();
         editionImg_Text                         = gameObjectDict["EditionImg_Text"].GetComponent<Text>();
+        activityRankDetailAmount                = gameObjectDict["ActivityRankDetailAmount"].GetComponent<Text>();
+        activityRankDetailTime                  = gameObjectDict["ActivityRankDetailTime"].GetComponent<Text>();
+        activityRankDetailSymbol                = gameObjectDict["ActivityRankDetailSymbol"].GetComponent<Text>();
+        activityRankDetailDigit                 = gameObjectDict["ActivityRankDetailDigit"].GetComponent<Text>();
+        activityRankDetailOperand               = gameObjectDict["ActivityRankDetailOperand"].GetComponent<Text>();
     }
-
-
 
     /// <summary>
     /// 刷新toggles的排列位置
@@ -247,6 +280,11 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         RefreshGui();
     }
 
+    private void OnEndEdit(string text)
+    {
+        inputNum = text;
+    }
+
     protected override void OnButtonClick(Button btn)
     {
         base.OnButtonClick(btn);
@@ -258,6 +296,57 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 break;
             case "AboutUs2SetUpFrameBtn":
                 CommonTool.GuiHorizontalMove(aboutUsWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                break;
+            case "ActivityBtn":
+                activityWin.SetActive(true);
+                CommonTool.GuiHorizontalMove(activityWin, Screen.width, MoveID.RightOrUp, canvasGroup, true);
+                break;
+            case "Activity2SetUpFrameBtn":
+                CommonTool.GuiHorizontalMove(activityWin, Screen.width, MoveID.RightOrUp, canvasGroup, false);
+                break;
+            case "ActivityEnrollBtn":
+                if (RankController.Instance.AlreadyEnroll)
+                {
+                    string message = LanguageController.Instance.GetLanguage("Text_40058");
+                    GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+                    return;
+                }
+
+                inputNum = "";
+                activityEnrollBoardInputField.text = "";
+                activityEnrollBoard.SetActive(true);
+                break;
+            case "ActivityEnrollBoardInputFieldConfirmBtn":
+                if (string.IsNullOrEmpty(inputNum)) return;
+                activityEnrollTipBoard.SetActive(true);
+                string curName = LanguageController.Instance.GetLanguage(activityEnrollTipBoardContent.index);
+                activityEnrollTipBoardContent.text = string.Format(curName, inputNum);
+                break;
+            case "ActivityEnrollBoardInputFieldCancelBtn":
+                activityEnrollBoard.SetActive(false);
+                break;
+            case "ActivityEnrollTipBoardConfirmBtn":
+                if (isEnrolling)
+                {
+                    return;
+                }
+
+                isEnrolling = true;
+                WWWForm form = new WWWForm();
+                form.AddField("userId", GameManager.Instance.UserID);
+                form.AddField("jwttoken", GameManager.Instance.Token);
+                form.AddField("info", inputNum);
+                GameManager.Instance.EnrollActivity(form, OnEnrollSucceed, OnEnrollFail);
+                break;
+            case "ActivityEnrollTipBoardCancelBtn":
+                activityEnrollTipBoard.SetActive(false);
+                break;
+            case "ActivityRankDetailBtn":
+                OpenRankDetailBoard();
+                break;
+            case "ActivityRankDetailBoardBg":
+                activityRankDetailBoardBg.gameObject.SetActive(false);
                 break;
             case "FeedbackBtn":
             case "FeedbackWin":
@@ -308,6 +397,7 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 layoutApplyBtn.interactable = false;
                 break;
             case "AboutUs2StartFrameBtn":
+            case "Activity2StartFrameBtn":
             case "Language2StartFrameBtn":
             case "Layout2StartFrameBtn":
             case "Reset2StartFrameBtn":
@@ -403,6 +493,43 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
                 break;
         }
+    }
+
+    private void OnEnrollSucceed(string data)
+    {
+        isEnrolling = false;
+        RankController.Instance.AlreadyEnroll = true;
+        activityEnrollBtn.gameObject.SetActive(false);
+        activityRankDetailBtn.gameObject.SetActive(true);
+        CategoryInstance instance = JsonUtility.FromJson<CategoryInstance>(data);
+        RankController.Instance.ActivityCategory = instance;
+        OpenRankDetailBoard();
+
+        string message = LanguageController.Instance.GetLanguage("Text_20080");
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OnEnrollFail(string message)
+    {
+        isEnrolling = false;
+        GuiController.Instance.CurCommonTipInstance = new CommonTipInstance(CommonTipID.Splash, message);
+        GuiController.Instance.SwitchWrapper(GuiFrameID.CommonTipFrame, true);
+    }
+
+    private void OpenRankDetailBoard()
+    {
+        activityRankDetailBoardBg.gameObject.SetActive(true);
+        CategoryInstance instance = RankController.Instance.ActivityCategory;
+        activityRankDetailPattern_Time.SetActive(instance.patternID == PatternID.Time);
+        activityRankDetailPattern_Number.SetActive(instance.patternID == PatternID.Number);
+        activityRankDetailTime.gameObject.SetActive(instance.patternID == PatternID.Time);
+        activityRankDetailAmount.gameObject.SetActive(instance.patternID == PatternID.Number);
+        activityRankDetailTime.text = string.Format(activityRankDetailTime.text, FightController.Instance.GetTimeAmount(instance.amountID));
+        activityRankDetailAmount.text = string.Format(activityRankDetailAmount.text, FightController.Instance.GetNumberAmount(instance.amountID));
+        activityRankDetailSymbol.text = string.Format(activityRankDetailSymbol.text, FightController.Instance.GetSymbol(instance.symbolID));
+        activityRankDetailDigit.text = string.Format(activityRankDetailDigit.text, (int)(instance.digitID + 2));
+        activityRankDetailOperand.text = string.Format(activityRankDetailOperand.text, (int)(instance.operandID + 2));
     }
 
     protected override void OnToggleClick(Toggle tgl)

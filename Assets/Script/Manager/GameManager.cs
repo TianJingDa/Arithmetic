@@ -9,7 +9,11 @@ using cn.sharesdk.unity3d;
 public class GameManager : MonoBehaviour
 {
     private const float                                         TimeOut = 1f;
-	private const string                                        VisitorURL = "http://47.105.77.226:8091/register";
+#if TEST
+    private const string                                        VisitorURL = "http://182.92.68.73:8091/register";
+#else
+    private const string                                        VisitorURL = "http://47.105.77.226:8091/register";
+#endif
 
     private LanguageController                                  c_LanguageCtrl;
     private FightController                                     c_FightCtrl;
@@ -193,6 +197,11 @@ public class GameManager : MonoBehaviour
     public void GetRankDetail(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)
     {
         StartCoroutine(c_RankCtrl.GetRankDetail(form, OnSucceed, OnFail));
+    }
+
+    public void EnrollActivity(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)
+    {
+        StartCoroutine(c_RankCtrl.EnrollActivity(form, OnSucceed, OnFail));
     }
 
 #endregion

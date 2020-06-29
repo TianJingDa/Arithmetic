@@ -119,6 +119,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                     return;
                 }
 
+                isUploading = true;
                 WWWForm form = new WWWForm();
 				form.AddField("userId", GameManager.Instance.UserID);
 				form.AddField("jwttoken", GameManager.Instance.Token);
@@ -133,8 +134,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
                 curSaveFileInstance.achievementName = "";//上传的战绩都没有成就
                 string data = JsonUtility.ToJson(curSaveFileInstance);
                 form.AddField("data", data);
-                isUploading = true;
-                GameManager.Instance.UploadRecord(form, OnUploadSuccees, OnUploadFail);
+                GameManager.Instance.UploadRecord(form, OnUploadSucceed, OnUploadFail);
                 break;
             case "AchievementDetailShareBtn":
                 AchievementController.Instance.CurAchievementInstance = curAchievementInstance;
@@ -217,7 +217,7 @@ public class SettlementFrameWrapper : GuiFrameWrapper
         return newTime.ToString();
     }
 
-    private void OnUploadSuccees(string message)
+    private void OnUploadSucceed(string message)
     {
         isUploading = false;
         curSaveFileInstance.isUpload = true;
