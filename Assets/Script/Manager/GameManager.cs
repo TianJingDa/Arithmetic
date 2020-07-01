@@ -295,6 +295,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator SilentLogin(System.Action OnSucceed, System.Action<string> OnFail)
     {
+        MyDebug.LogGreen("VisitorURL: " + VisitorURL);
         WWW www = new WWW(VisitorURL);
 
         float responseTime = 0;
@@ -307,12 +308,13 @@ public class GameManager : MonoBehaviour
         if (www.isDone)
         {
 			LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.text);
+            MyDebug.LogGreen("www.text: " + www.text);
 			if (response != null)
 			{
 				if (response.code == (int)CodeID.SUCCESS)
 				{
                     m_IsLogining = false;
-                    IsNewPlayer = true;
+                    IsNewPlayer = false;
                     Token = response.token;
 					UserID = response.data.id;
                     if (OnSucceed != null)
