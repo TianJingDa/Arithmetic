@@ -343,7 +343,7 @@ public sealed class RankController : Controller
     /// <param name="OnSuccees"></param>
     /// <param name="OnFail"></param>
     /// <returns></returns>
-    public IEnumerator EnrollActivity(WWWForm form, Action<string> OnSuccees, Action<string> OnFail)
+    public IEnumerator EnrollActivity(WWWForm form, Action<CategoryInstance> OnSuccees, Action<string> OnFail)
     {
         WWW www = new WWW(EnrollURL, form);
 
@@ -366,7 +366,8 @@ public sealed class RankController : Controller
 
                     if (OnSuccees != null)
                     {
-                        OnSuccees(response.data);
+                        CategoryInstance instance = ConvertToCategory(response.data);
+                        OnSuccees(instance);
                     }
                     yield break;
                 }
@@ -404,6 +405,17 @@ public sealed class RankController : Controller
         }
     }
 
+    private CategoryInstance ConvertToCategory(Category category)
+    {
+        CategoryInstance instance = new CategoryInstance();
+        instance.patternID = (PatternID)(category.model - 1);
+        instance.amountID = (AmountID)(category.num - 1);
+        instance.symbolID = (SymbolID)(category.calcu - 1);
+        instance.digitID = (DigitID)(category.digit - 2);
+        instance.operandID = (OperandID)(category.operate - 2);
+        return instance;
+    }
+
     [Serializable]
     private class DownloadDataResponse
     {
@@ -439,6 +451,16 @@ public sealed class RankController : Controller
     {
         public int code;//200:成功
         public string errmsg;
-        public string data;
+        public Category data;
+    }
+
+    [Serializable]
+    private class Category
+    {
+        public int model;
+        public int num;
+        public int calcu;
+        public int digit;
+        public int operate;
     }
 }

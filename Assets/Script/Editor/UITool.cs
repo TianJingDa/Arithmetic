@@ -370,6 +370,12 @@ public class UITool : Editor
         }
     }
 
+    [MenuItem("Custom Editor/清除数据")]
+    public static void ClearPlayerData()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
     private static string GetPath(Transform tra)
     {
         string path = tra.name;

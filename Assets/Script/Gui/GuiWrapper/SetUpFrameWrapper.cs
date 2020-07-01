@@ -313,6 +313,12 @@ public class SetUpFrameWrapper : GuiFrameWrapper
                     return;
                 }
 
+                if (string.IsNullOrEmpty(GameManager.Instance.UserName))
+                {
+                    GuiController.Instance.SwitchWrapper(GuiFrameID.NameBoardFrame, true);
+                    return;
+                }
+
                 inputNum = "";
                 activityEnrollBoardInputField.text = "";
                 activityEnrollBoard.SetActive(true);
@@ -495,13 +501,13 @@ public class SetUpFrameWrapper : GuiFrameWrapper
         }
     }
 
-    private void OnEnrollSucceed(string data)
+    private void OnEnrollSucceed(CategoryInstance instance)
     {
         isEnrolling = false;
         RankController.Instance.AlreadyEnroll = true;
         activityEnrollBtn.gameObject.SetActive(false);
         activityRankDetailBtn.gameObject.SetActive(true);
-        CategoryInstance instance = JsonUtility.FromJson<CategoryInstance>(data);
+        activityEnrollBoard.SetActive(false);
         RankController.Instance.ActivityCategory = instance;
         OpenRankDetailBoard();
 

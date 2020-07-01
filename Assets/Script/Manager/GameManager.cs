@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(c_RankCtrl.GetRankDetail(form, OnSucceed, OnFail));
     }
 
-    public void EnrollActivity(WWWForm form, System.Action<string> OnSucceed, System.Action<string> OnFail)
+    public void EnrollActivity(WWWForm form, System.Action<CategoryInstance> OnSucceed, System.Action<string> OnFail)
     {
         StartCoroutine(c_RankCtrl.EnrollActivity(form, OnSucceed, OnFail));
     }
