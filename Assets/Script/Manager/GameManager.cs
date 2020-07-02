@@ -314,7 +314,7 @@ public class GameManager : MonoBehaviour
 				if (response.code == (int)CodeID.SUCCESS)
 				{
                     m_IsLogining = false;
-                    IsNewPlayer = false;
+                    IsNewPlayer = true;
                     Token = response.token;
 					UserID = response.data.id;
                     if (OnSucceed != null)
